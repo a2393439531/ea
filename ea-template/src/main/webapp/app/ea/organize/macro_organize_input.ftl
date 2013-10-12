@@ -28,6 +28,7 @@
 					</#if>
 					<a onclick="javascript:action_organize('change_level.do','id=${organize.id?if_exists}')"  class="ui-icon ui-icon-arrowthick-1-w" title=前1级></a>      
 	 				<a onclick="javascript:action_organize('change_level.do','id=${organize.id?if_exists}&parentId=${organizeNodes[organize_index-1].id}')"  class="ui-icon ui-icon-arrowthick-1-e" title=后1级></a>	
+			 	     
 			 	</#if>
 			</#if>
 			</td>
