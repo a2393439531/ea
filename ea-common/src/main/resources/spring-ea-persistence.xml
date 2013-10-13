@@ -20,9 +20,9 @@
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">${ea.hibernate.dialect}</prop>
-				<prop key="hibernate.jdbc.fetch_size">50</prop>
-				<prop key="hibernate.cache.use_query_cache">true</prop>
-				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+				<prop key="hibernate.jdbc.fetch_size">${ea.hibernate.jdbc.fetch_size}</prop>
+				<prop key="hibernate.cache.use_query_cache">${ea.hibernate.cache.use_query_cache}</prop>
+				<prop key="hibernate.cache.use_second_level_cache">${ea.hibernate.cache.use_second_level_cache}</prop>
 				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
 				<prop key="hibernate.show_sql">${ea.hibernate.show_sql}</prop>
 				<prop key="hibernate.hbm2ddl.auto">${ea.hibernate.hbm2ddl}</prop>
@@ -104,4 +104,7 @@
 			</list>
 		</property>
 	</bean>
+	
+	
+	
 </beans>

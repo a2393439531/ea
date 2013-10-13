@@ -97,7 +97,7 @@ public class User extends BaseModel {
 	
 	
 	
-	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Role.class, fetch = FetchType.LAZY)
+	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Role.class, fetch = FetchType.LAZY )
 	@JoinTable(name = "manager_ea_role_user", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
 	public Set getRoles() {
 		return roles;
@@ -108,8 +108,8 @@ public class User extends BaseModel {
 	}
 
 	private Set<Resource> resource = new HashSet<Resource>();
-
-	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Resource.class, fetch = FetchType.LAZY)
+	
+	@ManyToMany(cascade = CascadeType.ALL, targetEntity = Resource.class, fetch = FetchType.LAZY  )
 	@JoinTable(name = "manager_ea_resource_user", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "resource_id") })
 	public Set<Resource> getResources() {
 		return resource;

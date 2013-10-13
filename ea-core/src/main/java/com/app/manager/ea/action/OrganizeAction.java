@@ -1,16 +1,23 @@
 package com.app.manager.ea.action;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import com.app.manager.ea.model.Extv;
 import com.app.manager.ea.model.Organize;
 @Component("organizeAction")
 @Scope("prototype")
 public class OrganizeAction extends BaseEaAction {
 	private final Logger log = LoggerFactory.getLogger(OrganizeAction.class);
+
 	public String menu_organize() throws Exception {
 		rhs.put("organizeRootList", common_get_tree_root("Organize"));
+		rhs.put("system_para_map", 	infEa.getParaMap());
 		rhs.put("info_type", "success");
 		rhs.put("info", "");
 		return "success";
@@ -31,6 +38,7 @@ public class OrganizeAction extends BaseEaAction {
 			baseDao.create(suborganize);
 		}
 		rhs.put("organizeRootList", common_get_tree_root(getpara("beanname")));
+		
 		rhs.put("info_type", "success");
 		rhs.put("info", " 添加新节点成功!");
 		return "success";
@@ -72,4 +80,15 @@ public class OrganizeAction extends BaseEaAction {
 		rhs.put("info", "改变层级成功!");
 		return "success";
 	}
+	
+	
+	 public String updateExtp() throws Exception {
+		 common_update_extp();
+		 rhs.put("organizeRootList", common_get_tree_root(getpara("beanname")));
+		 rhs.put("info_type", "success");
+		 rhs.put("info", "更新成功!");
+		 return "success";
+	    }
+	
+	
 }

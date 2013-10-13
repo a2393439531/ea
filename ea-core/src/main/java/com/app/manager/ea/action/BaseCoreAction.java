@@ -2,6 +2,7 @@ package com.app.manager.ea.action;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -10,9 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.app.manager.ea.api.InfEa;
+import com.app.manager.ea.model.Extv;
 import com.app.manager.ea.model.Organize;
 import com.app.manager.ea.model.User;
 import com.common.spring.ssh.action.BaseAction;
+
 
 import com.common.spring.ssh.dao.BaseDao;
 import com.common.spring.ssh.model.BaseModel;
@@ -89,5 +92,29 @@ public class BaseCoreAction extends BaseAction {
 
 		}
 	}	
-
+	public void common_get_para_map(){
+		rhs.put("system_para_map", 	infEa.getParaMap());
+	}
+	public void common_update_extp() throws Exception {
+		 String extpalias=getpara("extpalias");
+		 String modelid=getpara("modelid");
+		 String modelname=getpara("modelname");
+		 common_update_extp( modelname,  modelid,  extpalias,getpara("value"));
+	}	
+	public void common_update_extp(String modelname, String modelid, String extpalias,String value) throws Exception {
+		
+		 List  valueList= (List) baseDao.find( "from Extv ev where ev.modelname='"+modelname+"' and ev.extpalias='" +extpalias+"' and ev.modelid='" +modelid+"'");
+		 if(valueList.size()>0){
+			 Extv extv = (Extv) valueList.get(0);
+			 extv.setValue(java.net.URLDecoder.decode(value));   
+			 baseDao.update(extv);
+		 }else{
+			 Extv extv =new Extv();
+			 extv.setExtpalias(extpalias);
+			 extv.setModelid(getpara("modelid"));
+			 extv.setModelname(modelname);
+			 extv.setValue(java.net.URLDecoder.decode(getpara("value")));
+			 baseDao.create(extv);
+		 }
+	}	
 }

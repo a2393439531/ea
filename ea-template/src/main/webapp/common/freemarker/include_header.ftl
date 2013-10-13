@@ -27,16 +27,21 @@
 <script type="text/javascript" src="<@context/>common/jqueryui183/jquery-ui-1.8.13.custom.min.js"></script>
 <script type="text/javascript" src="<@context/>common/My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="<@context/>common/jquery-plugins/zTree/js/jquery.ztree.core-3.5.js"></script>
-
+<!--
 <link rel="stylesheet" type="text/css" href="<@context/>common/highslide/highslide.css" />
 <script type="text/javascript"          src="<@context/>common/highslide/highslide-with-html.js"></script>
+-->
+<link rel="stylesheet" type="text/css" href="<@context/>common/highslide-4-1-13/highslide/highslide.css" />
+<script type="text/javascript"          src="<@context/>common/highslide-4-1-13/highslide/highslide-with-html.js"></script>
 <script type="text/javascript" >
-	hs.graphicsDir = '<@context/>common/highslide/graphics/';
+	//hs.graphicsDir = '<@context/>common/highslide/graphics/';
+	hs.graphicsDir = '<@context/>common/highslide-4-1-13/highslide/graphics/';
 	hs.outlineType = 'rounded-white';
 	hs.wrapperClassName = 'draggable-header';
-	hs.minWidth=700;
-	hs.minHeight=750;
-	hs.Height=750;
+	
+	hs.minWidth=800;
+	hs.minHeight=800;
+    hs.preserveContent=false;
 	
 	function tip_info() {
 	    $('#div_action_result',window.parent.parent.frames['topFrame'].document).html(document.getElementById('div_action_result').innerHTML);
@@ -44,7 +49,18 @@
        	 
 	}	
 		
-	
+	function action_common(url,para){
+		$.ajax({
+	        type:"POST",
+	        url: url,
+	        data:para,
+	        cache: false,
+	        success: function(html){
+	            document.getElementById('div_action_result').innerHTML=html;
+	        	tip_info();   	 
+	        }
+	    });  
+	}
 </script>	
 </head>	
 

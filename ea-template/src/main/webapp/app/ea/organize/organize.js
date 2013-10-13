@@ -7,7 +7,7 @@ function action_organize(url,para){
          success: function(html){
        
            
-          if(url=="update.do"){
+          if(url=="update.do"||url=="updateExtp.do"){
          		
         		document.getElementById('div_action_result').innerHTML=html;
         	}else{

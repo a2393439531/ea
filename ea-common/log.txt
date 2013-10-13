@@ -2,3 +2,8 @@
 5089 [main] INFO  com.common.spring.SpringDaoTest - 测试结束
 4801 [main] INFO  com.common.spring.SpringDaoTest - 测试结束
 4815 [main] INFO  com.common.spring.SpringDaoTest - 测试结束
+3873 [main] INFO  com.common.spring.SpringDaoTest - 测试结束
+3358 [main] INFO  com.common.spring.SpringDaoTest - 测试结束
+3404 [main] INFO  com.common.spring.SpringDaoTest - 测试结束
+3296 [main] INFO  com.common.spring.SpringDaoTest - 测试结束
+3498 [main] INFO  com.common.spring.SpringDaoTest - 测试结束

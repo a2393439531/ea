@@ -14,4 +14,5 @@ public class BaseEaAction extends BaseCoreAction {
 		this.baseDao = baseDao;
 	}
 
+	
 }

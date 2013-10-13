@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 
-import com.common.spring.SpringConfigTestTemplate;
+import com.common.spring.junit.SpringConfigTestTemplate;
 
 public class PasswordEncryptorTest {
 	static Logger log = LoggerFactory.getLogger(PasswordEncryptorTest.class);

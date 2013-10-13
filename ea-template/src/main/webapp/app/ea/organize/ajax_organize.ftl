@@ -7,7 +7,7 @@
 		</tr>
 	</thead>   
    
-<@digui_organize rhs["organizeRootList"]?sort_by('sortNob'),"" />	
+<@digui_organize rhs["organizeRootList"]?sort_by('sortNob'),rhs,"" />	
 </table>
 <span id="div_action_result" style="display:none">${rhs["info"]?if_exists}</span>
 

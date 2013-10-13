@@ -239,7 +239,7 @@ public class SpringEaTest  {
 	@Test
 	public void testGetAllVisibleResource() throws Exception {
 		/**/
-		Set resourceSet = infEa.getAllVisibleResource("2");
+		Set resourceSet = infEa.getAllVisibleResource("1");
 		for (Iterator iterator3 = resourceSet.iterator(); iterator3.hasNext();) {
 			com.app.manager.ea.model.Resource resource = (com.app.manager.ea.model.Resource) iterator3
 					.next();

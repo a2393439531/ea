@@ -2,12 +2,17 @@
 <div class="container-fluid">
 	<div class="well" style="padding: 12px 0;">
 		<ul class="nav nav-list">
-		  <li class="nav-header">AAA-TEAM</li>
-		  <li onclick="menu_active(this)"> <a href="manager_tpltb1_menu_tpltb1.do" target="mainFrame">table-crud-ajax模式</a></li>
-		  <li onclick="menu_active(this)"> <a href="manager_tpltb2_menu_tpltb2.do" target="mainFrame">table-crud-对话框模式</a></li>
-		  <li onclick="menu_active(this)"> <a href="manager_tpltb3_list.do" target="mainFrame">table-crud-常见</a></li>
-		  <li onclick="menu_active(this)"> <a href="manager_tpltree1_menu_tpltree1.do" target="mainFrame">tree-crud-ajax模式</a></li>
-		  <li onclick="menu_active(this)"> <a href="demo.ftl" target="mainFrame">tab</a></li>
+		  <li class="nav-header">hotel管理系统</li>
+		 
+		  <li onclick="menu_active(this)">	<a href="hotel_hotel_list_hotel.do" target="mainFrame">日常管理</a></li>
+
+		  <li onclick="menu_active(this)"><a href="ea_user_list.do" target="mainFrame">客户管理</a></li>   
+		  <#--
+		  <li onclick="menu_active(this)"> <a href="hotel_finance_report_month.do" target="mainFrame">新客户入住</a></li>
+		  <li onclick="menu_active(this)"> <a href="hotel_finance_report_month.do" target="mainFrame">缴费</a></li>
+		  <li onclick="menu_active(this)"> <a href="hotel_finance_report_month.do" target="mainFrame">退房</a></li>
+		  -->
+		  <li onclick="menu_active(this)"> <a href="report_hotelrpt_fee.do" target="mainFrame">运营报表</a></li>
 	
 		 
 		</ul>

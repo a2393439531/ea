@@ -24,7 +24,8 @@ public class LoginAction extends BaseEaAction {
 	public InfEa infEa;
 
 	public String execute() throws Exception {
-		infEa.initData();
+	    infEa.initData();
+		
 		String account = getpara("account");
 		String password = getpara("password");
 		String sysName = getpara("sysName");
@@ -33,7 +34,6 @@ public class LoginAction extends BaseEaAction {
 			return "fail";
 		}
 		User user = (User) infEa.getUserbyAccount(account);
-		
 		if (user==null) {
 			rhs.put("tipInfo", "用户名不存在");
 			return "fail";

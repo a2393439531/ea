@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -68,7 +69,17 @@ public class BaseAction {
 		}
 
 	}
+	public String getnumberpara(String key) {
+		if (ServletActionContext.getRequest().getParameter(key) == null)
+			return "0";
+		else {
+			if (ServletActionContext.getRequest().getParameter(key).equals("")){
+				return "0";
+			}
+			return ServletActionContext.getRequest().getParameter(key).trim();
+		}
 
+	}
 	public Object getSessionValue(String key) {
 		Map<String, Object> sessionMap = ActionContext.getContext()
 				.getSession();
@@ -123,6 +134,9 @@ public class BaseAction {
 		baseDao.update(baseModel);
 	}
 
+	
+	
+	
 	public String common_update(String sql) throws Exception {
 		String id = getpara("id");
 		String column = getpara("column");
@@ -219,10 +233,25 @@ public class BaseAction {
 	public List common_get_tree_root(String beanname) throws Exception {
 		List olist = baseDao.find(" from " + beanname
 				+ " where parent_id = null");
+		getExptList("Organize");
+		common_get_extp("Organize");
+	
 		return olist;
 
 	}
 
+	public void common_get_extp(String beanname){
+		List  valueList= (List) baseDao.find( "from Extv ev where ev.modelname='"+beanname+"'");
+		HashMap extvmap=new HashMap();
+		for (Iterator iterator = valueList.iterator(); iterator.hasNext();) {
+			Object extv = (Object) iterator.next();
+			extvmap.put(BeanUtils.getValue(extv, "extpalias")+"_"+BeanUtils.getValue(extv, "modelid"), extv);
+		}
+		rhs.put("extvmap", extvmap);
+	
+		
+	}
+	
 	public void common_del_tree_node() throws Exception {
 		String id = getpara("id");
 		String beanname = getpara("beanname");
@@ -234,7 +263,10 @@ public class BaseAction {
 		baseDao.delete(baseModel);
 
 	}
-
+	
+	public void getExptList(String modelname){
+		rhs.put("extpList",  baseDao.find("from Extp ep  where ep.modelname='"+modelname+"'"));
+	}
 	public String edit_bean_property() throws IllegalAccessException,
 			InvocationTargetException, NoSuchMethodException {
 		String op = getpara("op");

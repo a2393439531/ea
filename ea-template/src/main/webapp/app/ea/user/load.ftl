@@ -13,7 +13,12 @@
 	</div>
 	
 	
- 
+	<div class="control-group">
+		<label class="control-label">姓名</label>
+		<div class="controls">
+			<input type="text" name="bfobject.name" value='<#if rhs["user"]?exists>${rhs["user"].name?if_exists}</#if>' />
+		</div>
+	</div> 
 	<div class="control-group">
 		<label class="control-label">身份证</label>
 		<div class="controls">
@@ -21,14 +26,7 @@
 		</div>
 	</div>
 
- 	<div class="control-group">
-		<label class="control-label">生日</label>
-		<div class="controls">
-			<input type="text" name="bfobject.birthDate" value='<#if rhs["tpltb3"]?exists>${rhs["tpltb3"].birthDate?if_exists}</#if>' 
-				onclick="javascript:WdatePicker({dateFmt:'yyyy-MM-dd'});" />
-		</div>
-	</div>
-	
+ 	
 	
 	<div class="controls">
 		<input type="submit" class="btn" value="保存"/>

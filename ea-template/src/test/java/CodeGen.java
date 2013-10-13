@@ -183,7 +183,7 @@ public class CodeGen {
 				
 		CodeGen.genCode("systempara", "tpltree1", "app/manager/",
 				"com/app/manager/oa/");	*/
-		CodeGen.genCode("user", "tpltb3", "app/manager/",
+		CodeGen.genCode("extp", "tpltb1", "app/manager/",
 				"com/app/manager/template/");
 	}
 

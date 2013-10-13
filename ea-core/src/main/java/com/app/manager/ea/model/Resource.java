@@ -90,11 +90,13 @@ public class Resource extends BaseModel {
 		this.roles = roles;
 	}
 
-	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = User.class, fetch = FetchType.LAZY)
+	@ManyToMany(cascade = CascadeType.ALL, targetEntity = User.class, fetch = FetchType.LAZY)
 	@JoinTable(name = "manager_ea_resource_user", joinColumns = { @JoinColumn(name = "resource_id") }, inverseJoinColumns = { @JoinColumn(name = "user_id") })
 	public Set<User> getUsers() {
 		return users;
 	}
+	
+	
 
 	public void setUsers(Set<User> users) {
 		this.users = users;

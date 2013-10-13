@@ -255,6 +255,18 @@ public class EaAction extends BaseEaAction {
 		rhs.put("usersList", usersList);
 		return "success";
 	}
+	
+	public String ajax_role_user_list() {
+		String roleId = getpara("roleId");
+		List usersList = infEa.getAllUser();
+		Role role = (Role) baseDao
+				.loadById("Role", Long.parseLong(roleId));
+		rhs.put("role", role);
+		rhs.put("organizeId", getpara("organizeId"));
+		rhs.put("usersList", usersList);
+		return "success";
+	}	
+	
 
 	public String iframe_get_userlist_of_role() {
 		String roleId = getpara("roleId");
