@@ -4,7 +4,9 @@
 		<ul class="nav nav-list">
 		  <li class="nav-header">Syttem config</li>
 		  <li onclick="menu_active(this)"><a href="ea_organize_menu_organize.do" target="mainFrame">organize manager</a></li>
+
 		  <li onclick="menu_active(this)"><a href="ea_rolegroup_menu_rolegroup.do" target="mainFrame">position manager</a></li>
+		  <li onclick="menu_active(this)"><a href="ea_organize_menu_organize.do" target="mainFrame">organize manager</a></li>
 		  <li onclick="menu_active(this)"><a href="ea_ea_menu_relation.do" target="mainFrame">role manager</a></li>
 		  <li onclick="menu_active(this)"><a href="ea_user_list.do" target="mainFrame">user manager</a></li>
 	      <li onclick="menu_active(this)"><a href="ea_resource_menu_resource.do" target="mainFrame">resource manager</a></li>
