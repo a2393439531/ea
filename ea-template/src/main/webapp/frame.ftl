@@ -1,11 +1,3 @@
-<#---->
-
-<#if Session["userlogined"]?exists&&Session["userlogined"].account=='admin'>
-<script type="text/javascript" language="javascript">
-    document.location="pframe.ftl";
-</script>
-</#if>
-
 
 <frameset rows="50,*" frameborder="no" marginwidth="0" framespacing="0" id="frameset01">
 	<frame src="top.ftl" name="topFrame" scrolling="No" noresize="noresize" id="topFrame"/>
