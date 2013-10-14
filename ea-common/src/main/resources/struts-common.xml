@@ -54,6 +54,7 @@
 
 	<package name="oa" namespace="/" extends="struts-default">  
    		<action name="login" class="com.app.manager.ea.action.LoginAction" method="execute">
+   		    <result name="admin">pframe.ftl</result>
 			<result name="success">frame.ftl</result>
 			<result name="fail">login.ftl</result>
 			

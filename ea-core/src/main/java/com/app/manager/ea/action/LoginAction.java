@@ -87,6 +87,9 @@ public class LoginAction extends BaseEaAction {
 				Organize departmentOrganize = (Organize) departmentList.get(0);
 				putSessionValue("currnetDepartment", departmentOrganize);
 			}
+			if (user.getAccount().equals("admin")) {
+				return "admin";
+			}
 			return "success";
 		}
 
