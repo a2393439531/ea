@@ -11,6 +11,7 @@
 		  <li onclick="menu_active(this)"><a href="ea_user_list.do" target="mainFrame">user manager</a></li>
 	      <li onclick="menu_active(this)"><a href="ea_resource_menu_resource.do" target="mainFrame">resource manager</a></li>
 		  <li onclick="menu_active(this)"><a href="ea_systempara_menu_systempara.do" target="mainFrame">system para</a></li>
+		  <li onclick="menu_active(this)"><a href="ea_smtp_menu_smtp.do" target="mainFrame">email smtp</a></li>
 	</ul>
 	</div><!--/.well -->
 </div>

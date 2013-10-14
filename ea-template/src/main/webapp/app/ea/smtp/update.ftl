@@ -1,1 +1,1 @@
-<#include "ajax_smtp.ftl">
+${rhs["info"]?if_exists}
