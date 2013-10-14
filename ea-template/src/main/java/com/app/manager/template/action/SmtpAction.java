@@ -1,19 +1,17 @@
-package com.app.manager.ea.action;
+package com.app.manager.template.action;
 
 import java.util.List;
-
-import javax.annotation.Resource;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.app.manager.ea.model.Smtp;
-
-import com.common.spring.ssh.page.Pagination;
+import com.app.manager.ea.action.BaseEaAction;
+import com.app.manager.template.model.Smtp;
+import com.common.spring.ssh.action.BaseBusinessAction;
+import com.common.spring.ssh.model.BaseModel;
 
 @Component("smtpAction")
 @SuppressWarnings("rawtypes")
@@ -32,7 +30,7 @@ public class SmtpAction extends BaseEaAction {
 
 	public String create() throws Exception {
 		Smtp smtp = new Smtp();
-		
+		smtp.setName("");
 		baseDao.create(smtp);
 		getPageData(hsql_all);
 		List countList = baseDao.find(hsql_all);

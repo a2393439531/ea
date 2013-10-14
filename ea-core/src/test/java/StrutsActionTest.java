@@ -46,7 +46,7 @@ public class StrutsActionTest extends StrutsSpringTestCase {
         request.setParameter("password", "abc123");
         request.setContextPath("/");
         String result =  executeAction("/com/app/manager/ea/action/login!execute.action");
-         System.out.println(result);
+        System.out.println(result);
           
     }
 }
