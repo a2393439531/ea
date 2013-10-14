@@ -25,3 +25,4 @@ function menu_active(obj){
 }
 </script>
 
+<a href="manager_smtp_menu_smtp.do" target="mainFrame">smtp</a><br/>

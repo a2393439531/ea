@@ -1,4 +1,4 @@
-package com.app;
+package com.app.old;
 import static org.junit.Assert.*;
 
 import java.util.List;

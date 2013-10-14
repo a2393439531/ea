@@ -23,6 +23,7 @@ import com.app.manager.ea.model.Rolegroup;
 import com.app.manager.ea.model.Smtp;
 import com.app.manager.ea.model.Systempara;
 import com.app.manager.ea.model.User;
+import com.common.mail.SendMail;
 import com.common.spring.ssh.dao.BaseDao;
 import com.common.spring.ssh.model.BaseModel;
 
@@ -518,9 +519,20 @@ public class ImpEa implements InfEa  {
 	}
 
 	@Override
-	public void sendMail(String to, String cc, String bcc, String subject,
+	public void sendMail(String from,String to, String cc, String bcc, String subject,
 			String text, String[] filename) {
 		System.out.println("发送邮件的api调用");
+		try {
+			SendMail sendMail = new SendMail();
+			sendMail.connect("smtp.163.com", "gscsystem", "abc123", "25");
+			sendMail.send(from, to, cc, bcc,subject,text, null);
+			sendMail.close();
+			System.out.println("发送完毕");
+
+		} catch (Exception e) {
+			System.out.println("发送失败，重新服务器尝试");
+			e.printStackTrace();
+		}
 
 	}
 

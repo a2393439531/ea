@@ -12,96 +12,83 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.app.manager.ea.model.Smtp;
+
 import com.common.spring.ssh.page.Pagination;
 
 @Component("smtpAction")
-@Scope("prototype")
+@SuppressWarnings("rawtypes")
 public class SmtpAction extends BaseEaAction {
-	static Logger log = LoggerFactory.getLogger(SmtpAction.class);
-	// protected baseDao baseDao;
-	protected Pagination pagination;
+	private static Logger log = LoggerFactory.getLogger(SmtpAction.class);
+	private static String hsql_all = "from Smtp";
 
-	public String execute() throws Exception {
-		get_page_data();
-		return "main";
-	}
-
-	public String menu_smtp_init() throws Exception {
-		get_page_data();
+	public String menu_smtp() throws Exception {
+		System.out.println();
+		System.out.println("进入了");
+		this.getPageData(hsql_all);
+		rhs.put("info_type", "success");
+		rhs.put("info", "");
 		return "success";
 	}
 
 	public String create() throws Exception {
-		String id = getpara("id");
 		Smtp smtp = new Smtp();
+		
 		baseDao.create(smtp);
-		get_page_data();
+		getPageData(hsql_all);
+		List countList = baseDao.find(hsql_all);
+		int maxPage = countList.size() % pagination.getMaxSize() > 0 ? countList
+				.size() / pagination.getMaxSize() + 1
+				: countList.size() / pagination.getMaxSize();
+		pagination.setCurrentPage(maxPage);
+		List smtpList = baseDao.page("from Smtp", pagination);
+		rhs.put("dataList", smtpList);
+		rhs.put("maxSize", pagination.getMaxSize());
+		rhs.put("count", countList.size());
+		rhs.put("maxPage", maxPage);
+		rhs.put("currentPage", maxPage);
+		rhs.put("info_type", "success");
+		rhs.put("info", "create success!");
 		return "success";
 	}
-
+	public String change_rank() throws Exception {
+		common_change_rank(); 
+		rhs.put("info_type", "success");
+		rhs.put("info", "改变顺序成功!");
+		getPageData(hsql_all);
+		return "success";
+	}
 	public String delete() throws Exception {
 		String id = getpara("id");
 		Smtp smtpdata = new Smtp();
 		smtpdata.setId(Long.parseLong(id));
 		baseDao.delete(smtpdata);
-		get_page_data();
+		getPageData(hsql_all);
+		rhs.put("info_type", "success");
+		rhs.put("info", "delete success!");
 		return "success";
 	}
+	
+
 
 	public String update() throws Exception {
-		String id = getpara("id");
-		String column = ServletActionContext.getRequest()
-				.getParameter("column");
-		String columnValue = getpara("columnValue");
-		if (column.equals("maxSize")) {
-			int pageNum = Integer.parseInt(columnValue);
-			if (pageNum != pagination.getMaxSize() && pageNum > 0) {
-				pagination.setMaxSize(pageNum);
-			}
-		} else {
-			Smtp smtp = (Smtp) baseDao.loadById("Smtp", Long.parseLong(id));
-			BeanUtils.setProperty(smtp, column, columnValue);
-			baseDao.update(smtp);
-		}
-		get_page_data();
+		common_update(hsql_all);
+		return "success";
+	}   
+	
+     //修改每页显示的个数
+	public String change_page_number() throws Exception {
+		putSessionValue("maxSize", getpara("maxSize"));
+		getPageData(hsql_all);
+		rhs.put("info_type", "success");
+		rhs.put("info", "");
+		return "success";
+	}
+     //翻页
+	public String ajax_page_data() throws Exception {
+		getPageData(hsql_all);
+		rhs.put("info_type", "success");
+		rhs.put("info", "success!");
 		return "success";
 	}
 
-	public String get_page_data() throws Exception {
-		String pageId = ServletActionContext.getRequest()
-				.getParameter("pageId");
-		if (pageId == null || "".equals(pageId)) {
-			pageId = (String) ServletActionContext.getRequest().getSession()
-					.getAttribute("pageId");
-			if (pageId == null || "".equals(pageId))
-				pageId = "1";
-		}
-		ServletActionContext.getRequest().getSession()
-				.setAttribute("pageId", pageId);
-		pagination.setCurrentPage(Integer.parseInt(pageId));
-		List smtpList = baseDao.page("from Smtp", pagination);
-		rhs.put("dataList", smtpList);
-		List countList = baseDao.find("from Smtp");
-		rhs.put("maxSize", pagination.getMaxSize());
-		rhs.put("count", countList.size());
-		rhs.put("maxPage",
-				countList.size() % pagination.getMaxSize() > 0 ? countList
-						.size() / pagination.getMaxSize() + 1 : countList
-						.size() / pagination.getMaxSize());
-		rhs.put("currentPage", Integer.parseInt(pageId));
-		return "success";
-	}
-
-	public Pagination getPagination() {
-		return pagination;
-	}
-
-	@Resource(name = "pagination")
-	public void setPagination(Pagination pagination) {
-		this.pagination = pagination;
-	}
-
-	public String setId(String id) {
-		return id;
-	}
 }
