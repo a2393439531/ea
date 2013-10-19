@@ -1,6 +1,9 @@
 package com.app.manager.ea.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -137,5 +140,14 @@ public class Organize extends BaseModel  {
 	public void setInputtime(String inputtime) {
 		this.inputtime = inputtime;
 	}
-	
+	public List allUser() {
+		ArrayList userList = new ArrayList();
+
+		for (Iterator iterator = this.getRoles().iterator(); iterator
+				.hasNext();) {
+			Role role = (Role) iterator.next();
+			userList.addAll(role.getUsers());
+		}
+		return userList;
+	}
 }
