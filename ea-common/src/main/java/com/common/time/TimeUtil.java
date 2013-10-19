@@ -522,12 +522,17 @@ public class TimeUtil {
 		return date;
 	}
 
+	public static long getHowManyDayFromNow(String date){
+		long daysBetween=(new Date().getTime()-parseDate(date, "yyyy-MM-dd").getTime()+1000000)/(3600*24*1000);
+	return daysBetween;
+	}
 	public static void main(String[] args) {
 		try {
 			// log.debug(DateUtil.getTimeStr("yyyy-MM-dd"));
 			// log.debug(DateUtil.getOhterDayByNumnber("2010-01-27", 5));
 			// log.debug(DateUtil.compareDayStr("2010-01-27", "2010-01-3"));
-			log.debug(TimeUtil.compareDate("2013-07-23", "2013-07-11", 0));
+		//	log.debug(TimeUtil.compareDate("2013-07-23", "2013-07-11", 0));
+			System.out.println("天数"+TimeUtil.getHowManyDayFromNow("2013-10-01"));
 			// log.debug(DateUtil.compareDate("2013-08-25",null,0) );
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
