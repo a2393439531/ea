@@ -50,7 +50,6 @@ public class OrganizeAction extends BaseEaAction {
 		Organize organize = (Organize) baseDao.loadById("Organize",
 				Long.parseLong(getpara("organizeId")));
 		rhs.put("organize", organize);
-		rhs.put("rolegroupList", baseDao.find("from Rolegroup"));
 		rhs.put("userList", infEa.getAllUser());
 		return "success";
 	}
