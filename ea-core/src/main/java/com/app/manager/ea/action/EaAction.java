@@ -90,7 +90,41 @@ public class EaAction extends BaseEaAction {
 	
 	
 
+	
+	public String ajax_create_role_in_organize() throws Exception {
+		Organize organize = (Organize) baseDao.loadById("Organize",
+				Long.parseLong(getpara("organizeId")));
+		Rolegroup rolegroup = (Rolegroup) baseDao.loadById("Rolegroup",
+				Long.parseLong(getpara("rolegroupId")));
 		
+	
+			Role role = new Role();
+			String rolename=organize.getName() + "-" + rolegroup.getName();
+			role.setName(rolename);
+			role.setAlias(organize.getAlias() + "-" + rolegroup.getAlias());
+			role.getOrganizes().add(organize);
+			role.getRolegroups().add(rolegroup);
+			baseDao.create(role);
+		
+		rhs.put("info_type", "success");
+		rhs.put("info", rolename+":创建成功!");
+		return "success";
+	}
+		
+	
+	public String ajax_save_new_user_in_role() throws Exception {
+		
+		User user=new User();
+		user.setName(getpara("name"));
+		user.setAccount(getpara("account"));
+		Role role=(Role)baseDao.loadById("Role",
+				Long.parseLong(getpara("roleId")));
+		role.getUsers().add(user);
+		baseDao.create(user);
+		rhs.put("info", user.getName()+ " 添加成功!");
+		//load_organize();
+		return "success";
+	}
 	
 	public String ajax_bat_create_role() throws Exception {
 		String organizeId = getpara("organizeId");
@@ -157,6 +191,20 @@ public class EaAction extends BaseEaAction {
 		ajax_organize_role_list();
 		return "success";
 	}	
+	
+	public String ajax_role_delete() throws Exception {
+		Role role = (Role) baseDao.loadById("Role",
+				Long.parseLong(getpara("roleId")));
+		role.setParentModel(null);
+		role.setRolegroups(null);
+		role.setUsers(null);
+		role.setOrganizes(null);
+		baseDao.delete(role);
+		rhs.put("info_type", "success");
+		rhs.put("info", "删除角色成功!");
+		return "success";
+	}		
+	
 	public String change_role_level() throws Exception {
 		common_change_level();
 		rhs.put("info_type", "success");

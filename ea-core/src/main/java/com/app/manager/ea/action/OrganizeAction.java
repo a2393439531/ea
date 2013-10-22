@@ -43,6 +43,18 @@ public class OrganizeAction extends BaseEaAction {
 		rhs.put("info", " 添加新节点成功!");
 		return "success";
 	}	
+
+	public String admin() throws Exception {
+		common_get_extp("Organize");
+		rhs.put("rolegroupRootList", common_get_tree_root("Rolegroup"));
+		Organize organize = (Organize) baseDao.loadById("Organize",
+				Long.parseLong(getpara("organizeId")));
+		rhs.put("organize", organize);
+		rhs.put("rolegroupList", baseDao.find("from Rolegroup"));
+		rhs.put("userList", infEa.getAllUser());
+		return "success";
+	}
+	
 	
 	public String update() throws Exception {
 		try {
