@@ -69,6 +69,13 @@ public class BaseAction {
 		}
 
 	}
+
+	public String getWebroot() {
+		return ServletActionContext.getRequest().getRealPath("/"); 
+	}
+	
+	
+	
 	public String getnumberpara(String key) {
 		if (ServletActionContext.getRequest().getParameter(key) == null)
 			return "0";

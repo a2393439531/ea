@@ -1,4 +1,4 @@
-package com.app.manager.template.action;
+package com.app.manager.ea.action;
 
 import java.util.List;
 
@@ -8,17 +8,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.app.manager.common.base.action.BaseEaAction;
-import com.app.manager.template.model.Tpltree1;
+import com.app.manager.ea.model.Rule;
 import com.common.spring.ssh.action.BaseBusinessAction;
 import com.common.spring.ssh.action.BaseAction;
 
 import org.apache.commons.beanutils.BeanUtils;
 
-@Component("tpltree1Action")
-public class Tpltree1Action extends BaseEaAction {
-	private final Logger log = LoggerFactory.getLogger(Tpltree1Action.class);
-	public String menu_tpltree1() throws Exception {
-		rhs.put("tpltree1RootList", common_get_tree_root("Tpltree1"));
+@Component("ruleAction")
+public class RuleAction extends BaseEaAction {
+	private final Logger log = LoggerFactory.getLogger(RuleAction.class);
+	public String menu_rule() throws Exception {
+		rhs.put("ruleRootList", common_get_tree_root("Rule"));
+		
 		rhs.put("info_type", "success");
 		rhs.put("info", "");
 		return "success";
@@ -27,18 +28,18 @@ public class Tpltree1Action extends BaseEaAction {
 	public String create() throws Exception {
 		String id = getpara("id");
 		if ("root".equals(id)) {
-			Tpltree1 tpltree1 = new Tpltree1();
-			tpltree1.setName("");
-			baseDao.create(tpltree1);
+			Rule rule = new Rule();
+			rule.setName("");
+			baseDao.create(rule);
 		} else {
-			Tpltree1 parent_org = (Tpltree1) baseDao.loadById("Tpltree1",
+			Rule parent_org = (Rule) baseDao.loadById("Rule",
 					Long.parseLong(id));
-			Tpltree1 subtpltree1 = new Tpltree1();
-			subtpltree1.setName("");
-			subtpltree1.setParentModel(parent_org);
-			baseDao.create(subtpltree1);
+			Rule subrule = new Rule();
+			subrule.setName("");
+			subrule.setParentModel(parent_org);
+			baseDao.create(subrule);
 		}
-		rhs.put("tpltree1RootList", common_get_tree_root(getpara("beanname")));
+		rhs.put("ruleRootList", common_get_tree_root(getpara("beanname")));
 		rhs.put("info_type", "success");
 		rhs.put("info", " 添加新节点!");
 		return "success";
@@ -52,7 +53,7 @@ public class Tpltree1Action extends BaseEaAction {
 			rhs.put("info", " 属性更新失败!");
 			return "success";
 		}
-		rhs.put("tpltree1RootList", common_get_tree_root(getpara("beanname")));
+		rhs.put("ruleRootList", common_get_tree_root(getpara("beanname")));
 		rhs.put("info_type", "success");
 		rhs.put("info", "更新成功!");
 		return "success";
@@ -60,7 +61,16 @@ public class Tpltree1Action extends BaseEaAction {
 
 	public String delete() throws Exception {
 		common_del_tree_node();
-		rhs.put("tpltree1RootList", common_get_tree_root(getpara("beanname")));
+		rhs.put("ruleRootList", common_get_tree_root(getpara("beanname")));
+		rhs.put("info_type", "success");
+		rhs.put("info", " 删除成功!");
+		return "success";
+	}
+	
+	public String detail() throws Exception {
+		Rule rule = (Rule) baseDao.loadById("Rule",
+				Long.parseLong(getpara("id")));
+		rhs.put("rule", rule);
 		rhs.put("info_type", "success");
 		rhs.put("info", " 删除成功!");
 		return "success";
@@ -68,14 +78,14 @@ public class Tpltree1Action extends BaseEaAction {
 	
 	public String change_rank() throws Exception {
 		common_change_rank(); 
-		rhs.put("tpltree1RootList", common_get_tree_root(getpara("beanname")));
+		rhs.put("ruleRootList", common_get_tree_root(getpara("beanname")));
 		rhs.put("info_type", "success");
 		rhs.put("info", "改变顺序成功!");
 		return "success";
 	}
 	public String change_level() throws Exception {
 		common_change_level();
-		rhs.put("tpltree1RootList", common_get_tree_root(getpara("beanname")));
+		rhs.put("ruleRootList", common_get_tree_root(getpara("beanname")));
 		rhs.put("info_type", "success");
 		rhs.put("info", "改变层级成功!");
 		return "success";

@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.app.manager.common.base.action.BaseEaAction;
 import com.app.manager.ea.hsql.Hsql;
 import com.app.manager.ea.model.Organize;
 import com.app.manager.ea.model.Organizegroup;
@@ -89,6 +90,19 @@ public class EaAction extends BaseEaAction {
 	
 	
 	
+	public String menu_organize_view_v() {
+		List roleGroupRootList = baseDao
+				.find(" from Rolegroup where parent_id = null");
+		rhs.put("roleGroupRootList", roleGroupRootList);
+		return "success";
+
+	}
+	public String menu_organize_view_h() {
+		List organizeRootList = infEa.getOrganizeRootNods();
+		rhs.put("organizeRootList", organizeRootList);
+		rhs.put("userList", infEa.getAllUser());
+		return "success";
+	}
 
 	
 	public String ajax_create_role_in_organize() throws Exception {
@@ -655,13 +669,7 @@ public class EaAction extends BaseEaAction {
 	
 		
 	
-	public String menu_organize_view_h() {
-		List organizeRootList = infEa.getOrganizeRootNods();
-		rhs.put("organizeRootList", organizeRootList);
-		rhs.put("userList", infEa.getAllUser());
-		return "success";
-	}
-
+	
 	public String menu_user_duty_define_by_role() {
 		List roleGroupRootList = baseDao
 				.find(" from Role where parent_id = null");

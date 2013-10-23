@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.app.manager.common.base.action.BaseEaAction;
 import com.app.manager.ea.model.Extv;
 import com.app.manager.ea.model.Organize;
 @Component("organizeAction")

@@ -50,6 +50,8 @@ public class Organize extends BaseModel  {
 	public String organizedescription;
 	@Column(length = 2000)
 	public String kpidescription;
+	public String imgfilename;
+	
 	public Organize parentModel;
 	private Set<Organize> childOrganizes = new HashSet<Organize>();
 	private Set<Role> roles = new HashSet<Role>();
@@ -150,4 +152,11 @@ public class Organize extends BaseModel  {
 		}
 		return userList;
 	}
+	public String getImgfilename() {
+		return imgfilename;
+	}
+	public void setImgfilename(String imgfilename) {
+		this.imgfilename = imgfilename;
+	}
+	
 }
