@@ -105,41 +105,10 @@ public class EaAction extends BaseEaAction {
 	}
 
 	
-	public String ajax_create_role_in_organize() throws Exception {
-		Organize organize = (Organize) baseDao.loadById("Organize",
-				Long.parseLong(getpara("organizeId")));
-		Rolegroup rolegroup = (Rolegroup) baseDao.loadById("Rolegroup",
-				Long.parseLong(getpara("rolegroupId")));
+
 		
 	
-			Role role = new Role();
-			String rolename=organize.getName() + "-" + rolegroup.getName();
-			role.setName(rolename);
-			role.setAlias(organize.getAlias() + "-" + rolegroup.getAlias());
-			role.getOrganizes().add(organize);
-			role.getRolegroups().add(rolegroup);
-			baseDao.create(role);
-		
-		rhs.put("info_type", "success");
-		rhs.put("info", rolename+":创建成功!");
-		return "success";
-	}
-		
-	
-	public String ajax_save_new_user_in_role() throws Exception {
-		
-		User user=new User();
-		user.setName(getpara("name"));
-		user.setAccount(getpara("account"));
-		Role role=(Role)baseDao.loadById("Role",
-				Long.parseLong(getpara("roleId")));
-		role.getUsers().add(user);
-		baseDao.create(user);
-		rhs.put("info", user.getName()+ " 添加成功!");
-		//load_organize();
-		return "success";
-	}
-	
+
 	public String ajax_bat_create_role() throws Exception {
 		String organizeId = getpara("organizeId");
 		String rolegroupIdString = getpara("rolegroupIdString");
@@ -437,113 +406,10 @@ public class EaAction extends BaseEaAction {
 		return "success";
 	}
     
-	public void common_get_user_info(List userList) {
-		for (Iterator iterator = userList.iterator(); iterator.hasNext();) {
-			User user = (User) iterator.next();
-			user.setAllrolegroup("");
-			user.setAllrole("");
-			try {
-				String companyname = "";
-				companyname = infEa.getUserFirestOrgNameByOrgGroup(
-						user.getId(), "company").getName();
-				user.setCompanyname(companyname);
-			} catch (Exception e) {
-				user.setCompanyname("未分配公司");
-			}
-			try {
-				String teamname = "";
-				Organize org=infEa.getOrganzieOfUserByOrganizeGroupAlias(
-						user.getId(), "team");
-				teamname = org.getName();
-				user.setTeamname(teamname);
-				user.setGroupname(org.getParentModel().getName());
-			} catch (Exception e) {
-				user.setTeamname("");
-				user.setGroupname("");
-			}
 
-			String techname="";
-			try {
-				for (Iterator iterator2 = user.getRoles().iterator(); iterator2
-						.hasNext();) {
-					Role role = (Role) iterator2.next();
-					if(role.getAlias()!=null){
-						user.setAllrole(user.getAllrole()+"-"+role.getAlias());
-					}
-					for (Iterator iterator3 = role.getOrganizes().iterator(); iterator3
-							.hasNext();) {
-						Organize organize = (Organize) iterator3.next();
-						if(organize.getParentModel()!=null&&organize.getParentModel().getAlias()!=null){
-							if(organize.getParentModel().getAlias().equalsIgnoreCase("tech")){
-								techname=techname+role.getName()+";";
-							}
-						}
-					}
-					for (Iterator iterator3 = role.getRolegroups().iterator(); iterator3
-							.hasNext();) {
-						Rolegroup rolegroup = (Rolegroup) iterator3.next();
-						if(rolegroup.getAlias()!=null){
-							user.setAllrolegroup(user.getAllrolegroup()+"-"+rolegroup.getAlias());
-						}
-					}
-						
-				}
-				
-			} catch (Exception e) {
-				System.out.println("异常用户："+user.getName()+e.toString());
-			
-			}		
-			user.setTechname(techname);
-			/*
-			try {
-				String techname = "";
-				techname = infEa.getOrganzieOfUserByOrganizeGroupAlias(
-						user.getId(), "tech").getName();
-				user.setTechname(techname);
-			} catch (Exception e) {
-				user.setTechname("未分配技术领域");
-			}
-			*/
-			continue;
-		}
-	}
 
-	public String report_user_check() throws Exception {
-		List userList = baseDao.find(Hsql.All_USER);
-		common_get_user_info(userList);
-		rhs.put("userList", userList);
-		return "success";
-	}
-	public String report_birt_user() throws Exception {
-	
-		List userList = (List)Cache.get("userlist");
-		 userList =null;
-		if (userList == null) {
-			userList = baseDao.find(Hsql.All_USER);
-			common_get_user_info(userList);
-			Cache.set("userlist", userList, "8h"); // 放入缓存
-		}
-		
-		rhs.put("dataList", userList);
-		return "success";
-	}
-	
 	public String clean() throws Exception {
 		Cache.delete("userlist");
-		return "success";
-	}
-	public String report_assement() throws Exception {
-		
-		report_birt_user();
-		return "success";
-	}
-
-	public String report_tech_member() throws Exception {
-		List organizeRootList = infEa.getOrganizeRootNods();
-		Organize organize=(Organize)infEa.getOrganizeByAlias("tech");
-		rhs.put("system_para_map", 	infEa.getParaMap());   
-		rhs.put("organizeRootList", organize.getChildOrganizes());
-		rhs.put("userList", infEa.getAllUser());
 		return "success";
 	}
 	public String menu_query_inf() {

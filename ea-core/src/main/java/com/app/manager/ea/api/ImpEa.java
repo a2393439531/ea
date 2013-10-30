@@ -626,5 +626,31 @@ public class ImpEa implements InfEa  {
 		return paraMap;
 	}
 
+	@Override
+	public void deleteRole(Role role) {
+		role.setRolegroups(null);
+		role.setOrganizes(null);
+		role.setUsers(null);
+		role.setParentModel(null);
+		baseDao.update(role);
+		baseDao.delete(role);
+	}
+
+	@Override
+	public void deleteOrgainize(Organize organize) {
+		for (Iterator iterator = organize.getRoles().iterator(); iterator.hasNext();) {
+			Role role = (Role) iterator.next();
+			role.setUsers(null);
+			role.setRolegroups(null);
+			role.setResources(null);
+			baseDao.delete(role);
+		}
+		
+		organize.setParentModel(null);
+		organize.setOrganizegroups(null);
+		baseDao.update(organize);
+		baseDao.delete(organize);
+	}
+
 	
 }

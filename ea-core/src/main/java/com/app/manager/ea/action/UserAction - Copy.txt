@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
@@ -49,32 +50,6 @@ public class UserAction extends BaseEaAction {
 	public String photo_upload() throws Exception {
 		User who =(User) infEa.getbaseDao().loadById("User", Long.parseLong(getpara("id")));
 		rhs.put("user", who);
-		return "success";
-	}
-	
-	/*
-	 * Add by liuhuiping
-	 */
-	public String list() throws Exception {
-		getPageData(Hsql.All_USER);
-		return "list";
-	}
-	
-	public String menu_save() throws Exception {
-		if (user.getId() == null || user.getId().toString().equals("")) { // create
-			baseDao.create(user);
-		} 
-		return list();
-	}
-	
-	public String load() throws Exception {
-		String id = getpara("id");
-		if ("".equals(getpara("id"))) {
-			rhs.put("user", null);
-		} else {
-			User user = (User) baseDao.loadById("User", Long.parseLong(id));
-			rhs.put("user", user);
-		}
 		return "success";
 	}
 	/*

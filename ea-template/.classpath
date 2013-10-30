@@ -107,6 +107,6 @@
 	<classpathentry kind="lib" path="lib/tools.jar"/>
 	<classpathentry kind="lib" path="lib/trilead-ssh2-1.0.0-build215.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis-1.0.b2.jar"/>
-	<classpathentry kind="lib" path="lib/xwork-core-2.3.7.jar"/>
+	<classpathentry kind="lib" path="lib/xwork-core-2.3.7.jar" sourcepath="d:/train/m2/repository/org/apache/struts/xwork/xwork-core/2.3.7/xwork-core-2.3.7-sources.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

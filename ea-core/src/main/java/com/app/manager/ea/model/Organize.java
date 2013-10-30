@@ -53,9 +53,9 @@ public class Organize extends BaseModel  {
 	public String imgfilename;
 	
 	public Organize parentModel;
-	private Set<Organize> childOrganizes = new HashSet<Organize>();
-	private Set<Role> roles = new HashSet<Role>();
-	private Set<Organizegroup> organizegroups = new HashSet<Organizegroup>();
+	public Set<Organize> childOrganizes = new HashSet<Organize>();
+	public Set<Role> roles = new HashSet<Role>();
+	public Set<Organizegroup> organizegroups = new HashSet<Organizegroup>();
 
 	@ManyToMany(cascade = CascadeType.ALL, targetEntity = Organizegroup.class, fetch = FetchType.LAZY)
 	@JoinTable(name = "manager_ea_organizegroup_organize", joinColumns = { @JoinColumn(name = "organize_id") }, inverseJoinColumns = { @JoinColumn(name = "organizegroup_id") })
@@ -106,6 +106,17 @@ public class Organize extends BaseModel  {
 		return roles;
 	}
 
+	public Set rootRoles() {
+		Set roleset=new HashSet();
+		for (Iterator iterator = getRoles().iterator(); iterator.hasNext();) {
+			Role role = (Role) iterator.next();
+			if(role.getParentModel()==null||this.parentModel.getRoles().contains(role.getParentModel())){
+				roleset.add(role);
+			}
+		}
+		return roleset;
+	}
+	
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}

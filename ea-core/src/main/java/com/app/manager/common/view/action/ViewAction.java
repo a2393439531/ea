@@ -53,6 +53,16 @@ public class ViewAction extends EaAction {
 	}	
 	
 	public String picture_role_user_v() {
+		Role role = (Role) baseDao.loadById("Role",
+				Long.parseLong(getpara("roleId")));
+		rhs.put("role", role);
+		return "success";
+		
+
+	}
+	
+	
+	public String picture_all_role_user_v() {
 		List roleGroupRootList = baseDao
 				.find(" from Rolegroup where parent_id = null");
 		rhs.put("roleGroupRootList", roleGroupRootList);
@@ -60,7 +70,22 @@ public class ViewAction extends EaAction {
 		
 
 	}
+		
+	
 
+	public String picture_user_in_organize() {
+		List roleGroupRootList = baseDao
+				.find(" from Rolegroup where parent_id = null");
+		rhs.put("roleGroupRootList", roleGroupRootList);
+		
+		User user = (User) baseDao.loadById("User",
+				Long.parseLong(getpara("userId")));
+		rhs.put("user", user);
+		return "success";
+		
+
+	}	
+	
 	public String position_node_v() {
 		Role role = (Role) baseDao.loadById("Role",
 				Long.parseLong(getpara("id")));
@@ -71,7 +96,7 @@ public class ViewAction extends EaAction {
 	
 	
 
-	public String picture_organize_all_v() {
+	public String picture_organize_v() {
 		
 		rhs.put("rootname",getName());
 		rhs.put("organizeRootList",getRootList());
