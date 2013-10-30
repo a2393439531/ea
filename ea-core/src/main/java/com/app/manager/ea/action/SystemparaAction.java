@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.app.manager.common.base.action.BaseEaAction;
 import com.app.manager.ea.model.Systempara;
 
 import com.opensymphony.util.BeanUtils;

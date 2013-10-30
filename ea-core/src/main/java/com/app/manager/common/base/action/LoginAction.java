@@ -1,4 +1,4 @@
-package com.app.manager.ea.action;
+package com.app.manager.common.base.action;
 
 import java.util.ArrayList;
 import java.util.List;

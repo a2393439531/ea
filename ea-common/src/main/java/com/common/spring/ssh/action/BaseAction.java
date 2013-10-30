@@ -69,6 +69,13 @@ public class BaseAction {
 		}
 
 	}
+
+	public String getWebroot() {
+		return ServletActionContext.getRequest().getRealPath("/"); 
+	}
+	
+	
+	
 	public String getnumberpara(String key) {
 		if (ServletActionContext.getRequest().getParameter(key) == null)
 			return "0";
@@ -193,9 +200,11 @@ public class BaseAction {
 						.size() / pagination.getMaxSize());
 		rhs.put("currentPage", Integer.parseInt(pageId));
 		if (getpara("sortName").equals("")) {
-			rhs.put("sortName", "id");
+			//rhs.put("sortName", "id");
+			putSessionValue("sortName", "id");
 		} else {
-			rhs.put("sortName", getpara("sortName"));
+			//rhs.put("sortName", getpara("sortName"));
+			putSessionValue("sortName",  getpara("sortName"));
 		}
 
 	}
@@ -259,10 +268,13 @@ public class BaseAction {
 				Long.parseLong(id));
 		BeanUtils.setValue(baseModel, "parentModel", null);
 		BeanUtils.setValue(baseModel, "organizegroups", null);
+		
 		baseDao.update(baseModel);
 		baseDao.delete(baseModel);
 
 	}
+	
+	
 	
 	public void getExptList(String modelname){
 		rhs.put("extpList",  baseDao.find("from Extp ep  where ep.modelname='"+modelname+"'"));

@@ -39,7 +39,8 @@ public interface InfEa {
 	public User createUser(String account, String password);
 
 	public void deleteUser(User user);
-
+	public void deleteRole(Role role);
+	public void deleteOrgainize(Organize organize);
 	public void updateOjbect(Object o);
 
 	public void initData() throws Exception;

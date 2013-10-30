@@ -1,4 +1,4 @@
-package com.app.manager.ea.action;
+package com.app.manager.common.base.action;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

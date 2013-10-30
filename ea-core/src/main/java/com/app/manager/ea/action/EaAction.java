@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.app.manager.common.base.action.BaseEaAction;
 import com.app.manager.ea.hsql.Hsql;
 import com.app.manager.ea.model.Organize;
 import com.app.manager.ea.model.Organizegroup;
@@ -89,9 +90,25 @@ public class EaAction extends BaseEaAction {
 	
 	
 	
+	public String menu_organize_view_v() {
+		List roleGroupRootList = baseDao
+				.find(" from Rolegroup where parent_id = null");
+		rhs.put("roleGroupRootList", roleGroupRootList);
+		return "success";
+
+	}
+	public String menu_organize_view_h() {
+		List organizeRootList = infEa.getOrganizeRootNods();
+		rhs.put("organizeRootList", organizeRootList);
+		rhs.put("userList", infEa.getAllUser());
+		return "success";
+	}
+
+	
 
 		
 	
+
 	public String ajax_bat_create_role() throws Exception {
 		String organizeId = getpara("organizeId");
 		String rolegroupIdString = getpara("rolegroupIdString");
@@ -157,6 +174,20 @@ public class EaAction extends BaseEaAction {
 		ajax_organize_role_list();
 		return "success";
 	}	
+	
+	public String ajax_role_delete() throws Exception {
+		Role role = (Role) baseDao.loadById("Role",
+				Long.parseLong(getpara("roleId")));
+		role.setParentModel(null);
+		role.setRolegroups(null);
+		role.setUsers(null);
+		role.setOrganizes(null);
+		baseDao.delete(role);
+		rhs.put("info_type", "success");
+		rhs.put("info", "删除角色成功!");
+		return "success";
+	}		
+	
 	public String change_role_level() throws Exception {
 		common_change_level();
 		rhs.put("info_type", "success");
@@ -375,113 +406,10 @@ public class EaAction extends BaseEaAction {
 		return "success";
 	}
     
-	public void common_get_user_info(List userList) {
-		for (Iterator iterator = userList.iterator(); iterator.hasNext();) {
-			User user = (User) iterator.next();
-			user.setAllrolegroup("");
-			user.setAllrole("");
-			try {
-				String companyname = "";
-				companyname = infEa.getUserFirestOrgNameByOrgGroup(
-						user.getId(), "company").getName();
-				user.setCompanyname(companyname);
-			} catch (Exception e) {
-				user.setCompanyname("未分配公司");
-			}
-			try {
-				String teamname = "";
-				Organize org=infEa.getOrganzieOfUserByOrganizeGroupAlias(
-						user.getId(), "team");
-				teamname = org.getName();
-				user.setTeamname(teamname);
-				user.setGroupname(org.getParentModel().getName());
-			} catch (Exception e) {
-				user.setTeamname("");
-				user.setGroupname("");
-			}
 
-			String techname="";
-			try {
-				for (Iterator iterator2 = user.getRoles().iterator(); iterator2
-						.hasNext();) {
-					Role role = (Role) iterator2.next();
-					if(role.getAlias()!=null){
-						user.setAllrole(user.getAllrole()+"-"+role.getAlias());
-					}
-					for (Iterator iterator3 = role.getOrganizes().iterator(); iterator3
-							.hasNext();) {
-						Organize organize = (Organize) iterator3.next();
-						if(organize.getParentModel()!=null&&organize.getParentModel().getAlias()!=null){
-							if(organize.getParentModel().getAlias().equalsIgnoreCase("tech")){
-								techname=techname+role.getName()+";";
-							}
-						}
-					}
-					for (Iterator iterator3 = role.getRolegroups().iterator(); iterator3
-							.hasNext();) {
-						Rolegroup rolegroup = (Rolegroup) iterator3.next();
-						if(rolegroup.getAlias()!=null){
-							user.setAllrolegroup(user.getAllrolegroup()+"-"+rolegroup.getAlias());
-						}
-					}
-						
-				}
-				
-			} catch (Exception e) {
-				System.out.println("异常用户："+user.getName()+e.toString());
-			
-			}		
-			user.setTechname(techname);
-			/*
-			try {
-				String techname = "";
-				techname = infEa.getOrganzieOfUserByOrganizeGroupAlias(
-						user.getId(), "tech").getName();
-				user.setTechname(techname);
-			} catch (Exception e) {
-				user.setTechname("未分配技术领域");
-			}
-			*/
-			continue;
-		}
-	}
 
-	public String report_user_check() throws Exception {
-		List userList = baseDao.find(Hsql.All_USER);
-		common_get_user_info(userList);
-		rhs.put("userList", userList);
-		return "success";
-	}
-	public String report_birt_user() throws Exception {
-	
-		List userList = (List)Cache.get("userlist");
-		 userList =null;
-		if (userList == null) {
-			userList = baseDao.find(Hsql.All_USER);
-			common_get_user_info(userList);
-			Cache.set("userlist", userList, "8h"); // 放入缓存
-		}
-		
-		rhs.put("dataList", userList);
-		return "success";
-	}
-	
 	public String clean() throws Exception {
 		Cache.delete("userlist");
-		return "success";
-	}
-	public String report_assement() throws Exception {
-		
-		report_birt_user();
-		return "success";
-	}
-
-	public String report_tech_member() throws Exception {
-		List organizeRootList = infEa.getOrganizeRootNods();
-		Organize organize=(Organize)infEa.getOrganizeByAlias("tech");
-		rhs.put("system_para_map", 	infEa.getParaMap());   
-		rhs.put("organizeRootList", organize.getChildOrganizes());
-		rhs.put("userList", infEa.getAllUser());
 		return "success";
 	}
 	public String menu_query_inf() {
@@ -607,13 +535,7 @@ public class EaAction extends BaseEaAction {
 	
 		
 	
-	public String menu_organize_view_h() {
-		List organizeRootList = infEa.getOrganizeRootNods();
-		rhs.put("organizeRootList", organizeRootList);
-		rhs.put("userList", infEa.getAllUser());
-		return "success";
-	}
-
+	
 	public String menu_user_duty_define_by_role() {
 		List roleGroupRootList = baseDao
 				.find(" from Role where parent_id = null");

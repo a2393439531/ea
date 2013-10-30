@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.app.manager.ea.action.BaseEaAction;
+import com.app.manager.common.base.action.BaseEaAction;
 import com.app.manager.template.model.Tpltb1;
 import com.common.spring.ssh.action.BaseBusinessAction;
 import com.common.spring.ssh.model.BaseModel;

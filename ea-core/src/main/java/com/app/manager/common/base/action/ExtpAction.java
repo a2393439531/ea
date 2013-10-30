@@ -1,4 +1,4 @@
-package com.app.manager.ea.action;
+package com.app.manager.common.base.action;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.app.manager.ea.action.EaAction;
 import com.app.manager.ea.model.Extp;
 
 @Component("extpAction")
