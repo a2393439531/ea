@@ -21,7 +21,6 @@
 	ul#icons li {cursor: pointer; float: left;  list-style: none;}
 		ul#icons span.ui-icon {float: left; margin: 0 2px;}
 	.ui-icon  { cursor: pointer; float: left;  }
-
 </style>	
 <script type="text/javascript" src="<@context/>common/jquery151/jquery-1.5.1.min.js"></script>
 <script type="text/javascript" src="<@context/>common/jqueryui183/jquery-ui-1.8.13.custom.min.js"></script>

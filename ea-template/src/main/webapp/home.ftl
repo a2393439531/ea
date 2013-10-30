@@ -1,3 +1,3 @@
-<body>
-欢迎使用XX系统
+<body style="padding: 10px; font-size:20px;">
+Welcome!
 </body>

@@ -1,3 +1,11 @@
+<head>
+<style>
+blockquote.pull-right {
+	border-right-style: none;
+	padding-right: 0px;
+}
+</style>
+</head>
 <div id=div_tpltb2_table>
     <table   class="table  table-condensed">
 	    <thead>
@@ -24,18 +32,10 @@
 		</#list> 
 		</tbody>
 	</table>            
-	<blockquote class="pull-right">
+	<p class="pull-right">
 		<span id="div_action_result" class="small text-${rhs["info_type"]?if_exists} ">
 			${rhs["info"]?if_exists}
 		</span>
-		显示条数<select style="WIDTH: 40px"   onchange="javascript:action_tpltb2('manager_tpltb2_change_page_number.do','maxSize='+this.value)" >
-				    <option value="${rhs.maxSize}">${rhs.maxSize}</option>
-	  				<option value="5">5</option>
-	  				<option value="10">10</option>
-	  				<option value="20">20</option>
-	  				<option value="50">50</option>
-	  				<option value="200">200</option>
-	 			<select>		
 		<#if (rhs.currentPage > 1) ><a class="btn btn-link btn-mini" onclick="javascript:action_tpltb2('manager_tpltb2_ajax_page_data.do','pageId=1')">第一页</a></#if>
 		<#if (rhs.currentPage > 1) ><a class="btn btn-link btn-mini"  onclick="javascript:action_tpltb2('manager_tpltb2_ajax_page_data.do','pageId=${rhs.currentPage-1}')">上一页</a></#if>
 		<#if (rhs.currentPage < rhs.maxPage) ><a class="btn btn-link btn-mini" onclick="javascript:action_tpltb2('manager_tpltb2_ajax_page_data.do','pageId=${rhs.currentPage+1}')">下一页11</a></#if>
@@ -43,5 +43,15 @@
 		第${rhs.currentPage}页&nbsp;
 		共${rhs.maxPage}页&nbsp;
 		总${rhs.count}条记录
-	</blockquote>
+		
+		显示条数
+		<select style="WIDTH: 60px"   onchange="javascript:action_tpltb2('manager_tpltb2_change_page_number.do','maxSize='+this.value)" >
+			<option value="${rhs.maxSize}">${rhs.maxSize}</option>
+	  		<option value="5">5</option>
+	  		<option value="10">10</option>
+	  		<option value="20">20</option>
+	  		<option value="50">50</option>
+	  		<option value="200">200</option>
+	 	</select>	
+	</p>
 </div>

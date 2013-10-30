@@ -1,10 +1,11 @@
 <#include "../../../common/freemarker/include_header.ftl">
+<!-- 
 <script>
 $(function() {
 	$( "#tabs" ).tabs();
 });
 </script>
- 
+-->
 <div id="tabs">
 	<div id="tabs-1">
 		<#include "include_add_search.ftl">
@@ -25,7 +26,7 @@ $(function() {
 					<td>${x.title?if_exists}</td>
 					<td>
 						<a title="编辑" href="manager_tpltb3_load.do?id=${x.id}" >编辑</a> 
-						<a title="删除" href="manager_tpltb3_delete.do?id=${x.id}"  >删除</a>
+						<a title="删除" href="manager_tpltb3_delete.do?id=${x.id}" >删除</a>
 					</td>
 				</tr>
 			</#list> 
