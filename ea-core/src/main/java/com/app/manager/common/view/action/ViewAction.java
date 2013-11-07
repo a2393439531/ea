@@ -124,6 +124,7 @@ public class ViewAction extends EaAction {
 		}else{
 			Organize organize = (Organize) baseDao.loadById("Organize",
 					Long.parseLong(getpara("id")));
+			rhs.put("organize", organize);
 		    ArrayList rootList=new ArrayList();
 		    for (Iterator iterator = organize.getChildOrganizes().iterator(); iterator.hasNext();) {
 				Organize o = (Organize) iterator.next();

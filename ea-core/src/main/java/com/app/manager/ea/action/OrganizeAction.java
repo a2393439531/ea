@@ -48,6 +48,7 @@ public class OrganizeAction extends BaseEaAction {
 		
 		rhs.put("info_type", "success");
 		rhs.put("info", " 添加新节点成功!");
+		
 		return "success";
 	}	
 
@@ -95,8 +96,10 @@ public class OrganizeAction extends BaseEaAction {
 			user.setAccount(getpara("account"));
 			Role role=(Role)baseDao.loadById("Role",
 					Long.parseLong(getpara("roleId")));
-			user.getRoles().add(role);
+			
 			baseDao.create(user);
+			user.getRoles().add(role);
+			baseDao.update(user);
 			rhs.put("info", user.getName()+ " 添加成功!");
 			admin();
 			return "success";
