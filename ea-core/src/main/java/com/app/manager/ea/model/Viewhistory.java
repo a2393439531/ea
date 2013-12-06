@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import com.common.spring.ssh.model.BaseModel;
 
 @Entity
-@Table(name = "oa_viewhistory")
+@Table(name = "ea_viewhistory")
 public class Viewhistory extends BaseModel {
 	private static final long serialVersionUID = 1L;
 	private Long id;

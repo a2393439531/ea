@@ -45,6 +45,8 @@ public class ImpEa implements InfEa  {
 		return baseDao.find(" from Organize where parent_id = null");
 
 	}
+	
+	
 
 	public InfDemo getInfDemo() {
 		return infDemo;
@@ -518,22 +520,33 @@ public class ImpEa implements InfEa  {
 		return resourceSet;
 	}
 
+	 /*
+	 
+		sendMail.send("gscsystem@163.com", "tom.ling@ericsson.com", "", "",
+				"from 163 用户发的", "test这是正文", null);
+			
+		 String from, String to, String cc, String bcc,
+			String subject, String text, String[] filename
+		 */
 	@Override
-	public void sendMail(String from,String to, String cc, String bcc, String subject,
+	public void sendMail(String to, String cc, String bcc, String subject,
 			String text, String[] filename) {
-		System.out.println("发送邮件的api调用");
-		try {
-			SendMail sendMail = new SendMail();
-			sendMail.connect("smtp.163.com", "gscsystem", "abc123", "25");
-			sendMail.send(from, to, cc, bcc,subject,text, null);
-			sendMail.close();
-			System.out.println("发送完毕");
-
-		} catch (Exception e) {
-			System.out.println("发送失败，重新服务器尝试");
-			e.printStackTrace();
+		ArrayList smtpList = (ArrayList) baseDao.find("from Smtp");
+		for (Iterator iterator = smtpList.iterator(); iterator.hasNext();) {
+			Smtp smtp = (Smtp) iterator.next();
+			log.debug(smtp.getHost()+smtp.getPort()+smtp.getAccount()+smtp.getPasswd());
+			try {
+				SendMail sendMail = new SendMail();
+				sendMail.connect(smtp.getHost(), smtp.getAccount(), smtp.getPasswd(), smtp.getPort());
+				sendMail.send(smtp.getSender(), to, cc, bcc,subject,text, null);
+				sendMail.close();
+			} catch (Exception e) {
+				log.debug("发送失败，重新服务器尝试");
+				e.printStackTrace();
+				continue;
+			}
 		}
-
+		
 	}
 
 	@Override

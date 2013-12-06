@@ -25,6 +25,7 @@ public class UserAction extends BaseEaAction {
 
 	public String menu_user() throws Exception {
 		getPageData(Hsql.All_USER);
+		rhs.put("system_para_map", 	infEa.getParaMap());
 		return "success";
 	}
 
@@ -32,19 +33,45 @@ public class UserAction extends BaseEaAction {
 		
 		infEa.createUser("", "abc123");
 		getPageData(Hsql.All_USER);
+		rhs.put("system_para_map", 	infEa.getParaMap());
 		return "success";
 	}
- 
+   /*
 	public String regedit() throws Exception {
 		User who =(User) infEa.getbaseDao().loadById("User", Long.parseLong(getpara("id")));
 		List<Organize> organizelist = infEa
 				.getOrganizeByOrganizegroupAlias("tech");
-		/*
-		User who = (User) infEa.getUserbyAccount(getpara("account"));
-		*/
+		
 		rhs.put("organizelist", organizelist);
 		rhs.put("user", who);
+		rhs.put("system_para_map", 	infEa.getParaMap());
 		return "success";
+	}
+	*/
+
+	public String resume() throws Exception {
+		return profile();
+
+	}	
+	public String profile_edit() throws Exception {
+		return profile();
+
+	}
+	public String profile() throws Exception {
+		 User u = null;
+		    if(!(getpara("id").equals("")))
+		    	 u = (User) infEa.getbaseDao().loadById("User", Long.parseLong(getpara("id")));
+		    if(!(getpara("account").equals("")))
+		    	 u = (User)  infEa.getUserbyAccount(getpara("account"));
+			if(u==null)	
+		     u = (User) infEa.getUserbyAccount(getCurrentAccount());
+			
+	    List<Organize> organizelist = infEa
+				.getOrganizeByOrganizegroupAlias("tech");
+		rhs.put("organizelist", organizelist);
+		rhs.put("user", u);
+		return "success";
+
 	}
 	public String photo_upload() throws Exception {
 		User who =(User) infEa.getbaseDao().loadById("User", Long.parseLong(getpara("id")));
@@ -178,18 +205,21 @@ public class UserAction extends BaseEaAction {
 		userdata.setId(Long.parseLong(id));
 		infEa.deleteUser(userdata);
 		getPageData(Hsql.All_USER);
+		rhs.put("system_para_map", 	infEa.getParaMap());
 		rhs.put("info_type", "success");
 		rhs.put("info", "delete success!");		
 		return "success";
 	}
 	public String update() throws Exception {
-		common_update(Hsql.All_USER);
+		
+		common_update("from User u ");
 		return "success";
 	}
     //修改每页显示的个数
 	public String change_page_number() throws Exception {
 		putSessionValue("maxSize", getpara("maxSize"));
 		getPageData(Hsql.All_USER);
+		rhs.put("system_para_map", 	infEa.getParaMap());
 		rhs.put("info_type", "success");
 		rhs.put("info", "");
 		return "success";
@@ -211,6 +241,7 @@ public class UserAction extends BaseEaAction {
 	public String ajax_query_user_by_name() {
 		String name = getpara("username");
 		List list = infEa.getAllResoucesByUserName(name);
+		
 		rhs.put("name", name);
 		rhs.put("list", list);
 		return "success";
@@ -220,11 +251,23 @@ public class UserAction extends BaseEaAction {
 		
 		String hsql = Hsql.All_USER + "where  upper(assessLev) like '%"+ getpara("assessLev")+"%'";
 		getPageData(hsql);
+		rhs.put("system_para_map", 	infEa.getParaMap());
+		rhs.put("info_type", "success");
+		rhs.put("info", "");
+		return "success";
+	}
+	public String search_by_status() throws Exception {
+		
+		String hsql = Hsql.All_USER + "where  nvl(status, 'normal') like '%"+ getpara("status")+"%'  ";
+		getPageData(hsql);
+		rhs.put("system_para_map", 	infEa.getParaMap());
 		rhs.put("info_type", "success");
 		rhs.put("info", "");
 		return "success";
 	}
 
+	
+	
 	public User getUser() {
 		return user;
 	}

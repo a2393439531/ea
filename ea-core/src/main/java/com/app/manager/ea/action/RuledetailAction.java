@@ -52,6 +52,7 @@ public class RuledetailAction extends BaseEaAction {
 	public String create() throws Exception {
 		Ruledetail ruledetail = new Ruledetail();
 		ruledetail.setName("");
+		ruledetail.setAlign("left");
 		Rule rule=getRule();
 		ruledetail.setRule(rule);
 		baseDao.create(ruledetail);

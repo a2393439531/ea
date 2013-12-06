@@ -1,7 +1,9 @@
 package com.app.manager.ea.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -83,6 +85,21 @@ public class Rolegroup extends BaseModel {
 		return name;
 	}
 
+	public List allUserOfRolegroup() {
+		List<User> result_user = new ArrayList();
+		for (Iterator iterator = this.getRoles().iterator(); iterator.hasNext();) {
+			Role role = (Role) iterator.next();
+			result_user.addAll(role.getUsers());
+		}
+		
+		for (Iterator iterator = result_user.iterator(); iterator.hasNext();) {
+			User user = (User) iterator.next();
+		//	System.out.println("用户"+user.getName());
+			
+		}
+		return result_user;
+	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}

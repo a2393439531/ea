@@ -65,9 +65,10 @@ public class User extends BaseModel {
 	private String score;
 	private String mark;
 	private String imgfilename;
+	private String status;
 
-
-	 
+	private String sognumber;
+	private String ksonumber;
 	public String conbegindate;
 	public String contenddate ; 
 	public String conmonfee    ;
@@ -476,6 +477,30 @@ public class User extends BaseModel {
 
 	public void setConadminfee(String conadminfee) {
 		this.conadminfee = conadminfee;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getSognumber() {
+		return sognumber;
+	}
+
+	public void setSognumber(String sognumber) {
+		this.sognumber = sognumber;
+	}
+
+	public String getKsonumber() {
+		return ksonumber;
+	}
+
+	public void setKsonumber(String ksonumber) {
+		this.ksonumber = ksonumber;
 	}
 
 

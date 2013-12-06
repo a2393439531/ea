@@ -24,7 +24,12 @@ public class RuleAction extends BaseEaAction {
 		rhs.put("info", "");
 		return "success";
 	}
-
+	public String list_rule() throws Exception {
+		rhs.put("ruleRootList", common_get_tree_root("Rule"));
+		rhs.put("info_type", "success");
+		rhs.put("info", "");
+		return "success";
+	}
 	public String create() throws Exception {
 		String id = getpara("id");
 		if ("root".equals(id)) {

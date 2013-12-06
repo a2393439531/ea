@@ -17,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 
 import com.common.spring.ssh.dao.BaseDao;
 import com.common.spring.ssh.model.BaseModel;
@@ -27,6 +28,7 @@ import com.opensymphony.xwork2.ActionContext;
 import freemarker.ext.beans.BeansWrapper;
 
 /*一些通用的方法,对所有项目的action共享，没有特别的类对象*/
+@Scope("prototype")
 public class BaseAction {
 	private final Logger log = LoggerFactory.getLogger(BaseAction.class);
 	public HashMap<String, Object> rhs = new HashMap<String, Object>();
@@ -161,8 +163,7 @@ public class BaseAction {
 			baseDao.update(modle);
 		}
 
-		rhs.put("info_type", "success");
-
+		
 		rhs.put("info_type", "success");
 		rhs.put("info", "update success!");
 		getPageData(sql);
@@ -206,7 +207,7 @@ public class BaseAction {
 			//rhs.put("sortName", getpara("sortName"));
 			putSessionValue("sortName",  getpara("sortName"));
 		}
-
+	
 	}
 
 	public void common_change_rank() throws Exception {

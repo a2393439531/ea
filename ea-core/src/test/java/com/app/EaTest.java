@@ -47,7 +47,7 @@ public class EaTest extends AbstractBaseTestCase {
 	
 	@Test
 	public void email() throws Exception {
-	     infEa.sendMail("gscsystem@163.com", "3436070@qq.com", "tom.ling@ericsson.com", "","组长录入REQ101:更新SVN解决方案", "请", null);
+	     infEa.sendMail( "3436070@qq.com", "tom.ling@ericsson.com", "","组长录入REQ101:更新SVN解决方案", "请", null);
 	    
 	}
 	

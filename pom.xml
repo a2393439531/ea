@@ -17,7 +17,7 @@
       <module>ea-parent</module> 
       <module>ea-common</module> 
       <module>ea-core</module>
-     
+      <module>ea-activiti</module>
       <!-- 
       <module>ea-template</module>
       <module>apm</module>

@@ -111,7 +111,7 @@ public class EarptAction extends BaseEaAction {
 		rhs.put("userList", userList);
 		return "success";
 	}
-	public String report_birt_user() throws Exception {
+	public String birt_user() throws Exception {
 	
 		List userList = (List)Cache.get("userlist");
 		
@@ -131,7 +131,7 @@ public class EarptAction extends BaseEaAction {
 	
 	public String assessment() throws Exception {
 		
-		report_birt_user();
+		birt_user();
 		return "success";
 	}
 
@@ -143,5 +143,19 @@ public class EarptAction extends BaseEaAction {
 		rhs.put("userList", infEa.getAllUser());
 		return "success";
 	}	
+	
+
+	public String ipm() throws Exception {
+		List hrworkshopList = baseDao.find("from Hrworkshop");
+		rhs.put("workshopList", hrworkshopList);
+		rhs.put("organizeRootList",infEa.getOrganizeRootNods());
+		if (getpara("show").equals("")) {
+			putSessionValue("show", "");
+		} else {
+			putSessionValue("show",  "report");
+		}		
+		return "success";
+	}	
+	
 	
 }

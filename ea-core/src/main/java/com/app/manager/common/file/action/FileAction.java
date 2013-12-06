@@ -35,6 +35,11 @@ public class FileAction extends BaseEaAction {
 	}
 	
 	public String image_upload() throws Exception {
+		return file_upload();
+	}	
+		
+
+	public String file_upload() throws Exception {
 		String id = getpara("id");
 		String beanname = getpara("beanname");
 		BaseModel baseModel = (BaseModel) baseDao.loadById(beanname,
@@ -42,9 +47,15 @@ public class FileAction extends BaseEaAction {
 		if(getpara("op").equals("w")){
 			InputStream is = new FileInputStream(file);
 			String fileName = this.getFileFileName();
-			String imagefilename = TimeUtil.getTimeStr("yyyyMMddhhmmssSSS")
+			String newfilename = TimeUtil.getTimeStr("yyyyMMddhhmmssSSS")
 						+ fileName.substring(fileName.lastIndexOf("."));
-			File deskFile = new File(getWebroot() + "/file/photo/", imagefilename);
+			String filepathname="";
+			if(getpara("folder").length()>0){
+				filepathname = getWebroot() + "/file/"+getpara("folder")+"/";
+			}else{
+				filepathname = getWebroot() + "/file/";
+			}
+			File deskFile = new File(filepathname+newfilename);
 			OutputStream os = new FileOutputStream(deskFile);
 			byte[] bytefer = new byte[1024];
 			int length = 0;
@@ -53,23 +64,38 @@ public class FileAction extends BaseEaAction {
 			}
 			os.close();
 			is.close();
-			rhs.put("imgfilename", BeanUtils.getProperty(baseModel, "imgfilename"));
-			BeanUtils.setProperty(baseModel, getpara("propertyname"), imagefilename);
+			rhs.put(getpara("propertyfilepath"), BeanUtils.getProperty(baseModel, getpara("propertyfilepath")));
+			BeanUtils.setProperty(baseModel, getpara("propertyfilepath"), newfilename);
+			try {
+				BeanUtils.setProperty(baseModel, getpara("propertyfilename"), fileName);
+			} catch (Exception e) {
+				// TODO: 不一定要保文件名的
+			}		
 			baseDao.update(baseModel);
 			rhs.put("beanname", beanname);
 			rhs.put("propertyname", getpara("propertyname"));
-						
+				
 		}else{
-			rhs.put("propertyname", getpara("propertyname"));
+			rhs.put("propertyfilepath", getpara("propertyfilepath"));
+			rhs.put("propertyfilename", getpara("propertyfilename"));
 			rhs.put("beanname", getpara("beanname"));
+			rhs.put("folder", getpara("folder"));
 			
+		}	
+		rhs.put("filepath", BeanUtils.getProperty(baseModel, getpara("propertyfilepath")));
+		try {
+			rhs.put("filename", BeanUtils.getProperty(baseModel, getpara("propertyfilename")));
+		} catch (Exception e) {
+			rhs.put("filename", "");
+			// TODO: 不一定要保文件名的
 		}	
 		rhs.put("object", baseModel);
 		rhs.put("op", "w");
 		return "success";
 	}	
-		
-		
+			
+	
+	
 	public String regedit() throws Exception {
 		User who = (User) infEa.getUserbyAccount(getCurrentAccount());
 		List<Organize> organizelist = infEa

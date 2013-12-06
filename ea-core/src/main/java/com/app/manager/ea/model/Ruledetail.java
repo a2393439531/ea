@@ -29,6 +29,9 @@ public class Ruledetail extends BaseModel {
 	private String videowidth;
 	private String videoheight;
 	private String videofilepath;	
+	
+	private String attachfilepath;	
+	private String attachfilename;
 	@Id
 	@GeneratedValue
 	public Long getId() {
@@ -128,6 +131,22 @@ public class Ruledetail extends BaseModel {
 
 	public void setVideofilepath(String videofilepath) {
 		this.videofilepath = videofilepath;
+	}
+
+	public String getAttachfilepath() {
+		return attachfilepath;
+	}
+
+	public void setAttachfilepath(String attachfilepath) {
+		this.attachfilepath = attachfilepath;
+	}
+
+	public String getAttachfilename() {
+		return attachfilename;
+	}
+
+	public void setAttachfilename(String attachfilename) {
+		this.attachfilename = attachfilename;
 	}
 	
 	

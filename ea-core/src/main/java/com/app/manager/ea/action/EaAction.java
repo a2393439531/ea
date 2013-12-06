@@ -22,12 +22,15 @@ import com.app.manager.ea.model.Organizegroup;
 import com.app.manager.ea.model.Role;
 import com.app.manager.ea.model.Rolegroup;
 import com.app.manager.ea.model.User;
+import com.app.manager.ea.model.Viewhistory;
 
 
 import com.common.cache.Cache;
 import com.common.file.FileProcessor;
 import com.common.spring.ssh.model.BaseModel;
 import com.common.time.TimeUtil;
+
+import freemarker.template.SimpleHash;
 
 @Component("eaAction")
 public class EaAction extends BaseEaAction {
@@ -66,6 +69,7 @@ public class EaAction extends BaseEaAction {
 		rhs.put("roleGroupRootList", roleGroupRootList);
 		return "menu_ea_init";
 	}
+	
 
 	public String menu_relation() {
 		List organizeRootList = infEa.getOrganizeRootNods();
@@ -105,10 +109,34 @@ public class EaAction extends BaseEaAction {
 	}
 
 	
-
-		
 	
-
+		
+	public String menu_mail_list() {
+		List organizeRootList = infEa.getOrganizeRootNods();
+		rhs.put("organizeRootList", organizeRootList);
+		rhs.put("rolegroupRootList", infEa.getRolegroupRootNods());
+		rhs.put("userList", infEa.getAllUser());
+		return "success";
+	}	
+	
+	public String send_email() {
+		
+		if(getpara("roleId")!=""){
+			Role role=(Role)baseDao.loadById("Role",Long.parseLong(getpara("roleId")));
+			
+			rhs.put("userList", role.getUsers());
+		}
+		
+		if(getpara("rolegroupId")!=""){
+			Rolegroup Rolegroup=(Rolegroup)baseDao.loadById("Rolegroup",Long.parseLong(getpara("rolegroupId")));
+		  rhs.put("userList", Rolegroup.allUserOfRolegroup());
+		}
+		return "success";
+	}	
+	public String select_userlist_by_organize() throws Exception {
+		rhs.put("organizeRootList",infEa.getOrganizeRootNods());	
+		return "success";	
+	}	
 	public String ajax_bat_create_role() throws Exception {
 		String organizeId = getpara("organizeId");
 		String rolegroupIdString = getpara("rolegroupIdString");
@@ -427,39 +455,6 @@ public class EaAction extends BaseEaAction {
 	}
 
 	
-	// 放在public，主要是不好调试，反正看职责，是要结合2个看的 ,再写入人的任务
-	public String edit_bean_property() throws IllegalAccessException,
-			InvocationTargetException, NoSuchMethodException {
-		System.out.println("");
-		String op = getpara("op");
-		String id = getpara("id");
-		String objectname = getpara("objectname"); // 对象名'
-		String propertyname = getpara("propertyname"); // 对象名'
-		String content = getpara("content");
-		BaseModel object = (BaseModel) baseDao.loadById(objectname,
-				Long.parseLong(id));
-		if (op.equals("r")) {
-			content = BeanUtils.getProperty(object, propertyname);
-		}
-
-		if (op.equals("w")) {
-			try {
-				BeanUtils.setProperty(object, propertyname, content);
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-			baseDao.update((BaseModel) object);
-		}
-		rhs.put("content", content);
-
-		rhs.put("objectname", objectname);
-		rhs.put("propertyname", propertyname);
-		rhs.put("id", id);
-		rhs.put("op", op);
-		return "success";
-	}
 	
 	
 	

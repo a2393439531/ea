@@ -75,7 +75,7 @@ public interface InfEa {
 	//
 	// public InfSmtpService getInfSmtpService();
 
-	public void sendMail(String from,String to, String cc, String bcc, String subject,
+	public void sendMail(String to, String cc, String bcc, String subject,
 			String text, String[] filename);
 	
 	

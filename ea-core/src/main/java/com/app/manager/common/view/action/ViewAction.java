@@ -23,6 +23,7 @@ import com.app.manager.ea.model.User;
 import com.app.manager.ea.model.Viewhistory;
 
 import com.common.file.FileProcessor;
+import com.common.freemark.StringbyPerlFreemark;
 
 import com.common.path.SystemInit;
 import com.common.spring.ssh.action.BaseBusinessAction;
@@ -154,7 +155,7 @@ public class ViewAction extends EaAction {
 		SimpleHash root=new SimpleHash();
 		root.put("rootname",getName());
 		root.put("organizeRootList", getRootList());
-		//StringbyPerlFreemark.getfilebyFreemark(getWebroot() + "/file/view/"+filename+".ftl", getWebroot() + "/app/manager/view",getpara("t")+".ftl",root);
+		StringbyPerlFreemark.getfilebyFreemark(getWebroot() + "/file/view/"+filename+".ftl", getWebroot() , "/app/common/view/"+getpara("t")+".ftl",root);
 		rhs.put("filename", filename);
 		return "success";
 
@@ -227,7 +228,10 @@ public class ViewAction extends EaAction {
 		return "success";
 	}	
 
-	
+	public String show_history_orgainze_pic() throws Exception {
+		
+		return "success";
+	}	
 
 
 	
