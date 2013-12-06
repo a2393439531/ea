@@ -3,7 +3,7 @@
 <script type="text/javascript" src="<@context_module/>tpltb1.js"></script>
 <style>
 p {
-	padding: 15px 0 0 10px;
+	padding: 15px 0 0 15px;
 	font-size: 13px;
 }
 .btn-new {
@@ -12,7 +12,7 @@ p {
     border: none;
     color: #FFFFFF;
     padding: 3px 12px;
-    margin: 0 0 5px 5px;
+    margin: 0 0 5px 10px;
     cursor: pointer;
     display: inline-block;
     font-size: 14px;

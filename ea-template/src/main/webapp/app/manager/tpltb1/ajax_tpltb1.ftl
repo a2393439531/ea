@@ -4,40 +4,67 @@ blockquote.pull-right {
 	border-right-style: none;
 	padding-right: 0px;
 }
+td {
+  	border:1px solid #DDD;
+}
+th {
+	background-color: #DDD;
+	border:1px solid #DDD;
+	border-right-color: #FFF;
+}
+input[type="text"], select {
+	border-style: none;
+	box-shadow: none;
+	text-align: center;
+}
+.testOver {
+	background-color: #efefef;
+}
 </style>
+<script type="text/javascript">
+function rowOver(target) 
+{ 
+    target.bgColor='#efefef'; 
+} 
+function rowOut(target) 
+{ 
+    target.bgColor='#ffffff'; 
+} 
+</script>
 </head>
 
-<div class="span11 content" id=div_tpltb1_table>
-   <table   class="table  table-condensed">
+<div class="span11 content" id="div_tpltb1_table">
+
+   <table class="table table-condensed" id="ServiceListTable">
 	    <thead>
 			<tr>
 			    <th width=25px >ID</th>
 				<th>姓名</th>
 				<th>性别</th>
 				<th>生日</th>
-				<th style="text-align:left;">操作</th>
+				<th style="border-right-color: #DDD;">操作</th>
 			</tr>
 		</thead>
 		<tbody>
 		<#list rhs["dataList"]?sort_by("sortNob") as x>
-			<tr>
+			<tr  >
 				<td class=nob >
 					${x_index+1}
-				</td>		
-				<td>
-					<input type="text" value='${x.name?if_exists}' onchange="javascript:action_tpltb1('update.do','column=name&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" />  
 				</td>
-				<td>
-					<select style="WIDTH: 50px"   onchange="javascript:action_tpltb1('update.do','column=sex&id=${x.id?if_exists}&columnValue='+this.value)">
+				<td onmouseover="rowOver(this)" onmouseout="rowOut(this)">
+					<input type="text" value='${x.name?if_exists}' onchange="javascript:action_tpltb1('update.do','column=name&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" />
+				</td>
+				<td onmouseover="rowOver(this)" onmouseout="rowOut(this)">
+					<select style="WIDTH: 50px" onchange="javascript:action_tpltb1('update.do','column=sex&id=${x.id?if_exists}&columnValue='+this.value)">
 					    <option value="${x.sex?if_exists}">${x.sex?if_exists}</option>
 		  				<option value="男">男</option>
 		  				<option value="女">女</option>
 		  			<select>
 				</td>
-				<td>
+				<td onmouseover="rowOver(this)" onmouseout="rowOut(this)">
 					<input type="text" value='${x.birthDate?if_exists}' onchange="javascript:action_tpltb1('update.do','column=birthDate&id=${x.id?if_exists}&columnValue='+this.value)" onClick="WdatePicker()"/>
 				</td>
-				<td>
+				<td onmouseover="rowOver(this)" onmouseout="rowOut(this)">
 					<#--<a href=# onclick="javascript:action_tpltb1('delete.do','id=${x.id}')" title="删除">删除</a>-->
 					    <a title="删除节点" onclick="javascript:action_tpltb1('delete.do','id=${x.id}');" class="ui-icon ui-icon-trash"  title=删除 ></a>
 					    <#if (rhs["dataList"]?size!=1)>
