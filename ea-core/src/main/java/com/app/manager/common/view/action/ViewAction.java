@@ -102,6 +102,8 @@ public class ViewAction extends EaAction {
 		rhs.put("rootname",getName());
 		rhs.put("organizeRootList",getRootList());
 		rhs.put("id",getpara("id"));
+		putSessionValue("show","");
+	    putSessionValue("show",getpara("show"));
 		return "success";
 	}	
 	
@@ -154,6 +156,7 @@ public class ViewAction extends EaAction {
 		
 		SimpleHash root=new SimpleHash();
 		root.put("rootname",getName());
+		root.put("show",getSessionValue("show"));
 		root.put("organizeRootList", getRootList());
 		StringbyPerlFreemark.getfilebyFreemark(getWebroot() + "/file/view/"+filename+".ftl", getWebroot() , "/app/common/view/"+getpara("t")+".ftl",root);
 		rhs.put("filename", filename);

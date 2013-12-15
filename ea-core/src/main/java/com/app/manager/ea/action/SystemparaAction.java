@@ -2,6 +2,7 @@ package com.app.manager.ea.action;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.app.manager.common.base.action.BaseEaAction;
@@ -10,6 +11,7 @@ import com.app.manager.ea.model.Systempara;
 import com.opensymphony.util.BeanUtils;
 
 @Component("systemparaAction")
+@Scope("prototype")
 public class SystemparaAction extends BaseEaAction {
 	private final Logger log = LoggerFactory.getLogger(SystemparaAction.class);
 	public String menu_systempara() throws Exception {

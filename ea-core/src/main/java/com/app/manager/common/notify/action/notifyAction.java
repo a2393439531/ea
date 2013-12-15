@@ -21,6 +21,8 @@ import com.app.manager.common.base.action.BaseEaAction;
 import com.app.manager.ea.api.InfEa;
 import com.app.manager.ea.model.Organize;
 import com.app.manager.ea.model.Resource;
+import com.app.manager.ea.model.Role;
+import com.app.manager.ea.model.Rolegroup;
 import com.app.manager.ea.model.Smtp;
 import com.app.manager.ea.model.User;
 import com.common.mail.SendMail;
@@ -36,6 +38,28 @@ public class notifyAction extends BaseEaAction {
 	public String execute() throws Exception {
     	return "success";
 	}
+	
+	public String send_email() {
+		ArrayList userlist=new ArrayList();
+		if(getpara("roleId")!=""){
+			Role role=(Role)baseDao.loadById("Role",Long.parseLong(getpara("roleId")));
+			
+		}
+		if(getpara("userId")!=""){
+			User user=(User)baseDao.loadById("User",Long.parseLong(getpara("userId")));
+			userlist.add(user);
+			rhs.put("userList",userlist);
+		}		
+		if(getpara("rolegroupId")!=""){
+		  Rolegroup Rolegroup=(Rolegroup)baseDao.loadById("Rolegroup",Long.parseLong(getpara("rolegroupId")));
+		  rhs.put("userList", Rolegroup.allUserOfRolegroup());
+		}
+		if(userlist.size()<1){
+			rhs.put("userList",baseDao.find("from User"));
+		}
+		return "success";
+	}	
+
 	
 	public String submit_send_mail() throws Exception {
 		List info=new ArrayList();

@@ -65,7 +65,7 @@ public class UserAction extends BaseEaAction {
 		    	 u = (User)  infEa.getUserbyAccount(getpara("account"));
 			if(u==null)	
 		     u = (User) infEa.getUserbyAccount(getCurrentAccount());
-			
+		
 	    List<Organize> organizelist = infEa
 				.getOrganizeByOrganizegroupAlias("tech");
 		rhs.put("organizelist", organizelist);

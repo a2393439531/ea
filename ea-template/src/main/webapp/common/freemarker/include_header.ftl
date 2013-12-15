@@ -32,6 +32,32 @@
 -->
 <link rel="stylesheet" type="text/css" href="<@context/>common/highslide-4-1-13/highslide/highslide.css" />
 <script type="text/javascript"          src="<@context/>common/highslide-4-1-13/highslide/highslide-with-html.js"></script>
+
+<style>
+.table-indie {
+	margin-left: 10px;
+}
+.table-indie th, .table-indie td {
+	vertical-align: middle;
+	text-align: center;
+}
+select, input[type="text"] {
+	margin-bottom: 0px;
+	border-style: none;
+	box-shadow: none;
+	text-align: center;
+}
+</style>
+<script type="text/javascript">
+function rowOver(target) 
+{ 
+    target.bgColor='#efefef'; 
+} 
+function rowOut(target) 
+{ 
+    target.bgColor='#ffffff'; 
+} 
+</script>
 <script type="text/javascript" >
 	//hs.graphicsDir = '<@context/>common/highslide/graphics/';
 	hs.graphicsDir = '<@context/>common/highslide-4-1-13/highslide/graphics/';

@@ -8,7 +8,7 @@
        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
     
     <import resource="spring-ea-persistence.xml"/>
-    <import resource="spring-test-activiti.xml"/>
+     <!--<import resource="spring-test-activiti.xml"/>--> 
     
     <import resource="spring-scan.xml" />
     <!--必须写在spring.xml里，不能写在import中-->   

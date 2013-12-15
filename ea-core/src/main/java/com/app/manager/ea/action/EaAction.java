@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.app.manager.common.base.action.BaseEaAction;
@@ -33,6 +34,7 @@ import com.common.time.TimeUtil;
 import freemarker.template.SimpleHash;
 
 @Component("eaAction")
+@Scope("prototype")
 public class EaAction extends BaseEaAction {
 	private final Logger log = LoggerFactory.getLogger(EaAction.class);
 	//http://localhost:9090/ea/app/manager/ea_sort.do?object=Organize

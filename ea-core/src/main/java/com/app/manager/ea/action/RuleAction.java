@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.app.manager.common.base.action.BaseEaAction;
@@ -15,6 +16,7 @@ import com.common.spring.ssh.action.BaseAction;
 import org.apache.commons.beanutils.BeanUtils;
 
 @Component("ruleAction")
+@Scope("prototype")
 public class RuleAction extends BaseEaAction {
 	private final Logger log = LoggerFactory.getLogger(RuleAction.class);
 	public String menu_rule() throws Exception {

@@ -123,7 +123,7 @@ public class LoginAction extends BaseEaAction {
 			infEa.resetPassword(currentuser.account, getpara("newpassword"));
 			rhs.put("info", "修改成功");
 		}
-		return "ajax_reset_password";
+		return "ajaxResetPassword";
 	}
 
 	@javax.annotation.Resource(name = "impEa")

@@ -1,41 +1,8 @@
-<head>
-<style>
-blockquote.pull-right {
-	border-right-style: none;
-	padding-right: 0px;
-}
-td {
-  	border:1px solid #DDD;
-}
-th {
-	background-color: #DDD;
-	border:1px solid #DDD;
-	border-right-color: #FFF;
-}
-input[type="text"], select {
-	border-style: none;
-	box-shadow: none;
-	text-align: center;
-}
-.testOver {
-	background-color: #efefef;
-}
-</style>
-<script type="text/javascript">
-function rowOver(target) 
-{ 
-    target.bgColor='#efefef'; 
-} 
-function rowOut(target) 
-{ 
-    target.bgColor='#ffffff'; 
-} 
-</script>
-</head>
+
 
 <div class="span11 content" id="div_tpltb1_table">
 
-   <table class="table table-condensed" id="ServiceListTable">
+   <table class="table table-condensed table-indie" id="ServiceListTable">
 	    <thead>
 			<tr>
 			    <th width=25px >ID</th>
@@ -47,7 +14,7 @@ function rowOut(target)
 		</thead>
 		<tbody>
 		<#list rhs["dataList"]?sort_by("sortNob") as x>
-			<tr  >
+			<tr>
 				<td class=nob >
 					${x_index+1}
 				</td>

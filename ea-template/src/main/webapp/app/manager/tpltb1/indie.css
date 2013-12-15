@@ -1,0 +1,40 @@
+.p-normal-style {
+	padding: 15px 0 0 15px;
+	font-size: 13px;
+}
+.btn-new {
+	background-color: #45A0F3;
+    background-image: none; 
+    border: none;
+    color: #FFFFFF;
+    padding: 3px 12px;
+    margin: 0 0 5px 10px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    vertical-align: middle;
+    }
+.btn-new:hover {
+	background-color: #73B8F9;
+}
+
+/* table-crud-ajax模式 */
+blockquote.pull-right {
+	border-right-style: none;
+	padding-right: 0px;
+}
+.table-indie td {
+  	border:1px solid #DDD;
+}
+.table-indie th {
+	background-color: #DDD;
+	border:1px solid #DDD;
+	border-right-color: #FFF;
+}
+.table-indie th, .table-indie td {
+	vertical-align: middle;
+	text-align: center;
+}
+/* table-crud-ajax模式 */

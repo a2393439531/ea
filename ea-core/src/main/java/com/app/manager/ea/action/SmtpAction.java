@@ -18,6 +18,7 @@ import com.common.spring.ssh.page.Pagination;
 
 @Component("smtpAction")
 @SuppressWarnings("rawtypes")
+@Scope("prototype")
 public class SmtpAction extends BaseEaAction {
 	private static Logger log = LoggerFactory.getLogger(SmtpAction.class);
 	private static String hsql_all = "from Smtp";

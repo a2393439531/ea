@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 
@@ -26,6 +27,7 @@ import com.app.manager.ea.model.Ruledetail;
 
 @Component("ruledetailAction")
 @SuppressWarnings("rawtypes")
+@Scope("prototype")
 public class RuledetailAction extends BaseEaAction {
 
 

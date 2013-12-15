@@ -8,6 +8,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.app.manager.ea.action.EaAction;
@@ -22,6 +23,7 @@ import freemarker.template.SimpleHash;
 
 @Component("viewhistoryAction")
 @SuppressWarnings("rawtypes")
+@Scope("prototype")
 public class ViewhistoryAction extends EaAction {
 	private static Logger log = LoggerFactory.getLogger(ViewhistoryAction.class);
 	public Viewhistory viewhistoryobject = new Viewhistory();
