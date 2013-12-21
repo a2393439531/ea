@@ -1,7 +1,0 @@
-1.
-assert (creds == 3);  不如
-assertEquals ("The number of credentials should be 3", 3, creds); 
-
-
-2. 测试spring 的bean 的简便方法
-SpringConfigTestTemplate

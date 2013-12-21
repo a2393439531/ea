@@ -43,8 +43,12 @@ public class MonitorAction extends BaseEaAction {
 		hashmap_system.put("h2-version",Path.getLocation( Class.forName("org.h2.Driver")));
 		hashmap_system.put("servlet-version",getServletVersion());
 		hashmap_system.put("xml-sax-parser-version", getXmSAXlParserName());
+		try{
 		hashmap_system.put("jetty-version", Path.getLocation( Class.forName("org.eclipse.jetty.server.Server")));
-	
+			
+		} catch (Exception e) {
+			hashmap_system.put("jetty-version", "");
+		}
 		hashmap_system.put("database-filename", System.getProperty("online", "db-${online}.properties"));
 		
 		

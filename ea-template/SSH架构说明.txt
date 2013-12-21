@@ -1,3 +1,0 @@
-ea-common    工具列dao的封装
-ea-core      组织架构，权限，登录模块    
-ea-template  标准模板工程（统一JAVA编码风格，统一前台界面模式，统一目录结构）

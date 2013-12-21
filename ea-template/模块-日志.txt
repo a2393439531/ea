@@ -1,1 +1,0 @@
-1.如何屏蔽掉SPRING启动时的加载信息，红色部分 System.err.println("红色 ");
