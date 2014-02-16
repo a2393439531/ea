@@ -1,4 +1,5 @@
-<script src="common/jquery151/jquery-1.5.1.min.js"></script>
+<#include "common/freemarker/include_header.ftl">
+
 <link href="common/ui/css/text.css" rel="stylesheet" type="text/css" media="all" />
 <script language="javascript">
     function check(){
@@ -26,7 +27,7 @@
     
      }
 </SCRIPT>
-
+<body style="padding:20px">
     <table width=350px>
 	    <tr>
 	       <td>当前密码</td>
@@ -38,7 +39,7 @@
 	    </tr>
 	    <tr>
 	      <td>重新输入新密码</td>
-	       <td> <input id="newrepeatpassword" class=input type="password" name="newrepeatpassword" size="20" onchange="check()"></td>    
+	       <td> <input id="newrepeatpassword" type="password" name="newrepeatpassword"  onchange="check()"></td>    
 	    </tr>
 	    <tr>
 	       <td  align="center" colspan="2" >
@@ -47,3 +48,18 @@
 	       </td>
 	    </tr>
   </table>
+  
+  
+<table>
+<#list Session["menuList"]?sort_by('sortNob')  as node>
+    <tr><td>${node.name?if_exists}</td>
+   
+    <td><a href=${node.actionUrl?if_exists} target=_blank >${node.actionUrl?if_exists} </a></td>
+    
+    </tr>
+</#list>
+
+</table>
+  
+  
+</body>

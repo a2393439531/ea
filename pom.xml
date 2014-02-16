@@ -15,18 +15,9 @@
    </activation>
    <modules>
       <module>ea-parent</module> 
-      <module>ea-common</module> 
       <module>ea-core</module>
-      <module>ea-activiti</module>
-      <!-- 
+      <!--
       <module>ea-template</module>
-      <module>apm</module>
-      <module>ea-activiti</module> 
-      <module>ea</module>
-      <module>ea</module>
-      <module>ea-view</module>
-      <module>ea-oa</module> 
-      <module>ea-view</module>
      -->
    </modules>
   </profile>

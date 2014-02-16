@@ -1,1 +1,0 @@
-<#include "ajax_testpaper.ftl">

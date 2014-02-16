@@ -1,9 +1,10 @@
-<div class="span11 content" id=div_smtp_table>
-   <table   class="table  table-condensed">
+<div  id=div_smtp_table>
+    <table   class="table table-bordered table-condensed  table-indie" width=800>
+
 	    <thead>
 			<tr>
 			    <th width=25px >ID</th>
-			 <th width=100>邮箱</th><th  width=50>标题</th><th width=50>服务器</th><th  width=50>端口号</th><th  width=80>账号</th><th  width=50>密码</th><th  width=150>操作</th></tr>
+			    <th width=100>邮箱</th><th  width=50>标题</th><th width=50>服务器</th><th  width=50>端口号</th><th  width=80>账号</th><th  width=50>密码</th><th  width=150>操作</th></tr>
 
 			</tr>
 		</thead>
@@ -13,13 +14,13 @@
 				<td class=nob >
 					${x_index+1}
 				</td>		
-			<td><input  type="text" style="width:100px" value='${x.sender?if_exists}' onchange="javascript:ajax_smtp('${x.id}','sender',this.value)" /></td>
-					<td><input  type="text" style="width:100px" value='${x.title?if_exists}'  onchange="javascript:ajax_smtp('${x.id}','title',this.value)" /></td>
-					<td><input  type="text" style="width:100px" value='${x.host?if_exists}'  onchange="javascript:ajax_smtp('${x.id}','host',this.value)" /></td>
-					<td><input  type="text" style="width:100px" value='${x.port?if_exists}' onchange="javascript:ajax_smtp('${x.id}','port',this.value)" /></td>
-					<td><input  type="text" style="width:100px" value='${x.account?if_exists}'  onchange="javascript:ajax_smtp('${x.id}','account',this.value)" /></td>
-					<td><input  type="text" style="width:100px" value='${x.passwd?if_exists}'  onchange="javascript:ajax_smtp('${x.id}','passwd',this.value)" /></td>
-				<td>
+					<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  type="text" style="width:140px" value='${x.sender?if_exists}' onchange="javascript:ajax_smtp('${x.id}','sender',this.value)" /></td>
+					<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  type="text" style="width:80px" value='${x.title?if_exists}'  onchange="javascript:ajax_smtp('${x.id}','title',this.value)" /></td>
+					<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  type="text" style="width:100px" value='${x.host?if_exists}'  onchange="javascript:ajax_smtp('${x.id}','host',this.value)" /></td>
+					<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  type="text" style="width:50px" value='${x.port?if_exists}' onchange="javascript:ajax_smtp('${x.id}','port',this.value)" /></td>
+					<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  type="text" style="width:100px" value='${x.account?if_exists}'  onchange="javascript:ajax_smtp('${x.id}','account',this.value)" /></td>
+					<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  type="text" style="width:100px" value='${x.passwd?if_exists}'  onchange="javascript:ajax_smtp('${x.id}','passwd',this.value)" /></td>
+				<td style="width:50px">
 					<#--<a href=# onclick="javascript:action_smtp('delete.do','id=${x.id}')" title="删除">删除</a>-->
 					    <a title="删除节点" onclick="javascript:action_smtp('delete.do','id=${x.id}');" class="ui-icon ui-icon-trash"  title=删除 ></a>
 					    <#if (rhs["dataList"]?size!=1)>

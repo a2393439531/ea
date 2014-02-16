@@ -1,0 +1,5 @@
+¡öorg.specs2.spring with no dependencies
+ ¡öorg.specs2.spring-example depends on org.specs2.spring
+ ¡öorg.specs2.spring.web depends on org.specs2.spring
+ ¡öorg.specs2.spring.web-example depends on org.specs2.spring.web
+ ¡öorg.specs2.spring.documentation with no dependencies

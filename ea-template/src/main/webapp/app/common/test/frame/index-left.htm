@@ -1,0 +1,262 @@
+
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<link rel="stylesheet" href="images/test.css" type="text/css">
+<script language="JavaScript">
+var w=200;
+function closenavi() {
+w-=10;
+if (w>-10) {window.parent.testframeset.cols = ''+w+',*';repeat=setTimeout("closenavi()",10);}
+else {clearTimeout(repeat);w=200;}
+}
+
+
+
+function initIt(){
+        divCount = document.all.tags("DIV");
+        for (i=0; i<divCount.length; i++) {
+            obj = divCount(i);
+            if (obj.className == "child" || obj.className == "child1") obj.style.display = "none";
+        }
+}
+
+function expandIt(el) {
+
+        obj = eval("page" + el);
+        obj2 = eval("main" + el);
+        if (obj.style.display == "none") {
+            obj.style.display = "block";
+			obj2.all.tags('img')[0].src='images/icon-folder1-open.gif';
+			obj2.all.tags('img')[1].src='images/icon-folder-open.gif';
+        }
+        else {
+            obj.style.display = "none";
+			obj2.all.tags('img')[0].src='images/icon-folder1-close.gif';
+			obj2.all.tags('img')[1].src='images/icon-folder-close.gif';
+        }
+
+}
+
+onload = initIt;
+
+var judge=0;
+function expandall(o) {
+if (judge==0) {divCount2 = document.all.tags("DIV");
+        for (i=0; i<divCount2.length; i++) {
+            obj2 = divCount2(i);
+            if (obj2.className == "child" || obj.className == "child1" || obj2.style.display == "none") 
+			{obj2.style.display = "block";}
+			if (obj2.className == "menu")
+			{obj2.all.tags('img')[0].src='images/icon-folder1-open.gif';
+            obj2.all.tags('img')[1].src='images/icon-folder-open.gif';
+            }
+}
+
+judge=1;
+o.src='images/icon-closeall.gif';
+o.alt='全部折叠';
+}
+else {divCount2 = document.all.tags("DIV");
+        for (i=0; i<divCount2.length; i++) {
+            obj2 = divCount2(i);
+            if (obj2.className == "child" || obj.className == "child1" || obj2.style.display == "block") 
+			{obj2.style.display = "none";}
+			if (obj2.className == "menu")
+			{obj2.all.tags('img')[0].src='images/icon-folder1-close.gif';
+            obj2.all.tags('img')[1].src='images/icon-folder-close.gif';
+            }
+}
+
+judge=0;
+o.src='images/icon-expandall.gif';
+o.alt='全部展开';
+}
+}
+
+</script>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" onselectstart="return false;">
+<table id=control width="100%" border="0" cellspacing="0" cellpadding="0" class="borderon">
+<tr>
+<td height="20" style="padding-top:3px"><nobr>&nbsp;站点导航</nobr></td>
+<td width="20" align="center" valign="top"><img src="images/icon-expandall.gif" width="16" height="15" class="button" onclick="expandall(this)" vspace="2" alt="全部展开"></td>
+<td width="20" align="center" valign="top"><img src="images/icon-close.gif" width="16" height="15" class="button" onClick="closenavi()" vspace="2" alt="关闭左栏"></td>
+</tr>
+</table>
+
+<div id="navi" style="position:relative; width:100%; height:expression(body.offsetHeight-control.offsetHeight-2); z-index:1; left: 0px; top: 0px; overflow: auto">
+<table width="180" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td valign="top" width="12"><img src="images/spacer.gif" width="12" height="12"></td>
+<td valign="top">&nbsp;</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;</td>
+<td valign="top">
+
+
+<div id="main1" class="menu" onClick="expandIt('1'); return false"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="35"><img src="images/icon-folder1-close.gif" width="15" height="13"><img src="images/icon-folder-close.gif" width="16" height="15" align="absmiddle"></td>
+<td>原创作品</td>
+</tr>
+</table>
+</div>
+<div id="page1" class="child" style="padding-left:15px">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="page01.htm" target="iframemain" onclick="parent.mainFrame.iframexxx.style.visibility='visible'">喷枪效果</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="page02.htm" target="iframemain" onclick="parent.mainFrame.iframexxx.style.visibility='visible'">模拟滚轮效果</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="page03.htm" target="iframemain" onClick="parent.mainFrame.iframexxx.style.visibility='visible'">拖动页面效果</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="page04.htm" target="iframemain" onClick="parent.mainFrame.iframexxx.style.visibility='visible'">录制光标位置</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="page05.htm" target="iframemain" onClick="parent.mainFrame.iframexxx.style.visibility='visible'">选区效果</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="#" onClick="window.open('page06.htm','popwin','width=220,height=425');parent.mainFrame.iframexxx.style.visibility='hidden'">疯狂窗口</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="#" onClick="window.open('page07.htm','popwin2','width=600,height=400,resizable=yes');parent.mainFrame.iframexxx.style.visibility='hidden'">在线图片浏览</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="page08.htm" target="iframemain" onclick="parent.mainFrame.iframexxx.style.visibility='visible'">放大的页面</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="page11.htm" target="iframemain" onclick="parent.mainFrame.iframexxx.style.visibility='visible'">活动工具条</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="page12.htm" target="iframemain" onclick="parent.mainFrame.iframexxx.style.visibility='visible'">液晶效果</a></td>
+</tr>
+</table>
+</div>
+<div id="main2" class="menu" onClick="expandIt('2'); return false"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="35"><img src="images/icon-folder1-close.gif" width="15" height="13"><img src="images/icon-folder-close.gif" width="16" height="15" align="absmiddle"></td>
+
+<td>自制插件</td>
+</tr>
+</table>
+</div>
+<div id="page2" class="child" style="padding-left:15px">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="plugins/Quick_Filter.mxp" onclick="alert('请使用右键目标另存为，双击或者运行Macromedia Extension Manager来安装');return false;">快速滤镜</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="plugins/Quick_Title.mxp" onclick="alert('请使用右键目标另存为，双击或者运行Macromedia Extension Manager来安装');return false;">快速提示</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="plugins/Open_Browser_Window+.mxp" onclick="alert('请使用右键目标另存为，双击或者运行Macromedia Extension Manager来安装');return false;">(改)弹出窗口升级版</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="plugins/IE55_scroll+.mxp" onclick="alert('请使用右键目标另存为，双击或者运行Macromedia Extension Manager来安装');return false;">(改)彩色滚动条升级版</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="plugins/LCD.mxp" onclick="alert('请使用右键目标另存为，双击或者运行Macromedia Extension Manager来安装');return false;">液晶效果</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="plugins/iframe.mxp" onclick="alert('请使用右键目标另存为，双击或者运行Macromedia Extension Manager来安装');return false;">Iframe(MX beta)</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="plugins/snippets.mxp" onclick="alert('请使用右键目标另存为，双击或者运行Macromedia Extension Manager来安装');return false;">Snippets Tool Kit(MX)</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="plugins/format_css.mxp" onclick="alert('请使用右键目标另存为，双击或者运行Macromedia Extension Manager来安装');return false;">CSS代码规范化</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="plugins/AddTemplateParam.mxp" onclick="alert('请使用右键目标另存为，双击或者运行Macromedia Extension Manager来安装');return false;">添加模板参数</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="plugins/maps_navigator.mxp" onclick="alert('请使用右键目标另存为，双击或者运行Macromedia Extension Manager来安装');return false;">热点地图查看器</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="plugins/averagedistribute.mxp" onclick="alert('请使用右键目标另存为，双击或者运行Macromedia Extension Manager来安装');return false;">单元格平均分布</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="plugins/batch.mxp" onclick="alert('请使用右键目标另存为，双击或者运行Macromedia Extension Manager来安装');return false;">批量修改后缀名</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="plugins/explore.mxp" onclick="alert('请使用右键目标另存为，双击或者运行Macromedia Extension Manager来安装');return false;">资源管理器方式<br>　　浏览站点文件夹</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="plugins/ChangeCase.mxp" onclick="alert('请使用右键目标另存为，双击或者运行Macromedia Extension Manager来安装');return false;">批量修改文件名大小写</a></td>
+</tr>
+</table>
+</div>
+<div id="main3" class="menu" onClick="expandIt('3'); return false"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="35"><img src="images/icon-folder1-close.gif" width="15" height="13"><img src="images/icon-folder-close.gif" width="16" height="15" align="absmiddle"></td>
+
+<td>游戏模拟</td>
+</tr>
+</table>
+</div>
+<div id="page3" style="padding-left:15px" class="child">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="page09.htm" target="iframemain" onclick="parent.mainFrame.iframexxx.style.visibility='visible'">模拟即时战略</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="#" onclick="window.open('page10.htm','popwin3','width=600,height=400,resizable=no');">模拟角色扮演</a></td>
+</tr>
+</table>
+</div>
+<div id="main4" class="menu" onClick="expandIt('4'); return false"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="35"><img src="images/icon-folder1-close.gif" width="15" height="13"><img src="images/icon-folder-close.gif" width="16" height="15" align="absmiddle"></td>
+
+<td>建设中...</td>
+</tr>
+</table>
+</div>
+<div id="page4" class="child" style="padding-left:15px">
+<img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4">分页
+</div>
+<div id="main5" class="menu" onClick="expandIt('5'); return false"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="35"><img src="images/icon-folder1-close.gif" width="15" height="13"><img src="images/icon-folder-close.gif" width="16" height="15" align="absmiddle"></td>
+
+<td>建设中...</td>
+</tr>
+</table>
+</div>
+<div id="page5" class="child" style="padding-left:15px">
+<img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4">分页
+</div>
+<div id="main6" class="menu" onClick="expandIt('6'); return false"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="35"><img src="images/icon-folder1-close.gif" width="15" height="13"><img src="images/icon-folder-close.gif" width="16" height="15" align="absmiddle"></td>
+
+<td>源代码打包下载</td>
+</tr>
+</table>
+</div>
+<div id="page6" class="child" style="padding-left:15px"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="zip/site.zip" onclick="alert('请使用右键目标另存为');return false;">最后更新2002/03/13</a></td>
+</tr>
+<tr>
+<td height="20"><img src="images/icon-page.gif" width="16" height="15" align="absmiddle" hspace="4"><a href="zip/runcode.zip" onclick="alert('请使用右键目标另存为');return false;">自制代码调试工具</a></td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;</td>
+<td valign="top">&nbsp;</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

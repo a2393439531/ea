@@ -19,11 +19,11 @@ import org.springframework.orm.hibernate3.SessionHolder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import com.app.manager.ea.api.InfEa;
-import com.app.manager.ea.model.User;
+import com.app.common.spring.ssh.dao.BaseDao;
+import com.app.common.spring.ssh.page.Pagination;
+import com.app.ea.api.InfEa;
+import com.app.ea.model.User;
 import com.app.model.Tb1;
-import com.common.spring.ssh.dao.BaseDao;
-import com.common.spring.ssh.page.Pagination;
 public class SpringDaoTest {
 	static Logger log = LoggerFactory.getLogger(SpringDaoTest.class);	
 	protected static ApplicationContext applicationContext;

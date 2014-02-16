@@ -12,14 +12,14 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.app.manager.ea.api.InfEa;
-import com.app.manager.ea.model.Resource;
-import com.app.manager.ea.model.User;
+import com.app.common.spring.ssh.dao.BaseDao;
+import com.app.common.spring.ssh.page.Pagination;
+import com.app.ea.api.InfEa;
+import com.app.ea.model.Resource;
+import com.app.ea.model.User;
 import com.app.model.Tb1;
 
-import com.common.spring.ok.AbstractBaseTestCase;
-import com.common.spring.ssh.dao.BaseDao;
-import com.common.spring.ssh.page.Pagination;
+import com.utils.spring.ok.AbstractBaseTestCase;
 
 /*
  每个方法之前会重新将数据库重新建一次，这样比较好，每个方法之间没有数据关联性
@@ -60,34 +60,6 @@ public class BaseDaoTest extends AbstractBaseTestCase {
 			log.debug(resource.getName()+resource.getUsers().size());
 		}
 	}
-	public void resourcenNotInLeftJoin() throws Exception {
-		List reslist =baseDao.find(" from Resource r where r.id  in (select r.id from Resource r  join r.users )");
-		log.debug("授权给用户的资源个数："+reslist.size());
-
-		 reslist =baseDao.find(" from Resource r where r.id  in (select r.id from Resource r  join r.roles )");
-		log.debug("授权给角色的资源个数："+reslist.size());
 	
-		reslist =baseDao.find(" from Resource r where r.id  in (select r.id from Resource r  join r.rolegroups )");
-		log.debug("授权给角色组的资源个数："+reslist.size());
-
-		
-		reslist =baseDao.find(" from Resource r where r.id  not in (select r.id from Resource r  join r.users ) and  r.id not  in (select r.id from Resource r  join r.roles ) and r.id not in (select r.id from Resource r  join r.rolegroups ) ");
-		log.debug("没有授权给三种媒体的资源个数："+reslist.size());
-
-		
-		/*
-		for (Iterator iterator = reslist.iterator(); iterator.hasNext();) {
-			Resource resource = (Resource) iterator.next();
-			log.debug(resource.getName()+resource.getUsers().size());
-		}
-		*/
-		
-		//All_USER
-		// "and u.id not in ( select u.id from User u  left join u.organizes org where  u.status="
-		// + status_ok + " and org.id=? )";
-		
-		
-		
-	}
 	
 }

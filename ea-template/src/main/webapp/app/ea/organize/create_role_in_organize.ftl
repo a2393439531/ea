@@ -1,0 +1,1 @@
+<#include "ajax_organize_admin.ftl">

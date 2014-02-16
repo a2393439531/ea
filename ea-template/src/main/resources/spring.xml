@@ -8,7 +8,8 @@
        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
     
     <import resource="spring-ea-persistence.xml"/>
-     <!--<import resource="spring-test-activiti.xml"/>--> 
+   <!----> 
+    <import resource="spring-activiti.xml"/>
     
     <import resource="spring-scan.xml" />
     <!--必须写在spring.xml里，不能写在import中-->   
@@ -23,7 +24,7 @@
 	</bean> 
    <!--基础服务接口部分 -->
 	<bean id="impEa"
-		class="com.app.manager.ea.api.ImpEa">
+		class="com.app.ea.api.ImpEa">
 		<property name="infDemo">
 			<ref bean="impTemplate" />
 		</property>

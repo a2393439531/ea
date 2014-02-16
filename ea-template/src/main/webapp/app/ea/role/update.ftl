@@ -1,1 +1,1 @@
-<#include "ajax_role.ftl">
+${rhs["info"]?if_exists}

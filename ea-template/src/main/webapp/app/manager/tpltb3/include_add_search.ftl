@@ -24,7 +24,7 @@ a:hover {
 </style>
 </head>
 <form action="manager_tpltb3_list.do" id="searchFromId" method="post" class="form-search breadcrumb"> <#-- 该ID需当参数传入分页的宏	-->
-	<!-- <a class="btn btn-primary" href="manager_tpltb3_load.do">添加</a> -->
+	<!-- <a class="btn btn-default" href="manager_tpltb3_load.do">添加</a> -->
 	<a class="btn-new" href="manager_tpltb3_load.do">添加</a>
 	<span>|</span>
 	<input type="hidden" name="search" value="search">  					<#-- 这里必须加上，不然不会进行条件查询，且name和value不能修改其他值		-->

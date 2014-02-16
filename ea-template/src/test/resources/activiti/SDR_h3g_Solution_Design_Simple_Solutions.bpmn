@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <collaboration id="Collaboration">
+    <participant id="pool1" name="sa" processRef="process_pool1"></participant>
+    <participant id="pool-team-leader" name="team-leader" processRef="process_pool2"></participant>
+  </collaboration>
+  <process id="Solution_Design_Simple_Solutions" name="Solution_Design_Simple_Solutions">
+    <documentation>For H3G HK customer, this activity is related to analyzing the Change Request (Request for solution) whic
+h can be raised by MS Local Delivery as a request to change / enhance the existing set of requirements of
+ specific application(s), report(s), product(s) &amp; service(s). 
+Work request is sent to the respective Application Design Team’s primary point of contract’s mailbox by email. 
+The email content should contain the following information as per WLA (or make reference to the Work Request Summary on the shared drive):
+Request ID
+WP indicator (For CR / WP only)
+Description of the request, together with any available specification (User Requirement Specification)
+Change impact assessment and preliminary effort estimation (applicable to Fixed Domain)
+Expected completion date.
+
+</documentation>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <textAnnotation id="textannotation1" textFormat="text/plain">
+      <text><![CDATA[在启动流程中，录入wo,设置1.01的执行人，分析完后交给设计的人]]></text>
+    </textAnnotation>
+  </process>
+  <process id="process_pool1" name="process_pool1">
+    <laneSet id="laneSet_process_pool1">
+      <lane id="lane1">
+        <flowNodeRef>usertask1</flowNodeRef>
+        <flowNodeRef>exclusivegateway1</flowNodeRef>
+        <flowNodeRef>manualtask2</flowNodeRef>
+        <flowNodeRef>servicetask2</flowNodeRef>
+      </lane>
+    </laneSet>
+    <userTask id="usertask1" name="SDR 1.01 - Analyze Work Order">
+      <documentation>For H3G HK customer, this activity is related to analyzing the Change Request (Request for solution) which can be raised by MS Local Delivery as a request to change / enhance the existing set of requirements of specific application(s), report(s), product(s) &amp; service(s). 
+Work request is sent to the respective Application Design Team’s primary point of contract’s mailbox by email. 
+The email content should contain the following information as per WLA (or make reference to the Work Request Summary on the shared drive):
+Request ID
+WP indicator (For CR / WP only)
+Description of the request, together with any available specification (User Requirement Specification)
+Change impact assessment and preliminary effort estimation (applicable to Fixed Domain)
+Expected completion date.
+</documentation>
+    </userTask>
+    <sequenceFlow id="flow3" name="" sourceRef="usertask1" targetRef="exclusivegateway1"></sequenceFlow>
+    <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow5" name="assign task to team member" sourceRef="exclusivegateway1" targetRef="usertask2">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${flag==2}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow6" name="Out of Scope/Additional Information NeededReject" sourceRef="exclusivegateway1" targetRef="manualtask2">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${flag==3}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow12" name="assignment to different domain needed" sourceRef="exclusivegateway1" targetRef="servicetask2">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${flag==1}]]></conditionExpression>
+    </sequenceFlow>
+    <manualTask id="manualtask2" name="SDR 1.04 – Reject WO and Contact Originator if Needed"></manualTask>
+    <serviceTask id="servicetask2" name="SDR1.02 Forward WO to Related design team" activiti:expression="#{printer.printInfo('1.0.2 不同范围 ')}"></serviceTask>
+  </process>
+  <process id="process_pool2" name="process_pool2">
+    <laneSet id="laneSet_process_pool2">
+      <lane id="lane2">
+        <flowNodeRef>startevent1</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <sequenceFlow id="flow1" name="组长接受任务，启动流程" sourceRef="startevent1" targetRef="usertask1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Collaboration">
+    <bpmndi:BPMNPlane bpmnElement="Collaboration" id="BPMNPlane_Collaboration">
+      <bpmndi:BPMNShape bpmnElement="pool1" id="BPMNShape_pool1" isHorizontal="true">
+        <omgdc:Bounds height="151" width="621" x="90" y="236"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="lane1" id="BPMNShape_lane1" isHorizontal="true">
+        <omgdc:Bounds height="151" width="601" x="110" y="236"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="pool-team-leader" id="BPMNShape_pool-team-leader" isHorizontal="true">
+        <omgdc:Bounds height="150" width="621" x="90" y="89"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="lane2" id="BPMNShape_lane2" isHorizontal="true">
+        <omgdc:Bounds height="150" width="601" x="110" y="89"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35" width="35" x="374" y="680"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation1" id="BPMNShape_textannotation1">
+        <omgdc:Bounds height="50" width="401" x="80" y="10"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
+        <omgdc:Bounds height="55" width="105" x="360" y="260"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
+        <omgdc:Bounds height="40" width="40" x="392" y="340"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="manualtask2" id="BPMNShape_manualtask2">
+        <omgdc:Bounds height="71" width="105" x="590" y="260"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetask2" id="BPMNShape_servicetask2">
+        <omgdc:Bounds height="71" width="105" x="150" y="260"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="412" y="315"></omgdi:waypoint>
+        <omgdi:waypoint x="412" y="340"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="412" y="380"></omgdi:waypoint>
+        <omgdi:waypoint x="412" y="430"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42" width="100" x="10" y="-15"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="432" y="360"></omgdi:waypoint>
+        <omgdi:waypoint x="591" y="359"></omgdi:waypoint>
+        <omgdi:waypoint x="642" y="331"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="56" width="100" x="-38" y="-59"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="392" y="360"></omgdi:waypoint>
+        <omgdi:waypoint x="245" y="355"></omgdi:waypoint>
+        <omgdi:waypoint x="202" y="331"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42" width="100" x="-28" y="-46"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35" width="35" x="390" y="130"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="407" y="165"></omgdi:waypoint>
+        <omgdi:waypoint x="412" y="260"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="42" width="100" x="10" y="-40"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

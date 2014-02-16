@@ -2,11 +2,15 @@
 <#macro digui_resource resourceNodes  flag >
 	<#list resourceNodes as resource>
 	    <tr>
-	    	<td >
-	    		${flag} name<input  value="${resource.name?if_exists}" 
+	    	<td style="WIDTH: 240px">
+	    		${flag} <input  value="${resource.name?if_exists}" 
 			      style="WIDTH: 140px"  onchange="javascript:action_resource('update.do','column=name&id=${resource.id?if_exists}&columnValue='+this.value)" /> 
 			</td>
-			<td width=220px>		 	     
+	    	<td >
+	    		  <input  value="${resource.actionUrl?if_exists}" 
+			      style="WIDTH: 250px"  onchange="javascript:action_resource('update.do','column=actionUrl&id=${resource.id?if_exists}&columnValue='+this.value)" /> 
+			</td>			
+			<td   style="WIDTH: 550px">		 	     
   		  		<a  onclick="javascript:action_resource('create.do','id=${resource.id}');" class="ui-icon ui-icon-plus" ></a>
  			<#if (resource.getChildResources()?size<1)> 
 				<a title="删除节点" onclick="javascript:action_resource('delete.do','id=${resource.id}');" class="ui-icon ui-icon-trash"  title=删除 ></a>
@@ -38,20 +42,20 @@
 		</div>
 		  
 		  <#if !(resource.getChildResources()?size<1)> 
-		      <@digui_resource resource.getChildResources()?sort_by('sortNob'),flag+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />	
+		      <@digui_resource resource.getChildResources()?sort_by('sortNob'),flag+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />	
 		  </#if>
 	</#list> 
 </#macro>
 
-<table    class="table  table-condensed" style="width:550px">
+<table class="table table-bordered    table-condensed" style="WIDTH: 700px" >
      <thead>
 		<tr>
-			<th>资源</th><th>操作</th>
+			<th>资源名称 </th><th> url</th><th>操作</th>
 		</tr>
 	</thead>   
-	<@digui_resource rhs["resourceRootList"]?sort_by('sortNob'),""/>	
+	<@digui_resource rhs["resourceRootList"]?sort_by('sortNob'),"&nbsp;&nbsp;&nbsp;"/>	
 </table>
 
-<span id="div_action_result" class="small text-${rhs["info_type"]?if_exists} ">
+<span id="div_action_result" style="display:none">
 	${rhs["info"]?if_exists}
 </span>

@@ -1,1 +1,0 @@
-<#include "ajax_customer.ftl">

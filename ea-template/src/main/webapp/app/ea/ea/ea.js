@@ -1,5 +1,72 @@
 var organizeId; 
 
+    var roleId=0;
+    function ajax_add_new_user() {
+	  	$.ajax({
+	        type:"POST",
+	     	url: "ea_ea_ajax_save_new_user_in_role.do",
+	     	data:"name="+document.getElementById('name').value+"&account="+document.getElementById('account').value+"&roleId="+document.getElementById('role_id').value,
+	     	cache: false,
+	     	success: function(html){
+	     	    document.getElementById('div_action_result').innerHTML=html;
+	     	    tip_info();
+	     	    window.location.reload();
+	       }	
+	    });  
+	}     
+     
+    function ajax_create_role_in_organize(organizeId,rolegroupId) {
+      	$.ajax({
+	        type:"POST",
+	     	url: "ea_ea_ajax_create_role_in_organize.do",
+	     	data:"organizeId="+organizeId+"&rolegroupId="+rolegroupId,
+	     	cache: false,
+	     	success: function(html){
+	     	    document.getElementById('div_action_result').innerHTML=html;
+	     	    tip_info();
+	     	    window.location.reload();
+	       }	
+	    });  
+	}     
+          
+
+    function ajax_delete_role(roleId) {
+      	$.ajax({
+	        type:"POST",
+	     	url: "ea_ea_ajax_role_delete.do",
+	     	data:"roleId="+roleId,
+	     	cache: false,
+	     	success: function(html){
+	     	    document.getElementById('div_action_result').innerHTML=html;
+	     	    tip_info();
+	     	    window.location.reload();
+	       }	
+	    });  
+	}     
+          
+	 function createUserRoleRelation(userId,roleId) {
+	  	$.ajax({
+	        type:"POST",
+	     	url: "ea_ea_create_user_role_relation.do",
+	     	data:"userId="+userId+"&roleId="+roleId,
+	     	cache: false,
+	     	success: function(html){
+	       }	
+	    });  
+	}
+	
+	function ajax_role_user_list(roleId,organizeId) {
+	    $.ajax({
+	        type:"POST",
+	     	url: "ea_ea_ajax_role_user_list.do",
+	     	data:"roleId="+roleId+"&organizeId="+organizeId,
+	     	cache: false,
+	     	success: function(html){
+	     	  document.getElementById('div_select_user').innerHTML=html;  
+	       }	
+	    });  
+	}
+
 function action_change_role(url,para){
 	  //alert("beanname=Role&organizeId="+organizeId+"&"+para);
 	  $.ajax({

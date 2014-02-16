@@ -9,11 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.annotation.Rollback;
 
-import com.app.manager.ea.model.Organize;
-import com.app.manager.ea.model.Resource;
-import com.app.manager.ea.model.Role;
-import com.app.manager.ea.model.Rolegroup;
-import com.app.manager.ea.model.User;
+import com.app.ea.model.Organize;
+import com.app.ea.model.Resource;
+import com.app.ea.model.Role;
+import com.app.ea.model.Rolegroup;
+import com.app.ea.model.User;
 
 public class EaCoreTest extends ParentTest {
 	static Logger log = LoggerFactory.getLogger(EaCoreTest.class);
@@ -101,7 +101,7 @@ public class EaCoreTest extends ParentTest {
 		/**/
 		Set resourceSet = infEa.getAllVisibleResource("2");
 		for (Iterator iterator3 = resourceSet.iterator(); iterator3.hasNext();) {
-			com.app.manager.ea.model.Resource resource = (com.app.manager.ea.model.Resource) iterator3
+			com.app.ea.model.Resource resource = (com.app.ea.model.Resource) iterator3
 					.next();
 			log.debug(resource.getName());
 		}

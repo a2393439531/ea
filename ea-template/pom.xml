@@ -11,6 +11,26 @@
 	<artifactId>ea-template</artifactId>
 	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
+	 
+	 
+	<build>
+	  	 <plugins>
+					 <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>8.0.0.M2</version>
+                <configuration>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <webAppSourceDirectory>${basedir}src/main/webapp/</webAppSourceDirectory>
+                    <webAppConfig>
+                        <contextPath>/demo</contextPath>
+                        <descriptor>${basedir}/src/main/webapp/WEB-INF/web.xml</descriptor>
+                    </webAppConfig>
+                </configuration>
+            </plugin>
+         </plugins>
+  </build>            
+            
 	<dependencies>
 			<dependency>
 			<groupId>ea</groupId>
@@ -18,12 +38,5 @@
 			<version>${project.version}</version>
 		</dependency>			
 		
-		<dependency>
-			<groupId>ea</groupId>
-			<artifactId>ea-common</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-	
 	</dependencies>
 	</project>

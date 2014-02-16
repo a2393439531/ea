@@ -12,14 +12,14 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.app.manager.ea.api.InfEa;
-import com.app.manager.ea.model.Resource;
-import com.app.manager.ea.model.User;
+import com.app.common.spring.ssh.dao.BaseDao;
+import com.app.common.spring.ssh.page.Pagination;
+import com.app.ea.api.InfEa;
+import com.app.ea.model.Resource;
+import com.app.ea.model.User;
 import com.app.model.Tb1;
 
-import com.common.spring.ok.AbstractBaseTestCase;
-import com.common.spring.ssh.dao.BaseDao;
-import com.common.spring.ssh.page.Pagination;
+import com.utils.spring.ok.AbstractBaseTestCase;
 
 /*
  每个方法之前会重新将数据库重新建一次，这样比较好，每个方法之间没有数据关联性

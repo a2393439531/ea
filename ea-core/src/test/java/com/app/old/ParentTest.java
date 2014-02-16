@@ -13,8 +13,8 @@ import org.springframework.orm.hibernate3.SessionFactoryUtils;
 import org.springframework.orm.hibernate3.SessionHolder;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import com.app.manager.ea.api.InfEa;
-import com.common.spring.ssh.dao.BaseDao;
+import com.app.common.spring.ssh.dao.BaseDao;
+import com.app.ea.api.InfEa;
 
 public class ParentTest {
 	protected static ApplicationContext applicationContext;

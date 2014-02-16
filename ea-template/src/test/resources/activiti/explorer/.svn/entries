@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="18"
+   name=""
+   committed-date="2014-01-21T08:39:20.724567Z"
+   url="http://code.taobao.org/svn/yjj-java/trunk/java/ea/ea-template/src/test/resources/acitiviti/explorer"
+   last-author="train-yjj"
+   kind="dir"
+   uuid="a1a60a76-587b-4583-b57e-c8b1ef045f7b"
+   repos="http://code.taobao.org/svn/yjj-java"
+   revision="18"/>
+<entry
+   committed-rev="18"
+   name="oneTaskProcess.bpmn20.xml"
+   text-time="2014-01-21T08:40:01.390928Z"
+   committed-date="2014-01-21T08:39:20.724567Z"
+   checksum="249370e1e96d0c82072aa9d6e8d66cc0"
+   last-author="train-yjj"
+   kind="file"
+   prop-time="2014-01-21T08:40:00.954903Z"/>
+<entry
+   committed-rev="18"
+   name="createTimersProcess.bpmn20.xml"
+   text-time="2014-01-21T08:40:01.397929Z"
+   committed-date="2014-01-21T08:39:20.724567Z"
+   checksum="1824bc829c94d7d796b015b04d09df46"
+   last-author="train-yjj"
+   kind="file"
+   prop-time="2014-01-21T08:40:01.088911Z"/>
+<entry
+   committed-rev="18"
+   name="VacationRequest.bpmn20.xml"
+   text-time="2014-01-21T08:40:01.405929Z"
+   committed-date="2014-01-21T08:39:20.724567Z"
+   checksum="d5915014c78bb3bca95633036171ff17"
+   last-author="train-yjj"
+   kind="file"
+   prop-time="2014-01-21T08:40:01.095912Z"/>
+<entry
+   committed-rev="18"
+   name="testProcess.bpmn20.xml"
+   text-time="2014-01-21T08:40:01.457932Z"
+   committed-date="2014-01-21T08:39:20.724567Z"
+   checksum="fe1fa5da9df2d6584524bfc68e5bc1a2"
+   last-author="train-yjj"
+   kind="file"
+   prop-time="2014-01-21T08:40:01.101912Z"/>
+<entry
+   committed-rev="18"
+   name="Helpdesk.bpmn20.xml"
+   text-time="2014-01-21T08:40:01.463933Z"
+   committed-date="2014-01-21T08:39:20.724567Z"
+   checksum="8d9a11e1e89321cee35fe9c7e23aae23"
+   last-author="train-yjj"
+   kind="file"
+   prop-time="2014-01-21T08:40:01.174916Z"/>
+<entry
+   committed-rev="18"
+   name="reviewSalesLead.bpmn20.xml"
+   text-time="2014-01-21T08:40:01.471933Z"
+   committed-date="2014-01-21T08:39:20.724567Z"
+   checksum="69f64bb948fc8f127d0a804860fd22c0"
+   last-author="train-yjj"
+   kind="file"
+   prop-time="2014-01-21T08:40:01.356926Z"/>
+<entry
+   committed-rev="18"
+   name="FixSystemFailureProcess.bpmn20.xml"
+   text-time="2014-01-21T08:40:01.477933Z"
+   committed-date="2014-01-21T08:39:20.724567Z"
+   checksum="bda7b550e25c550094a71fe1dcdf8537"
+   last-author="train-yjj"
+   kind="file"
+   prop-time="2014-01-21T08:40:01.382928Z"/>
+</wc-entries>

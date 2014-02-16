@@ -1,0 +1,2 @@
+<br>当前getNumActive：<span class="label label-danger ">${rhs["database"].getNumActive()?if_exists}</span>
+<br>当前getNumIdle：<span class="label label-danger ">${rhs["database"].getNumIdle()?if_exists}</span>

@@ -33,6 +33,7 @@
 
 <!--  script  -->
 <script type="text/javascript"> 
+
 function open_select_users_dialog(textObj, valueObj, flag){
 	window.returnTextObj = textObj;
 	window.returnValueObj = valueObj;
@@ -75,7 +76,7 @@ function init_select_users(){
 				// 保存到常选用户数据库
 				$.ajax({
 					type: 'post',
-					url: 'common_oftenselectedusers_save.do',
+					url: 'common_selectuser_save.do',
 					data: 'selectedUserAccount=' + window.returnValueObj.value + '&selectedUserName=' + window.returnTextObj.value,
 					async: false,
 					cache: false,
@@ -87,12 +88,13 @@ function init_select_users(){
 	        	$(this).dialog("close");
 	        }
       	},
+    
       	open: function(){
       		document.getElementById("include_select_users_div").style.display = "block";
       		
       		$.ajax({
 				type: 'post',
-				url: 'common_oftenselectedusers_list.do',
+				url: 'common_selectuser_oftenselectlist.do',
 				data: '',
 				async: false,
 				cache: false,
@@ -101,22 +103,11 @@ function init_select_users(){
 					window.usuallyNodes = data;
 				}
 			});
-      		$.ajax({
-				type: 'post',
-				url: 'manager_oa_select_userlist_by_organize_alias.do',
-				data: 'alias=project',
-				async: false,
-				cache: false,
-				//dataType: 'json',
-				success: function(data){
-					//alert(data);
-					window.projectNodes = data;
-				}
-			});  
+      	 
 			$.ajax({
 				type: 'post',
-				url: 'manager_oa_select_userlist_by_organize_alias.do',
-				data: 'alias=company',
+				url: 'common_selectuser_select_userlist_by_organize.do',
+				data: '',
 				async: false,
 				cache: false,
 				dataType: 'json',
@@ -124,9 +115,9 @@ function init_select_users(){
 					window.departmentNodes = data;
 				}
 			});
-			$.fn.zTree.init($("#usuallyTree"), window.setting, window.usuallyNodes);
+		//	$.fn.zTree.init($("#usuallyTree"), window.setting, window.usuallyNodes);
 			$.fn.zTree.init($("#departmentTree"), window.setting, window.departmentNodes);
-			$.fn.zTree.init($("#projectTree"), window.setting, window.projectNodes);
+			
       	},
 	    close: function() {
 	    	//allFields.val("").removeClass( "ui-state-error" );
@@ -143,7 +134,7 @@ function init_autocomplete(){
 		minLength: 1, 
 		source: function(request, response) { 
 			$.ajax({ 
-				url: "manager_oa_users_for_select.do", 
+				url: "common_selectuser_users_for_select.do", 
 				data: request, 
 				success: function(h) { 
 					document.getElementById("all_users").style.display = "none";
@@ -303,28 +294,33 @@ function menu_active(obj){
 <!--  html  -->
 <div id="include_select_users_div" style="display:none;">
 	<div class="select_users_div">
-		<div class="select_users_top">
+		<div class="select_users_top">按拼音搜索
 			<input style="width:150px;" id="auto_text" type="text" class="search-query"/>
-			<input style="width:100px;" type="button" class="btn" onclick="javascript:_clear();" value="清除"/>
+		
+		
+			 <a  href="#" onclick="javascript:_clear();" ><span class="label label-default">X</span>  </a>
+			
 		</div>
+		
 		<div id="all_users" class="select_users_content select_users_content_border">
 			<div class="radio_div">
 				<ul class="nav nav-pills">
 				  <li id="usually_radio" class="disabled" onclick="change_tree(this);menu_active(this);"><a href="javascript:void(0);">常选</a></li>
 				  <li id="department_radio" onclick="change_tree(this);menu_active(this);"><a href="javascript:void(0);">部门</a></li>
-				  <li id="project_radio" onclick="change_tree(this);menu_active(this);"><a href="javascript:void(0);">项目</a></li>
+				
 				</ul>
 			</div>
-			<div id="usually_tree_div">
+			<div id="usually_tree_div" style="display:none;">
 				<ul id="usuallyTree" class="ztree"></ul>
 			</div>
-			<div id="department_tree_div" style="display:none;">
+			<div id="department_tree_div" >
 				<ul id="departmentTree" class="ztree"></ul>
 			</div>
 			<div id="project_tree_div" style="display:none;">
 				<ul id="projectTree" class="ztree"></ul>
 			</div>
 		</div>
+		
 		<div id="search_users" style="display:none;">
 			<select class="select_users_content select_users_content_border" id="users_for_select" multiple="multiple" size="15">
 			</select>
@@ -336,14 +332,14 @@ function menu_active(obj){
 		<br>
 		<br>
 		<br>
-		<button class="btn  btn-mini" onclick="javascript:add_to_selected();">添加></button>
+		<button class="btn btn-info btn-xs " onclick="javascript:add_to_selected();">添加 ></button>
 		<br>
 		<br>
 		<br>
 		<br>
 		<br>
 		<br>
-		<button class="btn  btn-mini" onclick="javascript:remove_from_selected();"><删除</button>
+		<button class="btn btn-info btn-xs " onclick="javascript:remove_from_selected();">< 删除</button>
 	</div>
 	<div class="select_users_div">
 		<div class="select_users_top">

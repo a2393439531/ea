@@ -22,14 +22,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 
-import com.app.manager.ea.api.InfEa;
-import com.app.manager.ea.model.Organize;
-import com.app.manager.ea.model.Organizegroup;
-import com.app.manager.ea.model.Resource;
-import com.app.manager.ea.model.Role;
-import com.app.manager.ea.model.Rolegroup;
-import com.app.manager.ea.model.User;
-import com.common.spring.ssh.dao.BaseDao;
+import com.app.common.spring.ssh.dao.BaseDao;
+import com.app.ea.api.InfEa;
+import com.app.ea.model.Organize;
+import com.app.ea.model.Organizegroup;
+import com.app.ea.model.Resource;
+import com.app.ea.model.Role;
+import com.app.ea.model.Rolegroup;
+import com.app.ea.model.User;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -192,12 +192,12 @@ public class SpringEaTest  {
 
 	@Test
 	public void testGetBaseModelByAlias() throws Exception {
-		com.app.manager.ea.model.Resource resource = (com.app.manager.ea.model.Resource) infEa
+		com.app.ea.model.Resource resource = (com.app.ea.model.Resource) infEa
 				.getBaseModelByAlias("Resource", "sys-assessment");
 		log.debug(resource.getName());
 		for (Iterator iterator = resource.getChildResources().iterator(); iterator
 				.hasNext();) {
-			com.app.manager.ea.model.Resource resource1 = (com.app.manager.ea.model.Resource) iterator
+			com.app.ea.model.Resource resource1 = (com.app.ea.model.Resource) iterator
 					.next();
 			log.debug(resource1.getActionUrl());
 		}
@@ -241,7 +241,7 @@ public class SpringEaTest  {
 		/**/
 		Set resourceSet = infEa.getAllVisibleResource("1");
 		for (Iterator iterator3 = resourceSet.iterator(); iterator3.hasNext();) {
-			com.app.manager.ea.model.Resource resource = (com.app.manager.ea.model.Resource) iterator3
+			com.app.ea.model.Resource resource = (com.app.ea.model.Resource) iterator3
 					.next();
 			log.debug(resource.getName());
 		}

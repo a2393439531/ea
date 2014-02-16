@@ -16,3 +16,11 @@ ID   FILEDESCRIPTION   FILENAME   FILETYPE   FOREIGNID   URL
 1     SDR.bpmn          SDR.bpmn    bpmn       demo_1    file/activiti/1.368585329398821E12.bpmn    
 
 <pre>
+
+
+
+
+<form class="well form-search">
+        <input type="text" class="input-medium search-query">
+        <button type="submit" class="btn">搜索</button>
+</form>

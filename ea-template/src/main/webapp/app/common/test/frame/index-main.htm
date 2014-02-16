@@ -1,0 +1,100 @@
+
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<link rel="stylesheet" href="images/test.css" type="text/css">
+<script>
+function tick() {
+var hours, minutes, seconds, ap;
+var intHours, intMinutes, intSeconds;
+var today;
+today = new Date();
+intHours = today.getHours();
+intMinutes = today.getMinutes();
+intSeconds = today.getSeconds();
+flashclock.TSetProperty("/hour_hand", 10, intHours*30+intMinutes/2); 
+flashclock.TSetProperty("/hour_hand_shadow", 10, intHours*30+intMinutes/2); 
+flashclock.TSetProperty("/minute_hand", 10, intMinutes*6); 
+flashclock.TSetProperty("/minute_hand_shadow", 10, intMinutes*6); 
+flashclock.TSetProperty("/second_hand", 10, intSeconds*6); 
+flashclock.TSetProperty("/second_hand_shadow", 10, intSeconds*6); 
+if (intHours == 0) {
+hours = "12:";
+ap = "Midnight";
+} else if (intHours < 12) { 
+hours = intHours+":";
+ap = "A.M.";
+} else if (intHours == 12) {
+hours = "12:";
+ap = "Noon";
+} else {
+hours = intHours + ":";
+ap = "P.M.";
+}
+if (intMinutes < 10) {
+minutes = "0"+intMinutes+":";
+} else {
+minutes = intMinutes+":";
+}
+if (intSeconds < 10) {
+seconds = "0"+intSeconds+" ";
+} else {
+seconds = intSeconds+" ";
+} 
+timeString = hours+minutes+seconds+ap;
+Clock.innerHTML = timeString;
+window.setTimeout("tick();", 1000);
+}
+window.onload = tick;
+</script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function MM_reloadPage(init) {  //reloads the window if Nav4 resized
+  if (init==true) with (navigator) {if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
+    document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; }}
+  else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
+}
+MM_reloadPage(true);
+//-->
+</script>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" onselectstart="return false;">
+<table id=control width="100%" border="0" cellspacing="0" cellpadding="0" class="borderon">
+<tr>
+<td height="20"><img src="images/icon-default.gif" width="16" height="15" class="button" onclick="javascript:window.parent.testframeset.cols = '200,*';" vspace="2" hspace="1" alt="恢复左栏默认宽度"></td>
+</tr>
+</table>
+<table id=control width="100%" style="height:expression(document.body.offsetHeight-25)" border="0" cellspacing="0" cellpadding="6" class="borderon">
+<tr>
+<td align="center" valign="top">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%">
+<tr>
+<td valign="top"><div id=iframexxx style="visibility:hidden"><iframe name=iframemain width="100%" height="100%" scrolling="no" marginwidth=0 marginheight=0 frameborder=0 vspace=0 hspace=0></iframe></div></td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td align="right" valign="bottom" height="50">
+<table border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td align="right" valign="bottom"><img src="images/logo.gif" width="101" height="35" hspace="2" vspace="2"></td>
+        </tr>
+        <tr> 
+          <td align="center" class="borderoff"><span class="tden">&nbsp;&copy;2002 
+            Myhyli All Rights Reserved.&nbsp;|&nbsp;<span id="Clock"></span>&nbsp;</span></td>
+        </tr>
+      </table>
+</td>
+</tr>
+</table>
+<div id="Layer1" style="position:absolute; width:100px; height:100px; z-index:1; right: 10px; top: 30px;"> 
+  <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="100" height="100" id="flashclock">
+<param name="movie" value="images/clock.swf">
+    <param name="quality" value="high">
+    <param name="wmode" value="transparent">
+    <embed src="images/clock.swf" width="100" height="100" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" wmode="transparent"></embed></object></div>
+</body>
+</html>

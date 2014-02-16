@@ -2,14 +2,15 @@
 <#macro digui_systempara systemparaNodes  flag >
 	<#list systemparaNodes as systempara>
 	    <tr>
-	    	<td width=700px>
-	    		${flag}<#if flag=="">参数<#else>key</#if><input  value="${systempara.key?if_exists}" 
-			      style="WIDTH: 120px"  onchange="javascript:action_systempara('update.do','column=key&id=${systempara.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /> 
-					<#if flag=="">说明<#else>value</#if><input  value="${systempara.value?if_exists}" 
-			      style="WIDTH: 120px"  onchange="javascript:action_systempara('update.do','column=value&id=${systempara.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /> 
+	    	<td >
+	    		${flag}<b><#if flag=="">参数类别<#else>-[key]</#if></b><input  value="${systempara.keyname?if_exists}" 
+			      style="WIDTH: 180px"  onchange="javascript:action_systempara('update.do','column=keyname&id=${systempara.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /> 
+					<b><#if flag=="">&nbsp;说明:<#else>-[value]</#if></b><input  value="${systempara.value?if_exists}" 
+			      style="WIDTH: 180px"  onchange="javascript:action_systempara('update.do','column=value&id=${systempara.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /> 
 					
 			</td>
-			<td width=200px>		 	     
+		
+			<td width=100px>		 	     
   		  		<a  onclick="javascript:action_systempara('create.do','id=${systempara.id}');" class="ui-icon ui-icon-plus" ></a>
  			<#if (systempara.getChildSystemparas()?size<1)> 
 				<a title="删除节点" onclick="javascript:action_systempara('delete.do','id=${systempara.id}');" class="ui-icon ui-icon-trash"  title=删除 ></a>
@@ -37,9 +38,9 @@
 		      <@digui_systempara systempara.getChildSystemparas()?sort_by('sortNob'),flag+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" />	
 		  </#if>
 	</#list> 
-</#macro>
+</#macro>  
  
-<table class="table table-hover table-condensed" style="width:550px">
+<table class="table table-bordered   table-hover table-condensed" style="width:700px">
 	<@digui_systempara rhs["systemparaRootList"]?sort_by('sortNob'),""/>
 </table>
 

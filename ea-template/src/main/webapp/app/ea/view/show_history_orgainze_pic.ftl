@@ -1,0 +1,1 @@
+<#include "../../../file/view/"+RequestParameters["filename"]+".ftl">

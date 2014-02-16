@@ -49,5 +49,38 @@
 		"es":"Español"
 	   	}
 > 
+<#macro get_candidategroup_by_rolegroup rolegroupNodes  flag >
+	<#list rolegroupNodes as rolegroup>
+		<#if !(rolegroup.getParentModel()?exists)> 
+		<optgroup label=" ${rolegroup.name?if_exists}岗位">
+		<#else>
+		 	<option   value="${rolegroup.alias}">${flag}${rolegroup.name?if_exists}</option> 
+		 	
+		</#if>
+		<#if !(rolegroup.getChildRolegroups()?size<1)> 
+		      <@get_candidategroup_by_rolegroup rolegroup.getChildRolegroups()?sort_by('sortNob'),flag+"&nbsp;&nbsp;&nbsp;" />	
+		</#if>
+		<#if !(rolegroup.getParentModel()?exists)>  
+		</optgroup>
+		</#if>
+	</#list> 
+</#macro>
 
-
+<#macro get_candidategroup_by_organize organizeNodes  flag >
+	<#list organizeNodes as organize>
+		<#if !(organize.getParentModel()?exists)> 
+		<optgroup label=" ${organize.name?if_exists}">
+		<#else>
+		 	<option   value="${organize.alias}">${flag}[${organize.name?if_exists}]</option> 
+		 	<#list organize.getRoles()  as r>
+		 	<option   value="${r.alias}">${flag}${r.name?if_exists}</option> 
+		 	</#list>	
+		</#if>
+		<#if !(organize.getChildOrganizes()?size<1)> 
+		      <@get_candidategroup_by_organize organize.getChildOrganizes()?sort_by('sortNob'),flag+"&nbsp;&nbsp;&nbsp;" />	
+		</#if>
+		<#if !(organize.getParentModel()?exists)>  
+		</optgroup>
+		</#if>
+	</#list> 
+</#macro>

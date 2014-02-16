@@ -5,8 +5,15 @@ function action_role(url,para){
          data:"beanname=Role&"+para,
          cache: false,
          success: function(html){
-        	 document.getElementById('div_role_tree').innerHTML=html;
-        	 setTimeout( "document.getElementById('div_action_result').innerHTML=''", 2000);
+        
+          if(url=="update.do"){
+        		document.getElementById('div_action_result').innerHTML=html;
+        	}else{
+        	    document.getElementById('div_role_tree').innerHTML=html;
+        	}
+       	 	tip_info();          	
+          
+ 
            }
   });  
 }

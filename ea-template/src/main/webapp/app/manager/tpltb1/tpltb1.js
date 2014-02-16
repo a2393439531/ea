@@ -1,4 +1,5 @@
 function action_tpltb1(url,para){
+	  alert(url+"?"+para);
     $.ajax({
         type:"POST",
         url: "manager_tpltb1_"+url,
