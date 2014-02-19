@@ -50,7 +50,9 @@ public interface InfEa {
 	public List getRolegroupRootNods();
 
 	public List getAllRoles();
-
+	//add by hb for get all user by account获得当前用户组织下面的所以用户
+	public List getUnderUserByUserRole(Set<Role> userRole);
+	// end 
 	public List getOrganizegroupRootNods();
 
 	public List getAllOrganizegroup();

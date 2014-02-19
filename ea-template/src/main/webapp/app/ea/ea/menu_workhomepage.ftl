@@ -37,21 +37,10 @@
 	           <div class="panel  panel-primary">
 		            <div class="panel-heading">工作职责</div>
 		            <div class="panel-body">
-						<#macro digui_role_v treeNodes  flag >
-						   	<#list treeNodes as role>
-						   	        <#list role.getUsers() as u>
-							   	    <tr>	
-							   	     	 <td>${u.name?if_exists}（${role.name}）</td>
-							 	  	     <td><a   href='ea_ea_menu_view_user_handbook_detail.do?id=${u.id}'  onclick="return hs.htmlExpand(this, { objectType: 'iframe' })">检查工作手册</a>
-							 	  	     </td>
-								 	</tr>	  
-									</#list>
-								
-								<#if !(role.getChildRoles()?size<1)> 
-									<@digui_role_v role.getChildRoles()?sort_by("id") ,flag+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>	
-								</#if>
-							</#list> 
-						</#macro>
+		            
+						
+						
+						
 						 <table   class="table table-bordered table-condensed ">
 						    <thead>
 						    <tr><th >职位</th><th>上级</th><th>工作详细说明</th></tr>
@@ -103,6 +92,32 @@
 							</#list>
 						</#if>
 		            </div>
+		            
+		           	   <#macro digui_role_v treeNodes  flag >
+						   	<#list treeNodes as role>
+						   	        <#list role.getUsers() as u>
+							   	    <#list rhs["underList"]?keys as underuser>
+							   	    <#if underuser ==  u.account>
+							   	    <tr>	
+							   	     	 <td># ${u.name?if_exists}（${role.name}）</td>
+							 	  	     <td>
+							 	  	     <a   href='ea_ea_menu_view_user_handbook_detail.do?id=${u.id}'  onclick="return hs.htmlExpand(this, { objectType: 'iframe' })">检查工作手册</a>&nbsp;&nbsp;&nbsp;&nbsp;
+							 	  	     <a   href='ea_ea_menu_view_user_assigneed_task.do?accountName=${u.account}'  onclick="return hs.htmlExpand(this, { objectType: 'iframe' })"> 
+							 	  	     	   任务数:
+							 	  	     <span class="badge">${rhs["underList"][underuser]}</span>
+							 	  	     </a>
+							 	  	     </td>
+								 	</tr>
+									</#if>
+								 	</#list>
+									</#list>
+								
+								<#if !(role.getChildRoles()?size<1)> 
+									<@digui_role_v role.getChildRoles()?sort_by("id") ,flag+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>	
+								</#if>
+							</#list> 
+						</#macro>
+		            
 	            </div>
 
 

@@ -676,5 +676,35 @@ public class ImpEa implements InfEa  {
 		baseDao.delete(organize);
 	}
 
+
+	public List getUnderUsersByUserId(String id) {
+		
+		return  getUnderUserByUserRole(getUserByID(Long.parseLong(id)).getRoles());
+	}
+
+
+	@Override
+	public List getUnderUserByUserRole(Set<Role> userRole) {
+		
+		List<String> userList = new ArrayList<String>();
+		for (Role role : userRole) {
+			Set<Role> childRole = role.getChildRoles();
+			if (role.getChildRoles().size() > 0) {
+				Set<User> userTmp = role.getUsers();
+				for (User user2 : userTmp) {
+					userList.add(user2.getAccount());
+				}
+				userList.addAll(getUnderUserByUserRole(childRole));
+			} else {
+				Set<User> userTmp = role.getUsers();
+				for (User user2 : userTmp) {
+					userList.add(user2.getAccount());
+				}
+				return userList;
+			}
+		}
+		return userList;
+	}
+
 	
 }

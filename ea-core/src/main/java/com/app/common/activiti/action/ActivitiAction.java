@@ -102,6 +102,9 @@ public class ActivitiAction extends BaseProcessAction {
 		String taskId = getpara("taskId");
 		String taskPage = getpara("taskPage");
 		String modelStr = getpara("model");
+		//add by hb for only query user task
+		String readonly = getpara("readonly");
+		//end
 		String formId = (String)infActiviti.getVariableByTaskId(taskId, "formId");
 		if (formId == null || formId.equals("") || modelStr == null || "".equals(modelStr)) {
 			rhs.put("model", null);
@@ -185,6 +188,7 @@ public class ActivitiAction extends BaseProcessAction {
 		rhs.put("initiator", initiator);
 		rhs.put("nextTaskList", nextTaskList);
 		rhs.put("taskPage", taskPage);
+		rhs.put("readonly", readonly);
 		getAllUserAndGroupInfo();
 		
 		return "success";
@@ -201,27 +205,21 @@ public class ActivitiAction extends BaseProcessAction {
 		if(maxSize.equals("")) maxSize = "20";
 
 		Map<String, Object> map = infActiviti.getAssignedOaTaskListByAccount(getCurrentAccount(), Integer.parseInt(pageId), Integer.parseInt(maxSize));
-		Map<String, Object> candidateUserMap = infActiviti.getCandidatedOaTaskListByAccount(getCurrentAccount(), Integer.parseInt(pageId), Integer.parseInt(maxSize));
-		Map<String, Object> candidateGroupmap = infActiviti.getCandidatedOaTaskListByGroup(getCurrentUserGroup(), Integer.parseInt(pageId), Integer.parseInt(maxSize));
+		//Map<String, Object> candidateUserMap = infActiviti.getCandidatedOaTaskListByAccount(getCurrentAccount(), Integer.parseInt(pageId), Integer.parseInt(maxSize));
+		//Map<String, Object> candidateGroupmap = infActiviti.getCandidatedOaTaskListByGroup(getCurrentUserGroup(), Integer.parseInt(pageId), Integer.parseInt(maxSize));
 		
 		
 		List<OaTask> assigneeList = (List<OaTask>) map.get("dataList");
-		List<OaTask> candidateUserList = (List<OaTask>) candidateUserMap.get("dataList");
-		List<OaTask> candidateGroupList = (List<OaTask>) candidateGroupmap.get("dataList");
+		//List<OaTask> candidateUserList = (List<OaTask>) candidateUserMap.get("dataList");
+		//List<OaTask> candidateGroupList = (List<OaTask>) candidateGroupmap.get("dataList");
 		
 		
 		List<OaTask> allData = new ArrayList<OaTask>();
 		
 		allData.addAll(assigneeList);
-		allData.addAll(candidateUserList);
-		allData.addAll(candidateGroupList);
-		
-/*		for (OaTask oaTask : assigneeList) {
-			
-		}
-		for (OaTask oaTask : candidateList) {
-			
-		}*/
+		//allData.addAll(candidateUserList);
+		//allData.addAll(candidateGroupList);
+
 		Pagination p = (Pagination)map.get("pagination");
 		//rhs.put("oatasklist", map.get("dataList"));
 		rhs.put("oatasklist", allData);

@@ -1,14 +1,12 @@
 package com.app.ea.action;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
@@ -16,26 +14,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.app.common.base.action.BaseEaAction;
-import com.app.common.spring.ssh.model.BaseModel;
-import com.app.ea.hsql.Hsql;
+import com.app.common.activiti.action.BaseProcessAction;
+import com.app.common.activiti.api.OaTask;
+import com.app.common.spring.ssh.page.Pagination;
+import com.app.ea.api.ImpEa;
 import com.app.ea.model.Organize;
 import com.app.ea.model.Organizegroup;
 import com.app.ea.model.Role;
 import com.app.ea.model.Rolegroup;
 import com.app.ea.model.User;
-import com.app.ea.model.Viewhistory;
-
-
 import com.utils.cache.Cache;
-import com.utils.file.FileProcessor;
 import com.utils.time.TimeUtil;
-
-import freemarker.template.SimpleHash;
 
 @Component("eaAction")
 @Scope("prototype")
-public class EaAction extends BaseEaAction {
+public class EaAction extends BaseProcessAction {
 	private final Logger log = LoggerFactory.getLogger(EaAction.class);
 	//http://localhost:9090/ea/app/manager/ea_sort.do?object=Organize
 	public String sort() throws Exception {
@@ -548,7 +541,29 @@ public class EaAction extends BaseEaAction {
 
 	}
 	
+	//add by hb for view user assigneed task
+	public String menu_view_user_assigneed_task(){
+		String accountName = getpara("accountName");
+		String pageId = getpara("pageId");
+		String maxSize = getpara("maxSize");
+		if(pageId.equals("")) pageId = "1";
+		if(maxSize.equals("")) maxSize = "20";
 		
+		
+		Map<String, Object> map = infActiviti.getAssignedOaTaskListByAccount(accountName, Integer.parseInt(pageId), Integer.parseInt(maxSize));
+		
+		List<OaTask> assigneeList = (List<OaTask>) map.get("dataList");
+		
+		Pagination p = (Pagination)map.get("pagination");
+		rhs.put("oatasklist", assigneeList);
+		rhs.put("maxSize", p.getMaxSize());
+		rhs.put("count", p.getTotalSize());
+		rhs.put("maxPage", p.getTotalPage());
+		rhs.put("currentPage", p.getCurrentPage());
+		rhs.put("readonly", "true");
+		return "success";
+	}
+	//end	
 	
 	
 	public String menu_user_duty_define_by_role() {
@@ -586,6 +601,22 @@ public class EaAction extends BaseEaAction {
 				.find(" from Rule where parent_id = null");
 		List viewhistory = baseDao.find("from Viewhistory");
 		User user = (User) baseDao.loadById("User", getCurrentUser().getId());
+		//add by hb for show the task count for each user
+		//call ImpEa.java Method:getUnderUserByUserAccount(Set<Role> userRole)
+		String pageId = getpara("pageId");
+		String maxSize = getpara("maxSize");
+		if(pageId.equals("")) pageId = "1";
+		if(maxSize.equals("")) maxSize = "20";
+		Map<String,Long> taskcount = new HashMap<String, Long>();
+		List<String> underUserList = infEa.getUnderUserByUserRole(user.getRoles());
+		for (String accountName : underUserList) {
+			Map<String, Object> map = infActiviti.getAssignedOaTaskListByAccount(accountName, Integer.parseInt(pageId), Integer.parseInt(maxSize));
+			Pagination p = (Pagination)map.get("pagination");
+			taskcount.put(accountName, p.getTotalSize());
+		}
+		rhs.put("underList", taskcount);
+		//end
+		
 		rhs.put("user", user);
 		rhs.put("viewhistory", viewhistory);
 		rhs.put("ruleRootList", ruleRootList);
