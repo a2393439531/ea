@@ -27,11 +27,13 @@
     <groovy.version>2.0.0</groovy.version>
  		<jansi.version>1.8</jansi.version>
 	  <cometd.version>2.7.0</cometd.version>
+	  
+	  <mysql.version>5.1.29</mysql.version>
 	
 		<hibernate3.version>3.6.1.Final</hibernate3.version>
 		<!--<spring>3.0.5.RELEASE</spring>-->
 		<spring>3.2.1.RELEASE</spring>
-		<struts2.version>2.3.7</struts2.version>
+		<struts2.version>2.3.16</struts2.version><!--2.3.7-->
 		<json.version>2.2.1</json.version>
 		<junit.version>4.9</junit.version>
 		<h2.version>1.3.167</h2.version>
@@ -70,13 +72,21 @@
 
 	<dependencies>
 		
-<!---->
-		        <dependency>
+         <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
+        </dependency>
+        
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${servlet-api.version}</version>
       
         </dependency>
+
+
+
 
         <dependency>
             <groupId>javax.inject</groupId>

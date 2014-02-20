@@ -4,7 +4,7 @@
 <div class="row" style="padding-left:10px">
 
 	<div class="btn-group btn-group-xs" style="padding-bottom:10px">
-	<a class="btn btn-xs btn-info" href=# onclick="javascript:action_rule('create.do','id=root');">发布信息</a>
+	<a class="btn btn-xs btn-primary" href=# onclick="javascript:action_rule('create.do','id=root');">发布信息</a>
 
     </div>		
 

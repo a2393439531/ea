@@ -1,7 +1,7 @@
 <#include "../../../common/freemarker/include_header.ftl">
 <script type="text/javascript" src="<@context_module/>systempara.js"></script>
-<body style="padding:20px">
-	<a class="btn btn-xs btn-default"  href=# onclick="javascript:action_systempara('create.do','id=root');">添加系统参数类别</a>
+<body style="padding:10px">
+	<a class="btn btn-xs btn-primary"  href=# onclick="javascript:action_systempara('create.do','id=root');">添加系统参数类别</a>
     <br> <br>
         <table >
         <tr>

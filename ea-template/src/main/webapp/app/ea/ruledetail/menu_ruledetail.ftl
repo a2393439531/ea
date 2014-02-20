@@ -3,7 +3,7 @@
 <script type="text/javascript" src="<@context_module/>/ruledetail.js"></script>
 
 <div  style="padding:10px">
-	<a href=# onclick="javascript:action_ruledetail('create.do','parentId=${rhs["rule"].id?if_exists}');">新增内容</a>
+	<a class="btn btn-xs btn-primary" href=# onclick="javascript:action_ruledetail('create.do','parentId=${rhs["rule"].id?if_exists}');">新增内容</a>
 	&nbsp;&nbsp;&nbsp;
 	<hr>
 	<#include "ajax_ruledetail.ftl">

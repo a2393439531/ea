@@ -67,7 +67,7 @@
 			<td >
 			<span style="width:220px">
 			
-				<a  class="btn btn-xs btn-info" href='ea_user_profile_edit.do?${x.id?if_exists}' onclick="return hs.htmlExpand(this, { objectType: 'iframe' })">信息</a>
+				<a  class="btn btn-xs btn-info" href='ea_user_profile_edit.do?id=${x.id?if_exists}' onclick="return hs.htmlExpand(this, { objectType: 'iframe' })">信息</a>
 			     <a target="mainFrame" href='common_edit_edit_bean_property.do?objectname=User&op=r&propertyname=mark&id=${x.id?if_exists}' onclick="return hs.htmlExpand(this, { objectType: 'iframe' })">评价</a>&nbsp;&nbsp;
 	   <a  href="common_notify_send_email.do?userId=${x.id?if_exists}" onclick="return hs.htmlExpand(this, { objectType: 'iframe' })">email</a>&nbsp;&nbsp;
 				

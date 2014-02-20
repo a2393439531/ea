@@ -12,15 +12,15 @@
 <#macro digui_role roleNodes  flag >
 	<#list roleNodes as role>
 	    <tr >
-	    	<td style="width:450px" style="border:1px solid #ccc;">
+	    	<td style="width:480px" style="border:1px solid #ccc;">
 	    		${flag} <input  value="${role.name?if_exists}" 
-			      style="WIDTH: 200px"  onchange="javascript:action_role('update.do','column=name&id=${role.id?if_exists}&columnValue='+this.value)" /> 
-			    <div class="btn-group">
-				  	<a   onclick="scrolldiv_('div_scoll',2);document.getElementById('div_scoll').style.display ='';document.getElementById('div_add_new_user').style.display ='';document.getElementById('div_select_user').style.display ='none';document.getElementById('organize_id').value ='${rhs["organize"].id}';document.getElementById('role_id').value ='${role.id}'" class="btn btn-xs  btn-default"> <span class="glyphicon glyphicon-plus"  title="新增用户"></span></a>
-					<a   onclick="scrolldiv_('div_scoll',2);document.getElementById('div_scoll').style.display ='';document.getElementById('div_add_new_user').style.display ='none';document.getElementById('div_select_user').style.display ='';role_user_list('${role.id}','${rhs["organize"].id}');" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-user"  title="选择用户"></a>
-					<a   onclick="javascript:action_organize_admin('ea_organize_delete_role.do','roleId=${role.id}&organizeId=${rhs["organize"].id}');"  class="btn btn-xs btn-default"><span class="glyphicon glyphicon-trash"  title="删除"></span></a>				 	     
- 				</div>
+			      style="WIDTH: 150px"  onchange="javascript:action_role('update.do','column=name&id=${role.id?if_exists}&columnValue='+this.value)" /> 
+			  
 				
+				  	<a   onclick="scrolldiv_('div_scoll',2);document.getElementById('div_scoll').style.display ='';document.getElementById('div_add_new_user').style.display ='';document.getElementById('div_select_user').style.display ='none';document.getElementById('organize_id').value ='${rhs["organize"].id}';document.getElementById('role_id').value ='${role.id}'" class="btn btn-xs  btn-default"><span class="ui-icon ui-icon-circle-plus"></span> </a>
+					<a   onclick="scrolldiv_('div_scoll',2);document.getElementById('div_scoll').style.display ='';document.getElementById('div_add_new_user').style.display ='none';document.getElementById('div_select_user').style.display ='';role_user_list('${role.id}','${rhs["organize"].id}');" class="btn btn-xs btn-default"><span class="ui-icon ui-icon-circle-zoomin"></span> </a>
+					<a   onclick="javascript:action_organize_admin('ea_organize_delete_role.do','roleId=${role.id}&organizeId=${rhs["organize"].id}');"  class="btn btn-xs btn-default"><span class="ui-icon ui-icon-trash"   title="删除"></span></a>				 	     
+ 				
 				<table class="table-condensed" >
 					<tr><td>${flag}</td>
 					<td>
