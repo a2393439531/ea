@@ -16,6 +16,24 @@ import com.app.common.base.action.BaseEaAction;
 @SuppressWarnings("rawtypes")
 public class TestAction extends BaseEaAction {
 	
+	private static final long    serialVersionUID    = 7441785390598480063L;  
+	private int                    complete            = 0;   
+	// 获取进度值    
+	public int getComplete()  
+	{        complete += 10;        return complete;    }  
+
+	public String waitexe(){        
+		try {            
+			Thread.sleep(3000);       
+			}      
+		catch (InterruptedException e){            
+			e.printStackTrace();       
+		}       
+		return "success"; 
+	}
+		
+	
+	
 	public String menu_para() throws Exception {
 		rhs.put("system_para_map", 	infEa.getParaMap());
 		rhs.put("info_type", "success");

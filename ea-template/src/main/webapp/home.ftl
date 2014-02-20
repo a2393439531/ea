@@ -63,7 +63,8 @@
 			            </td>
 			        </tr>
 	
-		        <tr><td>提交时间过长处理：
+		        <tr><td>提交时间过长处理，解决表单重复提交：
+		        1.按钮失效
 			            <button id="loading-example-btn" type="button" class="btn btn-xs btn-primary" data-loading-text="正在请求数据...">...</button>
 						<script>
 						  $('#loading-example-btn').click(function () {
@@ -75,6 +76,9 @@
 
 						  });
 						</script>
+						&nbsp;
+						2. <a href="common_test_waitexe.do" ">显示等待页面execAndWait拦截器</a>
+						3.struts.token拦截器
 			          </td>
 		
 			        <tr><td>健壮性&安全性：
