@@ -75,15 +75,7 @@ public class User extends BaseModel {
 	private String ksonumber;
 	public String conbegindate;
 	public String contenddate;
-	public String conmonfee;
-	public String condayfee;
-	public String connetfee;
-	public String conadminfee;
-	public String lastdate;
-	public String laste;
-	public String lastw;
-	public String efee;
-	public String wfee;
+
 
 	@Column(length = 2000)
 	public String positiondescription;
@@ -405,77 +397,6 @@ public class User extends BaseModel {
 		this.contenddate = contenddate;
 	}
 
-	public String getConmonfee() {
-		return conmonfee;
-	}
-
-	public void setConmonfee(String conmonfee) {
-		this.conmonfee = conmonfee;
-	}
-
-	public String getCondayfee() {
-		return condayfee;
-	}
-
-	public void setCondayfee(String condayfee) {
-		this.condayfee = condayfee;
-	}
-
-	public String getLastdate() {
-		return lastdate;
-	}
-
-	public void setLastdate(String lastdate) {
-		this.lastdate = lastdate;
-	}
-
-	public String getLaste() {
-		return laste;
-	}
-
-	public void setLaste(String laste) {
-		this.laste = laste;
-	}
-
-	public String getLastw() {
-		return lastw;
-	}
-
-	public void setLastw(String lastw) {
-		this.lastw = lastw;
-	}
-
-	public String getEfee() {
-		return efee;
-	}
-
-	public void setEfee(String efee) {
-		this.efee = efee;
-	}
-
-	public String getWfee() {
-		return wfee;
-	}
-
-	public void setWfee(String wfee) {
-		this.wfee = wfee;
-	}
-
-	public String getConnetfee() {
-		return connetfee;
-	}
-
-	public void setConnetfee(String connetfee) {
-		this.connetfee = connetfee;
-	}
-
-	public String getConadminfee() {
-		return conadminfee;
-	}
-
-	public void setConadminfee(String conadminfee) {
-		this.conadminfee = conadminfee;
-	}
 
 	public String getStatus() {
 		return status;
