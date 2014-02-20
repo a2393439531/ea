@@ -1,5 +1,5 @@
 /target
-
 /.settings
 log.txt
 /.classpath
+database-${online}.properties
