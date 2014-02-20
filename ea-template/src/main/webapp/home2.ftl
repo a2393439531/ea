@@ -73,7 +73,11 @@
 	    </button>
 	  </div><!-- /example -->
 	
-	   
+	  <#include "app/common/test/bootstrap/botton.ftl">  
+	  
+	  
+<#include "app/common/test/bootstrap/ico.ftl">
+<#include "app/common/test/jquery/ico.ftl">	   
 	
 		<!-- Bootstrap core JavaScript
 	================================================== -->
