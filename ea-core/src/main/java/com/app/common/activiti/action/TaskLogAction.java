@@ -29,7 +29,7 @@ public class TaskLogAction extends BaseProcessAction {
 	public String list(){
 		String taskId = getpara("taskId");
 		String processInstanceId = getpara("processInstanceId");
-		if(processInstanceId.equals(""))
+		if(processInstanceId.equals("") || "undefined".equals(processInstanceId))
 			processInstanceId = getTask(taskId).getProcessInstanceId();
 
 		rhs.put("list", baseDao.find("from TaskLog where processInstanceId='" + processInstanceId + "' order by createTime desc"));
@@ -51,12 +51,18 @@ public class TaskLogAction extends BaseProcessAction {
 	
 	public String save() throws Exception {
 		Task t = getTask(getpara("taskId"));
+		String processInstanceId = getpara("processInstanceId");
+		if("undefined".equals(processInstanceId)){
+			processInstanceId = t.getProcessInstanceId();
+		}
 		User user = (User) getSessionValue("userlogined");
 		model = new TaskLog();
 		model.setLog(getpara("log"));
-		model.setTaskId(t.getId());
-		model.setTaskName(t.getName());
-		model.setProcessInstanceId(t.getProcessInstanceId());
+		if(t != null){
+			model.setTaskId(t.getId());
+			model.setTaskName(t.getName());
+		}
+		model.setProcessInstanceId(processInstanceId);
 		model.setCreateTime(TimeUtil.getTimeStr("yyyy-MM-dd HH:mm:ss"));
 		model.setUserAccount(user.getAccount());
 		model.setUserName(user.getName());
