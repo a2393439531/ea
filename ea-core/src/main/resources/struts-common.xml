@@ -31,17 +31,19 @@
 			</interceptor-stack>		
 	   </interceptors>	
 		<global-results>
-			<result name="unauthenticated.user" type="redirect">/website/siteadmin/index.ftl</result>
+			<result name="unauthenticated.user" type="redirect">/can_not_access.ftl</result>
 			<result name="can_not_access"         type="dispatcher">/can_not_access.ftl</result>
 			
 		</global-results> 		
 		
         <action name="*_*_*"   class="{2}Action"  method="{3}" >
-            <!--  <interceptor-ref name="authenticate-interceptor"/>    -->  
+            <!--   -->  <interceptor-ref name="authenticate-interceptor"/>   
             <result name="success">app/{1}/{2}/{3}.ftl</result>
             <result name="list">app/{1}/{2}/list.ftl</result>
             <result name="complete_task">app/common/activiti/complete_task.ftl</result>
         </action> 
+        
+        
        <!-- 
           <action name="*_*"  class="{1}Action"  method="{2}" >
             <result name="success">{1}/{2}.ftl</result>
