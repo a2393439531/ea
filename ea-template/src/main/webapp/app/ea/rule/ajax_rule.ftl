@@ -8,8 +8,8 @@
 			      style="WIDTH: 500px"  onchange="javascript:action_rule('update.do','column=name&id=${rule.id?if_exists}&columnValue='+this.value)" /> 
 			</td>
 			<td width=200px  >		 	     
-			    <a href=ea_ruledetail_menu_ruledetail.do?parentId=${rule.id}   target=mainFrame ><span class="glyphicon glyphicon-pencil"  title="编辑"></span></a>
-			    	<a href=ea_rule_detail.do?id=${rule.id?if_exists} onclick="return hs.htmlExpand(this, { objectType: 'iframe' })"><span class="glyphicon glyphicon-search"  title="预览"></span></a>
+			    <a href=ea_ruledetail_menu_ruledetail.do?parentId=${rule.id}   target=mainFrame ><span  class="ui-icon ui-icon-pencil"  title="编辑"></span></a>
+			    	<a href=ea_rule_detail.do?id=${rule.id?if_exists} onclick="return hs.htmlExpand(this, { objectType: 'iframe' })"><span class="ui-icon ui-icon-zoomin"  title="预览"></span></a>
   		  		<a  onclick="javascript:action_rule('create.do','id=${rule.id}');" class="ui-icon ui-icon-plus" ></a>
   		  		
  			<#if (rule.getChildRules()?size<1)> 

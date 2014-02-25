@@ -270,10 +270,11 @@ ${'     <span class="glyphicon glyphicon-adjust"></span>
 '?html} 
 </pre>
     
-
+<#--
 <#include "app/common/test/bootstrap/ico.ftl">
-
-
+-->
+${"<span class=ui-icon ui-icon-carat-1-e></span>"?html}
+<#include "app/common/test/jquery/ico.ftl">	   
 	<div class="panel panel-default">
 		<div class="panel-heading"><strong>按钮</strong></div>
 		<div class="panel-body">

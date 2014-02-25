@@ -29,6 +29,7 @@ public class TaskLogAction extends BaseProcessAction {
 	public String list(){
 		String taskId = getpara("taskId");
 		String processInstanceId = getpara("processInstanceId");
+		
 		if(processInstanceId.equals("") || "undefined".equals(processInstanceId))
 			processInstanceId = getTask(taskId).getProcessInstanceId();
 
@@ -51,6 +52,7 @@ public class TaskLogAction extends BaseProcessAction {
 	
 	public String save() throws Exception {
 		Task t = getTask(getpara("taskId"));
+		
 		String processInstanceId = getpara("processInstanceId");
 		if("undefined".equals(processInstanceId)){
 			processInstanceId = t.getProcessInstanceId();

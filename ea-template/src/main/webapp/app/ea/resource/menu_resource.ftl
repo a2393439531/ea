@@ -2,7 +2,7 @@
 <script type="text/javascript" src="<@context_module/>resource.js"></script>
 
 <div style="padding:10px">
-<a class="btn btn-xs btn-default" onclick="javascript:action_resource('create.do','id=root');">添加根节点</a>
+<a class="btn btn-xs btn-primary" onclick="javascript:action_resource('create.do','id=root');">添加根节点</a>
 <br><br>
 
 	<table>

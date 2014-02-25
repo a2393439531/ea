@@ -105,6 +105,32 @@
        <url-pattern>*.ftl</url-pattern>
     </servlet-mapping>   
      
+     
+  <!-- Servlet for activiti services add by hb-->
+  <listener>
+    <listener-class>org.activiti.rest.common.servlet.ActivitiServletContextListener</listener-class>
+  </listener>
+  
+	<!-- Restlet adapter -->
+  <servlet id="rset">
+    <servlet-name>RestletServlet</servlet-name>
+    <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
+    
+    <init-param>
+      <!-- Application class name -->
+      <param-name>org.restlet.application</param-name>
+      <param-value>org.activiti.rest.service.application.ActivitiRestServicesApplication</param-value>
+    </init-param>
+  
+  </servlet>
+  
+  <servlet-mapping>  
+    <servlet-name>RestletServlet</servlet-name>  
+    <url-pattern>/service/*</url-pattern>  
+  </servlet-mapping> 
+  <!-- end -->
+  
+     
      <!--一定要在后-->
 	 <welcome-file-list>
 	     <welcome-file>index.ftl</welcome-file>
