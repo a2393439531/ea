@@ -100,12 +100,35 @@
          <url-pattern>/admin/proxool</url-pattern>
      </servlet-mapping> 
       -->     
-    <servlet-mapping>
+ 
+    
+  <servlet>
+    <servlet-name>Chat</servlet-name>
+    <servlet-class>com.acme.ChatServlet</servlet-class>
+    <async-support>true</async-support>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>Chat</servlet-name>
+    <url-pattern>/chat/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>WSChat</servlet-name>
+    <servlet-class>com.acme.WebSocketChatServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>WSChat</servlet-name>
+    <url-pattern>/demo/ws/*</url-pattern>
+  </servlet-mapping>
+  
+      <servlet-mapping>
        <servlet-name>freemarker</servlet-name>
        <url-pattern>*.ftl</url-pattern>
-    </servlet-mapping>   
-     
-     
+    </servlet-mapping>  
   <!-- Servlet for activiti services add by hb-->
   <listener>
     <listener-class>org.activiti.rest.common.servlet.ActivitiServletContextListener</listener-class>

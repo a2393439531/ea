@@ -15,18 +15,18 @@ package org.activiti.rest.common.application;
 
 import javax.servlet.http.HttpSession;
 
-import org.activiti.rest.common.api.ActivitiUtil;
 import org.activiti.rest.common.filter.RestAuthenticator;
 import org.restlet.Application;
 import org.restlet.Request;
 import org.restlet.Response;
-import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.ext.servlet.internal.ServletCall;
 import org.restlet.security.ChallengeAuthenticator;
 import org.restlet.security.SecretVerifier;
 import org.restlet.security.Verifier;
 
+import com.app.ea.api.InfEa;
+import com.app.ea.api.ImpEa;
 import com.app.ea.model.User;
 /**
  * @author Tijs Rademakers
@@ -37,6 +37,7 @@ public abstract class ActivitiRestApplication extends Application {
   protected ActivitiStatusService activitiStatusService;
   protected MediaTypeResolver mediaTypeResolver;
   protected RestAuthenticator restAuthenticator;
+  public InfEa infEa;
 
   public ActivitiRestApplication() {
     activitiStatusService = new ActivitiStatusService();
@@ -69,16 +70,13 @@ public abstract class ActivitiRestApplication extends Application {
         //如果需要和自己的表关联，这里需要换成去我们的用户验证API
         //boolean verified = ActivitiUtil.getIdentityService().checkPassword(username, new String(password));
     	  System.out.printf("username:%s password:%s%n" , username , new String(password) );  
-	        /** 
-	         * 此处自定义的验证规则为：如果用户名不为空，并且用户名和密码相等则通过。否则不通过 
-	         */  
-	        if(username == null || username.equals("")){  
-	            return false;  
-	        }else if(username.equals( new String(password) )){  
-	            return true;
-	        }else{  
-	            return false;  
-	        }  
+    	  infEa = new ImpEa();
+    	  String result = infEa.checkLogin(username, new String(password));
+    	  if("0000".equals(result)){
+    		  return true;
+    	  }else{
+    		  return false;
+    	  }
       }
     };
     
