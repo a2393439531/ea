@@ -37,7 +37,7 @@ public class Path {
     	return getLocation( Class.forName(classpath));
     	} catch (Throwable t) {
     		t.printStackTrace();
-    		Log.debug(classpath);
+    		
 		}
     	return "an unknown location";
     }

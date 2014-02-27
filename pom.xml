@@ -16,9 +16,9 @@
    <modules>
       <module>ea-parent</module> 
       <module>ea-core</module>
-      <!--
+      <!-- -->
       <module>ea-template</module>
-     -->
+    
    </modules>
   </profile>
   

@@ -37,9 +37,9 @@
 		<json.version>2.2.1</json.version>
 		<junit.version>4.9</junit.version>
 		<h2.version>1.3.167</h2.version>
-		<!--<jetty.version>8.1.13.v20130916</jetty.version>8.0.0.M0  8.1.9.v20130131 -->
-		<jetty.version>8.0.0.M0</jetty.version><!--7.6.13.v20130916 8.0.0.M0  8.1.9.v20130131 -->
-		<servlet-api.version>3.0.1</servlet-api.version>
+		<jetty.version>9.1.2.v20140210</jetty.version><!--    8.0.0.M0  8.1.9.v20130131 --><!--7.6.13.v20130916 8.0.0.M0  8.1.9.v20130131 -->
+		
+		<servlet-api.version>3.1.0</servlet-api.version>
 		<commons-logging.version>1.1.1</commons-logging.version>
 		<commons-fileupload.version>1.2.1</commons-fileupload.version>
 		<freemarker.version>2.3.19</freemarker.version>
@@ -51,23 +51,19 @@
 	  <svnkit.version>1.7.6</svnkit.version>
 	   <activiti.version>5.14</activiti.version>
 	   <mybatis.version>3.0.6</mybatis.version>
-	   
+	  <restlet.version>2.0.15</restlet.version>
+	  <codehaus.jackson.version>1.9.9</codehaus.jackson.version>
 	   
 	</properties>
-	<!-- 
-<repositories>
-  <repository>
-    <id>sourceforge</id>
-    <url>http://oss.sonatype.org/content/groups/sourceforge/</url>
-    <releases>
-      <enabled>true</enabled>
-    </releases>
-    <snapshots>
-      <enabled>true</enabled>
-    </snapshots>
-  </repository>
+	<!-- 	
 
-</repositories>	
+  <repositories>
+    <repository>
+      <id>maven-restlet</id>
+      <name>Public online Restlet repository</name>
+      <url>http://maven.restlet.org</url>
+    </repository>
+  </repositories>
  -->
 
 	<dependencies>
@@ -526,13 +522,15 @@
 			<scope>provided</scope>
 			<version>${jetty.version}</version>
 		</dependency>
+		
+		<!--8.1.14.v20131031  all (37)
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<scope>provided</scope>
 			<artifactId>jetty-websocket</artifactId>
 			<version>${jetty.version}</version>
 		</dependency>
-
+-->
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 		
@@ -724,6 +722,46 @@
 			<scope>test</scope>
 		</dependency>
 
+
+<!--webserivce 
+    <dependency>
+      <groupId>org.restlet.jee</groupId>
+      <artifactId>org.restlet</artifactId>
+      <version>${restlet.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.restlet.jee</groupId>
+      <artifactId>org.restlet.ext.servlet</artifactId>
+      <version>${restlet.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.restlet.jee</groupId>
+      <artifactId>org.restlet.ext.jackson</artifactId>
+      <version>${restlet.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.codehaus.jackson</groupId>
+          <artifactId>jackson-core-asl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.codehaus.jackson</groupId>
+          <artifactId>jackson-mapper-asl</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-core-asl</artifactId>
+      <version>${codehaus.jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-mapper-asl</artifactId>
+      <version>${codehaus.jackson.version}</version>
+    </dependency>
+-->
+
+
 	</dependencies>
 
 	<build>
@@ -792,6 +830,8 @@
 					<version>1.2.16</version> </dependency> </dependencies> -->
 			</plugin>
 			
+
+   
 
 	
 		</plugins>
