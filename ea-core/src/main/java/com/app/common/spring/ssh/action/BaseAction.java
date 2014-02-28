@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,8 @@ import org.springframework.context.annotation.Scope;
 import com.app.common.spring.ssh.dao.BaseDao;
 import com.app.common.spring.ssh.model.BaseModel;
 import com.app.common.spring.ssh.page.Pagination;
+import com.app.ea.model.Organize;
+import com.app.ea.model.Role;
 import com.opensymphony.util.BeanUtils;
 import com.opensymphony.xwork2.ActionContext;
 
@@ -126,7 +129,7 @@ public class BaseAction {
 		baseDao.update(baseModel);
 	}
 
-	public void common_change_level() throws Exception {
+	public boolean common_change_level() throws Exception {
 		String beanname = getpara("beanname");
 		BaseModel baseModel = (BaseModel) baseDao.loadById(beanname,
 				Long.parseLong(getpara("id")));
@@ -139,9 +142,26 @@ public class BaseAction {
 		} else {
 			BaseModel baseModelParent = (BaseModel) baseDao.loadById(beanname,
 					Long.parseLong(getpara("parentId")));
+			
+			Organize organize = (Organize) baseDao.loadById("Organize",
+					Long.parseLong(getpara("organizeId")));
+			
+			Set<Role> rootSet = organize.rootRoles(); //拿到当前organize的根Role
+			Set<Role> roleSet =  organize.getRoles();//拿到下属的Role,应该还要除掉自己本身，传过来的role只要不等于下属role就可以改变
+			String parentId = getpara("parentId"); //前台传过来的上一级role id
+			for (Role role : roleSet) {
+				if(rootSet.contains(role)){
+					continue;
+				}
+				if( parentId.equals(String.valueOf(role.getId()))){
+					System.out.println("不能设置上级为自己的下属！");
+					return false;
+				}
+			}
 			BeanUtils.setValue(baseModel, "parentModel", baseModelParent);
 		}
 		baseDao.update(baseModel);
+		return true;
 	}
 
 	

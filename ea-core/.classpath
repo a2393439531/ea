@@ -14,6 +14,7 @@
   <classpathentry kind="var" path="M2_REPO/javax/servlet/jsp/jsp-api/2.2/jsp-api-2.2.jar"/>
   <classpathentry kind="var" path="M2_REPO/javax/servlet/jsp/jstl/jstl-api/1.2/jstl-api-1.2.jar"/>
   <classpathentry kind="var" path="M2_REPO/javax/el/el-api/2.2/el-api-2.2.jar"/>
+  <classpathentry kind="var" path="M2_REPO/javax/websocket/javax.websocket-api/1.0/javax.websocket-api-1.0.jar"/>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
   <classpathentry kind="var" path="M2_REPO/mysql/mysql-connector-java/5.1.29/mysql-connector-java-5.1.29.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/cometd/java/bayeux-api/2.7.0/bayeux-api-2.7.0.jar"/>
@@ -147,4 +148,9 @@
   <classpathentry kind="var" path="M2_REPO/org/apache/struts/struts2-junit-plugin/2.3.16/struts2-junit-plugin-2.3.16.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-httpclient/commons-httpclient/3.1/commons-httpclient-3.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-codec/commons-codec/1.2/commons-codec-1.2.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/websocket/websocket-servlet/9.1.2.v20140210/websocket-servlet-9.1.2.v20140210.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/websocket/websocket-api/9.1.2.v20140210/websocket-api-9.1.2.v20140210.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/websocket/websocket-common/9.1.2.v20140210/websocket-common-9.1.2.v20140210.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/websocket/websocket-client/9.1.2.v20140210/websocket-client-9.1.2.v20140210.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/websocket/websocket-server/9.1.2.v20140210/websocket-server-9.1.2.v20140210.jar"/>
 </classpath>

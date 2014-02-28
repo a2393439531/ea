@@ -143,6 +143,10 @@
   <classpathentry kind="var" path="M2_REPO/oro/oro/2.0.8/oro-2.0.8.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/struts/struts2-convention-plugin/2.3.16/struts2-convention-plugin-2.3.16.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/struts/struts2-junit-plugin/2.3.16/struts2-junit-plugin-2.3.16.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/websocket/websocket-servlet/9.1.2.v20140210/websocket-servlet-9.1.2.v20140210.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/websocket/websocket-api/9.1.2.v20140210/websocket-api-9.1.2.v20140210.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/websocket/websocket-common/9.1.2.v20140210/websocket-common-9.1.2.v20140210.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/websocket/websocket-client/9.1.2.v20140210/websocket-client-9.1.2.v20140210.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/jetty-servlets/9.1.2.v20140210/jetty-servlets-9.1.2.v20140210.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/glassfish/web/jstl-impl/1.2/jstl-impl-1.2.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/glassfish/web/el-impl/2.2/el-impl-2.2.jar"/>
