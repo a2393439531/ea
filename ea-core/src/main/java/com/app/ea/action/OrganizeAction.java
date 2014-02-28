@@ -108,16 +108,23 @@ public class OrganizeAction extends BaseEaAction {
 			return "success";
 		}
 		public String create_new_user_in_role() throws Exception {
-			User user=new User();
-			user.setName(getpara("name"));
-			user.setAccount(getpara("account"));
-			Role role=(Role)baseDao.loadById("Role",
-					Long.parseLong(getpara("roleId")));
-			
-			baseDao.create(user);
-			user.getRoles().add(role);
-			baseDao.update(user);
-			rhs.put("info", user.getName()+ " 添加成功!");
+			String username = getpara("name");
+			String account = getpara("account");
+			User user = (User) baseDao.loadByFieldValue(User.class, "account",
+					account);
+			if(user == null){
+				user=new User();
+				user.setName(username);
+				user.setAccount(getpara("account"));
+				Role role=(Role)baseDao.loadById("Role",
+						Long.parseLong(getpara("roleId")));
+				baseDao.create(user);
+				user.getRoles().add(role);
+				baseDao.update(user);
+				rhs.put("info", user.getName()+ " 添加成功!");
+			}else{
+				rhs.put("info", "帐号 " + account + " 已经存在!");
+			}
 			admin();
 			return "success";
 		}
