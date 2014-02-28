@@ -130,9 +130,14 @@ public class OrganizeAction extends BaseEaAction {
 		}
 		
 		public String change_role_level() throws Exception {
-			common_change_level();
-			rhs.put("info_type", "success");
-			rhs.put("info", "改变层级成功!");
+			boolean result = common_change_level();
+			if(result){
+				rhs.put("info", "改变层级成功!");
+				rhs.put("info_type", "success");
+			}else{
+				rhs.put("info", "改变层级失败!");
+				rhs.put("info_type", "failed");
+			}
 			admin();
 			return "success";
 		}
