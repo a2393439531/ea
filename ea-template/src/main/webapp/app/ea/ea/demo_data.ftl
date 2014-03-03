@@ -3,31 +3,7 @@
 <#include "../../../common/freemarker/include_select_users.ftl">
 
 <div  style="margin:10px">
-	 <div class="panel panel-default">
-	    <div class="panel-heading">
-	      <h3 class="panel-title">常见选择模式</h3>
-	    </div>
-	    <div class="panel-body">
-			<br>单选选择用户
-			    <input type="hidden" id="assignee" name="assignee"/>
-				<input type="text" class="input-small" id="assigneeText" 
-				onclick="javascript:open_select_users_dialog(document.getElementById('assigneeText'),document.getElementById('assignee'),1);" onchange="alert('')"/>
-				多选择用户
-			    <input type="hidden" id="assigneeM" name="assigneeM"/>
-				<input type="text" class="input-small" id="assigneeMText" 
-				onclick="javascript:open_select_users_dialog(document.getElementById('assigneeMText'),document.getElementById('assigneeM'),2);" />
-				
-				 &nbsp;选组下拉框				        
-				<select  style="width:200px" onchange="alert(this.value)">
-				   <option   value="">选择“悬赏任务”的可分配组</option> 
-				   <optgroup label="所有员工">
-				   <option   value="all">所有员工</option> 
-				   <@get_candidategroup_by_organize rhs["organizeRootList"]?sort_by('sortNob'),"" />	  
-				   <@get_candidategroup_by_rolegroup rhs["rolegroupRootList"]?sort_by('sortNob'),"" />	
-				</select> 		 
-	    </div>
-	  </div>
-	    
+
 
    
 	<!-- Table -->
@@ -112,7 +88,31 @@
 		</tbody>
 	</table>     
 		
-
+	 <div class="panel panel-default">
+	    <div class="panel-heading">
+	      <h3 class="panel-title">常见选择模式</h3>
+	    </div>
+	    <div class="panel-body">
+			<br>单选选择用户
+			    <input type="hidden" id="assignee" name="assignee"/>
+				<input type="text" class="input-small" id="assigneeText" 
+				onclick="javascript:open_select_users_dialog(document.getElementById('assigneeText'),document.getElementById('assignee'),1);" onchange="alert('')"/>
+				多选择用户
+			    <input type="hidden" id="assigneeM" name="assigneeM"/>
+				<input type="text" class="input-small" id="assigneeMText" 
+				onclick="javascript:open_select_users_dialog(document.getElementById('assigneeMText'),document.getElementById('assigneeM'),2);" />
+				
+				 &nbsp;选组下拉框				        
+				<select  style="width:200px" onchange="alert(this.value)">
+				   <option   value="">选择“悬赏任务”的可分配组</option> 
+				   <optgroup label="所有员工">
+				   <option   value="all">所有员工</option> 
+				   <@get_candidategroup_by_organize rhs["organizeRootList"]?sort_by('sortNob'),"" />	  
+				   <@get_candidategroup_by_rolegroup rhs["rolegroupRootList"]?sort_by('sortNob'),"" />	
+				</select> 		 
+	    </div>
+	  </div>
+	    
 	
 </div>
 

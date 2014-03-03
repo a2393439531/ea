@@ -10,6 +10,8 @@
       </div>
     </div>
 
+
+  <#----
    <div class="bs-example">
       <ul class="list-group">
         <li class="list-group-item">
@@ -27,16 +29,17 @@
       </ul>
     </div>
 
+
 <ul class="nav nav-tabs">
   <li class="active"><a href="#">Home</a></li>
   <li><a href="#">Profile</a></li>
   <li><a href="#">Messages</a></li>
 </ul>
-
-
+-->
+<#--
 <br><br>IE9下面导航不正常
 <nav class="navbar navbar-default" role="navigation">
-  <!-- Brand and toggle get grouped for better mobile display -->
+
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
       <span class="sr-only">Toggle navigation</span>
@@ -46,7 +49,7 @@
     </button>
     <a class="navbar-brand" href="#">Brand</a>
   </div>
-  <!-- Collect the nav links, forms, and other content for toggling -->
+ 
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav "  >
       <li class="active"><a href="#">Link</a></li>
@@ -83,5 +86,6 @@
         </ul>
       </li>
     </ul>
-  </div><!-- /.navbar-collapse -->  
+  </div>
 </nav>
+-->
