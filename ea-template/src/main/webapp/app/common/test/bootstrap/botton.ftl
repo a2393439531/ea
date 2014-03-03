@@ -1,12 +1,5 @@
 
-       <a href=#  class="btn btn-xs btn-default">连接</a>
-        <button type="button" class="btn btn-xs btn-default">Default</button>
-        <button type="button" class="btn btn-xs btn-primary">primary-Primary</button>
-        <button type="button" class="btn btn-xs btn-success">Success</button>
-        <button type="button" class="btn btn-xs btn-info">Info</button>
-        <button type="button" class="btn btn-xs btn-warning">Warning</button>
-        <button type="button" class="btn btn-xs btn-danger">Danger</button>
-        <button type="button" class="btn btn-xs btn-link">Link</button>
+  <#--
     <br>
 图标按钮
    <div class="bs-example">
@@ -27,17 +20,11 @@
     </div>   
   <br>  
     
-	        
+	    
         
-      <br> 按钮-符合父的大小
-      <div class="well" style="max-width: 300px; margin: 0 auto 10px;">
-        <button type="button" class="btn btn-primary btn-xs btn-block">Block level button</button>
-        <button type="button" class="btn btn-default btn-xs btn-block">Block level button</button>
-      </div>
+    
 	  <div class="row">
-	 	  <div class="col-md-6">  关闭按钮
-	 		 <button type="button" class="close" aria-hidden="true">&times;</button>
-		  </div>
+	 	  <div class="col-md-6">  关闭按钮<button type="button" class="close" aria-hidden="true">&times;</button>  </div>
 	  	  <div class="col-md-6">下拉<span class="caret"></span></div>
 	   </div>
                             按钮组  btn-group-xs  btn-group-sm  btn-group-lg
@@ -85,4 +72,4 @@
 	      
 	      </div>
 	    </div>		
-		
+		    -->

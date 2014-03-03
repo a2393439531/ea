@@ -1,5 +1,5 @@
 
-<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
   Launch demo modal
 </button>
 
