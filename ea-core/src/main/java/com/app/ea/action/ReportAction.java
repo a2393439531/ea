@@ -152,21 +152,14 @@ public class ReportAction extends BaseEaAction {
 		rhs.put("year", year);
 		return "success";
 	}	
-	public String day_report() throws Exception {
-		String year = getpara("theYear");
-		String type = getpara("type");
-		ArrayList reportList= (ArrayList) baseDao.find("select r from WorkReport r where r.type = '" + type + "'");
-		rhs.put("dateReport",reportList);
-		return "success";
-	}	
 	
 	public String data_save() throws Exception {
 		String date = getpara("date");
-		String Content = getpara("content");
+		String Content = java.net.URLDecoder.decode(getpara("content"));
 		String column = getpara("column");
 		String type = getpara("retype");
 		String account =getCurrentUser().getAccount();
-		ArrayList reportList= (ArrayList) baseDao.find("select r from Report r where r.userAccount = '" + account+"' and r."+column+"=" + date);
+		ArrayList reportList= (ArrayList) baseDao.find("select r from Report r where r.userAccount = '" + account+"' and r."+column+"='" + date+"' and r.type = '"+type+"'");
 		
 		if(reportList.size()<1){	
 			Report r = new Report();
@@ -189,7 +182,9 @@ public class ReportAction extends BaseEaAction {
 		String column = getpara("column");
 		String date = getpara("value");	
 		String account =getCurrentUser().getAccount();
-		ArrayList reportList= (ArrayList) baseDao.find("select r from Report r where r.userAccount = '" + account+"' and r."+column+"=" + date);
+		String type = getpara("retype");
+		System.out.println("type "+ type);
+		ArrayList reportList= (ArrayList) baseDao.find("select r from Report r where r.userAccount = '" + account+"' and r."+column+"='" + date+"' and r.type = '"+type+"'");
 
 		if(reportList.size()<1){
 			rhs.put("content", "");
@@ -201,6 +196,40 @@ public class ReportAction extends BaseEaAction {
 		return "success";
 	}
 	
+	public String sumReport() throws Exception {
+		String year = getpara("theYear");
+		String type = getpara("type");
+		String userA = getpara("userAccount");
+		ArrayList reportList;
+		
+		String account;
+		if(userA.equals("")){
+			account = getCurrentUser().getAccount();
+			//System.out.println("no account here");
+		}
+		else{
+			account = userA;
+			//System.out.println("get account here");
+		}
+		
+		if(type.equals("day")){
+			String fromDate = getpara("fromDate");
+			String toDate = getpara("toDate");
+			System.out.println("i am in sumreport from date"+fromDate+"! and to date "+toDate);
+			reportList= (ArrayList) baseDao.find("select r from Report r where r.type = '" + type +"' and r.userAccount = '" + account+ "'and date between '"+fromDate+"' and '" + toDate + "'");
+			rhs.put("fromDateI",fromDate);
+			rhs.put("toDateI", toDate);
+			
+		}
+		else{
+			reportList= (ArrayList) baseDao.find("select r from Report r where r.type = '" + type +"' and r.userAccount = '" + account+ "'and date like '"+year+"%'");
+		}
+		rhs.put("sumReport",reportList);
+		rhs.put("year", year);
+		rhs.put("type", type);
+		return "success";
+	}	
+
 	public String ipm() throws Exception {
 		List hrworkshopList = baseDao.find("from Hrworkshop");
 		rhs.put("workshopList", hrworkshopList);

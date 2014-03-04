@@ -8,7 +8,7 @@
 	<div class="panel panel-default">
 		<div class="panel-heading"><strong>项目说明</strong></div>
 		<div class="panel-body">
-			<p>企业架构基础开发平台适合软件开发团队迅速搭建企业级应用平台,主要功能包括:组织架构管理、工作流、权限控制、报表引擎、文档管理等
+			<p>企业架构基础开发平台适合软件开发团队迅速搭建企业级应用平台,主要功能包括:组织架构管理、工作流、权限控制、日报周报、在线支持、文档管理等
 			 <br> <br>  
 	         <a href="ea_ea_demo_data.do" target=_blank class="btn btn-xs btn-default">演示数据</a>
 	         <a href="common_activiti_index_demo.do" target=_blank class="btn btn-xs btn-default">工作流</a>

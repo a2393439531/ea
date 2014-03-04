@@ -51,15 +51,11 @@ function data_read(date,column){
 	
 </script>
 
-
-
 <body style="padding:10px">
 
 <strong>工作汇报</strong>
-	<a href="ea_report_dayReport.do?theYear=${rhs["year"]}&type=day" target="mainFrame"> 日报</a>
-	<a> 周报</a><a> 月报</a><a> 季报</a>
-<hr>
- 
+    <a href="ea_report_sumReport.do?theYear=${rhs["year"]}&type=day" target="mainFrame"> 日报</a>
+
 <#assign year= rhs["year"]?if_exists>
 <table class ="table">
 			<tr>
