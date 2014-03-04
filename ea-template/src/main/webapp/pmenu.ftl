@@ -52,7 +52,7 @@
 		  <li ><a href="common_activiti_menu_process_definition.do" target="mainFrame">工作流管理</a></li>
 
  		  <li ><a href="common_activiti_index_demo.do" target="mainFrame">工作流演示</a></li>
-		  <li ><a href="common_chat_chat.do" target="mainFrame">聊天室演示</a></li>
+		  <li ><a href="common_chat_chat.do" target="_blank">在线支持</a></li>
     </ul>
   </div>
 </body> 

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app id="WebApp_9" version="2.4" 
-	xmlns="http://java.sun.com/xml/ns/j2ee" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+<web-app id="WebApp_9" xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+   metadata-complete="false"
+   version="3.1">
 	<display-name>EA</display-name>
  	<context-param>
         <param-name>contextConfigLocation</param-name>
@@ -14,6 +15,7 @@
 	<filter>
 		<filter-name>openSessionInViewEa</filter-name>
 		<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+   		<async-supported>true</async-supported>
    		
     	<init-param>  
         	<param-name>sessionFactoryBeanName</param-name>  
@@ -28,11 +30,13 @@
     <filter>
         <filter-name>struts2</filter-name>
         <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+    	<async-supported>true</async-supported>
     </filter>
 
     <filter>                
         <filter-name>monitoring</filter-name>                
-        <filter-class>net.bull.javamelody.MonitoringFilter</filter-class>        
+        <filter-class>net.bull.javamelody.MonitoringFilter</filter-class>
+        <async-supported>true</async-supported>    
     </filter>        
     <filter-mapping>                
         <filter-name>monitoring</filter-name>               
@@ -95,7 +99,43 @@
        <servlet-name>freemarker</servlet-name>
        <url-pattern>*.ftl</url-pattern>
     </servlet-mapping>  
+ <!-- servlet for chat -->
  
+ <servlet>
+    <servlet-name>Chat</servlet-name>
+    <servlet-class>com.acme.ChatServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+    <async-supported>true</async-supported>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>Chat</servlet-name>
+    <url-pattern>/chat/*</url-pattern>
+  </servlet-mapping>
+ <!-- end -->
+ <!-- Servlet for activiti services add by hb-->
+  <listener>
+    <listener-class>org.activiti.rest.common.servlet.ActivitiServletContextListener</listener-class>
+  </listener>
+  
+	<!-- Restlet adapter -->
+  <servlet id="rset">
+    <servlet-name>RestletServlet</servlet-name>
+    <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
+    
+    <init-param>
+      <!-- Application class name -->
+      <param-name>org.restlet.application</param-name>
+      <param-value>org.activiti.rest.service.application.ActivitiRestServicesApplication</param-value>
+    </init-param>
+  
+  </servlet>
+  
+  <servlet-mapping>  
+    <servlet-name>RestletServlet</servlet-name>  
+    <url-pattern>/service/*</url-pattern>  
+  </servlet-mapping> 
+  <!-- end -->
      
      <!--一定要在后-->
 	 <welcome-file-list>
