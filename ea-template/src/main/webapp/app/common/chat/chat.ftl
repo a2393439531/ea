@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Async Chat</title>
+    <title>技术支持</title>
     <script type='text/javascript'>
         function $()
         {
