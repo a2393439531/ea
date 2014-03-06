@@ -33,6 +33,7 @@ public class LoginAction extends BaseEaAction {
 			rhs.put("tipInfo", "用户不能为空");
 			return "fail";
 		}
+		System.out.println("EA查出用户个数=" + infEa.getAllUser().size());
 		User user = (User) infEa.getUserbyAccount(account);
 		if (user==null) {
 			rhs.put("tipInfo", "用户名不存在");

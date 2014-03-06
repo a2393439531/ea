@@ -126,7 +126,13 @@ public class SpringEaTest  {
 	public void getAllUser() {
 		log.debug("EA查出用户个数=" + infEa.getAllUser().size());
 	}
-
+	@Test
+	public void testAop() {
+			
+		System.out.println("EA查出用户个数=" + infEa.getAllUser().size());
+	
+		
+	}
 	
 
 	@Test
