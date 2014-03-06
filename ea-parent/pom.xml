@@ -21,7 +21,7 @@
 	    <cometd.version>2.7.0</cometd.version>
 	    <mysql.version>5.1.29</mysql.version>
 	    <hibernate3.version>3.6.1.Final</hibernate3.version>
-		  <spring>3.2.1.RELEASE</spring>
+		  <spring>3.2.1.RELEASE</spring><!--3.2.1.RELEASE  3.2.8.RELEASE  -->
 		  <struts2.version>2.3.16</struts2.version><!--2.3.7-->
 		  <json.version>2.2.1</json.version>
 		  <junit.version>4.9</junit.version>
