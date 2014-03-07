@@ -19,13 +19,13 @@ import com.app.ea.model.Extv;
 import com.app.ea.model.Organize;
 import com.app.ea.model.User;
 
-
+//
 
 public class BaseCoreAction extends BaseAction {
 	private final Logger log = LoggerFactory
 			.getLogger(BaseCoreAction.class);
 	protected InfEa infEa;
-	@Resource(name = "impEa")
+	@Resource(name = "infEa")
 	public void setInfEa(InfEa infEa) {
 		this.infEa = infEa;
 	}
