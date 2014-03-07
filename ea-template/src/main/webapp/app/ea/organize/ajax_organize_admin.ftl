@@ -1,4 +1,4 @@
-<div id=div_organize_admin>
+<div id="div_organize_admin">
 <table    class="table  table-condensed" >
      <thead>
 		<tr>
@@ -8,7 +8,7 @@
 <@digui_role rhs["organize"].rootRoles()?sort_by('sortNob'),"" />	
    </table>
 </div>
-<span id="div_action_result" style="display:none">${rhs["info"]?if_exists}</span>
+<span id="div_action_result" style="display:block">${rhs["info"]?if_exists}</span>
 <#macro digui_role roleNodes  flag >
 	<#list roleNodes as role>
 	    <tr >
@@ -17,13 +17,13 @@
 			      style="WIDTH: 150px"  onchange="javascript:action_role('update.do','column=name&id=${role.id?if_exists}&columnValue='+this.value)" /> 
 			  
 				
-				  	<a   onclick="scrolldiv_('div_scoll',2);document.getElementById('div_scoll').style.display ='';document.getElementById('div_add_new_user').style.display ='';document.getElementById('div_select_user').style.display ='none';document.getElementById('organize_id').value ='${rhs["organize"].id}';document.getElementById('role_id').value ='${role.id}'" class="btn btn-xs  btn-default"><span class="ui-icon ui-icon-circle-plus"></span> </a>
-					<a   onclick="scrolldiv_('div_scoll',2);document.getElementById('div_scoll').style.display ='';document.getElementById('div_add_new_user').style.display ='none';document.getElementById('div_select_user').style.display ='';role_user_list('${role.id}','${rhs["organize"].id}');" class="btn btn-xs btn-default"><span class="ui-icon ui-icon-circle-zoomin"></span> </a>
+				  	<a   onclick="scrolldiv_('div_scoll',2);document.getElementById('div_scoll').style.display ='';document.getElementById('div_add_new_user').style.display ='';document.getElementById('div_select_user').style.display ='none';document.getElementById('organize_id').value ='${rhs["organize"].id}';document.getElementById('operation_title').innerHTML='新增员工';document.getElementById('role_id').value ='${role.id}'" class="btn btn-xs  btn-default" title="添加新员工"><span class="ui-icon ui-icon-circle-plus"></span> </a>
+					<a   onclick="scrolldiv_('div_scoll',2);document.getElementById('div_scoll').style.display ='';document.getElementById('div_add_new_user').style.display ='none';document.getElementById('div_select_user').style.display ='';document.getElementById('operation_title').innerHTML='现有员工';role_user_list('${role.id}','${rhs["organize"].id}');" class="btn btn-xs btn-default"><span class="ui-icon ui-icon-circle-zoomin" title="选择现有员工"></span> </a>
 					<a   onclick="javascript:action_organize_admin('ea_organize_delete_role.do','roleId=${role.id}&organizeId=${rhs["organize"].id}');"  class="btn btn-xs btn-default"><span class="ui-icon ui-icon-trash"   title="删除"></span></a>				 	     
  				
 				<table class="table-condensed" >
 					<tr><td>${flag}</td>
-					<td>
+					<td class="userList">
 				     <#list role.getUsers() as u>
 			            ${u.name}&nbsp;&nbsp 
 			         </#list>

@@ -54,24 +54,28 @@
 </table>
     
 						
-<div id="div_scoll"  class="well"  style="margin-left:150px;margin-top:100px; cursor:hander;position:absolute;width:300px;z-index:10000;">
- 	<a class="pull-right" href="#" onclick="show_dir();" ><span class="glyphicon glyphicon-remove"></span></a>
- 	<div id=div_panel_control style="border:2px solid #eee;">
- 		<div id=div_select_user style="cursor:hander;"> </div>
+<!--<div id="div_scoll"  class="well"  style="margin-left:150px;margin-top:100px; cursor:hander;position:absolute;width:300px;z-index:10000;">-->
+ 	                                                       
+ 	<div id="div_scoll" style="margin-left:150px;margin-top:100px; cursor:hander;position:absolute;width:400px;z-index:10000;" class="panel panel-default"><!--style="border:2px solid #eee;"-->
+ 		<div id="operation_title" class="panel-heading"><strong>现有员工</strong></div>
+ 		<a class="pull-right" onclick="show_dir();" class="btn btn-xs  btn-default" ><span class=ui-icon ui-icon-close></span></a>
+ 		<div class="panel-body" id=div_select_user style="cursor:hander;"> </div>
 	    <div id=div_add_new_user style="display:none;cursor:hander;padding:10px">
 		    <b> 新用户身份登记 </b> 
 		    <table class="table table-condensed ">
 		         <tr><td>中文姓名 </td><td><input id=name value="" style="WIDTH: 120px"   /></td></tr>
 		         <tr><td>英文帐号</td><td><input id=account value="" style="WIDTH: 120px"   /></td></tr>
-		         <tr><td colspan=2 align=center>			   	<button class="btn btn-xs btn-primary"  onclick= "javascript:action_organize_admin('ea_organize_create_new_user_in_role.do','name='+document.getElementById('name').value+'&account='+document.getElementById('account').value+'&roleId='+document.getElementById('role_id').value+'&organizeId=${rhs["organize"].id}');">新增用户</button>
+		         <tr><td colspan=2 align=center>			   	
+		         		<button class="btn btn-xs btn-primary"  onclick= "javascript:action_organize_admin('ea_organize_create_new_user_in_role.do','name='+document.getElementById('name').value+'&account='+document.getElementById('account').value+'&roleId='+document.getElementById('role_id').value+'&organizeId=${rhs["organize"].id}');">新增用户</button>
 		            </td>
 		         </tr>
 		    </table>
+		    <span style="display:block">${rhs["info"]?if_exists}</span>
 			<input id=role_id  type=hidden   value=""/>
 		    <input id=organize_id name=id type=hidden value=""/>
 	    </div>
 	</div>
-</div>
+<!--</div>-->
 	 	
 <br><br><br><br><br><br><br><br><br><br><br><br>
 <span id="div_action_result" style="display:none"></span>

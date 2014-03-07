@@ -26,6 +26,16 @@ function action_organize(url,para){
 // if(this.previewFrame!=null) this.previewFrame.location=this.previewFrame.location;
    
 function action_organize_admin(url,para){
+	var alluser = $(".userList").text();
+	var namePara = para.split('&')[0];
+	var nameText = namePara.split('=');
+	if(nameText[0] == "name"){
+   	 	document.getElementById('div_scoll').style.display = '';
+		if(alluser.indexOf($.trim(nameText[1])) > 0){
+			alert("User already exists!");
+			return;
+		}
+	}
   $.ajax({
          type:"POST",
          url: url,
@@ -47,6 +57,7 @@ function action_organize_admin(url,para){
 
 	
 	function role_user_list(roleId,organizeId) {
+		$("#div_select_user").html("Loading...");
 	    $.ajax({
 	        type:"POST",
 	     	url: "ea_organize_role_user_list.do",

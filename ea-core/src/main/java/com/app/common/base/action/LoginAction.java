@@ -22,7 +22,6 @@ import com.opensymphony.xwork2.ActionContext;
 @Scope("prototype")
 public class LoginAction extends BaseEaAction {
 	private final Logger log = LoggerFactory.getLogger(LoginAction.class);
-	public InfEa infEa;
 
 	public String execute() throws Exception {
 	    infEa.initData();

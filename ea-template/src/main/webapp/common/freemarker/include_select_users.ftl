@@ -155,7 +155,7 @@ function _clear(){
 	
 	document.getElementById("search_users").style.display = "none";
 	document.getElementById("all_users").style.display = "block";
-	document.getElementById("usually_tree_div").style.display = "block";
+	document.getElementById("usually_tree_div").style.display = "none";
 }
 
 function add_to_selected(){

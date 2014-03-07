@@ -162,7 +162,6 @@
 	<classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/websocket/websocket-common/9.1.2.v20140210/websocket-common-9.1.2.v20140210.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/websocket/websocket-client/9.1.2.v20140210/websocket-client-9.1.2.v20140210.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/websocket/websocket-server/9.1.2.v20140210/websocket-server-9.1.2.v20140210.jar"/>
-	<classpathentry kind="var" path="M2_REPO"/>
 	<classpathentry kind="lib" path="G:/work/2014年/1月/study/activiti-5.14/activiti-5.14/sources/activiti-bpmn-converter-5.14-sources.jar"/>
 	<classpathentry kind="lib" path="G:/work/2014年/1月/study/activiti-5.14/activiti-5.14/sources/activiti-bpmn-layout-5.14-sources.jar"/>
 	<classpathentry kind="lib" path="G:/work/2014年/1月/study/activiti-5.14/activiti-5.14/sources/activiti-bpmn-model-5.14-sources.jar"/>
