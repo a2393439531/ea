@@ -19,11 +19,34 @@
 		</property>
 		<property name="interceptorNames">
 			<list>
-				<value>timeMethodInterceptor</value>
+				<value>deleteMethodPointcutAdvisor</value>
+				<value>timeMethodPointcutAdvisor</value>
 			</list>
 		</property>
 		<property name="target">
 			<ref bean="impEa" />
 		</property>
-	</bean>	 
+	</bean>
+	<bean id="timeMethodPointcutAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+	    <property name="advice">    
+            <ref bean="timeMethodInterceptor"/>    
+        </property>	    
+	    <property name="patterns">
+	        <list>
+	           <value>.*getAllUser</value>
+	           <value>.*getUserbyAccount</value>
+	        </list>
+	    </property>
+	</bean>
+	<!-- 拦截删除用户的操作，将用户的role全部删除 -->
+	<bean id="deleteMethodPointcutAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+	    <property name="advice">    
+            <ref bean="deleteMethodInterceptor"/>    
+        </property>	    
+	    <property name="patterns">
+	        <list>
+	           <value>.*deleteUser</value>
+	        </list>
+	    </property>
+	</bean>
 </beans>
