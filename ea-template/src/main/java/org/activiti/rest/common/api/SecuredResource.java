@@ -34,6 +34,7 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.ext.servlet.internal.ServletCall;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ServerResource;
 
 /**
@@ -202,7 +203,7 @@ protected boolean authenticate(String group) {
 		return true;
 	}else{
 		setStatus(getAuthenticationFailureStatus(), "Authentication is required");
-		getResponse().redirectTemporary("/demo/login.do");
+		getResponse().setEntity(new StringRepresentation("验证失败"));//redirectTemporary("/demo/login.do");
 		return false;
 	}
   }

@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
 import org.apache.commons.beanutils.BeanUtils;
+import org.restlet.engine.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
@@ -88,6 +90,21 @@ public class EaAction extends BaseProcessAction {
 	}	
 	
 	
+	//add by hb for webservice
+	public String webservice(){
+		return "success";
+	}
+	public String webservice_code(){
+		String username = getpara("username");
+		String password = getpara("password");
+		if(!"".equals(username)&&!"".equals(password)){
+			String tmp = username + ":" + password;
+			String base64Code = "Basic " + Base64.encode(tmp.toCharArray(), true);
+			rhs.put("BASE_64_CODE",base64Code);
+		}
+		return "success";
+	}
+	// end
 	
 	public String menu_organize_view_v() {
 		List roleGroupRootList = baseDao

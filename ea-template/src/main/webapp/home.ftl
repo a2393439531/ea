@@ -12,7 +12,7 @@
 			 <br> <br>  
 	         <a href="ea_ea_demo_data.do" target=_blank class="btn btn-xs btn-default">演示数据</a>
 	         <a href="common_activiti_index_demo.do" target=_blank class="btn btn-xs btn-default">工作流</a>
-	         <a href="ea_ea_demo_data.do" target=_blank class="btn btn-xs btn-default">webservice访问接口</a>
+	         <a href="ea_ea_webservice.do" target=_blank class="btn btn-xs btn-default">webservice访问接口</a>
 	         <a href="rule.ftl" target=_blank class="btn btn-xs btn-default">开发规范</a>
   			 <a  href="common_monitor_home.do" target=_blank" class="btn btn-xs btn-default" title="https://code.google.com/p/javamelody/wiki/UserGuide">健壮性</a>
 			 <a  href="" target=_blank" class="btn btn-xs btn-default">安全性</a>	           

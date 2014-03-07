@@ -15,18 +15,21 @@ package org.activiti.rest.common.application;
 
 import javax.servlet.http.HttpSession;
 
+import org.activiti.rest.common.api.ActivitiUtil;
 import org.activiti.rest.common.filter.RestAuthenticator;
 import org.restlet.Application;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.ChallengeScheme;
+import org.restlet.data.Status;
 import org.restlet.ext.servlet.internal.ServletCall;
 import org.restlet.security.ChallengeAuthenticator;
 import org.restlet.security.SecretVerifier;
 import org.restlet.security.Verifier;
 
-import com.app.ea.api.InfEa;
+import com.app.common.spring.ssh.dao.BaseDao;
 import com.app.ea.api.ImpEa;
+import com.app.ea.api.InfEa;
 import com.app.ea.model.User;
 /**
  * @author Tijs Rademakers
@@ -69,12 +72,14 @@ public abstract class ActivitiRestApplication extends Application {
       public boolean verify(String username, char[] password) throws IllegalArgumentException {
         //如果需要和自己的表关联，这里需要换成去我们的用户验证API
         //boolean verified = ActivitiUtil.getIdentityService().checkPassword(username, new String(password));
+    	  infEa = ActivitiUtil.getIdentityService().getInfEa();
     	  System.out.printf("username:%s password:%s%n" , username , new String(password) );  
-    	  infEa = new ImpEa();
     	  String result = infEa.checkLogin(username, new String(password));
     	  if("0000".equals(result)){
+    		  System.out.printf("login successfully");
     		  return true;
     	  }else{
+    		  System.out.printf("login failed");
     		  return false;
     	  }
       }
