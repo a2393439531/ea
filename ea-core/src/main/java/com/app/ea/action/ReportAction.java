@@ -1,31 +1,24 @@
 package com.app.ea.action;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.app.common.base.action.BaseEaAction;
-import com.app.common.spring.ssh.model.BaseModel;
 import com.app.ea.hsql.Hsql;
 import com.app.ea.model.Organize;
-import com.app.ea.model.Organizegroup;
 import com.app.ea.model.Report;
 import com.app.ea.model.Role;
 import com.app.ea.model.Rolegroup;
 import com.app.ea.model.User;
 import com.utils.cache.Cache;
-import com.utils.file.FileProcessor;
 import com.utils.time.TimeUtil;
 
 @Component("reportAction")
@@ -148,10 +141,64 @@ public class ReportAction extends BaseEaAction {
 		if("".equals(year))
 		{
 			year = TimeUtil.getCurrentYear().toString();
-		}		
+		}
+		
+		//add by hb for get All report by year - start 2014/03/10
+		String monthDate = "";
+		Map<String,Boolean> monthMap = new HashMap<String,Boolean>();
+		String weekDate = "";
+		Map<String,Boolean> weekMap = new HashMap<String,Boolean>();
+		String dayDate = "";
+		Map<String,Boolean> dayMap = new HashMap<String,Boolean>();
+		
+		int weekCount = 1;
+		for (int month = 0; month < 12; month++) {
+			monthDate = String.valueOf(new Integer(Integer.valueOf(year)*10000 + (month+1)*100 ));
+			monthMap.put(monthDate,false);
+			int days = TimeUtil.getDayNumByYearMonth(year, month);
+			for(int day = 1; day <= days; day++){
+				boolean isWeek = TimeUtil.ifFirstDayOfWeek(year,month,day);
+				if(isWeek){
+					weekDate = String.valueOf(new Integer(Integer.valueOf(year)*10000 + weekCount));
+					weekMap.put(weekDate,false);
+					weekCount ++;
+				}
+				dayDate = String.valueOf(new Integer(Integer.valueOf(year)*10000 + (month+1)*100 + day));
+				dayMap.put(dayDate,false);
+			}
+		}
+		
+		getReportbyDate(monthMap);
+		getReportbyDate(weekMap);
+		getReportbyDate(dayMap);
+		
+		rhs.put("monthMap", monthMap);
+		rhs.put("weekMap", weekMap);
+		rhs.put("dayMap", dayMap);
+		
+		//-end
 		rhs.put("year", year);
 		return "success";
-	}	
+	}
+	
+	public void getReportbyDate(Map dateMap){
+		ArrayList reportList;
+		Set<String> dateSet = dateMap.keySet();
+		Set<String> dayByMonthSet;
+		String account = getCurrentAccount();
+		
+		
+		for (String date : dateSet) {
+			reportList = (ArrayList) baseDao
+					.find("select r from Report r where r.userAccount = '"
+							+ account + "' and r.date='" + date + "'");
+			if (reportList.size() > 0) {
+				dateMap.put(date, true);
+			} else {
+				dateMap.put(date, false);
+			}
+		}
+	}
 	
 	public String data_save() throws Exception {
 		String date = getpara("date");
@@ -174,7 +221,8 @@ public class ReportAction extends BaseEaAction {
 			Report re = (Report) reportList.get(0);
 			re.setContent(Content);
 			baseDao.update(re);
-		}		
+		}
+		report();
 		return "success";
 	}
 	

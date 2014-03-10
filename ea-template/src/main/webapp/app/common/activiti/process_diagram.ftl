@@ -7,9 +7,7 @@
 
 <body style="text-align:center;">
 	<h2>Process Diagram
-	    <a href="app/common/activiti/simple_solution_big.jpg" onclick="return hs.htmlExpand(this, { objectType: 'iframe' })" >
-		MSTOP offcie process diagram
-	    </a>	
+	
 	</h2> 
 	<#if rhs.processInstanceId == ''>
 		<img id="green_monster1" width="${rhs.imgWidth}px"
