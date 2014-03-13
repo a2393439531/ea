@@ -22,6 +22,10 @@
   用户名:<input type="text" value="" id="username"/> 密码:<input type="password" value="" id="password"/> <button class="btn btn-xs btn-primary" onclick="javascript:getCode()">获得base 64位加密字符串</button><span id="code">code: ${rhs["BASE_64_CODE"]?if_exists}</span><br/>
  b) 向Web Service 发送请求
  <button class="btn btn-xs btn-primary" onclick="javascript:sendRequest()">查询用户的task</button>
+ <br/> c) 向web service发送请求，上传一个文件，请求地址：/upload
+<form id="upload_form" action="./service/upload" method="post" enctype="multipart/form-data"><input type="file" name="uploadfile" />
+<button class="btn btn-xs btn-primary" onclick="javascript:document.getElementById('upload_form').submit()">发送Upload请求</button>
+</form>
 	</div>	
 			</pre>
 	 	<div class="panel panel-default">
@@ -109,6 +113,29 @@ function sendRequest(){
          url: './service/runtime/tasks',
          data: '',
          cache: false,
+         beforeSend : function(xhr) {
+				xhr.setRequestHeader('Authorization', basiccode);
+		 },
+         dataType : 'html',
+         success: function(html){
+         	$("#result").text(html);
+         },
+         error:function(XmlHttpRequest,textStatus, errorThrown)
+  		{
+  			$("#result").text(XmlHttpRequest.responseText);
+  		}
+  	});
+}
+
+function sendUploadRequest(){
+	var basiccode=$("#code").text();
+	$.ajax({
+         type:"GET",
+         url: './service/upload',
+         data: '',
+         cache: false,
+         contentType: false,
+         processData: false,
          beforeSend : function(xhr) {
 				xhr.setRequestHeader('Authorization', basiccode);
 		 },

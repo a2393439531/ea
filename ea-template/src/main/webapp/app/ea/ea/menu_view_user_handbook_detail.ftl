@@ -47,7 +47,10 @@ td {border:#BBCEDB solid 1px;padding:0px 2px 0px 2px;}
 				${role.name}
 			</td>
 			<td valign=top>
-				${role.getParentModel().name }
+				<#if role.getParentModel()?exists>
+					${role.getParentModel().name }
+				<#else>
+				</#if>
 			</td>			
 		
 			<td valign=top>

@@ -663,6 +663,14 @@ public class ImpActiviti implements InfActiviti {
 	}
 	//add by hb end
 
+	@Override
+	public Task getActivitiTaskByProcessInstanceId(String processInstanceId) {
+		//get all task by processInstanceId
+		Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
+
+		return task;
+	}
+
 
 
 

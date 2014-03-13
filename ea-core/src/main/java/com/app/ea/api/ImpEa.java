@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.app.common.notify.action.SendMailTheadBySmtpList;
 import com.app.common.spring.ssh.dao.BaseDao;
 import com.app.common.spring.ssh.model.BaseModel;
 import com.app.ea.demo.InfDemo;
@@ -704,6 +705,16 @@ public class ImpEa implements InfEa  {
 			}
 		}
 		return userList;
+	}
+
+
+
+	@Override
+	public void sendMailTheadBySmtpList(String title, String content,
+			String mailaddress, String cc, String bcc, String[] filename) {
+		ArrayList smtpList = (ArrayList) baseDao.find("from Smtp");
+		SendMailTheadBySmtpList.sendmail(smtpList,title, content,
+			 mailaddress, cc, bcc, filename);
 	}
 
 	

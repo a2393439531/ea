@@ -87,7 +87,7 @@ public class notifyAction extends BaseEaAction {
 		String content = java.net.URLDecoder.decode(getpara("content"));
 		String subject = java.net.URLDecoder.decode(getpara("subject"));
 		String to = java.net.URLDecoder.decode(getpara("to"));
-		SendMailTheadBySmtpList.sendmail((ArrayList) baseDao.find("from Smtp"),subject, content + TimeUtil.getTimeStr("yyyy-MM-dd hh:mm:ss"),to, null);
+		SendMailTheadBySmtpList.sendmail((ArrayList) baseDao.find("from Smtp"),subject, content + TimeUtil.getTimeStr("yyyy-MM-dd hh:mm:ss"),to,"","", null);
 		rhs.put("info", info);
 		return "success";
 	}	

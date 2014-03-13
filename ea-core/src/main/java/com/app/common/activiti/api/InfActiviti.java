@@ -46,6 +46,9 @@ public interface InfActiviti {
 	
 	public abstract Task getTaskById(String taskId);
 	
+	/*add by hb 2014/03/13*/
+	public abstract Task getActivitiTaskByProcessInstanceId(String processInstanceId);
+	
 	/* add by chenzhijian 20130423 -s*/
 	public abstract List<Map<String, String>> getNextTasks(String taskId);
 	public abstract void completeTaskForBusinessAction(HttpServletRequest request,String taskId, String formId, Map<String, Object> var);

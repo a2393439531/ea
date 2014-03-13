@@ -21,11 +21,14 @@ public class SendMailTheadBySmtpList extends Thread {
 	String mailtitle;
 	String mailcontent;
 	String mailaddress;
+	//add by hb for cc and bcc
+	String ccaddress;
+	String bccaddress;
 	String[] filenames;
 	public static ArrayList emailSmtpList;
 	
 
-	public SendMailTheadBySmtpList(ArrayList smtpList,String title, String content, String address,
+	public SendMailTheadBySmtpList(ArrayList smtpList,String title, String content, String address, String cc, String bcc,
 			String[] filename) {
 		try {
 			mailtitle = "[Time]" + TimeUtil.getTimeStr("yyyy-MM-dd-hh.mm.ss")
@@ -36,6 +39,8 @@ public class SendMailTheadBySmtpList extends Thread {
 		emailSmtpList=smtpList;
 		filenames = filename;
 		mailaddress = address;
+		ccaddress = cc;
+		bccaddress = bcc;
 		mailcontent = content + "<br><br><br> ****本邮件由系统自动发出，请勿直接回复！****";
 	}
 
@@ -51,7 +56,7 @@ public class SendMailTheadBySmtpList extends Thread {
 				SendMail sendMail = new SendMail();
 				sendMail.connect(smtp.getHost(), smtp.getAccount(), smtp.getPasswd(), smtp.getPort());
 				
-				sendMail.send(smtp.getSender(), mailaddress, "", "",
+				sendMail.send(smtp.getSender(), mailaddress, ccaddress, bccaddress,
 						mailtitle, mailcontent, filenames);
 				sendMail.close();
 				notsendflag = false;
@@ -60,6 +65,7 @@ public class SendMailTheadBySmtpList extends Thread {
 			} catch (Exception e) {
 				//log.error("Email send error = " + smtp.getTitle(), e);
 				log.error("<br>使用下面邮箱配置发送失败：" +smtp.getTitle()+smtp.getHost()+":"+smtp.getPort()+":"+smtp.getSender());
+				e.printStackTrace();
 			}
 		}
 
@@ -67,9 +73,9 @@ public class SendMailTheadBySmtpList extends Thread {
 
 	// 标题，内容，地址
 	public static void sendmail(ArrayList smtpList,String title, String content,
-			String mailaddress, String[] filename) {
+			String mailaddress, String cc, String bcc, String[] filename) {
         
-		SendMailTheadBySmtpList sendmail = new SendMailTheadBySmtpList(smtpList,title, content, mailaddress,
+		SendMailTheadBySmtpList sendmail = new SendMailTheadBySmtpList(smtpList,title, content, mailaddress, cc, bcc,
 				filename);
 		sendmail.start();
 

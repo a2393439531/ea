@@ -80,6 +80,9 @@ public interface InfEa {
 	public void sendMail(String to, String cc, String bcc, String subject,
 			String text, String[] filename);
 	
+	//add by hb for send mail by thread
+	public void sendMailTheadBySmtpList(String title,String content, 
+			String mailaddress, String cc, String bcc, String[] filename);
 	
 	/**
 	 * 修改用户密码
