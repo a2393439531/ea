@@ -50,7 +50,7 @@
 		  <li ><a href="ea_resource_menu_resource.do" target="mainFrame">权限</a></li>
  		  <li ><a href="common_monitor_home.do" target="mainFrame">运行状态</a></li>
 		  <li ><a href="common_activiti_menu_process_definition.do" target="mainFrame">工作流管理</a></li>
-		  <li ><a href="common_svn_svn_list.do" target="mainFrame">文档管理</a></li>
+		  <li ><a href="common_svn_svn_list.do" target="_blank">文档管理</a></li>
  		  <li ><a href="common_activiti_index_demo.do" target="mainFrame">工作流演示</a></li>
 		  <li ><a href="common_chat_chat.do" target="_blank">在线支持</a></li>
     </ul>

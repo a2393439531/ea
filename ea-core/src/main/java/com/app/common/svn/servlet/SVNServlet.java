@@ -18,7 +18,7 @@ import com.app.common.svn.util.SVNUtil;
 public class SVNServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 //	public static String url = "http://113.105.13.195:8980/svn/gsc/project/ehms/fixed/oss/02-task/2012-09285_ASR_Alert_Exclusion/to_hk/src/docroot";
-	public static String url = "http://113.105.13.195:8980/svn/gsc/project/manage";
+	public static String url = "http://113.105.13.195:8980/svn/gsc/project/";
 	public static String path = "";
 	/**
 	 * 将java对象转换为json字符串
@@ -58,12 +58,12 @@ public class SVNServlet extends HttpServlet {
 		if (path == null) {
 			path = "";
 		}
-		path = new String(path.getBytes("ISO-8859-1"), "UTF-8");
+		//path = new String(path.getBytes("ISO-8859-1"), "UTF-8"); //不用在转码了，不然会出现问题
 		
 		if (path.startsWith("/")){
 			path = path.substring(1);
 		}
-		
+		System.out.println(path);//如果是中文路径会有问题
 		PrintWriter out = response.getWriter();
 		SVNUtil svnUtil = new SVNUtil(url, usrName, password);
 		if (svnUtil.login()) {

@@ -17,7 +17,7 @@
            frozenColumns : [ [ {
               title : '路径',
               field : 'url',
-              width : 270,
+              width : 470,
               formatter : function(value) {
                   return '<span style="color:red">' + decodeURI(value.substr(value.lastIndexOf("/"))) + '</span>';
               }
@@ -25,15 +25,15 @@
            columns : [ [ {
               field : 'name',
               title : '名称',
-              width : 120
+              width : 220
            }, {
               field : 'size',
               title : '文件大小',
-              width : 80,
+              width : 40,
            }, {
               field : 'revision',
               title : '版本号',
-              width : 80,
+              width : 60,
            }, {
               field : 'author',
               title : '作者',
@@ -41,25 +41,25 @@
            }, {
               field : 'date',
               title : '修改日期',
-              width : 130,
+              width : 100,
            }, {
               field : 'commitMessage',
               title : '注释',
-              width : 150,
+              width : 100,
            }, {
               field : 'kind',
               title : '操作',
-              width : 300,
+              width : 240,
               align : 'center',
               formatter : function(value) {
             	  var op;
             	  if(value=='file'){
-            		  op = '<a onclick="download()" class="btn btn-xs btn-primary" style="cursor: pointer;">下载</a>';
+            		  op = '<a onclick="download()" class="btn btn-xs btn-primary" style=" cursor: pointer;">下载</a>';
             	  }else{
             		  op = ' <form enctype="multipart/form-data" action="commit" method="post" id="uploadForm" > '+
             		  '<input type="file"  name="imglistUpload" />'+
             		  '<input type="hidden" name="url" id="url" />'+
-            		  '<a onclick="commitFile()" class="btn btn-xs btn-primary" style="margin-left:100px; cursor: pointer;">提交文件</a>'+
+            		  '<a onclick="commitFile()" class="btn btn-xs btn-primary" style="float:right; cursor: pointer;">提交文件</a>'+
             		  '</form>';
             		  
             	  }
@@ -67,7 +67,8 @@
               }
            }] ],
            onBeforeExpand : function(row, param) {
-              $(this).treegrid('options').url = 'svn?pid='+encodeURI(decodeURI(row.url));
+           //alert(decodeURI(encodeURI(row.url)));
+              $(this).treegrid('options').url = 'svn?pid='+decodeURI(encodeURI(row.url));
            }
        });
     });

@@ -19,6 +19,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebAppContext.Context;
 import org.restlet.data.MediaType;
 import org.restlet.ext.fileupload.RestletFileUpload;
+import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
@@ -114,7 +115,7 @@ public class UploadResource extends SecuredResource {
 
 		}
 		// 结束
-		return new StringRepresentation("上传成功");
+		return new JacksonRepresentation(getRequest().getHostRef() + obj.getContextPath()+"/file/webservicefile/" + newFileName);
 	}
 
 }
