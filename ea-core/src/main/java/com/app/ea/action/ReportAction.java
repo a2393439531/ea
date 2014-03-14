@@ -127,7 +127,18 @@ public class ReportAction extends BaseEaAction {
 		return "success";
 	}
 
+	public String ajax_assessment() throws Exception {
+		
+		birt_user();
+		return "success";
+	}
+	
 	public String tech_member() throws Exception {
+		if (getpara("show").equals("")) {
+			putSessionValue("show", "none");
+		} else {
+			putSessionValue("show",  getpara("show"));
+		}	
 		List organizeRootList = infEa.getOrganizeRootNods();
 		Organize organize=(Organize)infEa.getOrganizeByAlias("tech");
 		rhs.put("system_para_map", 	infEa.getParaMap());   
