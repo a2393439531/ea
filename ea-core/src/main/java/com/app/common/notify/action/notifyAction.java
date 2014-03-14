@@ -43,7 +43,8 @@ public class notifyAction extends BaseEaAction {
 		ArrayList userlist=new ArrayList();
 		if(getpara("roleId")!=""){
 			Role role=(Role)baseDao.loadById("Role",Long.parseLong(getpara("roleId")));
-			
+			userlist.addAll(role.getUsers());
+			rhs.put("userList", userlist);
 		}
 		if(getpara("userId")!=""){
 			User user=(User)baseDao.loadById("User",Long.parseLong(getpara("userId")));
@@ -52,7 +53,8 @@ public class notifyAction extends BaseEaAction {
 		}		
 		if(getpara("rolegroupId")!=""){
 		  Rolegroup Rolegroup=(Rolegroup)baseDao.loadById("Rolegroup",Long.parseLong(getpara("rolegroupId")));
-		  rhs.put("userList", Rolegroup.allUserOfRolegroup());
+		  userlist.addAll(Rolegroup.allUserOfRolegroup());
+		  rhs.put("userList", userlist);
 		}
 		if(userlist.size()<1){
 			rhs.put("userList",baseDao.find("from User"));
