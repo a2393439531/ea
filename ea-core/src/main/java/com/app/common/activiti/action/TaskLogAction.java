@@ -54,7 +54,7 @@ public class TaskLogAction extends BaseProcessAction {
 		Task t = getTask(getpara("taskId"));
 		
 		String processInstanceId = getpara("processInstanceId");
-		if("undefined".equals(processInstanceId)){
+		if("undefined".equals(processInstanceId) || "".equals(processInstanceId)){
 			processInstanceId = t.getProcessInstanceId();
 		}
 		User user = (User) getSessionValue("userlogined");
@@ -74,6 +74,26 @@ public class TaskLogAction extends BaseProcessAction {
 //		} else { // edit
 //			baseDao.update(model);
 //		}
+		//send Email after log has been insert. start at 2013/03/17
+		String initiator = (String) infActiviti.getVariableByTaskId(t.getId(), "initiator");
+		User initiatorUser = (User) baseDao.loadByFieldValue(User.class, "account", initiator);
+		String mail = "";
+		if(initiatorUser.getEmail() != null && !"".equals(initiatorUser.getEmail())){
+			mail += initiatorUser.getEmail();
+		}
+		if(initiatorUser.getEmail2() != null && !"".equals(initiatorUser.getEmail2())){
+			mail =";" + initiatorUser.getEmail2() + ";";
+		}
+		String content = user.getName()
+				+ "has add log for task: <font color='red'>" + t.getName()
+				+ "</font>!<br/><br/>The log information as below:<br/><br/>"
+				+ "Log content: <font color='red'>" + model.getLog()
+				+ "</font>";
+
+		infEa.sendMailTheadBySmtpList(" Log added! ", content, 
+				mail, "", "", null);
+		//end
+		
 		return list();
 	}
 	
