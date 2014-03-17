@@ -26,6 +26,8 @@ public class BusinessWithProcessModel<T> {
 			processInstanceStatus = infActiviti.processInstanceStatus(para);
 			if("New".equals(processInstanceStatus)){
 				processTaskName = "Process not started!";
+			}else if("Done".equals(processInstanceStatus)){
+				processTaskName = "Process has been done!";
 			}else{
 				processTaskName = infActiviti.getActivitiTaskByProcessInstanceId(para).getName();
 			}
