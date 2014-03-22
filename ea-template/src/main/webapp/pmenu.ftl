@@ -42,9 +42,9 @@
   <div class="bs-sidebar hidden-print" >
     <ul class="nav bs-sidenav">
 	  <li class="nav-header"></li>
-		  <li ><a href="ea_organize_index.do" target="mainFrame">组织架构</a></li>
-		  <li ><a href="ea_user_menu_user.do" target="mainFrame">用户管理</a></li>
-		  <li ><a href="ea_rule_menu_rule.do" target="mainFrame">信息发布</a></li>
+		  <li ><a href="ea_organize_index.do" target="mainFrame"><@i18n "menu_organize" /></a></li>
+		  <li ><a href="ea_user_menu_user.do" target="mainFrame"><@i18n "menu_user" /></a></li>
+		  <li ><a href="ea_rule_menu_rule.do" target="mainFrame"><@i18n "menu_infocenter" /></a></li>
 		  <li ><a href="ea_smtp_menu_smtp.do" target="mainFrame">邮箱系统</a></li>
 		  <li ><a href="ea_systempara_menu_systempara.do" target="mainFrame">系统参数</a></li>
 		  <li ><a href="ea_resource_menu_resource.do" target="mainFrame">权限</a></li>

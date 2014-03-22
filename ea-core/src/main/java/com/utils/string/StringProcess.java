@@ -19,6 +19,11 @@
 
 package com.utils.string;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 /**
  * <strong>Internal class, do not use directly.</strong>
  * 
@@ -27,7 +32,16 @@ package com.utils.string;
  * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  */
 public class StringProcess {
+	public static String getformfile(String filesavepath) throws IOException {
+		InputStream in;
+		in = new BufferedInputStream(new FileInputStream(filesavepath));
+		byte[] buf = new byte[in.available()];
+		while ((in.read(buf)) != -1) {
+		}
+		in.close();
+		return new String(buf,"utf-8");
 
+	}
 	/**
 	 * Get hex string from byte array
 	 */

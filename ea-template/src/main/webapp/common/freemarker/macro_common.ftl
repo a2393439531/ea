@@ -1,4 +1,6 @@
 
+<#include "include_map_language_title.ftl">
+<#macro i18n keyname>${javacall["com.app.common.i18n.I18n"].getStringbyfile(Session["lang"],keyname)?if_exists}</#macro>
 <#macro context><#if request?exists>${request.getContextPath()}/<#else></#if></#macro>
 <#macro context_module><#if request?exists>${request.getRequestURI()[0..request.getRequestURI()?last_index_of("/")]}<#else></#if></#macro>
 
