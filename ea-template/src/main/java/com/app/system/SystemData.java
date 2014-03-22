@@ -1,4 +1,4 @@
-package com.utils.path;
+package com.app.system;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
@@ -15,6 +15,8 @@ import javax.servlet.ServletContextListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.app.manager.init.SystemConfig;
+import com.utils.path.PathUtils;
 
 
 /*在这里希望可以设置一些初始化路径，比方webroot路径和配置文件的路径
@@ -33,8 +35,9 @@ import org.apache.commons.logging.LogFactory;
  类.class.getResource("")会返回null.因为文件的目录结构和文件夹本身是两回事。 
 
  */
-public class SystemInit implements ServletContextListener {
-	private static Log log = LogFactory.getLog(SystemInit.class);
+public class SystemData  {
+	private static Log log = LogFactory.getLog(SystemData.class);
+	
 	public static String WEB_ROOT;
 	public static String ClASS_ROOT;
 	public static String HOME_ROOT;
@@ -42,22 +45,17 @@ public class SystemInit implements ServletContextListener {
 	public static SystemConfig SYSTEM_CONFIG;
 	public static  HashMap  SYSTEM_PARA_MAP;
 
-	public void contextInitialized(ServletContextEvent sce) {
-		try {
-		
-			system_config_path=ClASS_ROOT+"/system-config.xml";
-			this.SYSTEM_CONFIG=readSystemConfigXml(system_config_path);
-			System.out.println("web root path:" + SystemInit.WEB_ROOT);
-			System.out.println("class root path:" + SystemInit.ClASS_ROOT);
-			System.out.println("home path:" + SystemInit.HOME_ROOT);
-			System.out.println("edit model:" + this.SYSTEM_CONFIG.woEditModel);
+	
 
-		} catch (Exception e) {
-			log.error(" SystemData init error!", e);
-		}
+	public static String  getWebRoot() throws ClassNotFoundException {
+		if(WEB_ROOT==null)
+			WEB_ROOT = PathUtils.getWebrootPath(PathUtils.SYSTEM_DATA_CLASS);
+		return WEB_ROOT;
 	}
-
-	public void contextDestroyed(ServletContextEvent ce) {
+	public static String  getClassPath() throws ClassNotFoundException  {
+		if(ClASS_ROOT==null)
+		ClASS_ROOT =PathUtils.getClassPath(PathUtils.SYSTEM_DATA_CLASS);
+		return ClASS_ROOT;
 	}
 
 	public static void saveSystemConfigXml(String filepath,
@@ -78,5 +76,12 @@ public class SystemInit implements ServletContextListener {
 
 		return systemConfig;
 	}
-
+	public static void main(String[] args) throws FileNotFoundException, ClassNotFoundException {
+        System.out.println("类路径："+SystemData.getClassPath());
+        System.out.println("WEB路径："+SystemData.getWebRoot());
+		System.out.println(PathUtils.getClassPath(PathUtils.SYSTEM_DATA_CLASS));
+		System.out.println(PathUtils.getWebrootPath(PathUtils.SYSTEM_DATA_CLASS));
+		
+		
+	}
 }

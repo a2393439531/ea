@@ -1,0 +1,4 @@
+submit                 =決定する 
+menu_organize          =組織 
+menu_user              =ユーザー管理
+menu_infocenter        =情報の流布

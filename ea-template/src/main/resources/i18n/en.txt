@@ -1,0 +1,4 @@
+submit                 =Submit
+menu_organize          =Organize
+menu_user              =User Manager
+menu_infocenter        =Info Center

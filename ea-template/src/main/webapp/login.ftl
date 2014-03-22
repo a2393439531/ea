@@ -34,9 +34,28 @@
   </head>
 
   <body>
+<script>  
+  
+  	function changlang(value){
+	    document.getElementById('formlanmuadmin').submit();
+	}		
+</script>
+
+<body>
+
+			    
 
     <div class="container">
-
+	<form name="formlang" id="formlang" action="lang.do" method="post" >
+                            language
+	    <select class=input name="lang" size="1" onchange="document.getElementById('formlang').submit();" value="${Session["lang"]}">
+			    <option value="${Session["lang"]}">${language_name[Session["lang"]]}</option>
+			    <#list language_name?keys as key>
+				   <option value="${key}">${language_name[key]}</option>
+				</#list> 
+		</select> 			                            
+    </form>
+                            
       <form class="form-signin" name="loginForm" action="login.do" method="post">
         <#-- -->
 
@@ -51,10 +70,11 @@
         </label>
         -->
         <br>
-        <button class="btn btn-lg  btn-primary" type="submit">登录</button>
+        
+      
+        <button class="btn btn-lg  btn-primary" type="submit"> <@i18n "submit" /></button>
         <#if rhs?exists>${rhs["tipInfo"]?if_exists}</#if>
       </form>
-
     </div> <!-- /container -->
 
   </body>
