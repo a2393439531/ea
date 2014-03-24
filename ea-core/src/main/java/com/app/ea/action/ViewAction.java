@@ -6,37 +6,25 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
-import org.apache.struts2.ServletActionContext;
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.app.common.spring.ssh.action.BaseAction;
-import com.app.common.spring.ssh.action.BaseBusinessAction;
 import com.app.common.spring.ssh.model.BaseModel;
 import com.app.ea.model.Organize;
 import com.app.ea.model.Role;
-import com.app.ea.model.Rule;
 import com.app.ea.model.User;
 import com.app.ea.model.Viewhistory;
-
-
 import com.utils.file.FileProcessor;
 import com.utils.freemark.StringbyPerlFreemark;
-import com.utils.path.Path;
-import com.utils.path.SystemInit;
 import com.utils.time.TimeUtil;
 
-
-
 import freemarker.template.SimpleHash;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.collections.CollectionUtils;
 
 @Component("viewAction")
 public class ViewAction extends EaAction {
@@ -132,7 +120,6 @@ public class ViewAction extends EaAction {
 		    for (Iterator iterator = organize.getChildOrganizes().iterator(); iterator.hasNext();) {
 				Organize o = (Organize) iterator.next();
 				rootList.add(o);
-				
 			}
 			 
 			 return rootList;

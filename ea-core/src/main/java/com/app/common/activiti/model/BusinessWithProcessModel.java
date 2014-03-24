@@ -3,6 +3,8 @@ package com.app.common.activiti.model;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.activiti.engine.task.Task;
+
 import com.app.common.activiti.api.InfActiviti;
 import com.app.common.activiti.api.SpringContext;
 
@@ -11,6 +13,8 @@ public class BusinessWithProcessModel<T> {
 	private T businessModel;
 	private String processInstanceStatus = "";
 	private String processTaskName = "";
+	private String processAssigneedName = "";
+	private String processAssigneedTime = "";
 	
 	public BusinessWithProcessModel(T businessModel){
 		this.businessModel = businessModel;
@@ -26,10 +30,17 @@ public class BusinessWithProcessModel<T> {
 			processInstanceStatus = infActiviti.processInstanceStatus(para);
 			if("New".equals(processInstanceStatus)){
 				processTaskName = "Process not started!";
-			}else if("Done".equals(processInstanceStatus)){
-				processTaskName = "Process has been done!";
+				processAssigneedName = "Process has not assigneed!";
+				processAssigneedTime = "Process has not assigneed!";
 			}else{
-				processTaskName = infActiviti.getActivitiTaskByProcessInstanceId(para).getName();
+				if("Done".equals(processInstanceStatus)){
+					processTaskName = "Process has been done!";
+				}else{
+					Task t = infActiviti.getActivitiTaskByProcessInstanceId(para);
+					processTaskName = t.getName();
+				}
+				processAssigneedTime = infActiviti.getAssigneeTimeByProcessInstanceId(para);
+				processAssigneedName = infActiviti.getHisVariableByProcessInstanceId(para, "firstAssignee");
 			}
 		} catch (SecurityException e) {
 			e.printStackTrace();
@@ -50,6 +61,14 @@ public class BusinessWithProcessModel<T> {
 	
 	public String getProcessTaskName() {
 		return processTaskName;
+	}
+
+	public String getProcessAssigneedName() {
+		return processAssigneedName;
+	}
+
+	public String getProcessAssigneedTime() {
+		return processAssigneedTime;
 	}
 
 	public T getBusinessModel(){

@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,13 +38,13 @@ import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.impl.task.TaskDefinition;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.activiti.engine.task.Task;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.dispatcher.multipart.MultiPartRequestWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import com.app.common.activiti.model.ProcessModel;
 import com.app.common.spring.ssh.dao.BaseDao;
@@ -296,11 +297,10 @@ public class ImpActiviti implements InfActiviti {
 	public void completeTaskForBusinessAction(HttpServletRequest request,String taskId, String formId, Map<String, Object> var) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Map<String, String>> nextTasks = this.getNextTasks(taskId);
+		Task t = this.getTaskById(taskId);
 		for(Map<String, String> m : nextTasks){
 			map.put(m.get("taskAssigneeName"), request.getParameter(m.get("taskAssigneeName")));
-		   // String nametodo=(String)request.getParameter(m.get("taskAssigneeName"));
 		}
-		
 		if (formId != null)
 			map.put("formId", formId);
 		if(var != null)
@@ -669,6 +669,33 @@ public class ImpActiviti implements InfActiviti {
 		Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
 
 		return task;
+	}
+
+	@Override
+	public String getAssigneeTimeByProcessInstanceId(String processInstanceId) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		
+		HistoricProcessInstance hpi = historyService
+				.createHistoricProcessInstanceQuery()
+				.processInstanceId(processInstanceId).singleResult();
+		
+		String assigneedTime = sdf.format(hpi.getStartTime());
+
+		return assigneedTime;
+	}
+
+	@Override
+	public String getHisVariableByProcessInstanceId(String processInstanceId,String variable) {
+		List<HistoricVariableInstance> hpi = historyService.createHistoricVariableInstanceQuery().processInstanceId(processInstanceId).list();
+				
+		String firstAssignee = "";
+		for (HistoricVariableInstance historicVariableInstance : hpi) {
+			if(variable.equals(historicVariableInstance.getVariableName())){
+				firstAssignee = historicVariableInstance.getValue().toString();
+			}
+		}
+		return firstAssignee;
+		
 	}
 
 

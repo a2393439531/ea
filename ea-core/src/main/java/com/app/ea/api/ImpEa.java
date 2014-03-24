@@ -717,5 +717,23 @@ public class ImpEa implements InfEa  {
 			 mailaddress, cc, bcc, filename);
 	}
 
-	
+	@Override
+	public Systempara create_systempara(String key,String value)
+			throws Exception {
+		Systempara systempara = new Systempara();
+		systempara.setKeyname(key);
+		systempara.setValue(value);
+		baseDao.create(systempara);
+		return systempara;
+	}
+	@Override
+	public Systempara create_sub_systempara(Systempara systempara, String key,
+			String value) throws Exception {
+		Systempara subsystempara = new Systempara();
+		subsystempara.setKeyname(key);
+		subsystempara.setValue(value);
+		subsystempara.setParentModel(systempara);
+		baseDao.create(subsystempara);
+		return subsystempara;
+	}
 }

@@ -2,6 +2,9 @@
 <script type="text/javascript" src="<@context_module/>systempara.js"></script>
 <body style="padding:10px">
 	<a class="btn btn-xs btn-primary"  href=# onclick="javascript:action_systempara('create.do','id=root');">添加系统参数类别</a>
+   	<a class="btn btn-xs btn-primary"  href=# onclick="javascript:action_systempara('create.do','id=root&type=user-status');">添加用户状态参数</a>
+	<a class="btn btn-xs btn-primary"  href=# onclick="javascript:action_systempara('create.do','id=root&type=constellation');">添加星座参数</a>
+    
     <br> <br>
         <table >
         <tr>

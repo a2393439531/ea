@@ -145,12 +145,12 @@ a {font-family: "宋体";font-size: 12px;color: #000;text-decoration: none;curso
 <#macro digui_organize_v organizeNodes   varname  show=''>
 	<#list organizeNodes as organize>
    	        var organize${organize.id}=new OrgNode(); 
-     	    organize${organize.id}.Text="<@frame organize.name /><#if organize.imgfilename?exists&&organize.imgfilename!=''><table><tr><td width=150px align=center><image <@style_img/>  onmouseover='' src=<@context/>file/${organize.imgfilename?if_exists}  /></td></tr></table></#if><div style='margin:10px;'><@suoxie organize.organizedescription /></div> <#if show=='user'><div ><#list organize.getRoles() as role><#list role.getUsers() as u>${u.name}&nbsp;</#list></#list></div></#if>";
+     	    organize${organize.id}.Text="<@frame organize.name /><#if organize.imgfilename?exists&&organize.imgfilename!=''><table><tr><td width=150px align=center><image <@style_img/>  onmouseover='' src=<@context/>file/${organize.imgfilename?if_exists}  /></td></tr></table></#if><div style='margin:10px;'><@suoxie organize.organizedescription /></div> <#if show=='user'><div ><#assign i=1><#list organize.getRoles() as role><#list role.getUsers() as u>${u.name}&nbsp;<#if i%3==0><br/></#if><#assign i = i + 1></#list></#list></div></#if>";
 			organize${organize.id}.Description="${organize.name?if_exists}";
 			organize${organize.id}.Link="win_${organize.id?if_exists}()";
 			${varname}.Nodes.Add(organize${organize.id});
 	  	<#if !(organize.getChildOrganizes()?size<1)> 
-		    <@digui_organize_v organize.getChildOrganizes()?sort_by('sortNob'),'organize'+organize.id />	
+		    <@digui_organize_v organize.getChildOrganizes()?sort_by('sortNob'),'organize'+organize.id, Session["show"] />	
 		</#if>
 	</#list> 
 </#macro>

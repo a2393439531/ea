@@ -534,6 +534,7 @@ public class TimeUtil {
 			// log.debug(DateUtil.compareDayStr("2010-01-27", "2010-01-3"));
 		//	log.debug(TimeUtil.compareDate("2013-07-23", "2013-07-11", 0));
 			System.out.println("天数"+TimeUtil.getHowManyDayFromNow("2013-10-01"));
+			System.out.println(TimeUtil.getConstellationNumber("1989-12-27"));
 			// log.debug(DateUtil.compareDate("2013-08-25",null,0) );
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

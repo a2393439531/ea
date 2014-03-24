@@ -9,6 +9,7 @@ import com.app.common.spring.ssh.model.BaseModel;
 import com.app.ea.model.Organize;
 import com.app.ea.model.Organizegroup;
 import com.app.ea.model.Role;
+import com.app.ea.model.Systempara;
 import com.app.ea.model.User;
 
 public interface InfEa {
@@ -84,6 +85,10 @@ public interface InfEa {
 	public void sendMailTheadBySmtpList(String title,String content, 
 			String mailaddress, String cc, String bcc, String[] filename);
 	
+	public Systempara create_systempara(String key, String value) throws Exception;
+	
+	public 	Systempara create_sub_systempara(Systempara systempara, String key,
+			String value) throws Exception;
 	/**
 	 * 修改用户密码
 	 * 
@@ -117,4 +122,5 @@ public interface InfEa {
 	List getAllUserByOrganize(Organize organize);
 
 	public void putUserToRole(String userId, String roleId);
+
 }

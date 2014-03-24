@@ -44,15 +44,12 @@ public class User extends BaseModel {
 	private String email2;
 	private String passwd;
 	private String ericssonid;
-	@Column(length = 2000)
 	private String description;
 	private String companyname;
 	private String groupname;
 	private String teamname;
 	private String techname;
-	@Column(length = 600)
 	private String allrole;
-	@Column(length = 600)
 	private String allrolegroup;
 	private String phoneNumber;
 	private String rollDate;
@@ -77,9 +74,7 @@ public class User extends BaseModel {
 	public String contenddate;
 
 
-	@Column(length = 2000)
 	public String positiondescription;
-	@Column(length = 2000)
 	public String kpidescription;
 
 	/**
@@ -159,7 +154,7 @@ public class User extends BaseModel {
 	public void setPasswd(String passwd) {
 		this.passwd = passwd;
 	}
-
+	@Column(length = 2000)
 	public String getDescription() {
 		return description;
 	}
@@ -257,7 +252,7 @@ public class User extends BaseModel {
 	public void setCertification(String certification) {
 		this.certification = certification;
 	}
-
+	@Column(length = 4000)
 	public String getExperience() {
 		return experience;
 	}
@@ -289,7 +284,7 @@ public class User extends BaseModel {
 	public void setEricssonid(String ericssonid) {
 		this.ericssonid = ericssonid;
 	}
-
+	@Column(length = 4000)
 	public String getPositiondescription() {
 		return positiondescription;
 	}
@@ -297,7 +292,7 @@ public class User extends BaseModel {
 	public void setPositiondescription(String positiondescription) {
 		this.positiondescription = positiondescription;
 	}
-
+	@Column(length = 4000)
 	public String getKpidescription() {
 		return kpidescription;
 	}
@@ -348,7 +343,7 @@ public class User extends BaseModel {
 	public void setTechname(String techname) {
 		this.techname = techname;
 	}
-
+	@Column(length = 600)
 	public String getAllrole() {
 		return allrole;
 	}
@@ -356,7 +351,7 @@ public class User extends BaseModel {
 	public void setAllrole(String allrole) {
 		this.allrole = allrole;
 	}
-
+	@Column(length = 600)
 	public String getAllrolegroup() {
 		return allrolegroup;
 	}

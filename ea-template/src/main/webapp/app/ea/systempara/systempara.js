@@ -1,5 +1,6 @@
 function action_systempara(url,para){
-	
+	  alert(url);
+
   $.ajax({
          type:"POST",
          url: "ea_systempara_"+url,
@@ -11,7 +12,9 @@ function action_systempara(url,para){
         	}else{
         	    document.getElementById('div_systempara_tree').innerHTML=html;
         	}        	
-        	 
+          if(url=="create.do"){
+     		 location.reload();
+     	 }
         	 tip_info();
            }
   });  
