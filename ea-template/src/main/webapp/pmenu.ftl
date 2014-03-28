@@ -53,6 +53,9 @@
 		  <li ><a href="common_svn_svn_list.do" target="_blank">文档管理</a></li>
  		  <li ><a href="common_activiti_index_demo.do" target="mainFrame">工作流演示</a></li>
 		  <li ><a href="common_chat_chat.do" target="_blank">在线支持</a></li>
+		  <li ><hr/></li>
+		  <li ><a href="exam_knowledge_menu_knowledge.do" target="mainFrame">知识领域</a></li>
+		  <li ><a href="exam_item_list.do" target="mainFrame">题库管理</a></li>
     </ul>
   </div>
 </body> 

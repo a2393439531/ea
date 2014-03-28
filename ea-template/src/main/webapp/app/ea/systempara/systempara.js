@@ -1,5 +1,4 @@
 function action_systempara(url,para){
-	  alert(url);
 
   $.ajax({
          type:"POST",
