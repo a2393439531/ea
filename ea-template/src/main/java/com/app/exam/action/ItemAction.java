@@ -104,7 +104,19 @@ public class ItemAction extends BaseEaAction {
 		return "success";
 	}
 
-	
+	public String delete() throws Exception{
+		String id = getpara("id");
+		Item item = (Item) baseDao.loadById("Item", Long.parseLong(id));
+		/*
+		if(item.getType() == 1 || item.getType() == 2){
+			Set<Choiceitem> choiceitems = item.getChoiceitem();
+			for (Choiceitem choiceitem : choiceitems) {
+				baseDao.delete(choiceitem);
+			}
+		}*/
+		baseDao.delete(item);
+		return list();
+	}
 	
 	public List<String> getChoiceitemvalue() {
 		return choiceitemvalue;
@@ -137,9 +149,7 @@ public class ItemAction extends BaseEaAction {
 		for (Knowledge knowledge : knowledgerootlist) {
 			if (knowledge.getChildKnowledges().size() > 0) {
 				Set<Knowledge> knowledges = knowledge.getChildKnowledges();
-				
 				kn = getKnowledgeById(knowledges, id);
-				
 				if(kn == null){
 					continue;
 				}

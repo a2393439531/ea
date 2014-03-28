@@ -177,7 +177,10 @@ public class ImpTemplate extends ParentDemo implements InfDemo{
 		choiceitem3.setValue("选项三");
 		choiceitem4.setRefid(4);
 		choiceitem4.setValue("选项四");
-		
+		choiceitem1.setItem(item1);
+		choiceitem2.setItem(item1);
+		choiceitem3.setItem(item1);
+		choiceitem4.setItem(item1);
 		
 		Choiceitem choiceitem5 = new Choiceitem();
 		Choiceitem choiceitem6 = new Choiceitem();
@@ -191,6 +194,10 @@ public class ImpTemplate extends ParentDemo implements InfDemo{
 		choiceitem7.setValue("选项三");
 		choiceitem8.setRefid(4);
 		choiceitem8.setValue("选项四");
+		choiceitem5.setItem(item2);
+		choiceitem6.setItem(item2);
+		choiceitem7.setItem(item2);
+		choiceitem8.setItem(item2);
 		
 		baseDao.create(kl1);
 		baseDao.create(kl2);

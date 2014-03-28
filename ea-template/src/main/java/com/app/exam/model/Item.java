@@ -40,9 +40,10 @@ public class Item extends BaseModel {
 	
 	private Set<Choiceitem> choiceitem = new HashSet();
 	
-	@OneToMany(cascade = CascadeType.REFRESH, targetEntity = Choiceitem.class, fetch = FetchType.LAZY)
-	@JoinTable(name = "test_item_choiceitem", joinColumns = { @JoinColumn(name = "item_id") }, inverseJoinColumns = { @JoinColumn(name = "itemchoice_id") })
-	public Set getChoiceitem() {
+	//@OneToMany(cascade = CascadeType.REFRESH, targetEntity = Choiceitem.class, fetch = FetchType.LAZY)
+	//@JoinTable(name = "test_item_choiceitem", joinColumns = { @JoinColumn(name = "item_id") }, inverseJoinColumns = { @JoinColumn(name = "itemchoice_id") })
+	@OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+	public Set<Choiceitem> getChoiceitem() {
 		return choiceitem;
 	}
 
