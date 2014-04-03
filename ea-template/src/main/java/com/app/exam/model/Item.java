@@ -51,7 +51,7 @@ public class Item extends BaseModel {
 		this.choiceitem = choiceitem;
 	}
 	
-	private Set<Knowledge> knowledge;//知识领域
+	private Set<Knowledge> knowledge = new HashSet<Knowledge>();//知识领域
 	
 	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Knowledge.class, fetch = FetchType.LAZY)
 	@JoinTable(name = "test_item_knowledge", joinColumns = { @JoinColumn(name = "item_id") }, inverseJoinColumns = { @JoinColumn(name = "knowledge_id") })
@@ -63,7 +63,7 @@ public class Item extends BaseModel {
 		this.knowledge = knowledge;
 	}
 	
-	private Set<Template> templates;
+	private Set<Template> templates = new HashSet<Template>();
 	
 	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Template.class, fetch = FetchType.LAZY)
 	@JoinTable(name = "test_item_template", joinColumns = { @JoinColumn(name = "item_id") }, inverseJoinColumns = { @JoinColumn(name = "template_id") })

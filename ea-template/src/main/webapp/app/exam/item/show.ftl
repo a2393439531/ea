@@ -1,5 +1,5 @@
 <#include "../../../common/freemarker/include_header.ftl">
-			<form name="form_item" action="exam_item_save.do?method=show" metiod="post">
+			<form name="form_item" action="exam_item_save.do" metiod="post">
 				<div class="panel panel-primary">
 				    <div class="panel-heading">
 				    	添加题目

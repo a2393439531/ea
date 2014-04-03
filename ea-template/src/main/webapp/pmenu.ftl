@@ -56,6 +56,9 @@
 		  <li ><hr/></li>
 		  <li ><a href="exam_knowledge_menu_knowledge.do" target="mainFrame">知识领域</a></li>
 		  <li ><a href="exam_item_list.do" target="mainFrame">题库管理</a></li>
+		  <li ><a href="exam_template_list.do" target="mainFrame">模板管理</a></li>
+		  <li ><a href="exam_paper_list.do" target="mainFrame">试卷管理</a></li>
+		  <li ><a href="exam_exam_exam_list.do" target="mainFrame">考试管理</a></li><#--common_activiti_menu_task_list.do-->
     </ul>
   </div>
 </body> 

@@ -1,5 +1,6 @@
 package com.app.exam.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -12,15 +13,14 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.app.common.spring.ssh.model.BaseModel;
+import com.app.common.activiti.model.ProcessModel;
 import com.app.ea.model.User;
 
 @Entity
 @Table(name = "test_paper")
-public class Paper extends BaseModel {
+public class Paper extends ProcessModel {
 	private Long id;
 
 	@Id
@@ -33,7 +33,7 @@ public class Paper extends BaseModel {
 		this.id = id;
 	}
 	
-	private Set<Knowledge> knowledge;
+	private Set<Knowledge> knowledge = new HashSet<Knowledge>();
 
 	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Knowledge.class, fetch = FetchType.LAZY)
 	@JoinTable(name = "test_paper_knowledge", joinColumns = { @JoinColumn(name = "paper_id") }, inverseJoinColumns = { @JoinColumn(name = "knowledge_id") })
@@ -47,7 +47,7 @@ public class Paper extends BaseModel {
 	
 	private Template template; //引用的模板
 	
-	@OneToOne(cascade = { CascadeType.ALL })
+	@ManyToOne(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "template_id", nullable = true)	
 	public Template getTemplate() {
 		return template;
@@ -58,11 +58,12 @@ public class Paper extends BaseModel {
 	}
 
 	
-	public Set<Result> resultdetail;
+	public Set<Result> resultdetail = new HashSet<Result>();
 	
-	@OneToMany(cascade = CascadeType.REFRESH, targetEntity = Result.class, fetch = FetchType.LAZY)
-	@JoinTable(name = "test_paper_result", joinColumns = { @JoinColumn(name = "paper_id") }, inverseJoinColumns = { @JoinColumn(name = "result_id") })
-	public Set getResultdetail() {
+	//(cascade = CascadeType.REFRESH, targetEntity = Result.class, fetch = FetchType.LAZY)
+	//@JoinTable(name = "test_paper_result", joinColumns = { @JoinColumn(name = "paper_id") }, inverseJoinColumns = { @JoinColumn(name = "result_id") })
+	@OneToMany(mappedBy = "paper", cascade = CascadeType.ALL)
+	public Set<Result> getResultdetail() {
 		return resultdetail;
 	}
 
@@ -71,7 +72,7 @@ public class Paper extends BaseModel {
 	}
 
 	
-	public Set<User> assignedUser;
+	public Set<User> assignedUser = new HashSet<User>();
 	
 	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = User.class, fetch = FetchType.LAZY)
 	@JoinTable(name = "test_paper_user", joinColumns = { @JoinColumn(name = "paper_id") }, inverseJoinColumns = { @JoinColumn(name = "user_id") })
@@ -174,5 +175,12 @@ public class Paper extends BaseModel {
 	public void setCreatedate(String createdate) {
 		this.createdate = createdate;
 	}
-	
+	// for process
+	public String getProcessInstanceId() {
+		return processInstanceId;
+	}
+
+	public void setProcessInstanceId(String processInstanceId) {
+		this.processInstanceId = processInstanceId;
+	}
 }

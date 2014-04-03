@@ -37,7 +37,7 @@ public class Knowledge extends BaseModel {
 	private String value;
 	
 	
-	private Set<Template> templates;
+	private Set<Template> templates = new HashSet<Template>();
 	
 	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Template.class, fetch = FetchType.LAZY)
 	@JoinTable(name = "test_template_knowledge", joinColumns = { @JoinColumn(name = "knowledge_id") }, inverseJoinColumns = { @JoinColumn(name = "template_id") })
@@ -97,7 +97,7 @@ public class Knowledge extends BaseModel {
 		this.value = value;
 	}
 
-	private Set<Item> items;
+	private Set<Item> items = new HashSet<Item>();
 	
 	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Item.class, fetch = FetchType.LAZY)
 	@JoinTable(name = "test_item_knowledge", joinColumns = { @JoinColumn(name = "knowledge_id") }, inverseJoinColumns = { @JoinColumn(name = "item_id") })
@@ -109,7 +109,7 @@ public class Knowledge extends BaseModel {
 		this.items = items;
 	}
 
-	private Set<Paper> papers; //被哪些试卷引用
+	private Set<Paper> papers = new HashSet<Paper>(); //被哪些试卷引用
 	
 	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Paper.class, fetch = FetchType.LAZY)
 	@JoinTable(name = "test_paper_knowledge", joinColumns = { @JoinColumn(name = "knowledge_id") }, inverseJoinColumns = { @JoinColumn(name = "paper_id") })

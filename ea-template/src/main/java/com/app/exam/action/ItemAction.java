@@ -15,6 +15,7 @@ import com.app.common.base.action.BaseEaAction;
 import com.app.exam.model.Choiceitem;
 import com.app.exam.model.Item;
 import com.app.exam.model.Knowledge;
+import com.app.exam.model.Template;
 
 @Scope("prototype")
 @Component("itemAction")
@@ -36,6 +37,38 @@ public class ItemAction extends BaseEaAction {
 		rhs.put("knowledgeRootList", common_get_tree_root("Knowledge"));
 		return "success";
 	}
+	
+	public String listbycondition() throws Exception{
+		Set<Item> dataList = new HashSet<Item>();
+		
+		String knowledgesid = getpara("knowledgesid");
+		String type = getpara("type");
+		String templateid = getpara("templateid");
+		Template template = (Template)baseDao.loadById("Template", Long.valueOf(templateid));
+		
+		String[] knowledgeid = knowledgesid.split(",");
+		
+		for(int i = 0; i < knowledgeid.length; i++ ){
+			
+			Knowledge knowledge = (Knowledge) baseDao.loadById("Knowledge", Long.valueOf(knowledgeid[i]));
+			
+			Collection<Item> itemlist = knowledge.getItems();
+			
+			for (Item item : itemlist) {
+				if(type.equals(String.valueOf(item.getType()))){
+					dataList.add(item);
+				}
+			}
+		}
+		
+		if(dataList.size() == 0){
+			rhs.put("info", "所选知识领域没有该题型");
+		}
+		rhs.put("itemlist", dataList);
+		rhs.put("template",template);
+		return "success";
+		
+	}
 
 	public String save() throws Exception {
 		Set<Choiceitem> choiceitem = new HashSet<Choiceitem>();
@@ -55,8 +88,8 @@ public class ItemAction extends BaseEaAction {
 				for (String klv : knowledgevalue) {
 					Knowledge kn = getKnowledgeById(knowledgerootlist, klv);
 					knowledge.add(kn);
-					item.setKnowledge(knowledge);// 添加知识领域
 				}
+				item.setKnowledge(knowledge);// 添加知识领域
 			}
 			if (choiceitemvalue.size() >= 4) {
 				int i = 1;

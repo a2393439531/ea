@@ -74,7 +74,7 @@ function init_select_users(){
 				$(this).dialog("close");
 				
 				// 保存到常选用户数据库
-				$.ajax({
+				/*$.ajax({
 					type: 'post',
 					url: 'common_selectuser_save.do',
 					data: 'selectedUserAccount=' + window.returnValueObj.value + '&selectedUserName=' + window.returnTextObj.value,
@@ -82,7 +82,7 @@ function init_select_users(){
 					cache: false,
 					success: function(data){
 					}
-				});
+				});*/
 	        },
 	        "取消": function(){
 	        	$(this).dialog("close");

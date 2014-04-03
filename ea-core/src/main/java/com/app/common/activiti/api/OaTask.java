@@ -19,6 +19,7 @@ public class OaTask{
 	public String userName;
 	public String createTime;
 	public String formId;
+	public Object obj;
 	
 	public OaTask(){
 		super();
@@ -108,6 +109,14 @@ public class OaTask{
 	public void setFormId(String formId) {
 		this.formId = formId;
 	}
-	
 
+	public Object getObj() {
+		return obj;
+	}
+
+	public void setObj(Object obj) {
+		this.obj = obj;
+	}
+	
+	
 }
