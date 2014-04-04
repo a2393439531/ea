@@ -273,6 +273,51 @@ public class ExamAction extends BaseProcessAction {
 		rhs.put("datalist", dataList);
 		return "success";
 	}
+	
+	public String exam_record_detail(){
+		String paperId = getpara("paperId");
+		Paper paper = (Paper) baseDao.loadById("Paper", Long.valueOf(paperId));
+		Template template = paper.getTemplate();
+		Set<Result> singleitems = new HashSet<Result>();
+		Set<Result> multiitems = new HashSet<Result>();
+		Set<Result> blankitems = new HashSet<Result>();
+		Set<Result> essayitems = new HashSet<Result>();
+		String assignee = getCurrentAccount();
+		Set<Result> allresults = paper.getResultdetail();
+		Set<Result> results = new HashSet<Result>();
+		for (Result result : allresults) {
+			if(result.getUser().equals(assignee)){
+				results.add(result);
+			}
+		}
+		//上面拿到指定用户的结果
+		for (Result result : results) {
+			Item item = result.getItem(); 
+			switch (item.getType()) {
+			case 1:
+				singleitems.add(result);
+				break;
+			case 2:
+				multiitems.add(result);
+				break;
+			case 3:
+				blankitems.add(result);
+				break;
+			case 4:
+				essayitems.add(result);
+				break;
+			}
+		}
+		rhs.put("singleitems", singleitems);
+		rhs.put("multiitems", multiitems);
+		rhs.put("blankitems", blankitems);
+		rhs.put("essayitems", essayitems);
+		rhs.put("paper", paper);
+		rhs.put("template", template);
+		
+		return "success";
+	}
+	
 	public List<Result> getResults() {
 		return result;
 	}

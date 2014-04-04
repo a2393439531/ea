@@ -65,7 +65,7 @@ public class JudgeUtil implements JavaDelegate {
 		record.setMultichoicemark(multichoicemark);
 		record.setBlankmark(blankmark);
 		record.setEssaymark(essaymark);
-		record.setRemark("Success");
+		record.setRemark("Success, auto judge");
 		baseDao.create(record);
 		
 		log.debug("-------------------------->Auto Judge Done<-------------------------");

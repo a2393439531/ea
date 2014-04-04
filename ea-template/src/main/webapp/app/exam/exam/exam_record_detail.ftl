@@ -1,7 +1,5 @@
 <#include "../../../common/freemarker/include_header.ftl">
 <form name="form_item" action="exam_exam_complete_task.do" method="post">
-<input type="hidden" value="<#if rhs.method?exists >${rhs["method"]}</#if>" name="method" />
-<input type="hidden" value="<#if rhs["task"]?exists >${rhs["task"].id}</#if>" name="taskId" />
 <div class="panel panel-primary" style="margin-top: 18px;">
       <div class="panel-heading"><strong>Template List</strong></div>
       <div class="panel-body">
@@ -22,7 +20,7 @@
 		  	<strong>Single Choice</strong>(total:${rhs["template"].singlechoice + rhs["template"].rmdsinglechoice}, each: ${rhs["paper"].singlechoicemark})
 		  	<#list rhs["singleitems"]?sort_by("id") as singleitem>
 				<tr>
-					<td><strong>${singleitem_index+1}.&nbsp;${singleitem.item.content}</strong> <div class="pull-right">得分：<input type="text" name="singlechoicemark" value="<#if singleitem.answer == singleitem.item.refkey >${singleitem.mark}<#else>0</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></div></td>
+					<td><strong>${singleitem_index+1}.&nbsp;${singleitem.item.content}</strong> <div class="pull-right">得分：<input disabled type="text" name="singlechoicemark" value="<#if singleitem.answer == singleitem.item.refkey >${singleitem.mark}<#else>0</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></div></td>
 				<tr>
 				<#list singleitem.item.choiceitem?sort_by("id") as choiceitem>
 					<tr>
@@ -37,7 +35,7 @@
 	      	<strong>Multiple choice</strong>(total:${rhs["template"].multichoice + rhs["template"].rmdmultichoice}, each: ${rhs["paper"].multichoicemark})
 	      	<#list rhs["multiitems"]?sort_by("id") as multiitem>
 	      		<tr>
-					<td><strong>${multiitem_index+1}.&nbsp;${multiitem.item.content}</strong> <div class="pull-right">得分：<input type="text" name="multichoicemark" value="<#if multiitem.answer == multiitem.item.refkey >${multiitem.mark}<#else>0</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></div></td>
+					<td><strong>${multiitem_index+1}.&nbsp;${multiitem.item.content}</strong> <div class="pull-right">得分：<input disabled type="text" name="multichoicemark" value="<#if multiitem.answer == multiitem.item.refkey >${multiitem.mark}<#else>0</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></div></td>
 				<tr>
 				<#list multiitem.item.choiceitem?sort_by("id") as choiceitem>
 					<tr>
@@ -51,7 +49,7 @@
 	      	<strong>Blank</strong>(total:${rhs["template"].blank + rhs["template"].rmdblank}, each: ${rhs["paper"].blankmark})
 	      	<#list rhs["blankitems"]?sort_by("id") as blankitem>
 	      		<tr>
-					<td><strong>${blankitem_index+1}.&nbsp;${blankitem.item.content}</strong> <div class="pull-right">得分：<input type="text" name="blankmark" value="<#if blankitem.answer == blankitem.item.refkey >${blankitem.mark}<#else>0</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></div></td>
+					<td><strong>${blankitem_index+1}.&nbsp;${blankitem.item.content}</strong> <div class="pull-right">得分：<input disabled type="text" name="blankmark" value="<#if blankitem.answer == blankitem.item.refkey >${blankitem.mark}<#else>0</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></div></td>
 				<tr>
 				<tr>
 					<td><input disabled type="text" value="${blankitem.answer}" name=""/> 参考答案: ${blankitem.item.refkey}</td>
@@ -63,7 +61,7 @@
 	      	<strong>Essay</strong>(total:${rhs["template"].essay + rhs["template"].rmdessay}, each: ${rhs["paper"].essaymark})
 	      	<#list rhs["essayitems"]?sort_by("id") as essayitem>
 	      		<tr>
-					<td><strong>${essayitem_index+1}.&nbsp;${essayitem.item.content}</strong> <div class="pull-right">得分：<input type="text" name="essaymark" value="<#if essayitem.answer == essayitem.item.refkey >${essayitem.mark}<#else>0</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></div></td>
+					<td><strong>${essayitem_index+1}.&nbsp;${essayitem.item.content}</strong> <div class="pull-right">得分：<input disabled type="text" name="essaymark" value="<#if essayitem.answer == essayitem.item.refkey >${essayitem.mark}<#else>0</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></div></td>
 				<tr>
 				<tr>
 					<td><textarea disabled name="">${essayitem.answer}</textarea> 参考答案：${essayitem.item.refkey}</td>
@@ -73,7 +71,9 @@
 	    </table>
 	    <table class="table table-condensed table-bordered table-striped">
 	    	<tr>
-      			<td><input type="button" class="btn btn-xs btn-info" value="Save" id="submitButton"/></td>
+      			<td>
+      				<a  class="btn btn-xs btn-info" href="exam_exam_exam_record_list.do">Return</a>
+      			</td>
       		</tr>
 	    </table>
       </div>

@@ -23,7 +23,7 @@
 				<#list rhs["datalist"] as record>
 					<tr>
 						<td>${record_index+1}</td>
-						<td>${record.paper.name}</td>
+						<td><a href="exam_exam_exam_record_detail.do?paperId=${record.paper.id}" >${record.paper.name}</a></td>
 						<td>${record.paper.totalmark}</td>
 						<td>${record.paper.passmark}</td>
 						<td >${record.singlechoicemark} (total: ${record.paper.template.singlechoice + record.paper.template.rmdsinglechoice}, each: ${record.paper.singlechoicemark})</td>
