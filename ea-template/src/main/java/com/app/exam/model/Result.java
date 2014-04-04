@@ -38,19 +38,34 @@ public class Result extends BaseModel {
 		this.paper = paper;
 	}
 	
-	private int item;
-
-	private String answer;
-	private int mark;
-
-	public int getItem() {
+	
+	private Item item;
+	
+	@ManyToOne(cascade = { CascadeType.ALL })
+	@JoinColumn(name = "item_id", nullable = true)
+	public Item getItem() {
 		return item;
 	}
 
-	public void setItem(int item) {
+	public void setItem(Item item) {
 		this.item = item;
 	}
+
+	private String answer;
+	private int mark;
+	private String user;
 	
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+
+	
+
 	@Column(length = 2000)
 	public String getAnswer() {
 		return answer;

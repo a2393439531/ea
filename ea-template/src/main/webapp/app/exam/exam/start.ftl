@@ -6,6 +6,7 @@
       <div class="panel-heading"><strong>Start Exam</strong></div>
       <div class="panel-body">
       	<table class="table table-condensed table-bordered table-striped">
+      	<tr><td colspan="8"><font color="red"><strong>考试中请勿关闭浏览器，否则会导致考试失败</strong></font></td></tr>
       		<tr>
       			<td><strong>试卷名称</strong></td>
       			<td><#if rhs["paper"]?exists > ${rhs["paper"].name}</#if></td>
@@ -29,7 +30,8 @@
 						<td><input type="radio" value="${choiceitem.refid}" name="result[${i}].answer"/> ${choiceitem.value}</td>
 					</tr>
 				</#list>
-				<input type="hidden" value="${singleitem.id}" name="result[${i}].item" />
+				<input type="hidden" value="${singleitem.id}" name="result[${i}].item.id" />
+				<input type="hidden" value="${rhs["paper"].singlechoicemark}" name="result[${i}].mark" />
 				<#assign i = i + 1 > 
 		  	</#list>
       	</table>
@@ -45,7 +47,8 @@
 						<td><input type="checkbox" value="${choiceitem.refid}" name="result[${i}].answer"/> ${choiceitem.value}</td>
 					</tr>
 				</#list>
-				<input type="hidden" value="${multiitem.id}" name="result[${i}].item" />
+				<input type="hidden" value="${multiitem.id}" name="result[${i}].item.id" />
+				<input type="hidden" value="${rhs["paper"].multichoicemark}" name="result[${i}].mark" />
 				<#assign i = i + 1 > 
 	      	</#list>
       	</table>
@@ -57,7 +60,8 @@
 				<tr>
 				<tr>
 					<td><input type="text"  name="result[${i}].answer"/></td>
-					<input type="hidden" value="${blankitem.id}" name="result[${i}].item" />
+					<input type="hidden" value="${blankitem.id}" name="result[${i}].item.id" />
+					<input type="hidden" value="${rhs["paper"].blankmark}" name="result[${i}].mark" />
 				</tr>
 				<#assign i = i + 1 > 
 	      	</#list>
@@ -70,7 +74,8 @@
 				<tr>
 				<tr>
 					<td><textarea name="result[${i}].answer"> </textarea></td>
-					<input type="hidden" value="${essayitem.id}" name="result[${i}].item" />
+					<input type="hidden" value="${essayitem.id}" name="result[${i}].item.id" />
+					<input type="hidden" value="${rhs["paper"].essaymark}" name="result[${i}].mark" />
 				</tr>
 				<#assign i = i + 1 > 
 	      	</#list>

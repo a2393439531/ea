@@ -1,6 +1,7 @@
 package com.app.exam.model;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -29,6 +30,53 @@ public class Examrecord extends BaseModel {
 	
 	
 	private String userid ;
+	private int singlechoicemark;
+	private int multichoicemark;
+	private int blankmark;
+	private int essaymark;
+	
+	private String remark;
+	
+	@Column(length = 2000)
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public int getSinglechoicemark() {
+		return singlechoicemark;
+	}
+
+	public void setSinglechoicemark(int singlechoicemark) {
+		this.singlechoicemark = singlechoicemark;
+	}
+
+	public int getMultichoicemark() {
+		return multichoicemark;
+	}
+
+	public void setMultichoicemark(int multichoicemark) {
+		this.multichoicemark = multichoicemark;
+	}
+
+	public int getBlankmark() {
+		return blankmark;
+	}
+
+	public void setBlankmark(int blankmark) {
+		this.blankmark = blankmark;
+	}
+
+	public int getEssaymark() {
+		return essaymark;
+	}
+
+	public void setEssaymark(int essaymark) {
+		this.essaymark = essaymark;
+	}
 
 	public String getUserid() {
 		return userid;

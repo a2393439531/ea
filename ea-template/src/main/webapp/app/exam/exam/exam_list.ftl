@@ -11,9 +11,9 @@
 					<td width=25px><strong>#</strong></td>
 					<td ><strong>Initiator</strong></td>
 					<td ><strong>Exam Name</strong></td>
-					<td ><strong>Exam Time</strong></td>
-					<td ><strong>Total mark</strong></td>
 					<td ><strong>Passmark mark</strong></td>
+					<td ><strong>Total mark</strong></td>
+					<td ><strong>Exam Time</strong></td>
 					<td ><strong>Create Time</strong></td>
 					<td ><strong>Operation</strong></td>
 				</tr>
@@ -33,7 +33,7 @@
 								View
 							</a>-->
 							<a href="${item.handleTaskUrl?if_exists}&taskId=${item.task.id}" class="btn btn-xs btn-primary">
-								Start Exam
+								${item.method}
 							</a>
 						</td>
 					</tr>

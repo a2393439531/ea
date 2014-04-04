@@ -59,6 +59,7 @@
 		  <li ><a href="exam_template_list.do" target="mainFrame">模板管理</a></li>
 		  <li ><a href="exam_paper_list.do" target="mainFrame">试卷管理</a></li>
 		  <li ><a href="exam_exam_exam_list.do" target="mainFrame">考试管理</a></li><#--common_activiti_menu_task_list.do-->
+		  <li ><a href="exam_exam_exam_record_list.do" target="mainFrame">考试查询</a></li>
     </ul>
   </div>
 </body> 

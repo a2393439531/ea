@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import com.app.common.activiti.action.BaseProcessAction;
 import com.app.common.activiti.api.OaTask;
 import com.app.common.spring.ssh.page.Pagination;
+import com.app.exam.model.Examrecord;
 import com.app.exam.model.Item;
 import com.app.exam.model.Paper;
 import com.app.exam.model.Result;
@@ -25,6 +26,10 @@ import com.app.exam.model.Template;
 public class ExamAction extends BaseProcessAction {
 	
 	public List<Result> result = new ArrayList<Result>();
+	public List<String> singlechoicemark = new ArrayList<String>();
+	public List<String> multichoicemark = new ArrayList<String>();
+	public List<String> blankmark = new ArrayList<String>();
+	public List<String> essaymark = new ArrayList<String>();
 	
 	public String open_exam(){
 		String taskId = getpara("taskId");
@@ -39,13 +44,13 @@ public class ExamAction extends BaseProcessAction {
 		
 		if("start".equals(method)){
 			//先判断eception
-			String exception = (String)infActiviti.getVariableByTaskId(taskId, "exception");
+			String exception = String.valueOf(infActiviti.getVariableByTaskId(taskId, "exception"));
 			if(!"".equals(exception) && exception != null && Boolean.valueOf(exception)){
 				//不是正常完成
 				Map<String,Object> var = new HashMap<String, Object>();
 				String assignee = (String) infActiviti.getVariableByTaskId(taskId, "assignee");
-				//测试注释
-				//infActiviti.completeTaskVar(taskId, paperId, assignee, var);
+				infActiviti.completeTaskVar(taskId, paperId, assignee, var);
+				taskPage = "exam/reason.ftl";
 			}else{
 				//开始考试
 				Set<Item> singleitems = new HashSet<Item>();
@@ -78,17 +83,48 @@ public class ExamAction extends BaseProcessAction {
 				rhs.put("essayitems", essayitems);
 				
 				//同时设置exception为true，只有考生正确complete exam，exception才为false。
-				//测试注释
-				//String processInstanceId = task.getProcessInstanceId();
-				//infActiviti.setVariableByProcessInstanceId(processInstanceId, "exception", true);
+				String processInstanceId = task.getProcessInstanceId();
+				infActiviti.setVariableByProcessInstanceId(processInstanceId, "exception", true);
 			}
 			
 		}else if("reason".equals(method)){
 			
 		
 		}else if("judge".equals(method)){
-			
-		
+			Set<Result> singleitems = new HashSet<Result>();
+			Set<Result> multiitems = new HashSet<Result>();
+			Set<Result> blankitems = new HashSet<Result>();
+			Set<Result> essayitems = new HashSet<Result>();
+			String assignee = (String) infActiviti.getVariableByTaskId(taskId, "assignee");
+			Set<Result> allresults = paper.getResultdetail();
+			Set<Result> results = new HashSet<Result>();
+			for (Result result : allresults) {
+				if(result.getUser().equals(assignee)){
+					results.add(result);
+				}
+			}
+			//上面拿到指定用户的结果
+			for (Result result : results) {
+				Item item = result.getItem(); 
+				switch (item.getType()) {
+				case 1:
+					singleitems.add(result);
+					break;
+				case 2:
+					multiitems.add(result);
+					break;
+				case 3:
+					blankitems.add(result);
+					break;
+				case 4:
+					essayitems.add(result);
+					break;
+				}
+			}
+			rhs.put("singleitems", singleitems);
+			rhs.put("multiitems", multiitems);
+			rhs.put("blankitems", blankitems);
+			rhs.put("essayitems", essayitems);
 		}
 		
 		
@@ -115,6 +151,14 @@ public class ExamAction extends BaseProcessAction {
 		for (OaTask oaTask : assigneeList) {
 			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(oaTask.getFormId()));
 			oaTask.setObj(paper);
+			String taskname = oaTask.getTask().getTaskDefinitionKey();
+			if("usertask4".equals(taskname)){
+				oaTask.setMethod("Judge");
+			}else if("usertask2".equals(taskname)){
+				oaTask.setMethod("Start");
+			}else if("usertask3".equals(taskname)){
+				oaTask.setMethod("Input Reason");
+			}
 			allData.add(oaTask);
 		}
 
@@ -140,30 +184,95 @@ public class ExamAction extends BaseProcessAction {
 			if(paperId == null || "".equals(paperId)){
 				paperId = getpara("paperid");
 			}
-			String judge = getpara("judge"); //拿到判卷人
 			String autojudge = getpara("autojudge");
-			var.put("auto", Boolean.valueOf(autojudge));
-			var.put("judge", judge);
+			if("".equals(autojudge) || autojudge == null){
+				var.put("auto", true);
+			}else{
+				var.put("auto", false);
+				String judge = getpara("judge"); //拿到判卷人
+				var.put("judge", judge);
+			}
 			String[] assignees = getpara("assignee").split(",");//拿到分配考试的人,有可能是多人
 			//针对每个人,启动流程
 			for (String assignee : assignees) {
 				infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignee, var);
 			}
 		}else if("start".equals(method)){
-			int itemscount = result.size();
-			System.out.println(itemscount);
-			
+			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperId));
+			for (Result res : result) {
+				res.setPaper(paper);
+				res.setUser(getCurrentAccount());
+				Item item = (Item) baseDao.loadById("Item", res.getItem().getId());
+				res.setItem(item);
+				baseDao.create(res);
+			}
+			//设置异常为false
+			String processInstanceId = task.getProcessInstanceId();
+			infActiviti.setVariableByProcessInstanceId(processInstanceId, "exception", false);
+			infActiviti.completeTaskVar(taskId, paperId, getCurrentAccount(), var);
 		}else if("reason".equals(method)){
-			
+			String reason = getpara("reason");
+			Examrecord record = new Examrecord();
+			record.setUserid((String) infActiviti.getVariableByTaskId(taskId, "assignee"));
+			record.setSinglechoicemark(0);
+			record.setMultichoicemark(0);
+			record.setBlankmark(0);
+			record.setEssaymark(0);
+			record.setPaper((Paper)baseDao.loadById("Paper", Long.valueOf(paperId)));
+			record.setRemark("Failed, reason: "+reason);
+			baseDao.create(record);
+			infActiviti.completeTaskVar(taskId, paperId, getCurrentAccount(), var);
 		}else if("judge".equals(method)){
+			int singlechoicetotalmark = 0;
+			int multichoicetotalmark = 0;
+			int blanktotalmark = 0;
+			int essaytotalmark = 0;
+			Examrecord record = new Examrecord();
+			for (String mark : singlechoicemark) {
+				singlechoicetotalmark += Integer.valueOf(mark.trim());
+			}
+			for (String mark : multichoicemark) {
+				multichoicetotalmark += Integer.valueOf(mark);
+			}
+			for (String mark : blankmark) {
+				blanktotalmark += Integer.valueOf(mark);
+			}
+			for (String mark : essaymark) {
+				essaytotalmark += Integer.valueOf(mark);
+			}
+			record.setSinglechoicemark(singlechoicetotalmark);
+			record.setMultichoicemark(multichoicetotalmark);
+			record.setBlankmark(blanktotalmark);
+			record.setEssaymark(essaytotalmark);
+			record.setUserid((String) infActiviti.getVariableByTaskId(taskId, "assignee"));
+			record.setPaper((Paper)baseDao.loadById("Paper", Long.valueOf(paperId)));
+			record.setRemark("Success, judged by " + getCurrentUser().getName());
+			baseDao.create(record);
 			
+			infActiviti.completeTaskVar(taskId, paperId, getCurrentAccount(), var);
 		}
 		
 		rhs.put("resultMessage", "成功完成任务。");
 		return "success";
 		
 	}
-
+	public String exam_record_list() throws Exception{
+		String useraccount = getCurrentAccount();
+		List<Examrecord> dataList = new ArrayList<Examrecord>();
+		String sql = " from Examrecord r ";
+		
+		getPageData(sql);
+		
+		List<Examrecord> recordList = (List)rhs.get("dataList");
+		
+		for (Examrecord examrecord : recordList) {
+			if(examrecord.getUserid().equals(useraccount)){
+				dataList.add(examrecord);
+			}
+		}
+		rhs.put("datalist", dataList);
+		return "success";
+	}
 	public List<Result> getResults() {
 		return result;
 	}

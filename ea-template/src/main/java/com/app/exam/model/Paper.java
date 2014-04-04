@@ -71,6 +71,15 @@ public class Paper extends ProcessModel {
 		this.resultdetail = resultdetail;
 	}
 
+	public Set<Result> getResultdetailByAccount(String account) {
+		Set<Result> results = new HashSet<Result>();
+		for (Result result : resultdetail) {
+			if(account.equals(result.getUser())){
+				results.add(result);
+			}
+		}
+		return results;
+	}
 	
 	public Set<User> assignedUser = new HashSet<User>();
 	
