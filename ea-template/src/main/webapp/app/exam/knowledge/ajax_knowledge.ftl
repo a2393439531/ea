@@ -12,8 +12,8 @@
 		<tr>
 	    	<td width=700px height=30px >
 				${flag} 
-	    		<span>名称: </span><input value="${knowledge.name?if_exists}" style="width: 120px; height: 14px;" onchange="javascript:action_knowledge('update.do','column=name&id=${knowledge.id?if_exists}&columnValue='+this.value)" /> 
-			    <span>别名:</span><input value="${knowledge.alias?if_exists}" style="width: 120px; height: 14px;"  onchange="javascript:action_knowledge('update.do','column=alias&id=${knowledge.id?if_exists}&columnValue='+this.value)" /> 
+	    		<span>名称: </span><input value="${knowledge.name?if_exists}" style="width: 120px; height: 20px;" onchange="javascript:action_knowledge('update.do','column=name&id=${knowledge.id?if_exists}&columnValue='+this.value)" /> 
+			    <span>别名:</span><input value="${knowledge.alias?if_exists}" style="width: 120px; height: 20px;"  onchange="javascript:action_knowledge('update.do','column=alias&id=${knowledge.id?if_exists}&columnValue='+this.value)" /> 
 			</td>
 			
 			<td width=200px>		 	     

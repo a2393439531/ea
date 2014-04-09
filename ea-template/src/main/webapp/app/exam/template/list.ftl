@@ -28,7 +28,7 @@
 			</tr>
 			</#list>
 		</tbody>
-	</table>       
+	</table>
 		<#include "../../../common/freemarker/macro_pagination.ftl">
 		<@pagination  "search_form" />
       </div>

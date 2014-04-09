@@ -58,24 +58,37 @@ public class Paper extends ProcessModel {
 	}
 
 	
-	public Set<Result> resultdetail = new HashSet<Result>();
+	//public Set<Result> resultdetail = new HashSet<Result>();
 	
 	//(cascade = CascadeType.REFRESH, targetEntity = Result.class, fetch = FetchType.LAZY)
 	//@JoinTable(name = "test_paper_result", joinColumns = { @JoinColumn(name = "paper_id") }, inverseJoinColumns = { @JoinColumn(name = "result_id") })
+	//@OneToMany(mappedBy = "paper", cascade = CascadeType.ALL)
+	//	public Set<Result> getResultdetail() {
+	//		return resultdetail;
+	//	}
+	//
+	//	public void setResultdetail(Set<Result> resultdetail) {
+	//		this.resultdetail = resultdetail;
+	//	}
+
+	public Set<Examrecord> resultdetail = new HashSet<Examrecord>();
+	
 	@OneToMany(mappedBy = "paper", cascade = CascadeType.ALL)
-	public Set<Result> getResultdetail() {
+	public Set<Examrecord> getResultdetail() {
 		return resultdetail;
 	}
 
-	public void setResultdetail(Set<Result> resultdetail) {
+	public void setResultdetail(Set<Examrecord> resultdetail) {
 		this.resultdetail = resultdetail;
 	}
-
-	public Set<Result> getResultdetailByAccount(String account) {
-		Set<Result> results = new HashSet<Result>();
-		for (Result result : resultdetail) {
-			if(account.equals(result.getUser())){
-				results.add(result);
+	
+	public Set<Examrecord> getResultdetailByAccountAndRecordId(String account,String id) {
+		Set<Examrecord> results = new HashSet<Examrecord>();
+		for (Examrecord result : resultdetail) {
+			if(account.equals(result.getUserid())){
+				if(id.equals(String.valueOf(result.getId()))){
+					results.add(result);
+				}
 			}
 		}
 		return results;

@@ -23,19 +23,19 @@
 				<#list rhs["datalist"] as record>
 					<tr>
 						<td>${record_index+1}</td>
-						<td><a href="exam_exam_exam_record_detail.do?paperId=${record.paper.id}" >${record.paper.name}</a></td>
+						<td><a href="exam_exam_exam_record_detail.do?paperId=${record.paper.id}&recordsId=${record.id}" >${record.paper.name}</a></td>
 						<td>${record.paper.totalmark}</td>
 						<td>${record.paper.passmark}</td>
 						<td >${record.singlechoicemark} (total: ${record.paper.template.singlechoice + record.paper.template.rmdsinglechoice}, each: ${record.paper.singlechoicemark})</td>
 						<td >${record.multichoicemark} (total: ${record.paper.template.multichoice + record.paper.template.rmdmultichoice}, each: ${record.paper.multichoicemark})</td></td>
 						<td >${record.blankmark}(total: ${record.paper.template.blank + record.paper.template.rmdblank}, each: ${record.paper.blankmark})</td>
 						<td >${record.essaymark}(total: ${record.paper.template.essay + record.paper.template.rmdessay}, each: ${record.paper.essaymark})</td>
-						<td >${record.remark}</td>
+						<td >${record.remark?if_exists}</td>
 					</tr>
 				</#list>
 			</table>
 			
-			<form action="common_activiti_menu_task_list.do" id="search_form" method="post" style="display:none;">
+			<form action="exam_exam_exam_record_list.do" id="search_form" method="post" style="display:none;">
 				<input type="hidden" name="search" value="search">
 				<input type="hidden" name="pageId" id="pageId">
 				<input type="hidden" name="maxSize" id="pageMaxSize">

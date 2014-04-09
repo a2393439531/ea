@@ -1,5 +1,8 @@
 package com.app.exam.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,8 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 
 import com.app.common.spring.ssh.model.BaseModel;
 
@@ -98,5 +101,16 @@ public class Examrecord extends BaseModel {
 		this.paper = paper;
 	}
 	
+	private Set<Result> result = new HashSet();
+
+	
+	@OneToMany(mappedBy = "examrecord", cascade = CascadeType.ALL)
+	public Set<Result> getResult() {
+		return result;
+	}
+
+	public void setResult(Set<Result> result) {
+		this.result = result;
+	}
 	
 }

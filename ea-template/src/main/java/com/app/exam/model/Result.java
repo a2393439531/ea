@@ -26,17 +26,17 @@ public class Result extends BaseModel {
 		this.id = id;
 	}
 	
-	private Paper paper;
-	
-	@ManyToOne(cascade = { CascadeType.ALL })
-	@JoinColumn(name = "paper_id", nullable = true)
-	public Paper getPaper() {
-		return paper;
-	}
-
-	public void setPaper(Paper paper) {
-		this.paper = paper;
-	}
+//	private Paper paper;
+//	
+//	@ManyToOne(cascade = { CascadeType.ALL })
+//	@JoinColumn(name = "paper_id", nullable = true)
+//	public Paper getPaper() {
+//		return paper;
+//	}
+//
+//	public void setPaper(Paper paper) {
+//		this.paper = paper;
+//	}
 	
 	
 	private Item item;
@@ -63,12 +63,22 @@ public class Result extends BaseModel {
 		this.user = user;
 	}
 
-
+	private Examrecord examrecord;
 	
+
 
 	@Column(length = 2000)
 	public String getAnswer() {
 		return answer;
+	}
+	@ManyToOne(cascade = { CascadeType.ALL })
+	@JoinColumn(name = "examrecord_id", nullable = true)
+	public Examrecord getExamrecord() {
+		return examrecord;
+	}
+
+	public void setExamrecord(Examrecord examrecord) {
+		this.examrecord = examrecord;
 	}
 
 	public void setAnswer(String answer) {

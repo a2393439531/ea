@@ -43,7 +43,12 @@
 			</tr>
 			</#list>
 		</tbody>
-	</table>       
+	</table>
+				<form action="exam_item_list.do" id="search_form" method="post" style="display:none;">
+				<input type="hidden" name="search" value="search">
+				<input type="hidden" name="pageId" id="pageId">
+				<input type="hidden" name="maxSize" id="pageMaxSize">
+			</form>
 		<#include "../../../common/freemarker/macro_pagination.ftl">
 		<@pagination  "search_form" />
       </div>

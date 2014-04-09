@@ -21,7 +21,7 @@
 		<br><br><a style="margin-left:10px;margin-top:5px;" class="btn btn-primary "  href="exam_paper_save.do?method=show">新建试卷</a>
 		
 	<div class="panel panel-primary" style="margin-top: 18px;">
-      <div class="panel-heading"><strong>Template List</strong></div>
+      <div class="panel-heading"><strong>Paper List</strong></div>
       <div class="panel-body">
 			
 			
@@ -55,7 +55,7 @@
 			</tr>
 			</#list>
 		</tbody>
-	</table>       
+	</table>
 		<#include "../../../common/freemarker/macro_pagination.ftl">
 		<@pagination  "search_form" />
       </div>

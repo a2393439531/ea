@@ -50,6 +50,7 @@ public class ExamAction extends BaseProcessAction {
 				Map<String,Object> var = new HashMap<String, Object>();
 				String assignee = (String) infActiviti.getVariableByTaskId(taskId, "assignee");
 				infActiviti.completeTaskVar(taskId, paperId, assignee, var);
+				method = "reason";
 				taskPage = "exam/reason.ftl";
 			}else{
 				//开始考试
@@ -96,13 +97,15 @@ public class ExamAction extends BaseProcessAction {
 			Set<Result> blankitems = new HashSet<Result>();
 			Set<Result> essayitems = new HashSet<Result>();
 			String assignee = (String) infActiviti.getVariableByTaskId(taskId, "assignee");
-			Set<Result> allresults = paper.getResultdetail();
+			String recordsId = String.valueOf(infActiviti.getVariableByProcessInstanceId(task.getProcessInstanceId(), "recordsId"));
+			
+			
+			Set<Examrecord> allresults = paper.getResultdetailByAccountAndRecordId(assignee,recordsId);
 			Set<Result> results = new HashSet<Result>();
-			for (Result result : allresults) {
-				if(result.getUser().equals(assignee)){
-					results.add(result);
-				}
+			for (Examrecord examrecord : allresults) {
+				results.addAll(examrecord.getResult());
 			}
+			
 			//上面拿到指定用户的结果
 			for (Result result : results) {
 				Item item = result.getItem(); 
@@ -177,13 +180,14 @@ public class ExamAction extends BaseProcessAction {
 		String taskPage = getpara("taskPage");
 		String paperId = (String)infActiviti.getVariableByTaskId(taskId, "formId");
 		String method = getpara("method");
-		
 		Task task = infActiviti.getTaskById(taskId);
 		
+		if(paperId == null || "".equals(paperId)){
+			paperId = getpara("paperid");
+		}
+		
+		
 		if("assign".equals(method)){
-			if(paperId == null || "".equals(paperId)){
-				paperId = getpara("paperid");
-			}
 			String autojudge = getpara("autojudge");
 			if("".equals(autojudge) || autojudge == null){
 				var.put("auto", true);
@@ -199,16 +203,29 @@ public class ExamAction extends BaseProcessAction {
 			}
 		}else if("start".equals(method)){
 			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperId));
+			Examrecord record = new Examrecord();
+			record.setUserid(getCurrentAccount());
+			record.setPaper(paper);
+			record.setRemark("Wait for judge");
+			baseDao.create(record);
 			for (Result res : result) {
-				res.setPaper(paper);
+				//res.setPaper(paper);
+				res.setExamrecord(record);
 				res.setUser(getCurrentAccount());
 				Item item = (Item) baseDao.loadById("Item", res.getItem().getId());
 				res.setItem(item);
 				baseDao.create(res);
 			}
+			Set<Result> resultset = new HashSet<Result>();
+			resultset.addAll(result);
+			record.setResult(resultset);
+			baseDao.update(record);
 			//设置异常为false
 			String processInstanceId = task.getProcessInstanceId();
 			infActiviti.setVariableByProcessInstanceId(processInstanceId, "exception", false);
+			//设置recordId，方便自动评卷拿到
+			infActiviti.setVariableByProcessInstanceId(processInstanceId, "recordsId", record.getId());
+			//end
 			infActiviti.completeTaskVar(taskId, paperId, getCurrentAccount(), var);
 		}else if("reason".equals(method)){
 			String reason = getpara("reason");
@@ -218,6 +235,7 @@ public class ExamAction extends BaseProcessAction {
 			record.setMultichoicemark(0);
 			record.setBlankmark(0);
 			record.setEssaymark(0);
+			record.setResult(null);
 			record.setPaper((Paper)baseDao.loadById("Paper", Long.valueOf(paperId)));
 			record.setRemark("Failed, reason: "+reason);
 			baseDao.create(record);
@@ -227,18 +245,27 @@ public class ExamAction extends BaseProcessAction {
 			int multichoicetotalmark = 0;
 			int blanktotalmark = 0;
 			int essaytotalmark = 0;
-			Examrecord record = new Examrecord();
-			for (String mark : singlechoicemark) {
-				singlechoicetotalmark += Integer.valueOf(mark.trim());
-			}
-			for (String mark : multichoicemark) {
-				multichoicetotalmark += Integer.valueOf(mark);
-			}
-			for (String mark : blankmark) {
-				blanktotalmark += Integer.valueOf(mark);
-			}
-			for (String mark : essaymark) {
-				essaytotalmark += Integer.valueOf(mark);
+			String recordsId = String.valueOf(infActiviti.getVariableByProcessInstanceId(task.getProcessInstanceId(), "recordsId"));
+			Examrecord record = (Examrecord)baseDao.loadById("Examrecord", Long.valueOf(recordsId));
+			
+			for (Result res : result) {
+				Result result = (Result)baseDao.loadById("Result", res.getId());
+				result.setMark(res.getMark());
+				baseDao.update(result);
+				switch (result.getItem().getType()) {
+				case 1:
+					singlechoicetotalmark += res.getMark();
+					break;
+				case 2:
+					multichoicetotalmark += res.getMark();
+					break;
+				case 3:
+					blanktotalmark += res.getMark();
+					break;
+				case 4:
+					essaytotalmark += res.getMark();
+					break;
+				}
 			}
 			record.setSinglechoicemark(singlechoicetotalmark);
 			record.setMultichoicemark(multichoicetotalmark);
@@ -247,7 +274,8 @@ public class ExamAction extends BaseProcessAction {
 			record.setUserid((String) infActiviti.getVariableByTaskId(taskId, "assignee"));
 			record.setPaper((Paper)baseDao.loadById("Paper", Long.valueOf(paperId)));
 			record.setRemark("Success, judged by " + getCurrentUser().getName());
-			baseDao.create(record);
+			record.setResult(record.getResult());
+			baseDao.update(record);
 			
 			infActiviti.completeTaskVar(taskId, paperId, getCurrentAccount(), var);
 		}
@@ -259,7 +287,7 @@ public class ExamAction extends BaseProcessAction {
 	public String exam_record_list() throws Exception{
 		String useraccount = getCurrentAccount();
 		List<Examrecord> dataList = new ArrayList<Examrecord>();
-		String sql = " from Examrecord r ";
+		String sql = " from Examrecord r where r.userid=" + "'" +useraccount+"'";
 		
 		getPageData(sql);
 		
@@ -276,6 +304,7 @@ public class ExamAction extends BaseProcessAction {
 	
 	public String exam_record_detail(){
 		String paperId = getpara("paperId");
+		String recordsId = getpara("recordsId");
 		Paper paper = (Paper) baseDao.loadById("Paper", Long.valueOf(paperId));
 		Template template = paper.getTemplate();
 		Set<Result> singleitems = new HashSet<Result>();
@@ -283,12 +312,11 @@ public class ExamAction extends BaseProcessAction {
 		Set<Result> blankitems = new HashSet<Result>();
 		Set<Result> essayitems = new HashSet<Result>();
 		String assignee = getCurrentAccount();
-		Set<Result> allresults = paper.getResultdetail();
+		Set<Examrecord> allresults = paper.getResultdetailByAccountAndRecordId(assignee, recordsId);
+		
 		Set<Result> results = new HashSet<Result>();
-		for (Result result : allresults) {
-			if(result.getUser().equals(assignee)){
-				results.add(result);
-			}
+		for (Examrecord examrecord : allresults) {
+			results.addAll(examrecord.getResult());
 		}
 		//上面拿到指定用户的结果
 		for (Result result : results) {

@@ -1,4 +1,5 @@
 <#include "../../../common/freemarker/include_header.ftl">
+<body>
 <form name="form_item" action="exam_exam_complete_task.do" method="post">
 <input type="hidden" value="<#if rhs.method?exists >${rhs["method"]}</#if>" name="method" />
 <input type="hidden" value="<#if rhs["task"]?exists >${rhs["task"].id}</#if>" name="taskId" />
@@ -88,11 +89,69 @@
       </div>
 </div>
 </form>
+</body>
 <script>
 	$('#submitButton').click(function () {
 		var btn = $(this);
 		btn.button('loading');
-		$('#dialog').dialog('open');
 		document.getElementsByName("form_item")[0].submit();
+		window.close();
 	});
+	$(document).ready(function(){
+     	window.opener=null;
+	});
+	document.oncontextmenu=function(){
+    	alert('禁止鼠标右键菜单!');
+    	return false;
+	}
+	document.onkeydown=function(e){
+	    e=e||event;
+	    //alert(e.keyCode);//可查看各个按键的keyCode是多少
+		//屏蔽F5刷新键
+	    if(e.keyCode==116){
+	        alert('禁止F5刷新!');
+	        e.keyCode = 0;
+	        return false;
+	    }
+		//屏蔽esc键
+		if(e.keyCode == 27){
+			alert('禁止ESC！');
+			e.keyCode = 0;
+			 return false;
+		}
+		//屏蔽alt
+		if(e.keyCode == 18){
+			alert('禁止ALT！');
+			e.keyCode = 0;
+			return false;
+		}
+		//屏蔽F11
+		if(e.keyCode == 122){
+			//alert('禁止F11！');
+			e.keyCode = 0;
+			return false;
+		}
+		if((e.ctrlKey)&&(e.keyCode==78)){
+			alert('禁止Ctrl + N！');
+			e.keyCode = 0;
+			return false;
+		}
+	}
+	//失去焦点后的动作
+	function c(){  
+        window.close();  
+    }
+	//为窗口注册失去焦点事件  
+    window.onblur = c;
+    
+    //当关闭窗口时提示是否提交考试 
+    window.onbeforeunload = function()  {  
+        return "当前数据还没有保存，关闭、刷新或切换窗口会自动完成考试，是否继续?";       
+    }
+    
+    //窗口关闭后给出提示  
+    window.onunload = function()  {
+    	document.getElementsByName("form_item")[0].submit();
+        alert("已成功提交考试！");  
+    }
 </script>
