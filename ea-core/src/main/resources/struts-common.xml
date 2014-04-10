@@ -65,6 +65,9 @@
 		<action name="menu" class="menuAction" method="execute">
 			<result name="success">menu.ftl</result>
 		</action>
+		<action name="adminmenu" class="menuAction" method="adminmenu">
+			<result name="success">pmenu.ftl</result>
+		</action>
 		
 		
    		<action name="lang" class="langAction" method="execute">
