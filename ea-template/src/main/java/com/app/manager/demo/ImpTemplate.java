@@ -21,6 +21,9 @@ import com.app.ea.model.Role;
 import com.app.ea.model.Rolegroup;
 import com.app.ea.model.Systempara;
 import com.app.ea.model.User;
+import com.app.exam.model.Choiceitem;
+import com.app.exam.model.Item;
+import com.app.exam.model.Knowledge;
 @Component("impTemplate")
 public class ImpTemplate extends ParentDemo implements InfDemo{
 	private final Logger log = LoggerFactory.getLogger(ImpTemplate.class);
@@ -104,6 +107,121 @@ public class ImpTemplate extends ParentDemo implements InfDemo{
 		admin.getResources().add(r05);
 		admin.getResources().add(r06);
 		admin.getResources().add(r07);
+		
+		
+		
+		//add exam information
+		//知识领域
+		Knowledge kl1 = new Knowledge();
+		kl1.setName("language");
+		kl1.setAlias("语言");
+		
+		Knowledge kl11 = new Knowledge();
+		kl11.setName("c");
+		kl11.setParentModel(kl1);
+		
+		Knowledge kl12 = new Knowledge();
+		kl12.setName("java");
+		kl12.setParentModel(kl1);
+		
+		Knowledge kl13 = new Knowledge();
+		kl13.setName("shell");
+		kl13.setParentModel(kl1);
+		
+		
+		Knowledge kl2 = new Knowledge();
+		kl2.setName("business");
+		kl2.setAlias("业务");
+		
+		Knowledge kl21 = new Knowledge();
+		kl21.setName("短信");
+		kl21.setParentModel(kl2);
+		
+		Knowledge kl22 = new Knowledge();
+		kl22.setName("彩信");
+		kl22.setParentModel(kl2);
+
+		
+		//题目
+		Item item1 = new Item();
+		item1.setContent("单选测试题目一");
+		item1.setType(1);
+		item1.setRefkey("3");
+		
+		Item item2 = new Item();
+		item2.setContent("多选测试题目一");
+		item2.setType(2);
+		item2.setRefkey("2,3,4");
+		
+		Item item3 = new Item();
+		item3.setContent("填空测试题目一");
+		item3.setType(3);
+		item3.setRefkey("填空测试题目参考答案");
+		
+		Item item4 = new Item();
+		item4.setContent("主观测试题目一");
+		item4.setType(4);
+		item4.setRefkey("主观测试题目参考答案");
+		
+		
+		//选项
+		Choiceitem choiceitem1 = new Choiceitem();
+		Choiceitem choiceitem2 = new Choiceitem();
+		Choiceitem choiceitem3 = new Choiceitem();
+		Choiceitem choiceitem4 = new Choiceitem();
+		choiceitem1.setRefid(1);
+		choiceitem1.setValue("选项一");
+		choiceitem2.setRefid(2);
+		choiceitem2.setValue("选项二");
+		choiceitem3.setRefid(3);
+		choiceitem3.setValue("选项三");
+		choiceitem4.setRefid(4);
+		choiceitem4.setValue("选项四");
+		choiceitem1.setItem(item1);
+		choiceitem2.setItem(item1);
+		choiceitem3.setItem(item1);
+		choiceitem4.setItem(item1);
+		
+		Choiceitem choiceitem5 = new Choiceitem();
+		Choiceitem choiceitem6 = new Choiceitem();
+		Choiceitem choiceitem7 = new Choiceitem();
+		Choiceitem choiceitem8 = new Choiceitem();
+		choiceitem5.setRefid(1);
+		choiceitem5.setValue("选项一");
+		choiceitem6.setRefid(2);
+		choiceitem6.setValue("选项二");
+		choiceitem7.setRefid(3);
+		choiceitem7.setValue("选项三");
+		choiceitem8.setRefid(4);
+		choiceitem8.setValue("选项四");
+		choiceitem5.setItem(item2);
+		choiceitem6.setItem(item2);
+		choiceitem7.setItem(item2);
+		choiceitem8.setItem(item2);
+		
+		baseDao.create(kl1);
+		baseDao.create(kl2);
+		baseDao.create(kl11);
+		baseDao.create(kl12);
+		baseDao.create(kl13);
+		baseDao.create(kl21);
+		baseDao.create(kl22);
+		
+		baseDao.create(item1);
+		baseDao.create(item2);
+		baseDao.create(item3);
+		baseDao.create(item4);
+		
+		baseDao.create(choiceitem1);
+		baseDao.create(choiceitem2);
+		baseDao.create(choiceitem3);
+		baseDao.create(choiceitem4);
+		baseDao.create(choiceitem5);
+		baseDao.create(choiceitem6);
+		baseDao.create(choiceitem7);
+		baseDao.create(choiceitem8);
+		
+		//end
 		
 		baseDao.update(admin);
 	    

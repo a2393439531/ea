@@ -19,6 +19,10 @@ public class OaTask{
 	public String userName;
 	public String createTime;
 	public String formId;
+	//来定义操作task的button显示名称
+	public String method;
+	//end
+	public Object obj;
 	
 	public OaTask(){
 		super();
@@ -108,6 +112,22 @@ public class OaTask{
 	public void setFormId(String formId) {
 		this.formId = formId;
 	}
-	
 
+	public Object getObj() {
+		return obj;
+	}
+
+	public void setObj(Object obj) {
+		this.obj = obj;
+	}
+
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
+	}
+	
+	
 }

@@ -183,9 +183,13 @@ public class CodeGen {
 				"com/app/manager/oa/");
 				
 		CodeGen.genCode("systempara", "tpltree1", "app/manager/",
-				"com/app/manager/oa/");	*/
+				"com/app/manager/oa/");	
 		CodeGen.genCode("smtp", "tpltb1", "app/manager/",
 				"com/app/manager/template/");
+		*/
+		
+	CodeGen.genCode("knowledge", "tpltree1", "app/manager/",
+			"com/app/manager/");	
 	}
 
 }
