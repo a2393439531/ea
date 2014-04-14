@@ -107,6 +107,20 @@ public class User extends BaseModel {
 		this.resource = resources;
 	}
 
+	//add by hb for 在线测试功能,拿到配分配的试卷
+	//	private Set<Paper> assignedpaper;
+	//	
+	//	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Paper.class, fetch = FetchType.LAZY)
+	//	@JoinTable(name = "test_paper_user", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "paper_id") })
+	//	public Set<Paper> getAssignedpaper() {
+	//		return assignedpaper;
+	//	}
+	//
+	//	public void setAssignedpaper(Set<Paper> assignedpaper) {
+	//		this.assignedpaper = assignedpaper;
+	//	}
+	//end
+	
 	public String getAccount() {
 		return account;
 	}
