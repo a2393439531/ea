@@ -14,6 +14,7 @@ import com.app.common.activiti.api.SpringContext;
 import com.app.common.spring.ssh.dao.BaseDao;
 import com.app.exam.model.Examrecord;
 import com.app.exam.model.Item;
+import com.app.exam.model.Knowledge;
 import com.app.exam.model.Paper;
 import com.app.exam.model.Result;
 
@@ -36,6 +37,9 @@ public class JudgeUtil implements JavaDelegate {
 		String recordsId = String.valueOf(infActiviti.getVariableByProcessInstanceId(processInstanceId, "recordsId"));
 		
 		Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperid));
+		
+		Set<Knowledge> knset = paper.getKnowledge();
+		
 		
 		Set<Examrecord> examrecords = (Set<Examrecord>)paper.getResultdetailByAccountAndRecordId(assignee,recordsId);
 		Set<Result> results = new HashSet<Result>();

@@ -1,7 +1,9 @@
 <#include "../../../common/freemarker/include_header.ftl">
 <body> 
    		<#include "include_add_search.ftl">
-		<br><br><a style="margin-left:10px;margin-top:5px;" class="btn btn-primary "  href="exam_template_save.do?method=show">新建模板</a>
+		<br><br>
+		<a style="margin-left:10px;margin-top:5px;" class="btn btn-primary "  href="exam_template_save.do?method=show"><@i18n "menu_template_new" /></a>
+		<a class="btn btn-xs btn-info" style="margin-top:10px;" onclick="javascript:window.location.href='exam_paper_list.do';"><@i18n "return" /></a>
 		
 	<div class="panel panel-primary" style="margin-top: 18px;">
       <div class="panel-heading"><strong>Template List</strong></div>
@@ -13,8 +15,8 @@
 	    <thead>
 			<tr>
 			    <td width=25px><strong>#</strong></td>
-				<td width=500px><strong>模板标题</strong></td>
-				<td><strong>操作</strong></td>
+				<td width=500px><strong><@i18n "title_name" /></strong></td>
+				<td><strong><@i18n "title_operation" /></strong></td>
 				<td></td>
 			</tr>
 		</thead>
@@ -23,7 +25,7 @@
 			 <tr>
 			    <td class=nob >${x_index+1}</td>
 				<td>${x.title?if_exists}</td>
-				<td><a href="exam_template_load.do?method=edit&id=${x.id}">编辑</a> | <a href="exam_template_load.do?method=show&id=${x.id}"> 查看</a> | <a href="exam_template_delete.do?id=${x.id}">删除</a></td>
+				<td><a href="exam_template_load.do?method=edit&id=${x.id}"><@i18n "title_edit" /></a> | <a href="exam_template_load.do?method=show&id=${x.id}"> <@i18n "title_view" /></a> | <a href="exam_template_delete.do?id=${x.id}"><@i18n "title_delete" /></a></td>
 				<td></td>
 			</tr>
 			</#list>

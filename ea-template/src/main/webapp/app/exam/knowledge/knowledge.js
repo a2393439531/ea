@@ -7,7 +7,7 @@ function action_knowledge(url,para){
          success: function(html){
         	 document.getElementById('div_knowledge_tree').innerHTML=html;
        		 location.reload();
-        	 tip_info();
+        	 //tip_info();
            }
   });  
 }

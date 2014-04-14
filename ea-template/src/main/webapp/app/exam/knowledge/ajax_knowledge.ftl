@@ -1,3 +1,4 @@
+<#include "../../../common/freemarker/include_header.ftl">
 <head>
 <style>
 .table-condensed th, .table-condensed td {
@@ -12,8 +13,8 @@
 		<tr>
 	    	<td width=700px height=30px >
 				${flag} 
-	    		<span>名称: </span><input value="${knowledge.name?if_exists}" style="width: 120px; height: 20px;" onchange="javascript:action_knowledge('update.do','column=name&id=${knowledge.id?if_exists}&columnValue='+this.value)" /> 
-			    <span>别名:</span><input value="${knowledge.alias?if_exists}" style="width: 120px; height: 20px;"  onchange="javascript:action_knowledge('update.do','column=alias&id=${knowledge.id?if_exists}&columnValue='+this.value)" /> 
+	    		<span><@i18n "title_name" />: </span><input value="${knowledge.name?if_exists}" style="width: 120px; height: 20px;" onchange="javascript:action_knowledge('update.do','column=name&id=${knowledge.id?if_exists}&columnValue='+this.value)" /> 
+			    <span><@i18n "title_alias" />: </span><input value="${knowledge.alias?if_exists}" style="width: 120px; height: 20px;"  onchange="javascript:action_knowledge('update.do','column=alias&id=${knowledge.id?if_exists}&columnValue='+this.value)" /> 
 			</td>
 			
 			<td width=200px>		 	     
@@ -51,7 +52,7 @@
 <table class="table  table-condensed" style="width:1000px">
 	<thead>
 		<tr>
-			<th>树型内容</th><th>操作</th>
+			<th><@i18n "title_content" /></th><th><@i18n "title_operation" /></th>
 		</tr>
 	</thead>   
     <@digui_knowledge rhs["knowledgeRootList"]?sort_by('sortNob'),""/>

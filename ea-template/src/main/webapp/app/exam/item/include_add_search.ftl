@@ -10,7 +10,7 @@
 				<#list rhs["knowledgeRootList"] as knowledge>
 					<#if knowledge.getChildKnowledges()?exists >
 						<#list knowledge.getChildKnowledges() as knowledgenode>
-							<input type="checkbox" name="checkbox" />&nbsp;&nbsp;${knowledgenode.name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<input type="checkbox" name="knowledgevalue" value="${knowledgenode.id}"/>&nbsp;&nbsp;${knowledgenode.name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						</#list>
 					</#if>
 				</#list>

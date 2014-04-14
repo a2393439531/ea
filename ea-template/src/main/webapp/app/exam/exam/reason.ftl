@@ -2,7 +2,7 @@
 <form name="form_item" action="exam_exam_complete_task.do" method="post">
 <input type="hidden" value="<#if rhs.method?exists >${rhs["method"]}</#if>" name="method" />
 <input type="hidden" value="<#if rhs["task"]?exists >${rhs["task"].id}</#if>" name="taskId" />
-<input type="hidden" value="<#if rhs["paper"]?exists >${rhs["paper"].id}</#if>" name="paperId" />
+<input type="hidden" value="<#if rhs["paper"]?exists >${rhs["paper"].id}</#if>" name="paperid" />
 <div class="panel panel-primary" style="margin-top: 18px;">
       <div class="panel-heading"><strong>Input Reason</strong></div>
       <div class="panel-body">

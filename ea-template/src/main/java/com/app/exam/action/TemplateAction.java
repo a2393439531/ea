@@ -35,7 +35,16 @@ public class TemplateAction extends BaseEaAction {
 	public String list() throws Exception {
 		String sql = getSearchSql(get_list_sql());
 		getPageData(sql);
-
+		Set<Template> list = new HashSet<Template>();
+		if(knowledgevalue.size() != 0){
+			for (String knowledge : knowledgevalue) {
+				Knowledge kl = (Knowledge)baseDao.loadById("Knowledge", Long.valueOf(knowledge));
+				list.addAll(kl.getTemplates());
+			}
+		}else{
+			list.addAll((Collection<? extends Template>) rhs.get("dataList"));
+		}
+		rhs.put("dataList", list);
 		rhs.put("knowledgeRootList", common_get_tree_root("Knowledge"));
 		return "success";
 	}
@@ -108,6 +117,7 @@ public class TemplateAction extends BaseEaAction {
 			}
 		}
 		baseDao.update(template);
+		knowledgevalue.clear();
 		return list();
 	}
 

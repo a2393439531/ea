@@ -2,27 +2,27 @@
 			<form name="form_item" action="exam_item_save.do" metiod="post">
 				<div class="panel panel-primary">
 				    <div class="panel-heading">
-				    	添加题目
+				    	<@i18n "menu_item_new" /> <a style="margin-left:10px;color:#FFFFFF" href="exam_item_add_psychological_item.do"><@i18n "menu_psychological_add" /></a>
 				    </div>
 					<div class="panel-body">
 				 <table class="table table-condensed table-bordered table-striped">
 					<tr>
-						<td>题目类型 </td>
+						<td><@i18n "title_type" /> </td>
 						<td>
-							<input type="radio" name="item.type" value="1" onclick="javascript:generateitem(1)"/>单选
-							<input type="radio" name="item.type" value="2" onclick="javascript:generateitem(2)"/>多选
-							<input type="radio" name="item.type" value="3" onclick="javascript:generateitem(3)"/>填空
-							<input type="radio" name="item.type" value="4" onclick="javascript:generateitem(4)"/>主观
+							<input type="radio" name="item.type" value="1" onclick="javascript:generateitem(1)"/><@i18n "title_single" />
+							<input type="radio" name="item.type" value="2" onclick="javascript:generateitem(2)"/><@i18n "title_multi" />
+							<input type="radio" name="item.type" value="3" onclick="javascript:generateitem(3)"/><@i18n "title_blank" />
+							<input type="radio" name="item.type" value="4" onclick="javascript:generateitem(4)"/><@i18n "title_essay" />
 						</td>
 					</tr>
 					<tr>
-						<td>题目内容</td>
+						<td><@i18n "title_content" /></td>
 						<td id="itemcontent">
 						</td>
 					</tr>
 					
 					<tr>
-						<td>知识领域</td>
+						<td><@i18n "title_knowledge" /></td>
 						<td>
 							<#list rhs["knowledgeRootList"] as knowledge>
 								<#if knowledge.getChildKnowledges()?exists >
@@ -55,16 +55,16 @@
 	function generateitem(type){
 		switch(type){
 			case 1:
-				$("#itemcontent").html("<input class='input' style='width:400px;' type='text' value='' name='item.content' /><br/><button style='margin-top:6px;' class='btn btn-xs btn-info' onclick='javascript:addoption(1);return false;'>添加选项</button><div id='choice' ><input type='radio' name='item.refkey' value='1'/><input style='margin-left:3px;' type='text' name='choiceitemvalue' /><br/><input type='radio' value='2' name='item.refkey' /><input type='text' style='margin-left:3px;' name='choiceitemvalue' /><br/><input type='radio' value='3' name='item.refkey' /><input style='margin-left:3px;' type='text' name='choiceitemvalue' /><br/><input type='radio'  value='4' name='item.refkey' /><input style='margin-left:3px;' type='text' name='choiceitemvalue' /><br/></div>");
+				$("#itemcontent").html("<input class='input' style='width:400px;' type='text' value='' name='item.content' /><br/><button style='margin-top:6px;' class='btn btn-xs btn-info' onclick='javascript:addoption(1);return false;'><@i18n "title_option_new" /></button><div id='choice' ><input type='radio' name='item.refkey' value='1'/><input style='margin-left:3px;' type='text' name='choiceitemvalue' /><br/><input type='radio' value='2' name='item.refkey' /><input type='text' style='margin-left:3px;' name='choiceitemvalue' /><br/><input type='radio' value='3' name='item.refkey' /><input style='margin-left:3px;' type='text' name='choiceitemvalue' /><br/><input type='radio'  value='4' name='item.refkey' /><input style='margin-left:3px;' type='text' name='choiceitemvalue' /><br/></div>");
 				break;
 			case 2:
-				$("#itemcontent").html("<input class='input' style='width:400px;' type='text' value='' name='item.content' /><br/><button style='margin-top:6px;' class='btn btn-xs btn-info' onclick='javascript:addoption(2);return false;'>添加选项</button><div id='choice' ><input type='checkbox' name='item.refkey' value='1'/><input style='margin-left:3px;' type='text' name='choiceitemvalue' /><br/><input type='checkbox' value='2' name='item.refkey' /><input type='text' style='margin-left:3px;' name='choiceitemvalue' /><br/><input type='checkbox' value='3' name='item.refkey' /><input style='margin-left:3px;' type='text' name='choiceitemvalue' /><br/><input type='checkbox' value='4' name='item.refkey' /><input style='margin-left:3px;' type='text' name='choiceitemvalue' /><br/></div>");
+				$("#itemcontent").html("<input class='input' style='width:400px;' type='text' value='' name='item.content' /><br/><button style='margin-top:6px;' class='btn btn-xs btn-info' onclick='javascript:addoption(2);return false;'><@i18n "title_option_new" /></button><div id='choice' ><input type='checkbox' name='item.refkey' value='1'/><input style='margin-left:3px;' type='text' name='choiceitemvalue' /><br/><input type='checkbox' value='2' name='item.refkey' /><input type='text' style='margin-left:3px;' name='choiceitemvalue' /><br/><input type='checkbox' value='3' name='item.refkey' /><input style='margin-left:3px;' type='text' name='choiceitemvalue' /><br/><input type='checkbox' value='4' name='item.refkey' /><input style='margin-left:3px;' type='text' name='choiceitemvalue' /><br/></div>");
 				break;
 			case 3:
-				$("#itemcontent").html("<input class='input' style='width:400px;' type='text' value='' name='item.content' /><br/><div class='btn btn-xs btn-info'>参考答案<input class='input' style='width:340px;' type='text' value='' name='item.refkey' /></div>");
+				$("#itemcontent").html("<input class='input' style='width:400px;' type='text' value='' name='item.content' /><br/><div class='btn btn-xs btn-info'><@i18n "title_refkey" /><input class='input' style='width:340px;' type='text' value='' name='item.refkey' /></div>");
 				break;
 			case 4:
-				$("#itemcontent").html("<textarea class='input' style='width:400px;height:100px' type='text' value='' name='item.content' /><br/><div class='btn btn-xs btn-info'>参考答案<input class='input' style='width:340px;' type='text' value='' name='item.refkey' /></div>");
+				$("#itemcontent").html("<textarea class='input' style='width:400px;height:100px' type='text' value='' name='item.content' /><br/><div class='btn btn-xs btn-info'><@i18n "title_refkey" /><input class='input' style='width:340px;' type='text' value='' name='item.refkey' /></div>");
 				break;	
 		}
 	}

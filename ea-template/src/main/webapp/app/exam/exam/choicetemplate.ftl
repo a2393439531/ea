@@ -1,6 +1,6 @@
 <#include "../../../common/freemarker/include_header.ftl">
 <script type="text/javascript" src="<@context_module/>paper.js"></script>
-			<form name="form_item" action="exam_paper_save.do" metiod="post">
+			<form name="form_item" action="exam_exam_show_record.do" metiod="post">
 				<input type="hidden" name="method" value='choicetemplate' />
 				<input type="hidden" name="paper.id" value='<#if rhs["paper"]?exists >${rhs["paper"].id?if_exists }</#if>' />
 				<div class="panel panel-primary">
@@ -17,13 +17,12 @@
 										<option value="${x.id}">${x.title}</option>
 					 				</#list>
 								</select>
-								<a style="margin-left:10px;margin-top:5px;" class="btn btn-xs btn-info "  href="exam_template_list.do"><@i18n "menu_template" /></a>
 							</td>
 						</tr>
 						<tr>
 							<td colspan="2" >
-							    <input type="button" class="btn btn-xs btn-info" value="Save" id="submitButton"/>
-							    <a  class="btn btn-xs btn-info" href="exam_paper_list.do">Return</a>
+							    <input type="button" class="btn btn-xs btn-info" value="Query" id="submitButton"/>
+							    <#--<a  class="btn btn-xs btn-info" href="exam_paper_list.do">Return</a>-->
 							</td>
 						</tr>
 					</div>

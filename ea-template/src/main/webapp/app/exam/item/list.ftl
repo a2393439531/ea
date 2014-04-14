@@ -1,7 +1,10 @@
 <#include "../../../common/freemarker/include_header.ftl">
 <body> 
    		<#include "include_add_search.ftl">
-		<br><br><a style="margin-left:10px;margin-top:5px;" class="btn btn-primary "  href="exam_item_save.do?method=show">添加题目</a>
+		<br><br>
+		<a style="margin-left:7px;margin-top:5px;" class="btn btn-primary "  href="exam_item_save.do?method=show"><@i18n "menu_item_new" /></a>
+		<a style="margin-left:10px;margin-top:5px;" class="btn btn-xs btn-info "  href="exam_knowledge_menu_knowledge.do"><@i18n "menu_knowledge" /></a>
+		
 		
 	<div class="panel panel-primary" style="margin-top: 18px;">
       <div class="panel-heading"><strong>Item List</strong></div>
@@ -13,9 +16,9 @@
 	    <thead>
 			<tr>
 			    <td width=25px><strong>#</strong></td>
-				<td width=500px><strong>题目内容</strong></td>
-				<td width=120px><strong>题目类型</strong></td>
-				<td><strong>操作</strong></td>
+				<td width=500px><strong><@i18n "title_title" /></strong></td>
+				<td width=120px><strong><@i18n "title_type" /></strong></td>
+				<td><strong><@i18n "title_operation" /></strong></td>
 				<td></td>
 			</tr>
 		</thead>
@@ -26,19 +29,19 @@
 				<td>${x.content?if_exists}</td>
 				<td>
 					<#if x.type == 1>
-						单项选择题
+						<@i18n "title_single" />
 					</#if>
 					<#if x.type == 2>
-						多项选择题
+						<@i18n "title_multi" />
 					</#if>
 					<#if x.type == 3>
-						填空题
+						<@i18n "title_blank" />
 					</#if>
 					<#if x.type == 4>
-						主观题
+						<@i18n "title_essay" />
 					</#if>
 				</td>
-				<td><a href="exam_item_load.do?method=edit&id=${x.id}">编辑</a> | <a href="exam_item_load.do?method=show&id=${x.id}"> 查看</a> | <a href="exam_item_delete.do?id=${x.id}">删除</a></td>
+				<td><a href="exam_item_load.do?method=edit&id=${x.id}"><@i18n "title_edit" /></a> | <a href="exam_item_load.do?method=show&id=${x.id}"> <@i18n "title_view" /></a> | <a href="exam_item_delete.do?id=${x.id}"><@i18n "title_delete" /></a></td>
 				<td></td>
 			</tr>
 			</#list>

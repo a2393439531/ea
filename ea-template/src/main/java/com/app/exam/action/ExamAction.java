@@ -17,6 +17,7 @@ import com.app.common.activiti.api.OaTask;
 import com.app.common.spring.ssh.page.Pagination;
 import com.app.exam.model.Examrecord;
 import com.app.exam.model.Item;
+import com.app.exam.model.Knowledge;
 import com.app.exam.model.Paper;
 import com.app.exam.model.Result;
 import com.app.exam.model.Template;
@@ -30,6 +31,11 @@ public class ExamAction extends BaseProcessAction {
 	public List<String> multichoicemark = new ArrayList<String>();
 	public List<String> blankmark = new ArrayList<String>();
 	public List<String> essaymark = new ArrayList<String>();
+	public Template template = new Template();
+	
+	public String get_template_list_sql() {
+		return "from Template";
+	}
 	
 	public String open_exam(){
 		String taskId = getpara("taskId");
@@ -284,6 +290,47 @@ public class ExamAction extends BaseProcessAction {
 		return "success";
 		
 	}
+	
+	public String choicetemplate() throws Exception{
+		List<Knowledge> knowledgerootlist = common_get_tree_root("Knowledge");
+		String method = getpara("method");
+		String sql = get_template_list_sql();
+		getPageData(sql);
+		rhs.put("knowledgeRootList", knowledgerootlist);
+		return "success";
+	}
+
+	public String show_record() throws Exception {
+		String templateid = getpara("templateid");
+		String useraccount = getCurrentAccount();
+		List<Examrecord> dataList = new ArrayList<Examrecord>();
+		if (!"".equals(templateid) && templateid != null) {
+			String sql = " from Template t where t.id=" + "'" + templateid
+					+ "'";
+			getPageData(sql);
+			template = ((List<Template>) rhs.get("dataList")).get(0);
+		}
+		Set<Paper> papers = template.getPapers();
+
+		for (Paper paper : papers) {
+			Set<Examrecord> examrecords = paper.getResultdetail();
+			for (Examrecord examrecord : examrecords) {
+				if (examrecord.getUserid().equals(useraccount)) {
+					dataList.add(examrecord);
+				}
+			}
+		}
+		for (Knowledge knowledge : template.getKnowledge()) {
+			if(knowledge.getName().equals("职业性格测试")){
+				rhs.put("page", "psychology");
+			}else{
+				rhs.put("page", "normal");
+			}
+		}
+		rhs.put("datalist", dataList);
+		return "success";
+	}
+
 	public String exam_record_list() throws Exception{
 		String useraccount = getCurrentAccount();
 		List<Examrecord> dataList = new ArrayList<Examrecord>();

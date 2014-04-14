@@ -34,8 +34,19 @@ public class PaperAction extends BaseEaAction {
 	public String list() throws Exception {
 		String sql = getSearchSql(get_list_sql());
 		getPageData(sql);
-		List paperList = (List)rhs.get("dataList");
 		
+		Set<Paper> list = new HashSet<Paper>();
+		if(knowledgevalue.size() != 0){
+			for (String knowledge : knowledgevalue) {
+				Knowledge kl = (Knowledge)baseDao.loadById("Knowledge", Long.valueOf(knowledge));
+				list.addAll(kl.getPapers());
+			}
+		}else{
+			list.addAll((Collection<? extends Paper>) rhs.get("dataList"));
+		}
+		//rhs.put("dataList", list);
+		List paperList = new ArrayList<Paper>();
+		paperList.addAll(list);
 		List processPaperList = paperToProcessPaper(paperList);
 		rhs.put("dataList", processPaperList);
 		
@@ -97,6 +108,7 @@ public class PaperAction extends BaseEaAction {
 			} 
 		}
 		baseDao.update(paper);
+		knowledgevalue.clear();
 		return list();
 	}
 

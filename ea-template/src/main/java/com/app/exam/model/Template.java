@@ -49,7 +49,7 @@ public class Template extends BaseModel {
 	
 	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Knowledge.class, fetch = FetchType.LAZY)
 	@JoinTable(name = "test_template_knowledge", joinColumns = { @JoinColumn(name = "template_id") }, inverseJoinColumns = { @JoinColumn(name = "knowledge_id") })
-	public Set getKnowledge() {
+	public Set<Knowledge> getKnowledge() {
 		return knowledge;
 	}
 
@@ -104,7 +104,10 @@ public class Template extends BaseModel {
 			}
 		}
 		// 上面的步骤已经拿到该模板的指定类型的所有题目，接下来需要在该类型的所有题目中，随机抽取指定数量的题目
-
+		if(count == datalist.size()){
+			data.addAll(datalist);
+			return data;
+		}
 			List<Integer> randomNum = generateRmdNum(0, datalist.size() - 1,
 					count);
 			for (Integer integer : randomNum) {

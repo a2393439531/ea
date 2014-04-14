@@ -5,14 +5,14 @@
 				<input type="hidden" name="paper.id" value='<#if rhs["paper"]?exists >${rhs["paper"].id?if_exists }</#if>' />
 				<div class="panel panel-primary">
 				    <div class="panel-heading">
-				    	新增试卷
+				    	<@i18n "menu_paper_new" />
 				    </div>
 					<div class="panel-body">
 					 <table class="table table-condensed table-bordered table-striped">
 						<tr>
-							<td> 试卷名称 </td>
+							<td> <@i18n "title_name" /> </td>
 							<td style="width:300px;" colspan="2"> <input type="text" name="paper.name" value="<#if rhs["paper"]?exists >${rhs["paper"].name?if_exists}</#if>" style="width:300px;"/></td>
-							<td>知识领域</td>
+							<td><@i18n "title_knowledge" /></td>
 							<td>
 								<#list rhs["knowledgeRootList"] as knowledge>
 									<#if knowledge.getChildKnowledges()?exists >
@@ -30,42 +30,42 @@
 							</td>
 						</tr>
 						<tr>
-							<td>单选题数</td>
-							<td>必做:<input type="text" disabled name="paper.template.singlechoice" value="<#if rhs["paper"]?exists >${rhs["paper"].template.singlechoice}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
-							<td>随机:<input type="text" disabled name="paper.template.rmdsinglechoice" value="<#if rhs["paper"]?exists >${rhs["paper"].template.rmdsinglechoice}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
-							<td>单选题分值</td>
+							<td><@i18n "title_single" /></td>
+							<td><@i18n "title_req" />:<input type="text" disabled name="paper.template.singlechoice" value="<#if rhs["paper"]?exists >${rhs["paper"].template.singlechoice}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
+							<td><@i18n "title_rmd" />:<input type="text" disabled name="paper.template.rmdsinglechoice" value="<#if rhs["paper"]?exists >${rhs["paper"].template.rmdsinglechoice}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
+							<td><@i18n "title_single_mark" /></td>
 							<td><input type="text" name="paper.singlechoicemark" value="<#if rhs["paper"]?exists >${rhs["paper"].singlechoicemark?if_exists}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
 						</tr>
 						<tr>
-							<td>多选题数</td>
-							<td>必做:<input type="text" disabled name="paper.template.multichoice" value="<#if rhs["paper"]?exists >${rhs["paper"].template.multichoice}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
-							<td>随机:<input type="text" disabled name="paper.template.rmdmultichoice" value="<#if rhs["paper"]?exists >${rhs["paper"].template.rmdmultichoice}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
-							<td>多选题分值</td>
+							<td><@i18n "title_multi" /></td>
+							<td><@i18n "title_req" />:<input type="text" disabled name="paper.template.multichoice" value="<#if rhs["paper"]?exists >${rhs["paper"].template.multichoice}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
+							<td><@i18n "title_rmd" />:<input type="text" disabled name="paper.template.rmdmultichoice" value="<#if rhs["paper"]?exists >${rhs["paper"].template.rmdmultichoice}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
+							<td><@i18n "title_multi_mark" /></td>
 							<td><input type="text" name="paper.multichoicemark" value="<#if rhs["paper"]?exists >${rhs["paper"].multichoicemark?if_exists}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
 						</tr>
 						<tr>
-							<td>填空题数</td>
-							<td>必做:<input type="text" disabled name="paper.template.blank" value="<#if rhs["paper"]?exists >${rhs["paper"].template.blank}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
-							<td>随机:<input type="text" disabled name="paper.template.rmdblank" value="<#if rhs["paper"]?exists >${rhs["paper"].template.rmdblank}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
-							<td>填空题分值</td>
+							<td><@i18n "title_blank" /></td>
+							<td><@i18n "title_req" />:<input type="text" disabled name="paper.template.blank" value="<#if rhs["paper"]?exists >${rhs["paper"].template.blank}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
+							<td><@i18n "title_rmd" />:<input type="text" disabled name="paper.template.rmdblank" value="<#if rhs["paper"]?exists >${rhs["paper"].template.rmdblank}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
+							<td><@i18n "title_blank_mark" /></td>
 							<td><input type="text" name="paper.blankmark" value="<#if rhs["paper"]?exists >${rhs["paper"].blankmark?if_exists}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
 						</tr>
 						<tr>
-							<td>主观题数</td>
-							<td>必做:<input type="text" disabled name="paper.template.essay" value="<#if rhs["paper"]?exists >${rhs["paper"].template.essay}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
-							<td>随机:<input type="text" disabled name="paper.template.rmdessay" value="<#if rhs["paper"]?exists >${rhs["paper"].template.rmdessay}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
-							<td>主观题分值</td>
+							<td><@i18n "title_essay" /></td>
+							<td><@i18n "title_req" />:<input type="text" disabled name="paper.template.essay" value="<#if rhs["paper"]?exists >${rhs["paper"].template.essay}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
+							<td><@i18n "title_rmd" />:<input type="text" disabled name="paper.template.rmdessay" value="<#if rhs["paper"]?exists >${rhs["paper"].template.rmdessay}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
+							<td><@i18n "title_essay_mark" /></td>
 							<td><input type="text" name="paper.essaymark" value="<#if rhs["paper"]?exists >${rhs["paper"].essaymark?if_exists}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
 						</tr>
 						<tr>
-							<td>考试时间(minutes)</td>
+							<td><@i18n "title_examtime" />(minutes)</td>
 							<td colspan="2"><input type="text" name="paper.time" value="<#if rhs["paper"]?exists >${rhs["paper"].time}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
-							<td> 试卷模板</td>
+							<td> <@i18n "title_template" /></td>
 							<td> <input type="text" disabled name="paper.template.title" value="<#if rhs["paper"]?exists >${rhs["paper"].template.title}</#if>"<td>
 							<input type="hidden" value="<#if rhs["paper"]?exists >${rhs["paper"].template.id}</#if>" name="templateid"/>
 						</tr>
 						<tr>
-							<td>通过分</td>
+							<td><@i18n "title_passmark" /></td>
 							<td colspan="4"><input type="text" name="paper.passmark" value="<#if rhs["paper"]?exists >${rhs["paper"].passmark}</#if>" /></td>
 						</tr>
 						<tr>

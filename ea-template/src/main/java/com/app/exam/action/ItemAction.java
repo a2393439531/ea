@@ -1,27 +1,42 @@
 package com.app.exam.action;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.app.common.base.action.BaseEaAction;
+import com.app.common.uploadfile.model.Uploadfile;
 import com.app.exam.model.Choiceitem;
 import com.app.exam.model.Item;
 import com.app.exam.model.Knowledge;
 import com.app.exam.model.Template;
+import com.app.exam.util.ItemUtil;
 
 @Scope("prototype")
 @Component("itemAction")
 public class ItemAction extends BaseEaAction {
 	private final Logger log = LoggerFactory.getLogger(KnowledgeAction.class);
 	public Item item = new Item();
+	private File[] upload;
+    private String[] uploadContentType;
+    private String[] uploadFileName;
 	public List<String> choiceitemvalue = new ArrayList<String>();
 	public List<String> knowledgevalue = new ArrayList<String>();
 	public List<String> choiceitemid = new ArrayList<String>();
@@ -32,8 +47,17 @@ public class ItemAction extends BaseEaAction {
 
 	public String list() throws Exception {
 		String sql = getSearchSql(get_list_sql());
+		Set<Item> list = new HashSet<Item>();
 		getPageData(sql);
-		
+		if(knowledgevalue.size() != 0){
+			for (String knowledge : knowledgevalue) {
+				Knowledge kl = (Knowledge)baseDao.loadById("Knowledge", Long.valueOf(knowledge));
+				list.addAll(kl.getItems());
+			}
+		}else{
+			list.addAll((Collection<? extends Item>) rhs.get("dataList"));
+		}
+		rhs.put("dataList", list);
 		rhs.put("knowledgeRootList", common_get_tree_root("Knowledge"));
 		return "success";
 	}
@@ -119,6 +143,7 @@ public class ItemAction extends BaseEaAction {
 			rhs.put("page", "editpage");
 		}
 		baseDao.update(item);
+		knowledgevalue.clear();
 		return list();
 	}
 
@@ -137,18 +162,67 @@ public class ItemAction extends BaseEaAction {
 		return "success";
 	}
 
+	public String add_psychological_item() throws Exception{
+		ItemUtil.add_psychological_item("9");
+		rhs.put("page", "editpage");
+		return list();
+	}
+	
 	public String delete() throws Exception{
 		String id = getpara("id");
 		Item item = (Item) baseDao.loadById("Item", Long.parseLong(id));
-		/*
-		if(item.getType() == 1 || item.getType() == 2){
-			Set<Choiceitem> choiceitems = item.getChoiceitem();
-			for (Choiceitem choiceitem : choiceitems) {
-				baseDao.delete(choiceitem);
-			}
-		}*/
 		baseDao.delete(item);
 		return list();
+	}
+	
+	public String import_itembyxls(){
+		
+		return "success";
+	}
+	//上传文件并且导入题目
+	public String import_itembyxls_save() throws IOException{
+		File[] files = this.getUpload();
+		String foreignId = "";
+		String folder = "item";
+		if(files != null && files.length != 0){
+			for(int i = 0; i < files.length; i++){
+				File file = files[i];
+				
+				String filepath =ServletActionContext.getRequest().getRealPath("");
+				InputStream is = new FileInputStream(file);
+				String fileName = getUploadFileName()[i];
+				filepath += "/file/" + folder + "/";
+				File fileDir = new File(filepath);
+				if (!fileDir.exists())
+					FileUtils.forceMkdir(new File(filepath));
+				String fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
+				String newFileName = new Date().getTime() + Math.random() + "." + fileType;
+				File deskFile = new File(filepath, newFileName);
+				OutputStream os = new FileOutputStream(deskFile);
+				byte[] bytefer = new byte[1024];
+				int length = 0;
+				while ((length = is.read(bytefer)) != -1) {
+					os.write(bytefer, 0, length);
+				}
+				os.close();
+				is.close();
+				
+				Uploadfile uploadFile = new Uploadfile(fileType, fileName, fileName, foreignId, "/file/" + folder + "/"  + newFileName);
+				baseDao.create(uploadFile);
+				//上传成功，然后开始生成题目
+				Map<Item,Set<Choiceitem>> data = ItemUtil.getDataByXLS(deskFile);
+				Set<Item> items = data.keySet();
+				for (Item item : items) {
+					Set<Choiceitem> choiceitems = data.get(item);
+					item.setChoiceitem(choiceitems);
+					baseDao.create(item);
+					for (Choiceitem choiceitem : choiceitems) {
+						baseDao.create(choiceitem);
+					}
+				}
+			}
+		}
+		return "success";
 	}
 	
 	public List<String> getChoiceitemvalue() {
@@ -175,6 +249,30 @@ public class ItemAction extends BaseEaAction {
 		this.choiceitemid = choiceitemid;
 	}
 	
+	public File[] getUpload() {
+		return upload;
+	}
+
+	public void setUpload(File[] upload) {
+		this.upload = upload;
+	}
+
+	public String[] getUploadContentType() {
+		return uploadContentType;
+	}
+
+	public void setUploadContentType(String[] uploadContentType) {
+		this.uploadContentType = uploadContentType;
+	}
+
+	public String[] getUploadFileName() {
+		return uploadFileName;
+	}
+
+	public void setUploadFileName(String[] uploadFileName) {
+		this.uploadFileName = uploadFileName;
+	}
+
 	protected Knowledge getKnowledgeById(
 			Collection<Knowledge> knowledgerootlist, String id)
 			throws Exception {
