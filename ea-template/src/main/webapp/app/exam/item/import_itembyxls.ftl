@@ -1,5 +1,5 @@
 <#include "../../../common/freemarker/include_header.ftl">
-<form name="form_item" action="exam_item_import_itembyxls_save.do" metiod="post" enctype="multipart/form-data">
+<form name="form_item" action="exam_item_import_itembyxls_save.do" method="post" enctype="multipart/form-data" >
 <input type="hidden" mane="method" value="import" />
 	<div class="panel panel-primary" style="margin-top: 18px;">
 		<div class="panel-heading"><strong><@i18n "menu_item_import" /></strong></div>
@@ -17,10 +17,18 @@
 					<td colspan="2"><img src="<@context/>common/images/uploadtemplate.jpg" alt="Upload file template" /></td>
 				</tr>
 				<tr>
-					<td><input type="file" name="upload" /></td>
-					<td><button type="submit" value="Submit" /></td>
+					<td colspan="2"><input type="File"  name="file" /> <input type="button" class="btn btn-xs btn-info" value="Save" id="submitButton"/>					
+					</td>
 				</tr>
 			</table>
 		</div>
 	</div>
 </form>
+<script>
+	$('#submitButton').click(function () {
+		var btn = $(this);
+		btn.button('loading');
+		$('#dialog').dialog('open');
+		document.getElementsByName("form_item")[0].submit();
+	});
+</script>

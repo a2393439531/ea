@@ -74,6 +74,12 @@
 							</td>
 						</tr>
 						<tr>
+							<td><@i18n "title_mark" /></td>
+							<td>
+								<input class='input' <#if rhs.readonly>disabled</#if> type='text' value='<#if rhs["item"].mark?exists>${rhs["item"].mark}<#else>0</#if>' name='item.mark' />
+							</td>
+						</tr>
+						<tr>
 							<td colspan="2" >
 								<#if !rhs.readonly>
 								    <input type="button" class="btn btn-xs btn-info" value="Save" id="submitButton"/>

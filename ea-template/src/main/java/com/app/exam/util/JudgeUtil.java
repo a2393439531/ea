@@ -37,10 +37,7 @@ public class JudgeUtil implements JavaDelegate {
 		String recordsId = String.valueOf(infActiviti.getVariableByProcessInstanceId(processInstanceId, "recordsId"));
 		
 		Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperid));
-		
-		Set<Knowledge> knset = paper.getKnowledge();
-		
-		
+		//Set<Knowledge> knset = paper.getKnowledge();
 		Set<Examrecord> examrecords = (Set<Examrecord>)paper.getResultdetailByAccountAndRecordId(assignee,recordsId);
 		Set<Result> results = new HashSet<Result>();
 		

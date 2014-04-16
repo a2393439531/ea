@@ -108,10 +108,12 @@ public class Paper extends ProcessModel {
 
 	private String name;
 	private int totalmark;
+	//以下各题型的分数，如果在该题目有分值的情况下，则不参与计算，以该题目分值为准
 	private int singlechoicemark;
 	private int multichoicemark;
 	private int blankmark;
 	private int essaymark;
+	//end
 	private int passmark;
 	private int time;
 	
