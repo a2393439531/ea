@@ -290,21 +290,22 @@ public class ItemUtil {
 	}
 	
 	public static Map<Item,Set<Choiceitem>> getDataByXLS(File file){
-		Map<Item,List<Choiceitem>> data = new HashMap<Item, List<Choiceitem>>();
+		BaseDao baseDao = (BaseDao)SpringContext.getBean("eaDaoTarget");
+		Map<Item,Set<Choiceitem>> data = new HashMap<Item, Set<Choiceitem>>();
 		HSSFWorkbook workbook = null;
         HSSFSheet sheet = null;
         HSSFRow row = null;
         HSSFCell cell = null;
-        Item item = null;
-        Choiceitem choiceitem = null;
-        Set<Choiceitem> choiceitems = null;
         try {
 			workbook = new HSSFWorkbook(new POIFSFileSystem(new FileInputStream(file)));
 			sheet = workbook.getSheetAt(0);// getSheet("Sheet1");
 			int rowNum = sheet.getPhysicalNumberOfRows();
 			if(rowNum > 0){
-				item = new Item();
+				Knowledge rootkn = (Knowledge)baseDao.loadByFieldValue(Knowledge.class, "name", "auto_knowledge");
 				for(int r = 1; r < rowNum; r++){
+					Item item = new Item();
+			        Set<Choiceitem> choiceitems = null;
+			        Set<Knowledge> knowledges = new HashSet<Knowledge>();
 					row = sheet.getRow(r);
 					if(row==null){
 						rowNum=rowNum+1;
@@ -326,24 +327,51 @@ public class ItemUtil {
                             }
                         	switch (c) {
 							case 0:
-								
+								//item Knowledge
+								Knowledge kn = (Knowledge)baseDao.loadByFieldValue(Knowledge.class, "name", cellValue);
+								if(rootkn == null){
+									rootkn = new Knowledge();
+									rootkn.setName("auto_knowledge");
+									baseDao.create(rootkn);
+								}
+								if(kn == null){
+									kn = new Knowledge();
+									kn.setName(cellValue);
+									kn.setParentModel(rootkn);
+									baseDao.create(kn);
+								}
+								knowledges.add(kn);
+								item.setKnowledge(knowledges);
 								break;
 							case 1:
-								
+								//item type
+								item.setType(Integer.valueOf(cellValue));
 								break;
 							case 2:
-								
+								//item content
+								item.setContent(cellValue);
 								break;
 							case 3:
-								
+								//item mark
+								item.setMark(cellValue);
 								break;
 							case 4:
-								
+								//item refkey
+								if(cellValue.matches("[1-" + (cellNum-5) + "]")){
+									item.setRefkey(cellValue);
+								}
 								break;
 							default:
+								//choiceitem
+								Choiceitem choiceitem = new Choiceitem();
+								choiceitem.setValue(cellValue);
+								choiceitem.setRefid(cellNum-c);
+								
+								choiceitems.add(choiceitem);
 								break;
 							}
                         }
+                        data.put(item, choiceitems);
 					}
 				}
 			}
@@ -354,6 +382,6 @@ public class ItemUtil {
 			e.printStackTrace();
 		}
 		
-		return null;
+		return data;
 	}
 }

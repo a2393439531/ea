@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import com.app.common.activiti.model.BusinessWithProcessModel;
 import com.app.common.base.action.BaseEaAction;
+import com.app.exam.model.Examrecord;
+import com.app.exam.model.Item;
 import com.app.exam.model.Knowledge;
 import com.app.exam.model.Paper;
 import com.app.exam.model.Template;
@@ -90,20 +92,21 @@ public class PaperAction extends BaseEaAction {
 
 				paper.setKnowledge(knowledge);
 				paper.setTemplate(template);
-
-				//设置总分
-				int singlecount = paper.getTemplate().getSinglechoice() + paper.getTemplate().getRmdsinglechoice();
-				int multicount = paper.getTemplate().getMultichoice() + paper.getTemplate().getRmdmultichoice();
-				int blankcount = paper.getTemplate().getBlank() + paper.getTemplate().getRmdblank();
-				int essaycount = paper.getTemplate().getEssay() + paper.getTemplate().getRmdessay();
 				
-				paper.setTotalmark(singlecount
-						* Integer.valueOf(paper.getSinglechoicemark())
-						+ multicount
-						* Integer.valueOf(paper.getMultichoicemark())
-						+ blankcount * Integer.valueOf(paper.getBlankmark())
-						+ essaycount * Integer.valueOf(paper.getEssaymark()));
-				
+				if(!Boolean.valueOf(getpara("byexcel"))){
+					//设置总分
+					int singlecount = paper.getTemplate().getSinglechoice() + paper.getTemplate().getRmdsinglechoice();
+					int multicount = paper.getTemplate().getMultichoice() + paper.getTemplate().getRmdmultichoice();
+					int blankcount = paper.getTemplate().getBlank() + paper.getTemplate().getRmdblank();
+					int essaycount = paper.getTemplate().getEssay() + paper.getTemplate().getRmdessay();
+					
+					paper.setTotalmark(singlecount
+							* Integer.valueOf(paper.getSinglechoicemark())
+							+ multicount
+							* Integer.valueOf(paper.getMultichoicemark())
+							+ blankcount * Integer.valueOf(paper.getBlankmark())
+							+ essaycount * Integer.valueOf(paper.getEssaymark()));
+				}
 				rhs.put("page", "editpage");
 			} 
 		}
@@ -116,6 +119,13 @@ public class PaperAction extends BaseEaAction {
 		String id = getpara("id");
 		Paper paper = (Paper) baseDao.loadById("Paper", Long.parseLong(id));
 		paper.setTemplate(null);
+		
+		Set<Examrecord> record = paper.getResultdetail();
+		for (Examrecord examrecord : record) {
+			examrecord.setPaper(null);
+			examrecord.setResult(null);
+		}
+		paper.setResultdetail(null);
 		baseDao.update(paper);
 		baseDao.delete(paper);
 		return list();
@@ -134,6 +144,7 @@ public class PaperAction extends BaseEaAction {
 	}
 	
 	public String load() throws Exception {
+		boolean byexcel = false;
 		rhs.put("knowledgeRootList", common_get_tree_root("Knowledge"));
 		if (!getpara("id").equals("")) {
 			Paper paper = (Paper) baseDao.loadById("Paper",
@@ -144,7 +155,15 @@ public class PaperAction extends BaseEaAction {
 			} else if ("edit".equals(getpara("method"))) {
 				rhs.put("readonly", false);
 			}
+			Set<Item> items = paper.getTemplate().getItems();
+			for (Item item : items) {
+				if(!"".equals(item.getMark()) && item.getMark() != null){
+					byexcel = true;
+					break;
+				}
+			}
 		}
+		rhs.put("byexcel", byexcel);
 		return "success";
 	}
 

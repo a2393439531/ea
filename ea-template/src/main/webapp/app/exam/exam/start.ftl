@@ -32,7 +32,7 @@
 					</tr>
 				</#list>
 				<input type="hidden" value="${singleitem.id}" name="result[${i}].item.id" />
-				<input type="hidden" value="${rhs["paper"].singlechoicemark}" name="result[${i}].mark" />
+				<input type="hidden" value="<#if singleitem.mark?exists >${singleitem.mark}<#else>${rhs["paper"].singlechoicemark}</#if>" name="result[${i}].mark" />
 				<#assign i = i + 1 > 
 		  	</#list>
       	</table>
@@ -49,7 +49,7 @@
 					</tr>
 				</#list>
 				<input type="hidden" value="${multiitem.id}" name="result[${i}].item.id" />
-				<input type="hidden" value="${rhs["paper"].multichoicemark}" name="result[${i}].mark" />
+				<input type="hidden" value="<#if multiitem.mark?exists>${multiitem.mark}<#else>${rhs["paper"].multichoicemark}</#if>" name="result[${i}].mark" />
 				<#assign i = i + 1 > 
 	      	</#list>
       	</table>
@@ -62,7 +62,7 @@
 				<tr>
 					<td><input type="text"  name="result[${i}].answer"/></td>
 					<input type="hidden" value="${blankitem.id}" name="result[${i}].item.id" />
-					<input type="hidden" value="${rhs["paper"].blankmark}" name="result[${i}].mark" />
+					<input type="hidden" value="<#if blankitem.mark?exists >${blankitem.mark}<#else>${rhs["paper"].blankmark}</#if>" name="result[${i}].mark" />
 				</tr>
 				<#assign i = i + 1 > 
 	      	</#list>
@@ -76,7 +76,7 @@
 				<tr>
 					<td><textarea name="result[${i}].answer"> </textarea></td>
 					<input type="hidden" value="${essayitem.id}" name="result[${i}].item.id" />
-					<input type="hidden" value="${rhs["paper"].essaymark}" name="result[${i}].mark" />
+					<input type="hidden" value="<#if essayitem.mark?exists>${essayitem.mark}<#else>${rhs["paper"].essaymark}</#if>" name="result[${i}].mark" />
 				</tr>
 				<#assign i = i + 1 > 
 	      	</#list>

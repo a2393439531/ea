@@ -26,6 +26,7 @@ import com.app.common.uploadfile.model.Uploadfile;
 import com.app.exam.model.Choiceitem;
 import com.app.exam.model.Item;
 import com.app.exam.model.Knowledge;
+import com.app.exam.model.Paper;
 import com.app.exam.model.Template;
 import com.app.exam.util.ItemUtil;
 
@@ -34,9 +35,6 @@ import com.app.exam.util.ItemUtil;
 public class ItemAction extends BaseEaAction {
 	private final Logger log = LoggerFactory.getLogger(KnowledgeAction.class);
 	public Item item = new Item();
-	private File[] upload;
-    private String[] uploadContentType;
-    private String[] uploadFileName;
 	public List<String> choiceitemvalue = new ArrayList<String>();
 	public List<String> knowledgevalue = new ArrayList<String>();
 	public List<String> choiceitemid = new ArrayList<String>();
@@ -79,7 +77,7 @@ public class ItemAction extends BaseEaAction {
 			Collection<Item> itemlist = knowledge.getItems();
 			
 			for (Item item : itemlist) {
-				if(type.equals(String.valueOf(item.getType()))){
+				if(type.equals(String.valueOf(item.getType())) && (item.getMark() == null||"".equals(item.getMark()))){
 					dataList.add(item);
 				}
 			}
@@ -181,47 +179,80 @@ public class ItemAction extends BaseEaAction {
 	}
 	//上传文件并且导入题目
 	public String import_itembyxls_save() throws IOException{
-		File[] files = this.getUpload();
 		String foreignId = "";
 		String folder = "item";
-		if(files != null && files.length != 0){
-			for(int i = 0; i < files.length; i++){
-				File file = files[i];
-				
-				String filepath =ServletActionContext.getRequest().getRealPath("");
-				InputStream is = new FileInputStream(file);
-				String fileName = getUploadFileName()[i];
-				filepath += "/file/" + folder + "/";
-				File fileDir = new File(filepath);
-				if (!fileDir.exists())
-					FileUtils.forceMkdir(new File(filepath));
-				String fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
-				String newFileName = new Date().getTime() + Math.random() + "." + fileType;
-				File deskFile = new File(filepath, newFileName);
-				OutputStream os = new FileOutputStream(deskFile);
-				byte[] bytefer = new byte[1024];
-				int length = 0;
-				while ((length = is.read(bytefer)) != -1) {
-					os.write(bytefer, 0, length);
-				}
-				os.close();
-				is.close();
-				
-				Uploadfile uploadFile = new Uploadfile(fileType, fileName, fileName, foreignId, "/file/" + folder + "/"  + newFileName);
-				baseDao.create(uploadFile);
-				//上传成功，然后开始生成题目
-				Map<Item,Set<Choiceitem>> data = ItemUtil.getDataByXLS(deskFile);
-				Set<Item> items = data.keySet();
-				for (Item item : items) {
-					Set<Choiceitem> choiceitems = data.get(item);
-					item.setChoiceitem(choiceitems);
-					baseDao.create(item);
-					for (Choiceitem choiceitem : choiceitems) {
-						baseDao.create(choiceitem);
-					}
-				}
+		String filepath =ServletActionContext.getRequest().getRealPath("");
+		InputStream is = new FileInputStream(file);
+		String fileName = this.getFileFileName();
+		filepath += "/file/" + folder + "/";
+		File fileDir = new File(filepath);
+		if (!fileDir.exists())
+			FileUtils.forceMkdir(new File(filepath));
+		String fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
+		String newFileName = new Date().getTime() + Math.random() + "." + fileType;
+		File deskFile = new File(filepath, newFileName);
+		OutputStream os = new FileOutputStream(deskFile);
+		byte[] bytefer = new byte[1024];
+		int length = 0;
+		while ((length = is.read(bytefer)) != -1) {
+			os.write(bytefer, 0, length);
+		}
+		os.close();
+		is.close();
+		
+		Uploadfile uploadFile = new Uploadfile(fileType, fileName, fileName, foreignId, "/file/" + folder + "/"  + newFileName);
+		baseDao.create(uploadFile);
+		//上传成功，然后开始生成题目
+		Map<Item,Set<Choiceitem>> data = ItemUtil.getDataByXLS(deskFile);
+		Set<Item> items = data.keySet();
+		for (Item item : items) {
+			Set<Choiceitem> choiceitems = data.get(item);
+			item.setChoiceitem(choiceitems);
+			baseDao.create(item);
+			for (Choiceitem choiceitem : choiceitems) {
+				choiceitem.setItem(item);
+				baseDao.create(choiceitem);
 			}
 		}
+		//然后自动生成一个模板，把这些题目变成必做题。然后拿到该模板的ID，新建一个该模板创建的试卷
+		Template template = new Template();
+		int p = 0,j = 0,k = 0,l = 0;
+		int totalmark = 0;
+		template.setItems(items);
+		template.setRmdsinglechoice(0);
+		template.setRmdmultichoice(0);
+		template.setRmdblank(0);
+		template.setRmdessay(0);
+		
+		for (Item item : items) {
+			totalmark += Integer.valueOf(item.getMark());
+			switch(item.getType()){
+			case 1:
+				p++;
+				break;
+			case 2:
+				j++;
+				break;
+			case 3:
+				k++;
+				break;
+			case 4:
+				l++;
+				break;
+			}
+		}
+		template.setSinglechoice(p);
+		template.setMultichoice(j);
+		template.setBlank(k);
+		template.setEssay(l);
+		template.setTitle("Auto Template_" + new Date().toLocaleString());
+		baseDao.create(template);
+		Paper paper = new Paper();
+		paper.setName("Auto Paper_" + new Date().toLocaleString());
+		paper.setTemplate(template);
+		paper.setTotalmark(totalmark);
+		baseDao.create(paper);
+//跳转到paper页面
 		return "success";
 	}
 	
@@ -249,30 +280,6 @@ public class ItemAction extends BaseEaAction {
 		this.choiceitemid = choiceitemid;
 	}
 	
-	public File[] getUpload() {
-		return upload;
-	}
-
-	public void setUpload(File[] upload) {
-		this.upload = upload;
-	}
-
-	public String[] getUploadContentType() {
-		return uploadContentType;
-	}
-
-	public void setUploadContentType(String[] uploadContentType) {
-		this.uploadContentType = uploadContentType;
-	}
-
-	public String[] getUploadFileName() {
-		return uploadFileName;
-	}
-
-	public void setUploadFileName(String[] uploadFileName) {
-		this.uploadFileName = uploadFileName;
-	}
-
 	protected Knowledge getKnowledgeById(
 			Collection<Knowledge> knowledgerootlist, String id)
 			throws Exception {

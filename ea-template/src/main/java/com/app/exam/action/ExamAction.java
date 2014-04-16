@@ -43,106 +43,112 @@ public class ExamAction extends BaseProcessAction {
 		String paperId = (String)infActiviti.getVariableByTaskId(taskId, "formId");
 		String method = getpara("method");
 		
-		Task task = infActiviti.getTaskById(taskId);
-		Paper paper = (Paper) baseDao.loadById("Paper", Long.valueOf(paperId));
-		Template template = paper.getTemplate();
-		
-		
-		if("start".equals(method)){
-			//先判断eception
-			String exception = String.valueOf(infActiviti.getVariableByTaskId(taskId, "exception"));
-			if(!"".equals(exception) && exception != null && Boolean.valueOf(exception)){
-				//不是正常完成
-				Map<String,Object> var = new HashMap<String, Object>();
+		if("".equals(paperId)){
+			taskPage = "exam/exam_list.ftl";
+			rhs.put("taskPage", taskPage);
+			return exam_list();
+		}else{
+			Task task = infActiviti.getTaskById(taskId);
+			Paper paper = (Paper) baseDao.loadById("Paper", Long.valueOf(paperId));
+			Template template = paper.getTemplate();
+			
+			
+			if("start".equals(method)){
+				//先判断eception
+				String exception = String.valueOf(infActiviti.getVariableByTaskId(taskId, "exception"));
+				if(!"".equals(exception) && exception != null && Boolean.valueOf(exception)){
+					//不是正常完成
+					Map<String,Object> var = new HashMap<String, Object>();
+					String assignee = (String) infActiviti.getVariableByTaskId(taskId, "assignee");
+					infActiviti.completeTaskVar(taskId, paperId, assignee, var);
+					method = "reason";
+					taskPage = "exam/reason.ftl";
+				}else{
+					//开始考试
+					Set<Item> singleitems = new HashSet<Item>();
+					Collection<Item> rmdsingleitems = template.getRmdItem("1", template.getRmdsinglechoice());
+					Collection<Item> reqsingleitems = template.getReqItem("1");
+					singleitems.addAll(reqsingleitems);
+					singleitems.addAll(rmdsingleitems);
+					
+					Set<Item> multiitems = new HashSet<Item>();
+					Collection<Item> rmdmultiitems = template.getRmdItem("2", template.getRmdmultichoice());
+					Collection<Item> reqmultiitems = template.getReqItem("2");
+					multiitems.addAll(reqmultiitems);
+					multiitems.addAll(rmdmultiitems);
+					
+					Set<Item> blankitems = new HashSet<Item>();
+					Collection<Item> rmdblankitems = template.getRmdItem("3", template.getRmdblank());
+					Collection<Item> reqblankitems = template.getReqItem("3");
+					blankitems.addAll(reqblankitems);
+					blankitems.addAll(rmdblankitems);
+					
+					Set<Item> essayitems = new HashSet<Item>();
+					Collection<Item> rmdessayitems = template.getRmdItem("4", template.getRmdessay());
+					Collection<Item> reqessayitems = template.getReqItem("4");
+					essayitems.addAll(reqessayitems);
+					essayitems.addAll(rmdessayitems);
+					
+					rhs.put("singleitems", singleitems);
+					rhs.put("multiitems", multiitems);
+					rhs.put("blankitems", blankitems);
+					rhs.put("essayitems", essayitems);
+					
+					//同时设置exception为true，只有考生正确complete exam，exception才为false。
+					String processInstanceId = task.getProcessInstanceId();
+					infActiviti.setVariableByProcessInstanceId(processInstanceId, "exception", true);
+				}
+				
+			}else if("reason".equals(method)){
+				
+			
+			}else if("judge".equals(method)){
+				Set<Result> singleitems = new HashSet<Result>();
+				Set<Result> multiitems = new HashSet<Result>();
+				Set<Result> blankitems = new HashSet<Result>();
+				Set<Result> essayitems = new HashSet<Result>();
 				String assignee = (String) infActiviti.getVariableByTaskId(taskId, "assignee");
-				infActiviti.completeTaskVar(taskId, paperId, assignee, var);
-				method = "reason";
-				taskPage = "exam/reason.ftl";
-			}else{
-				//开始考试
-				Set<Item> singleitems = new HashSet<Item>();
-				Collection<Item> rmdsingleitems = template.getRmdItem("1", template.getRmdsinglechoice());
-				Collection<Item> reqsingleitems = template.getReqItem("1");
-				singleitems.addAll(reqsingleitems);
-				singleitems.addAll(rmdsingleitems);
+				String recordsId = String.valueOf(infActiviti.getVariableByProcessInstanceId(task.getProcessInstanceId(), "recordsId"));
 				
-				Set<Item> multiitems = new HashSet<Item>();
-				Collection<Item> rmdmultiitems = template.getRmdItem("2", template.getRmdmultichoice());
-				Collection<Item> reqmultiitems = template.getReqItem("2");
-				multiitems.addAll(reqmultiitems);
-				multiitems.addAll(rmdmultiitems);
 				
-				Set<Item> blankitems = new HashSet<Item>();
-				Collection<Item> rmdblankitems = template.getRmdItem("3", template.getRmdblank());
-				Collection<Item> reqblankitems = template.getReqItem("3");
-				blankitems.addAll(reqblankitems);
-				blankitems.addAll(rmdblankitems);
+				Set<Examrecord> allresults = paper.getResultdetailByAccountAndRecordId(assignee,recordsId);
+				Set<Result> results = new HashSet<Result>();
+				for (Examrecord examrecord : allresults) {
+					results.addAll(examrecord.getResult());
+				}
 				
-				Set<Item> essayitems = new HashSet<Item>();
-				Collection<Item> rmdessayitems = template.getRmdItem("4", template.getRmdessay());
-				Collection<Item> reqessayitems = template.getReqItem("4");
-				essayitems.addAll(reqessayitems);
-				essayitems.addAll(rmdessayitems);
-				
+				//上面拿到指定用户的结果
+				for (Result result : results) {
+					Item item = result.getItem(); 
+					switch (item.getType()) {
+					case 1:
+						singleitems.add(result);
+						break;
+					case 2:
+						multiitems.add(result);
+						break;
+					case 3:
+						blankitems.add(result);
+						break;
+					case 4:
+						essayitems.add(result);
+						break;
+					}
+				}
 				rhs.put("singleitems", singleitems);
 				rhs.put("multiitems", multiitems);
 				rhs.put("blankitems", blankitems);
 				rhs.put("essayitems", essayitems);
-				
-				//同时设置exception为true，只有考生正确complete exam，exception才为false。
-				String processInstanceId = task.getProcessInstanceId();
-				infActiviti.setVariableByProcessInstanceId(processInstanceId, "exception", true);
 			}
 			
-		}else if("reason".equals(method)){
 			
-		
-		}else if("judge".equals(method)){
-			Set<Result> singleitems = new HashSet<Result>();
-			Set<Result> multiitems = new HashSet<Result>();
-			Set<Result> blankitems = new HashSet<Result>();
-			Set<Result> essayitems = new HashSet<Result>();
-			String assignee = (String) infActiviti.getVariableByTaskId(taskId, "assignee");
-			String recordsId = String.valueOf(infActiviti.getVariableByProcessInstanceId(task.getProcessInstanceId(), "recordsId"));
-			
-			
-			Set<Examrecord> allresults = paper.getResultdetailByAccountAndRecordId(assignee,recordsId);
-			Set<Result> results = new HashSet<Result>();
-			for (Examrecord examrecord : allresults) {
-				results.addAll(examrecord.getResult());
-			}
-			
-			//上面拿到指定用户的结果
-			for (Result result : results) {
-				Item item = result.getItem(); 
-				switch (item.getType()) {
-				case 1:
-					singleitems.add(result);
-					break;
-				case 2:
-					multiitems.add(result);
-					break;
-				case 3:
-					blankitems.add(result);
-					break;
-				case 4:
-					essayitems.add(result);
-					break;
-				}
-			}
-			rhs.put("singleitems", singleitems);
-			rhs.put("multiitems", multiitems);
-			rhs.put("blankitems", blankitems);
-			rhs.put("essayitems", essayitems);
+			rhs.put("paper", paper);
+			rhs.put("template", template);
+			rhs.put("task", task);
+			rhs.put("method", method);
+			rhs.put("taskPage", taskPage);
+			return "success";
 		}
-		
-		
-		rhs.put("paper", paper);
-		rhs.put("template", template);
-		rhs.put("task", task);
-		rhs.put("method", method);
-		rhs.put("taskPage", taskPage);
-		return "success";
 	}
 	
 	public String exam_list(){

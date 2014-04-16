@@ -123,6 +123,7 @@ public class TemplateAction extends BaseEaAction {
 
 	public String load() throws Exception {
 		rhs.put("knowledgeRootList", common_get_tree_root("Knowledge"));
+		boolean byexcel = false;
 		if (!getpara("id").equals("")) {
 			Template template = (Template) baseDao.loadById("Template",
 					Long.parseLong(getpara("id")));
@@ -131,6 +132,16 @@ public class TemplateAction extends BaseEaAction {
 				rhs.put("readonly", true);
 			}else if("edit".equals(getpara("method"))){
 				rhs.put("readonly", false);
+			}
+			Set<Item> items = template.getItems();
+			for (Item item : items) {
+				if(!"".equals(item.getMark()) && item.getMark() != null){
+					byexcel = true;
+					break;
+				}
+			}
+			if(byexcel){
+				rhs.put("readonly", true);
 			}
 		} 
 		return "success";
