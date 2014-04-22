@@ -365,7 +365,7 @@ public class ItemUtil {
 								//choiceitem
 								Choiceitem choiceitem = new Choiceitem();
 								choiceitem.setValue(cellValue);
-								choiceitem.setRefid(cellNum-c);
+								choiceitem.setRefid(c-4);
 								
 								choiceitems.add(choiceitem);
 								break;

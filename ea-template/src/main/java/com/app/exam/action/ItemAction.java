@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -251,6 +252,8 @@ public class ItemAction extends BaseEaAction {
 		paper.setName("Auto Paper_" + new Date().toLocaleString());
 		paper.setTemplate(template);
 		paper.setTotalmark(totalmark);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+		paper.setCreatedate(sdf.format(new Date()));
 		baseDao.create(paper);
 //跳转到paper页面
 		return "success";
