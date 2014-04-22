@@ -72,3 +72,4 @@ title_c_count          =C(Count)
 title_d_count          =D(Count)
 title_candidate        =Choose Candidate
 title_judge            =Choose Judge
+title_mark             =Mark

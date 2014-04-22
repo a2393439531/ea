@@ -1,5 +1,6 @@
 package com.app.exam.action;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,7 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
 import org.activiti.engine.task.Task;
+import org.apache.struts2.ServletActionContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +26,7 @@ import com.app.exam.model.Knowledge;
 import com.app.exam.model.Paper;
 import com.app.exam.model.Result;
 import com.app.exam.model.Template;
+import com.app.exam.util.ExcelUtil;
 
 @Scope("prototype")
 @Component("examAction")
@@ -218,7 +224,7 @@ public class ExamAction extends BaseProcessAction {
 			Examrecord record = new Examrecord();
 			record.setUserid(getCurrentAccount());
 			record.setPaper(paper);
-			record.setRemark("Wait for judge");
+			//record.setRemark("Wait for judge");
 			baseDao.create(record);
 			for (Result res : result) {
 				//res.setPaper(paper);
@@ -340,19 +346,58 @@ public class ExamAction extends BaseProcessAction {
 	public String exam_record_list() throws Exception{
 		String useraccount = getCurrentAccount();
 		List<Examrecord> dataList = new ArrayList<Examrecord>();
-		String sql = " from Examrecord r where r.userid=" + "'" +useraccount+"'";
+		Map<String,List<Examrecord>> dataMap = new HashMap<String, List<Examrecord>>();
+		String sql = " from Examrecord r ";//where r.userid=" + "'" +useraccount+"'
 		
 		getPageData(sql);
 		
 		List<Examrecord> recordList = (List)rhs.get("dataList");
 		
-		for (Examrecord examrecord : recordList) {
-			if(examrecord.getUserid().equals(useraccount)){
-				dataList.add(examrecord);
+		if(!getCurrentUser().getAccount().equals("admin")){
+			for (Examrecord examrecord : recordList) {
+				if(examrecord.getUserid().equals(useraccount)&&examrecord.getPaper() != null){
+					String papername = examrecord.getPaper().getName();
+					List<Examrecord> examrecords = dataMap.get(papername);
+					if(examrecords == null){
+						examrecords = new ArrayList<Examrecord>();
+					}
+					examrecords.add(examrecord);
+					dataMap.put(papername, examrecords);
+				}
 			}
+			rhs.put("export", false);
+		}else{
+			for (Examrecord examrecord : recordList) {
+				if(examrecord.getPaper() != null){
+					String papername = examrecord.getPaper().getName();
+					List<Examrecord> examrecords = dataMap.get(papername);
+					if(examrecords == null){
+						examrecords = new ArrayList<Examrecord>();
+					}
+					examrecords.add(examrecord);
+					dataMap.put(papername, examrecords);
+				}
+			}
+			rhs.put("export", true);
 		}
-		rhs.put("datalist", dataList);
+		rhs.put("datalist", dataMap);
 		return "success";
+	}
+	
+	public String export_record() throws IOException{
+		String paperId = getpara("paperId");
+		
+		Paper paper = (Paper) baseDao.loadById("Paper", Long.valueOf(paperId));
+		
+		HttpServletResponse response = ServletActionContext.getResponse();
+		
+		response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", 
+                "attachment; filename=export_result.xls");
+        ServletOutputStream os = response.getOutputStream();
+		ExcelUtil.exportToExcel(paper, os);
+		os.close();
+		return null;
 	}
 	
 	public String exam_record_detail(){
