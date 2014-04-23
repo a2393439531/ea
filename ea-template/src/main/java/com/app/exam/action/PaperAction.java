@@ -162,6 +162,16 @@ public class PaperAction extends BaseEaAction {
 					break;
 				}
 			}
+			//如果是excel导入的，就把所有题目显示出来
+			if(byexcel){
+				Template template = paper.getTemplate();
+				Set<Item> singleitems = new HashSet<Item>();
+				Collection<Item> reqsingleitems = template.getReqItem("1");
+				singleitems.addAll(reqsingleitems);
+				rhs.put("singleitems", singleitems);
+				rhs.put("paper", paper);
+				rhs.put("template", template);
+			}
 		}
 		rhs.put("byexcel", byexcel);
 		return "success";
