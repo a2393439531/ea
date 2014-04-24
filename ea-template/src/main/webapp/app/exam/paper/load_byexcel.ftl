@@ -67,7 +67,9 @@
 						</tr>
 						<tr>
 							<td><@i18n "title_passmark" /></td>
-							<td colspan="4"><input type="text" <#if rhs.readonly>disabled</#if>  name="paper.passmark" value="<#if rhs["paper"]?exists >${rhs["paper"].passmark}</#if>" /></td>
+							<td><input type="text" <#if rhs.readonly>disabled</#if>  name="paper.passmark" value="<#if rhs["paper"]?exists >${rhs["paper"].passmark}</#if>" /></td>
+							<td><@i18n "title_createtime" /></td>
+							<td><input type="text" <#if rhs.readonly>disabled</#if>  name="paper.createdate" value="<#if rhs["paper"]?exists >${rhs["paper"].createdate?if_exists}</#if>" /></td>
 						</tr>
 						<tr>
 							<td colspan="5" >

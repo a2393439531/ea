@@ -68,7 +68,7 @@ public class ExamAction extends BaseProcessAction {
 					String assignee = (String) infActiviti.getVariableByTaskId(taskId, "assignee");
 					infActiviti.completeTaskVar(taskId, paperId, assignee, var);
 					method = "reason";
-					taskPage = "exam/reason.ftl";
+					taskPage = "exam/reason.ftl";//应该跳转到一个提示页面，提示考试异常结束。而不是直接跳转到原因页面。
 				}else{
 					//开始考试
 					Set<Item> singleitems = new HashSet<Item>();
@@ -100,9 +100,24 @@ public class ExamAction extends BaseProcessAction {
 					rhs.put("blankitems", blankitems);
 					rhs.put("essayitems", essayitems);
 					
+					//以单个题显示,默认显示全部试题
+					if(getpara("format").equals("single")){
+						//首先跳转页面要改变
+						taskPage = "exam/single.ftl";
+						//把所有题目放入session
+						List<Item> alldata = new ArrayList<Item>();
+						alldata.addAll(singleitems);
+						alldata.addAll(multiitems);
+						alldata.addAll(blankitems);
+						alldata.addAll(essayitems);
+						putSessionValue("items", alldata);
+						rhs.put("index", 0);
+						//放入第一题
+						rhs.put("item", alldata.get(0));
+					}
 					//同时设置exception为true，只有考生正确complete exam，exception才为false。
-					String processInstanceId = task.getProcessInstanceId();
-					infActiviti.setVariableByProcessInstanceId(processInstanceId, "exception", true);
+					//String processInstanceId = task.getProcessInstanceId();
+					//infActiviti.setVariableByProcessInstanceId(processInstanceId, "exception", true);
 				}
 				
 			}else if("reason".equals(method)){
@@ -195,7 +210,6 @@ public class ExamAction extends BaseProcessAction {
 	public String complete_task(){
 		Map<String, Object> var = new HashMap<String, Object>();
 		String taskId = getpara("taskId"); //如果method为assigne，则taskid为空
-		String taskPage = getpara("taskPage");
 		String paperId = (String)infActiviti.getVariableByTaskId(taskId, "formId");
 		String method = getpara("method");
 		Task task = infActiviti.getTaskById(taskId);
@@ -301,6 +315,77 @@ public class ExamAction extends BaseProcessAction {
 		rhs.put("resultMessage", "成功完成任务。");
 		return "success";
 		
+	}
+
+	//计算当前一个题目的分数，并且继续下一题
+	public String complete_task_single(){
+		List<Item> items = (List<Item>) getSessionValue("items");
+		int index = Integer.valueOf(getpara("index"));
+		int score = (Integer) getSessionValue("score");
+		String examrecordId = getpara("examrecordId");
+		Examrecord examrecord = null;
+
+		
+		String taskId = getpara("taskId");
+		Task task = infActiviti.getTaskById(taskId);
+		String paperId = (String)infActiviti.getVariableByTaskId(taskId, "formId");
+		Paper paper = (Paper) getSessionValue("paper");
+		if(paper == null){
+			paper = (Paper) baseDao.loadById("Paper", Long.valueOf(paperId));
+			putSessionValue("paper", paper);
+		}
+		Template template = (Template)getSessionValue("template");
+		if(template == null){
+			template = paper.getTemplate();
+			putSessionValue("template", template);
+		}
+		
+		for (Result res : result) {
+			Item item = (Item) baseDao.loadById("Item", res.getItem().getId());
+			if(res.getAnswer().equals(item.getRefkey())){
+				if(item.getMark().equals("")){
+					switch (item.getType()) {
+					case 1:
+						score += paper.getSinglechoicemark();
+						break;
+					case 2:
+						score += paper.getMultichoicemark();
+						break;
+					case 3:
+						score += paper.getBlankmark();
+						break;
+					case 4:
+						score += paper.getEssaymark();
+						break;
+					}
+				}else{
+					score += Integer.valueOf(item.getMark());
+				}
+			}
+		}
+		Set<Result> resultset = new HashSet<Result>();
+		resultset.addAll(result);
+		if("".equals(examrecordId)){
+			examrecord = new Examrecord();
+		}else{
+			examrecord = (Examrecord)baseDao.loadById("Examrecord", Long.valueOf(examrecordId));
+		}
+		examrecord.setResult(resultset);
+		examrecord.setPaper(paper);
+		examrecord.setUserid(getCurrentAccount());
+		
+		baseDao.update(examrecord);
+		
+		
+		putSessionValue("score", score);
+		rhs.put("template", template);
+		rhs.put("paper", paper);
+		rhs.put("item", items.get(++index));
+		rhs.put("index", index);
+		rhs.put("score",score);
+		
+		
+		return "success";
 	}
 	
 	public String choicetemplate() throws Exception{
