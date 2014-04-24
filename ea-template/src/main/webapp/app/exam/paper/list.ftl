@@ -32,7 +32,8 @@
 	    <thead>
 			<tr>
 			    <td width=25px><strong>#</strong></td>
-				<td width=500px><strong><@i18n "title_title" /></strong></td>
+				<td width=300px><strong><@i18n "title_title" /></strong></td>
+				<td width=150px><strong><@i18n "title_createtime" /></strong></td>
 				<td width=100px><strong><@i18n "title_passmark" /></strong></td>
 				<td width=100px><strong><@i18n "title_totalmark" /></strong></td>
 				<td width=100px><strong><@i18n "title_examtime" /></strong></td>
@@ -45,13 +46,14 @@
 			 <tr>
 			    <td class=nob >${x_index+1}</td>
 				<td>${x.businessModel.name?if_exists}</td>
+				<td>${x.businessModel.createdate?if_exists}</td>
 				<td>${x.businessModel.passmark?if_exists}</td>
 				<td>${x.businessModel.totalmark?if_exists}</td>
 				<td>${x.businessModel.time?if_exists} &nbsp;(Minutes)</td>
 				<td><a href="exam_paper_load.do?method=edit&id=${x.businessModel.id}"><@i18n "title_edit" /></a> | <a href="exam_paper_load.do?method=show&id=${x.businessModel.id}"> <@i18n "title_view" /></a> | <a href="exam_paper_delete.do?id=${x.businessModel.id}"><@i18n "title_delete" /></a></td>
 				<td>
 				<a id="startProcess${x.businessModel.id}" title="Start Process" class="btn btn-xs btn-primary"
-					    		href="exam_paper_assign.do?id=${x.businessModel.id}" >
+					    		<#if (x.businessModel.time?number > 0) >href="exam_paper_assign.do?id=${x.businessModel.id}" <#else> onclick="javascript:alert('Exam Time was not set!');"</#if> >
 					    		Start</a>
 				</td>
 			</tr>

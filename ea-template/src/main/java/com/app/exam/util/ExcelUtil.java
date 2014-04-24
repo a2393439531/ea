@@ -9,10 +9,12 @@ import java.util.Set;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.hssf.util.Region;
 
 import com.app.exam.model.Examrecord;
@@ -90,9 +92,9 @@ public class ExcelUtil {
 			if(dataMap.size() > 0){
 	            HSSFRow firstrow = sheet.createRow(1);
 	            HSSFCell cell = null;
-	            String[] names = {"Category", "Question", "Score"};
-	            HSSFCellStyle style = workbook.createCellStyle();
-	            style.setFillBackgroundColor((short) 64);
+	            String[] names = {"Category", "Question", "Score", "", "Category", "Total Score"};
+	            
+	            HSSFCellStyle style = getUserStyle(workbook, HSSFColor.LIGHT_GREEN.index);
 	            
 	            //设置头
 	            for (int i = 0; i < names.length; i++) {
@@ -104,6 +106,9 @@ public class ExcelUtil {
 	            Set<Knowledge> knowledges = dataMap.keySet();
 	            int r = 2;
 	            for (Knowledge knowledge : knowledges) {
+	            	//total score
+	            	int score = 0;
+	            	int j = 2;
 	            	//合并单元格
 	        		Region region = new Region(r, (short) 1, r+dataMap.get(knowledge).size()-1, (short) 1); 
 	        		
@@ -112,8 +117,9 @@ public class ExcelUtil {
 	        		Set<Result> resdata = dataMap.get(knowledge);
 	        		
 	        		int i = 0;
+	        		HSSFRow row = null;
 	        		for (Result result : resdata) {
-	        			HSSFRow row = sheet.createRow(r + i);
+	        			row = sheet.createRow(r + i);
 	        			//knowledge
 	        			HSSFCell knowledgecell = row.createCell((short) 1);
 	        			knowledgecell.setCellValue(knowledge.getName());
@@ -123,9 +129,14 @@ public class ExcelUtil {
 	        			//score
 	        			HSSFCell scorecell = row.createCell((short) 3);
 	        			scorecell.setCellValue(result.getMark());
+	        			score += result.getMark();
 	        			i++;
 					}
-
+	        		HSSFCell categorycell = row.createCell((short)5);
+	        		HSSFCell totalscorecell = row.createCell((short)6);
+	        		categorycell.setCellValue(knowledge.getName());
+	        		totalscorecell.setCellValue(score);
+	        		
 	        		r +=  dataMap.get(knowledge).size();
 	            }
 	            
@@ -138,5 +149,24 @@ public class ExcelUtil {
 		}
 		
 	}
-	
+	public static HSSFCellStyle getUserStyle(HSSFWorkbook workBook,short index){
+		HSSFCellStyle cellStyle1 = workBook.createCellStyle();
+		HSSFFont fontTitle = workBook.createFont();
+	    fontTitle.setFontHeightInPoints((short)10);
+	    fontTitle.setFontName("Arial");
+	    fontTitle.setBoldweight((short)700);
+		cellStyle1.setFillForegroundColor(index);
+		cellStyle1.setFont(fontTitle);
+		cellStyle1.setWrapText(true);
+		cellStyle1.setBorderBottom((short)1);
+		cellStyle1.setBorderLeft((short)1);
+		cellStyle1.setBorderRight((short)1);
+		cellStyle1.setBorderTop((short)1);
+		cellStyle1.setFillPattern((short)1);
+		cellStyle1.setLeftBorderColor((short)8);
+		cellStyle1.setRightBorderColor((short)8);
+		cellStyle1.setTopBorderColor((short)8);
+		cellStyle1.setBottomBorderColor((short)8);
+		return cellStyle1;
+	}
 }
