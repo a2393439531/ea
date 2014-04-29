@@ -171,6 +171,24 @@ public class ItemAction extends BaseEaAction {
 		String id = getpara("id");
 		Item item = (Item) baseDao.loadById("Item", Long.parseLong(id));
 		baseDao.delete(item);
+		Set<Template> templates = item.getTemplates();
+		for (Template template : templates) {
+			switch(item.getType()){
+			case 1:
+				template.setSinglechoice(template.getSinglechoice() - 1);
+				break;
+			case 2:
+				template.setMultichoice(template.getMultichoice() - 1);
+				break;
+			case 3:
+				template.setBlank(template.getBlank() - 1);
+				break;
+			case 4:
+				template.setEssay(template.getEssay() - 1);
+				break;
+			}
+			baseDao.update(template);
+		}
 		return list();
 	}
 	
@@ -252,7 +270,7 @@ public class ItemAction extends BaseEaAction {
 		paper.setName("Auto Paper_" + new Date().toLocaleString());
 		paper.setTemplate(template);
 		paper.setTotalmark(totalmark);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		paper.setCreatedate(sdf.format(new Date()));
 		baseDao.create(paper);
 //跳转到paper页面

@@ -50,11 +50,12 @@
 				<td>${x.businessModel.passmark?if_exists}</td>
 				<td>${x.businessModel.totalmark?if_exists}</td>
 				<td>${x.businessModel.time?if_exists} &nbsp;(Minutes)</td>
-				<td><a href="exam_paper_load.do?method=edit&id=${x.businessModel.id}"><@i18n "title_edit" /></a> | <a href="exam_paper_load.do?method=show&id=${x.businessModel.id}"> <@i18n "title_view" /></a> | <a href="exam_paper_delete.do?id=${x.businessModel.id}"><@i18n "title_delete" /></a></td>
+				<td><a href="exam_paper_load.do?method=edit&id=${x.businessModel.id}"><@i18n "title_edit" /></a> | <a href="exam_paper_load.do?method=show&id=${x.businessModel.id}"> <@i18n "title_view" /></a> <#if !(x.businessModel.processInstanceId?exists&&x.businessModel.processInstanceId != "") >| <a href="exam_paper_delete.do?id=${x.businessModel.id}"><@i18n "title_delete" /></a> </#if> </td>
 				<td>
 				<a id="startProcess${x.businessModel.id}" title="Start Process" class="btn btn-xs btn-primary"
 					    		<#if (x.businessModel.time?number > 0) >href="exam_paper_assign.do?id=${x.businessModel.id}" <#else> onclick="javascript:alert('Exam Time was not set!');"</#if> >
 					    		Start</a>
+					    		
 				</td>
 			</tr>
 			</#list>

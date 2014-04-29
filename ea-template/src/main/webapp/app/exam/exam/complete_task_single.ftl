@@ -1,5 +1,13 @@
-<form name="form_item" action="exam_exam_complete_task_single.do" method="post">
-<#--<input type="hidden" value="<#if rhs.method?exists >${rhs["method"]}</#if>" name="method" />-->
+<#if rhs["finsh"]>
+	<script type="text/javascript">
+		//document.location.href = 'exam_exam_exam_list.do?resultMessage=${rhs["resultMessage"]}';
+		window.close();
+	</script>
+<#else>
+	<#include "single.ftl">
+</#if>
+<#--<form name="form_item" action="exam_exam_complete_task_single.do" method="post">
+<input type="hidden" value="<#if rhs.examrecordId?exists >${rhs["examrecordId"]}</#if>" name="examrecordId" />
 <input type="hidden" value="<#if rhs["task"]?exists >${rhs["task"].id}</#if>" name="taskId" />
 <div class="panel panel-primary" style="margin-top: 18px;">
       <div class="panel-heading"><strong>Start Exam</strong></div>
@@ -48,6 +56,7 @@
 					</#if>
 				<input type="hidden" value="${rhs["item"].id}" name="result[${rhs["index"]}].item.id" />
 				<input type="hidden" value="${rhs["index"]}" name="index" />
+				<input type="hidden" value="${rhs["score"]?if_exists}" name="score" />
 				<input type="hidden" value="<#if rhs["item"].mark?exists >${rhs["item"].mark}<#else>${rhs["paper"].singlechoicemark}</#if>" name="result[${rhs["index"]}].mark" />
       	</table>
 	    <table class="table table-condensed table-bordered table-striped">
@@ -57,4 +66,4 @@
 	    </table>
       </div>
 </div>
-</form>
+</form>-->
