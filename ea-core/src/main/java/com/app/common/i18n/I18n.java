@@ -37,6 +37,10 @@ public class I18n {
 			 siteStrMap = getMapFromePropFile(PathUtils.getClassPath(PathUtils.SYSTEM_DATA_CLASS) + "/i18n",
 			"txt");
 		}
+		//添加默认lang
+		if("".equals(lang) || lang == null){
+			lang = "en";
+		}
 		return (String) siteStrMap.get(lang + "_"+ keyname);			
 		} catch (Exception e) {
 			log.error(""+e);
