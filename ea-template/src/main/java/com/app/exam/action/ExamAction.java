@@ -110,10 +110,16 @@ public class ExamAction extends BaseProcessAction {
 						alldata.addAll(multiitems);
 						alldata.addAll(blankitems);
 						alldata.addAll(essayitems);
+						for (Item item : alldata) {
+							if(item.getChoiceitem().size() >0){
+								item.getChoiceitem();
+							}
+						}
 						putSessionValue("items", alldata);
 						rhs.put("index", 0);
 						//放入第一题
 						rhs.put("item", alldata.get(0));
+						rhs.put("score", getSessionValue("score"));
 					}
 					//同时设置exception为true，只有考生正确complete exam，exception才为false。
 					//String processInstanceId = task.getProcessInstanceId();
@@ -230,9 +236,13 @@ public class ExamAction extends BaseProcessAction {
 			}
 			String[] assignees = getpara("assignee").split(",");//拿到分配考试的人,有可能是多人
 			//针对每个人,启动流程
+			String processInstanceId = "";
 			for (String assignee : assignees) {
-				infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignee, var);
+				processInstanceId += infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignee, var) + ",";
 			}
+			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperId));
+			paper.setProcessInstanceId(processInstanceId);
+			baseDao.update(paper);
 		}else if("start".equals(method)){
 			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperId));
 			Examrecord record = new Examrecord();
@@ -319,12 +329,17 @@ public class ExamAction extends BaseProcessAction {
 
 	//计算当前一个题目的分数，并且继续下一题
 	public String complete_task_single(){
+		Map<String, Object> var = new HashMap<String, Object>();
 		List<Item> items = (List<Item>) getSessionValue("items");
-		int index = Integer.valueOf(getpara("index"));
-		int score = (Integer) getSessionValue("score");
+		int index = Integer.valueOf(((getpara("index").equals(""))?"0":getpara("index")));
+		int score = Integer.valueOf(((getpara("score").equals(""))?"0":getpara("score")));
 		String examrecordId = getpara("examrecordId");
 		Examrecord examrecord = null;
-
+		if("".equals(examrecordId)){
+			examrecord = new Examrecord();
+		}else{
+			examrecord = (Examrecord)baseDao.loadById("Examrecord", Long.valueOf(examrecordId));
+		}
 		
 		String taskId = getpara("taskId");
 		Task task = infActiviti.getTaskById(taskId);
@@ -341,6 +356,9 @@ public class ExamAction extends BaseProcessAction {
 		}
 		
 		for (Result res : result) {
+			if(res == null){
+				continue;
+			}
 			Item item = (Item) baseDao.loadById("Item", res.getItem().getId());
 			if(res.getAnswer().equals(item.getRefkey())){
 				if(item.getMark().equals("")){
@@ -361,29 +379,47 @@ public class ExamAction extends BaseProcessAction {
 				}else{
 					score += Integer.valueOf(item.getMark());
 				}
+			}else{
+				res.setMark(0);
 			}
+			res.setItem(item);
+			res.setExamrecord(examrecord);
+			res.setUser(getCurrentAccount());
+			baseDao.create(res);
 		}
 		Set<Result> resultset = new HashSet<Result>();
 		resultset.addAll(result);
-		if("".equals(examrecordId)){
-			examrecord = new Examrecord();
-		}else{
-			examrecord = (Examrecord)baseDao.loadById("Examrecord", Long.valueOf(examrecordId));
-		}
+
 		examrecord.setResult(resultset);
 		examrecord.setPaper(paper);
 		examrecord.setUserid(getCurrentAccount());
 		
 		baseDao.update(examrecord);
+		examrecordId = String.valueOf(examrecord.getId());
 		
-		
-		putSessionValue("score", score);
+		//putSessionValue("score", score);
+		rhs.put("score", score);
 		rhs.put("template", template);
 		rhs.put("paper", paper);
-		rhs.put("item", items.get(++index));
+		
+		if(index == items.size()-1){
+			//已经答完所有题目
+			//设置异常为false
+			String processInstanceId = task.getProcessInstanceId();
+			infActiviti.setVariableByProcessInstanceId(processInstanceId, "exception", false);
+			//设置recordId，方便自动评卷拿到
+			infActiviti.setVariableByProcessInstanceId(processInstanceId, "recordsId", examrecord.getId());
+			infActiviti.completeTaskVar(taskId, paperId, getCurrentAccount(), var);
+			rhs.put("finsh", true);
+		}else{
+			rhs.put("finsh", false);
+			rhs.put("item", items.get(++index));
+		}
+		
 		rhs.put("index", index);
 		rhs.put("score",score);
-		
+		rhs.put("task", task);
+		rhs.put("examrecordId", examrecordId);
 		
 		return "success";
 	}
@@ -440,7 +476,7 @@ public class ExamAction extends BaseProcessAction {
 		
 		if(!getCurrentUser().getAccount().equals("admin")){
 			for (Examrecord examrecord : recordList) {
-				if(examrecord.getUserid().equals(useraccount)&&examrecord.getPaper() != null){
+				if(useraccount.equals(examrecord.getUserid())&&examrecord.getPaper() != null){
 					String papername = examrecord.getPaper().getName();
 					List<Examrecord> examrecords = dataMap.get(papername);
 					if(examrecords == null){

@@ -25,7 +25,7 @@
 						<td><strong>#.&nbsp;${rhs["item"].content}</strong></td>
 					<tr>
 					<#if rhs["item"].type == 1>
-						<#list rhs["item"].choiceitem?sort_by("id") as choiceitem>
+						<#list rhs["item"].getChoiceitem()?sort_by("id") as choiceitem>
 							<tr>
 								<td><input type="radio" value="${choiceitem.refid}" name="result[${rhs["index"]}].answer"/> ${choiceitem.value}</td>
 							</tr>
@@ -50,6 +50,7 @@
 					</#if>
 				<input type="hidden" value="${rhs["item"].id}" name="result[${rhs["index"]}].item.id" />
 				<input type="hidden" value="${rhs["index"]}" name="index" />
+				<input type="hidden" value="${rhs["score"]?if_exists}" name="score" />
 				<input type="hidden" value="<#if rhs["item"].mark?exists >${rhs["item"].mark}<#else>${rhs["paper"].singlechoicemark}</#if>" name="result[${rhs["index"]}].mark" />
       	</table>
 	    <table class="table table-condensed table-bordered table-striped">
@@ -68,14 +69,14 @@
 		$.ajax({
                 cache: true,
                 type: "POST",
-                url:ajaxCallUrl,
+                url:"exam_exam_complete_task_single.do",
                 data:$('#form_item').serialize(),// 你的formid
-                async: false,
+                async: true,
                 error: function(request) {
                     alert("Connection error");
                 },
                 success: function(data) {
-                    $("#form_item").parent().html(data);
+                    $("#result").html(data);
                 }
             });
 		//window.close();
@@ -83,10 +84,10 @@
 	$(document).ready(function(){
 
 	});
-	document.oncontextmenu=function(){
-    	alert('禁止鼠标右键菜单!');
-    	return false;
-	}
+	//document.oncontextmenu=function(){
+    	//alert('禁止鼠标右键菜单!');
+    	//return false;
+	//}
 	document.onkeydown=function(e){
 	    e=e||event;
 	    //alert(e.keyCode);//可查看各个按键的keyCode是多少
@@ -121,16 +122,16 @@
 		}
 	}
 	//失去焦点后的动作
-	function c(){  
-        window.close();  
-    }
+	//function c(){  
+       // window.close();  
+    //}
 	//为窗口注册失去焦点事件  
-    window.onblur = c;
+    //window.onblur = c;
     
     //当关闭窗口时提示是否提交考试 
-    window.onbeforeunload = function()  {  
-        return "当前数据还没有保存，关闭、刷新或切换窗口会自动完成考试，是否继续?";       
-    }
+   // window.onbeforeunload = function()  {  
+       // return "当前数据还没有保存，关闭、刷新或切换窗口会自动完成考试，是否继续?";       
+    //}
     
     //窗口关闭后给出提示  
     window.onunload = function()  {

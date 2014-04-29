@@ -33,6 +33,11 @@
 							<a  <#if item.method == "Start"> onclick="javascript:toFull('${item.handleTaskUrl?if_exists}&taskId=${item.task.id}')"<#else>href="${item.handleTaskUrl?if_exists}&taskId=${item.task.id}"</#if> class="btn btn-xs btn-primary">
 								${item.method}
 							</a>
+							<#if item.method == "Start">
+								<a  onclick="javascript:toFull('${item.handleTaskUrl?if_exists}&taskId=${item.task.id}&format=single')" class="btn btn-xs btn-info">
+									${item.method}(Single)
+								</a>
+							</#if>
 						</td>
 					</tr>
 				</#list>

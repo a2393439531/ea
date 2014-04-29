@@ -30,6 +30,15 @@ public class SelectuserAction extends BaseEaAction {
 		
 	}	
 	
+	//针对有没组织架构的选人
+	public String select_userlist() throws Exception {
+		log.debug("aaa");
+		rhs.put("userList",infEa.getAllUser());	
+	return "success";	
+		
+		
+	}
+	
 	public String users_for_select() throws Exception {
 		String term = getpara("term");
 		log.debug("users_for_select() : " + term);
