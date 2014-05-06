@@ -1,16 +1,26 @@
 package com.app.common.test;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.apache.struts2.ServletActionContext;
 import org.springframework.stereotype.Component;
 
 import com.app.common.base.action.BaseEaAction;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.utils.hardinfo.HardInfo;
 
 @Component("testAction")
 @SuppressWarnings("rawtypes")
@@ -32,7 +42,31 @@ public class TestAction extends BaseEaAction {
 		return "success"; 
 	}
 		
-	
+	public String zxing() throws Exception{        
+		String url ="http:/"+HardInfo.findNonLocalhostIp()+":"+getRequest().getLocalPort()+getRequest().getContextPath();
+		String url_apk =url+"/ea-android.apk";
+		
+		int width = 200;
+		int height = 200;
+		String format = "png";
+		Hashtable hints = new Hashtable();
+		hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
+		genQR(url_apk, width, height, format, hints,getWebroot()+"/url_apk.png");
+		genQR(url, width, height, format, hints,getWebroot()+"/url.png");
+		
+		return "success"; 
+	}
+
+	private void genQR(String url, int width, int height, String format,
+			Hashtable hints,String filename) throws WriterException, IOException {
+		BitMatrix bitMatrix = new MultiFormatWriter().encode(url,
+				BarcodeFormat.QR_CODE, width, height, hints);
+		
+		System.out.println("二维码文件保存地址"+filename);
+		File outputFile = new File(filename);
+		MatrixToImageWriter.writeToFile(bitMatrix, format, outputFile);
+	}
+			
 	
 	public String menu_para() throws Exception {
 		rhs.put("system_para_map", 	infEa.getParaMap());

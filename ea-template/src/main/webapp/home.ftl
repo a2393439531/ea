@@ -16,7 +16,7 @@
 	         <a href="rule.ftl" target=_blank class="btn btn-xs btn-default">开发规范</a>
   			 <a  href="common_monitor_home.do" target=_blank" class="btn btn-xs btn-default" title="https://code.google.com/p/javamelody/wiki/UserGuide">健壮性</a>
 			 <a  href="" target=_blank" class="btn btn-xs btn-default">安全性</a>	           
-	           
+	          <a  href="common_test_zxing.do" target=_blank" class="btn btn-xs btn-default">二维码</a>	    
 	  		</p>
 			</div>
 		</div>

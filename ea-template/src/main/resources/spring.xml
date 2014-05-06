@@ -24,7 +24,7 @@
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath:/database-mysql.properties</value>
+				<value>classpath:/database-${db}.properties</value>
 			</list>
 		</property>
 		<property name="fileEncoding" value="UTF-8" />

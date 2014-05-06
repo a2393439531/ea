@@ -21,6 +21,11 @@
                 <version>8.0.0.M2</version>
                 <configuration>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
+					<connectors>
+						<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+							<port>9090</port>
+						</connector>
+					</connectors>
                     <webAppSourceDirectory>${basedir}src/main/webapp/</webAppSourceDirectory>
                     <webAppConfig>
                         <contextPath>/demo</contextPath>
