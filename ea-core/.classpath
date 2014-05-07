@@ -16,6 +16,8 @@
   <classpathentry kind="var" path="M2_REPO/javax/el/el-api/2.2/el-api-2.2.jar"/>
   <classpathentry kind="var" path="M2_REPO/javax/websocket/javax.websocket-api/1.0/javax.websocket-api-1.0.jar"/>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="var" path="M2_REPO/com/google/zxing/core/3.0.1/core-3.0.1.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/google/zxing/javase/3.0.1/javase-3.0.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/mysql/mysql-connector-java/5.1.29/mysql-connector-java-5.1.29.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/poi/poi/3.10-FINAL/poi-3.10-FINAL.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-codec/commons-codec/1.5/commons-codec-1.5.jar"/>
