@@ -17,6 +17,8 @@ import com.app.exam.model.Knowledge;
 import com.app.exam.model.Paper;
 import com.app.exam.model.Template;
 
+import edu.emory.mathcs.backport.java.util.Collections;
+
 @Scope("prototype")
 @Component("paperAction")
 public class PaperAction extends BaseEaAction {
@@ -201,6 +203,7 @@ public class PaperAction extends BaseEaAction {
 
 	private List paperToProcessPaper(List list){
 		List retList = new ArrayList();
+		Collections.sort(list);
 		if(list != null){
 			for(int i = 0; i < list.size(); i++){
 				Paper paper = (Paper)list.get(i);

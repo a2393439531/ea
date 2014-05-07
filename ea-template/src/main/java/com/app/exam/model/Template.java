@@ -157,6 +157,39 @@ public class Template extends BaseModel {
 		return num;
 	}
 	
+	public List<Item> getAllItem(Template template){
+		Set<Item> singleitems = new HashSet<Item>();
+		Collection<Item> rmdsingleitems = getRmdItem("1", getRmdsinglechoice());
+		Collection<Item> reqsingleitems = getReqItem("1");
+		singleitems.addAll(reqsingleitems);
+		singleitems.addAll(rmdsingleitems);
+		
+		Set<Item> multiitems = new HashSet<Item>();
+		Collection<Item> rmdmultiitems = getRmdItem("2", getRmdmultichoice());
+		Collection<Item> reqmultiitems = getReqItem("2");
+		multiitems.addAll(reqmultiitems);
+		multiitems.addAll(rmdmultiitems);
+		
+		Set<Item> blankitems = new HashSet<Item>();
+		Collection<Item> rmdblankitems = getRmdItem("3", getRmdblank());
+		Collection<Item> reqblankitems = getReqItem("3");
+		blankitems.addAll(reqblankitems);
+		blankitems.addAll(rmdblankitems);
+		
+		Set<Item> essayitems = new HashSet<Item>();
+		Collection<Item> rmdessayitems = getRmdItem("4", getRmdessay());
+		Collection<Item> reqessayitems = getReqItem("4");
+		essayitems.addAll(reqessayitems);
+		essayitems.addAll(rmdessayitems);
+		
+		List<Item> alldata = new ArrayList<Item>();
+		alldata.addAll(singleitems);
+		alldata.addAll(multiitems);
+		alldata.addAll(blankitems);
+		alldata.addAll(essayitems);
+		return alldata;
+	}
+	
 	public String getTitle() {
 		return title;
 	}
