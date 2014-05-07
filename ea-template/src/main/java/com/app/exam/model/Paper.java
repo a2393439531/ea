@@ -20,7 +20,7 @@ import com.app.ea.model.User;
 
 @Entity
 @Table(name = "test_paper")
-public class Paper extends ProcessModel {
+public class Paper extends ProcessModel  {
 	private Long id;
 
 	@Id
@@ -57,6 +57,22 @@ public class Paper extends ProcessModel {
 		this.template = template;
 	}
 
+	private Papergroup papergroup; //所属的试卷组
+	
+	//@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Knowledge.class, fetch = FetchType.LAZY)
+	//@JoinTable(name = "test_paper_papergroup", joinColumns = { @JoinColumn(name = "paper_id") }, inverseJoinColumns = { @JoinColumn(name = "papergroup_id") })
+	
+	@ManyToOne(cascade = { CascadeType.ALL })
+	@JoinColumn(name = "papergroup_id", nullable = true)
+	public Papergroup getPapergroup() {
+		return papergroup;
+	}
+
+	public void setPapergroup(Papergroup papergroup) {
+		this.papergroup = papergroup;
+	}
+	
+	
 	
 	//public Set<Result> resultdetail = new HashSet<Result>();
 	
@@ -70,6 +86,24 @@ public class Paper extends ProcessModel {
 	//	public void setResultdetail(Set<Result> resultdetail) {
 	//		this.resultdetail = resultdetail;
 	//	}
+
+
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		if(o instanceof Paper){
+			if(this.id > (((Paper) o).getId())){
+				return 1;
+			}
+			if(this.id < (((Paper) o).getId())){
+				return -1;
+			}
+			if(this.id == (((Paper) o).getId())){
+				return 0;
+			}
+		}
+		return super.compareTo(o);
+	}
 
 	public Set<Examrecord> resultdetail = new HashSet<Examrecord>();
 	

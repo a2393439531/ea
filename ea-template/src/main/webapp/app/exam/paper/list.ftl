@@ -20,6 +20,7 @@
    		<#include "include_add_search.ftl">
 		<br><br>
 		<a style="margin-left:7px;margin-top:5px;" class="btn btn-info "  href="exam_paper_save.do?method=show"><@i18n "menu_paper_new" /></a>
+		<a style="margin-left:7px;margin-top:5px;" class="btn btn-xs btn-info "  href="exam_papergroup_list.do"><@i18n "menu_papergroup" /></a>
 		<a style="margin-left:7px;margin-top:5px;" class="btn btn-xs btn-info "  href="exam_template_list.do"><@i18n "menu_template" /></a>
 		
 	<div class="panel panel-primary" style="margin-top: 18px;">

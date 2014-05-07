@@ -24,9 +24,11 @@ import com.app.exam.model.Examrecord;
 import com.app.exam.model.Item;
 import com.app.exam.model.Knowledge;
 import com.app.exam.model.Paper;
+import com.app.exam.model.Papergroup;
 import com.app.exam.model.Result;
 import com.app.exam.model.Template;
 import com.app.exam.util.ExcelUtil;
+import com.utils.cache.Cache;
 
 @Scope("prototype")
 @Component("examAction")
@@ -116,6 +118,7 @@ public class ExamAction extends BaseProcessAction {
 							}
 						}
 						putSessionValue("items", alldata);
+						Cache.set("items", alldata, "60mn");
 						rhs.put("index", 0);
 						//放入第一题
 						rhs.put("item", alldata.get(0));
@@ -210,6 +213,12 @@ public class ExamAction extends BaseProcessAction {
 		rhs.put("count", p.getTotalSize());
 		rhs.put("maxPage", p.getTotalPage());
 		rhs.put("currentPage", p.getCurrentPage());
+		return "success";
+	}
+	
+	public String exam_home() throws Exception{
+		exam_list();
+		exam_record_list();
 		return "success";
 	}
 	
@@ -330,7 +339,8 @@ public class ExamAction extends BaseProcessAction {
 	//计算当前一个题目的分数，并且继续下一题
 	public String complete_task_single(){
 		Map<String, Object> var = new HashMap<String, Object>();
-		List<Item> items = (List<Item>) getSessionValue("items");
+		//List<Item> items = (List<Item>) getSessionValue("items");
+		List<Item> items = (List<Item>) Cache.get("items");
 		int index = Integer.valueOf(((getpara("index").equals(""))?"0":getpara("index")));
 		int score = Integer.valueOf(((getpara("score").equals(""))?"0":getpara("score")));
 		String examrecordId = getpara("examrecordId");
@@ -344,15 +354,23 @@ public class ExamAction extends BaseProcessAction {
 		String taskId = getpara("taskId");
 		Task task = infActiviti.getTaskById(taskId);
 		String paperId = (String)infActiviti.getVariableByTaskId(taskId, "formId");
-		Paper paper = (Paper) getSessionValue("paper");
+		//Paper paper = (Paper) getSessionValue("paper");
+		Paper paper = (Paper) Cache.get("paper");
 		if(paper == null){
 			paper = (Paper) baseDao.loadById("Paper", Long.valueOf(paperId));
-			putSessionValue("paper", paper);
+			Papergroup papergroup = paper.getPapergroup();
+			Set<Paper> papers = papergroup.getPapers();
+			for (Paper paper2 : papers) {
+			}
+			//putSessionValue("paper", paper);
+			Cache.set("paper", paper);
 		}
-		Template template = (Template)getSessionValue("template");
+		//Template template = (Template)getSessionValue("template");
+		Template template = (Template) Cache.get("template");
 		if(template == null){
 			template = paper.getTemplate();
-			putSessionValue("template", template);
+			//putSessionValue("template", template);
+			Cache.set("template", template);
 		}
 		
 		for (Result res : result) {
@@ -398,6 +416,28 @@ public class ExamAction extends BaseProcessAction {
 		examrecordId = String.valueOf(examrecord.getId());
 		
 		//putSessionValue("score", score);
+		//当score大于该paper的通过分数后，应该查询paper的下一组paper和tamplate。放入rhs。
+		//然后根据template拿到item，更新session中的items,还有把index址零
+		//同时应该新建一条examrecord来记录下一个试卷的result
+		if(score > paper.getPassmark()){
+			Papergroup papergroup = paper.getPapergroup();
+			paper = papergroup.getNextPaper(papergroup.getPapers(), paper);
+			template = (Template)baseDao.loadById("Template", paper.getTemplate().getId());
+			
+			items = template.getAllItem(template);
+			for (Item item : items) {
+				if(item.getChoiceitem().size() >0){
+					item.getChoiceitem();
+				}
+			}
+			
+			//putSessionValue("items", items);
+			Cache.set("items", items);
+			index = 0;
+			score = 0;
+			examrecordId = "";
+		}
+		
 		rhs.put("score", score);
 		rhs.put("template", template);
 		rhs.put("paper", paper);
@@ -474,7 +514,7 @@ public class ExamAction extends BaseProcessAction {
 		
 		List<Examrecord> recordList = (List)rhs.get("dataList");
 		
-		if(!getCurrentUser().getAccount().equals("admin")){
+		if(!"admin".equals(getCurrentUser().getAccount())){
 			for (Examrecord examrecord : recordList) {
 				if(useraccount.equals(examrecord.getUserid())&&examrecord.getPaper() != null){
 					String papername = examrecord.getPaper().getName();
@@ -514,7 +554,7 @@ public class ExamAction extends BaseProcessAction {
 		
 		response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", 
-                "attachment; filename=export_result.xls");
+                "attachment; filename="+ paper.getName() +"_result.xls");
         ServletOutputStream os = response.getOutputStream();
 		ExcelUtil.exportToExcel(paper, os);
 		os.close();
