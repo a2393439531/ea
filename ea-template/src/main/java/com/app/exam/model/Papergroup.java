@@ -71,7 +71,7 @@ public class Papergroup extends BaseModel {
 			}
 			index ++ ;
 		}
-		if(index == 0){
+		if(index == 0 || index == list.size()){
 			return null;
 		}
 		return list.get(index);

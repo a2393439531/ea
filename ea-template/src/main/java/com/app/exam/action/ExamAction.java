@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.activiti.engine.task.Task;
 import org.apache.struts2.ServletActionContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -28,18 +30,20 @@ import com.app.exam.model.Papergroup;
 import com.app.exam.model.Result;
 import com.app.exam.model.Template;
 import com.app.exam.util.ExcelUtil;
+import com.app.manager.action.Tpltb1Action;
 import com.utils.cache.Cache;
 
 @Scope("prototype")
 @Component("examAction")
 public class ExamAction extends BaseProcessAction {
-	
+	private static Logger log = LoggerFactory.getLogger(ExamAction.class);
 	public List<Result> result = new ArrayList<Result>();
 	public List<String> singlechoicemark = new ArrayList<String>();
 	public List<String> multichoicemark = new ArrayList<String>();
 	public List<String> blankmark = new ArrayList<String>();
 	public List<String> essaymark = new ArrayList<String>();
 	public Template template = new Template();
+	public List<String> examrecordIds = new ArrayList<String>();
 	
 	public String get_template_list_sql() {
 		return "from Template";
@@ -118,7 +122,9 @@ public class ExamAction extends BaseProcessAction {
 							}
 						}
 						putSessionValue("items", alldata);
-						Cache.set("items", alldata, "60mn");
+						Map<String,Object> dataMap = new HashMap<String, Object>();
+						dataMap.put("items", alldata);
+						Cache.set(getCurrentAccount(), dataMap);
 						rhs.put("index", 0);
 						//放入第一题
 						rhs.put("item", alldata.get(0));
@@ -246,8 +252,12 @@ public class ExamAction extends BaseProcessAction {
 			String[] assignees = getpara("assignee").split(",");//拿到分配考试的人,有可能是多人
 			//针对每个人,启动流程
 			String processInstanceId = "";
-			for (String assignee : assignees) {
-				processInstanceId += infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignee, var) + ",";
+			if(assignees.length > 1){
+				for (String assignee : assignees) {
+					processInstanceId = processInstanceId + ","+ infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignee, var);
+				}
+			}else{
+				processInstanceId = assignees[0];
 			}
 			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperId));
 			paper.setProcessInstanceId(processInstanceId);
@@ -339,14 +349,25 @@ public class ExamAction extends BaseProcessAction {
 	//计算当前一个题目的分数，并且继续下一题
 	public String complete_task_single(){
 		Map<String, Object> var = new HashMap<String, Object>();
+		Map<String, Object> dataMap = (Map<String, Object>) Cache.get(getCurrentAccount());
 		//List<Item> items = (List<Item>) getSessionValue("items");
-		List<Item> items = (List<Item>) Cache.get("items");
+		List<Item> items = (List<Item>) dataMap.get("items");
 		int index = Integer.valueOf(((getpara("index").equals(""))?"0":getpara("index")));
 		int score = Integer.valueOf(((getpara("score").equals(""))?"0":getpara("score")));
 		String examrecordId = getpara("examrecordId");
 		Examrecord examrecord = null;
+		String allrecordid = "";
 		if("".equals(examrecordId)){
 			examrecord = new Examrecord();
+			baseDao.create(examrecord);
+			allrecordid = String.valueOf(dataMap.get("allrecord"));
+			if(!"".equals(allrecordid) &&!"null".equals(allrecordid)&& allrecordid != null){
+				allrecordid = allrecordid + "," + examrecord.getId();
+				dataMap.put("allrecord", allrecordid);
+				//Cache.set(getCurrentAccount(), dataMap);
+			}else{
+				dataMap.put("allrecord", examrecord.getId());
+			}
 		}else{
 			examrecord = (Examrecord)baseDao.loadById("Examrecord", Long.valueOf(examrecordId));
 		}
@@ -355,7 +376,7 @@ public class ExamAction extends BaseProcessAction {
 		Task task = infActiviti.getTaskById(taskId);
 		String paperId = (String)infActiviti.getVariableByTaskId(taskId, "formId");
 		//Paper paper = (Paper) getSessionValue("paper");
-		Paper paper = (Paper) Cache.get("paper");
+		Paper paper = (Paper) dataMap.get("paper");
 		if(paper == null){
 			paper = (Paper) baseDao.loadById("Paper", Long.valueOf(paperId));
 			Papergroup papergroup = paper.getPapergroup();
@@ -363,16 +384,23 @@ public class ExamAction extends BaseProcessAction {
 			for (Paper paper2 : papers) {
 			}
 			//putSessionValue("paper", paper);
-			Cache.set("paper", paper);
+			//Cache.set("paper", paper);
+			//Cache.set("allpaper", paper.getId());
+			dataMap.put("paper", paper);
+			dataMap.put("allpaper", paper.getId());
+			//Cache.set(getCurrentAccount(), dataMap);
 		}
 		//Template template = (Template)getSessionValue("template");
-		Template template = (Template) Cache.get("template");
+		Template template = (Template) dataMap.get("template");
 		if(template == null){
 			template = paper.getTemplate();
 			//putSessionValue("template", template);
-			Cache.set("template", template);
+			//Cache.set("template", template);
+			dataMap.put("template", template);
+			//Cache.set(getCurrentAccount(), dataMap);
 		}
-		
+		//计算结果
+		Set<Result> resultset = new HashSet<Result>();
 		for (Result res : result) {
 			if(res == null){
 				continue;
@@ -404,10 +432,10 @@ public class ExamAction extends BaseProcessAction {
 			res.setExamrecord(examrecord);
 			res.setUser(getCurrentAccount());
 			baseDao.create(res);
+			resultset.add(res);
 		}
-		Set<Result> resultset = new HashSet<Result>();
-		resultset.addAll(result);
-
+		resultset.addAll(examrecord.getResult());
+		
 		examrecord.setResult(resultset);
 		examrecord.setPaper(paper);
 		examrecord.setUserid(getCurrentAccount());
@@ -421,21 +449,33 @@ public class ExamAction extends BaseProcessAction {
 		//同时应该新建一条examrecord来记录下一个试卷的result
 		if(score > paper.getPassmark()){
 			Papergroup papergroup = paper.getPapergroup();
-			paper = papergroup.getNextPaper(papergroup.getPapers(), paper);
-			template = (Template)baseDao.loadById("Template", paper.getTemplate().getId());
-			
-			items = template.getAllItem(template);
-			for (Item item : items) {
-				if(item.getChoiceitem().size() >0){
-					item.getChoiceitem();
+			Paper temppaper = papergroup.getNextPaper(papergroup.getPapers(), paper);
+			if(temppaper != null){
+				paper = temppaper;
+				template = (Template)baseDao.loadById("Template", paper.getTemplate().getId());
+				items = template.getAllItem(template);
+				for (Item item : items) {
+					if(item.getChoiceitem().size() >0){
+						item.getChoiceitem();
+					}
 				}
+				
+				String allpaperid = "";
+				allpaperid = String.valueOf( dataMap.get("allpaper"));
+				if(!"".equals(allpaperid) && allpaperid != null){
+					allpaperid = allpaperid + "," + paper.getId();
+				}
+				dataMap.put("allpaper", allpaperid);
+				dataMap.put("items", items);
+				dataMap.put("paper", paper);
+				dataMap.put("template", template);
+				
+				index = -1;
+				score = 0;
+				examrecordId = "";
+			}else{
+				log.debug("Last paper!!");
 			}
-			
-			//putSessionValue("items", items);
-			Cache.set("items", items);
-			index = 0;
-			score = 0;
-			examrecordId = "";
 		}
 		
 		rhs.put("score", score);
@@ -448,19 +488,21 @@ public class ExamAction extends BaseProcessAction {
 			String processInstanceId = task.getProcessInstanceId();
 			infActiviti.setVariableByProcessInstanceId(processInstanceId, "exception", false);
 			//设置recordId，方便自动评卷拿到
-			infActiviti.setVariableByProcessInstanceId(processInstanceId, "recordsId", examrecord.getId());
+			infActiviti.setVariableByProcessInstanceId(processInstanceId, "recordsId", allrecordid);
 			infActiviti.completeTaskVar(taskId, paperId, getCurrentAccount(), var);
 			rhs.put("finsh", true);
+			//把缓存清空
+			Cache.set(getCurrentAccount(), new HashMap<String, Object>());
 		}else{
+			index ++;
 			rhs.put("finsh", false);
-			rhs.put("item", items.get(++index));
+			rhs.put("item", items.get(index));
 		}
-		
 		rhs.put("index", index);
 		rhs.put("score",score);
 		rhs.put("task", task);
 		rhs.put("examrecordId", examrecordId);
-		
+		Cache.set(getCurrentAccount(), dataMap);
 		return "success";
 	}
 	
@@ -508,7 +550,7 @@ public class ExamAction extends BaseProcessAction {
 		String useraccount = getCurrentAccount();
 		List<Examrecord> dataList = new ArrayList<Examrecord>();
 		Map<String,List<Examrecord>> dataMap = new HashMap<String, List<Examrecord>>();
-		String sql = " from Examrecord r ";//where r.userid=" + "'" +useraccount+"'
+		String sql = " from Examrecord r where r.userid=" + "'" +useraccount+"'";
 		
 		getPageData(sql);
 		
