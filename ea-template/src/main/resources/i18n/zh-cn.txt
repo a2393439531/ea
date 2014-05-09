@@ -2,3 +2,4 @@ submit                 =提交
 menu_oragnize          =组织架构
 menu_user              =用户管理
 menu_infocenter        =信息发布
+menu_test              =菜单测试

@@ -4,10 +4,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -17,7 +20,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.app.common.base.action.BaseEaAction;
+import com.app.common.i18n.I18n;
 import com.app.common.spring.ssh.model.BaseModel;
+import com.utils.path.PathUtils;
 
 @Component("editAction")
 public class editAction extends BaseEaAction {
@@ -72,27 +77,40 @@ public class editAction extends BaseEaAction {
 		rhs.put("datalist", fileList);
 		return "success";
 	}
-	public String file_load() throws IOException{
+	public String file_load() throws IOException, ClassNotFoundException{
 		BufferedReader br = null;
 		List<String> datalist = new ArrayList<String>();
-		String file = getpara("file");
-		String webapppath = ServletActionContext.getServletContext().getRealPath("");
-		String resourcepath = webapppath.substring(0, webapppath.lastIndexOf("\\")) + "\\resources\\i18n";
-		File conf = new File(resourcepath+ "\\" +file);
+		String filename = getpara("file");
+		String resourcepath = PathUtils.getClassPath(PathUtils.SYSTEM_DATA_CLASS) + "/i18n";
+		File conf = new File(resourcepath+ "\\" +filename);
 		if(conf != null){
 			br = new BufferedReader(new InputStreamReader(new FileInputStream(conf)));
 		}
 		for (String line = br.readLine(); line != null; line = br.readLine()) {  
             datalist.add(line);  
         }
-		rhs.put("datalist", datalist);
 		br.close();
+		rhs.put("datalist", datalist);
 		return "success";
 	}
-	public String file_save() throws IOException{
-		String conten = getpara("file_content");
+	public String file_save() throws ClassNotFoundException, Exception{
+		String content = getpara("file_content");
+		String filename = getpara("file_name");
+		String resourcepath = PathUtils.getClassPath(PathUtils.SYSTEM_DATA_CLASS) + "/i18n";
 		
+		File deskFile = new File(resourcepath, filename);
+		OutputStream os = new FileOutputStream(deskFile);
 		
+		StringBuffer sb = new StringBuffer();
+		for (String line : content.split("\n")) {
+			sb.append(line + "\n");
+		}
+		
+		os.write(sb.toString().getBytes());
+		os.close();
+		if(I18n.siteStrMap != null){
+			I18n.siteStrMap = I18n.getMapFromePropFile(PathUtils.getClassPath(PathUtils.SYSTEM_DATA_CLASS) + "/i18n","txt");
+		}
 		list_file();
 		return "success";
 	}
