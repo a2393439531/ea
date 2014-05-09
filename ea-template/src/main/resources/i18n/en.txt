@@ -28,6 +28,7 @@ menu_template          =Template Management
 menu_template_new      =Add Template
 menu_template_edit     =Edit Template
 menu_template_view     =View Template
+menu_edit_para         =Edit System Parameter
 title_option_new       =Add Option
 title_mark             =Mark
 title_refkey           =Reference Key

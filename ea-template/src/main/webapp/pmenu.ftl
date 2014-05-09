@@ -47,6 +47,7 @@
 		  <li ><a href="ea_rule_menu_rule.do" target="mainFrame"><@i18n "menu_infocenter" /></a></li>
 		  <li ><a href="ea_smtp_menu_smtp.do" target="mainFrame">邮箱系统</a></li>
 		  <li ><a href="ea_systempara_menu_systempara.do" target="mainFrame">系统参数</a></li>
+		  <li ><a href="common_edit_list_file.do" target="mainFrame"><@i18n "menu_edit_para" /></a></li>
 		  <li ><a href="ea_resource_menu_resource.do" target="mainFrame">权限</a></li>
  		  <li ><a href="common_monitor_home.do" target="mainFrame">运行状态</a></li>
 		  <li ><a href="common_activiti_menu_process_definition.do" target="mainFrame">工作流管理</a></li>
