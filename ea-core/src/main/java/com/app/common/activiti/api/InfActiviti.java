@@ -47,7 +47,7 @@ public interface InfActiviti {
 	public abstract Task getTaskById(String taskId);
 	
 	/*add by hb 2014/03/13*/
-	public abstract Task getActivitiTaskByProcessInstanceId(String processInstanceId);
+	public abstract List<Task> getActivitiTaskByProcessInstanceId(String processInstanceId);
 	public abstract String getHisVariableByProcessInstanceId(String processInstanceId, String variable);
 	public abstract String getAssigneeTimeByProcessInstanceId(String processInstanceId);
 	/* add by chenzhijian 20130423 -s*/

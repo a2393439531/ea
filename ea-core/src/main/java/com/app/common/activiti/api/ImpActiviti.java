@@ -38,7 +38,6 @@ import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.impl.task.TaskDefinition;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.activiti.engine.task.Task;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.struts2.ServletActionContext;
@@ -241,26 +240,36 @@ public class ImpActiviti implements InfActiviti {
 	
 	@Override
 	public String processInstanceStatus(String processInstanceId) {
+		String result = "";
 		if (processInstanceId == null || "".equals(processInstanceId))
 			return ProcessInstanceStatus.New;
 		else {
-			HistoricProcessInstance hpi = historyService
-					.createHistoricProcessInstanceQuery()
-					.processInstanceId(processInstanceId).singleResult();
-			if (hpi == null) {
-				return ProcessInstanceStatus.New;
-			} else if (hpi.getEndTime() != null) {
-				return ProcessInstanceStatus.Done;
-			} else {
-				ProcessInstance pi = runtimeService
-						.createProcessInstanceQuery()
-						.processInstanceId(processInstanceId).singleResult();
-				if (pi.isSuspended())
-					return ProcessInstanceStatus.Suspended;
-				else
-					return ProcessInstanceStatus.Ongoing;
+			String[] instanceId = processInstanceId.split(",");
+			for (String id : instanceId) {
+				HistoricProcessInstance hpi = historyService
+						.createHistoricProcessInstanceQuery()
+						.processInstanceId(id).singleResult();
+				if (hpi == null) {
+					result = ProcessInstanceStatus.New;
+					//return ProcessInstanceStatus.New;
+				} else if (hpi.getEndTime() != null) {
+					result = ProcessInstanceStatus.Done;
+					//return ProcessInstanceStatus.Done;
+				} else {
+					ProcessInstance pi = runtimeService
+							.createProcessInstanceQuery()
+							.processInstanceId(id).singleResult();
+					if (pi.isSuspended())
+						result = ProcessInstanceStatus.Suspended;
+						//return ProcessInstanceStatus.Suspended;
+					else
+						result = ProcessInstanceStatus.Ongoing;
+						return result;
+						//return ProcessInstanceStatus.Ongoing;
+				}
 			}
 		}
+		return result;
 	}
 	//old
 	@Override
@@ -664,37 +673,59 @@ public class ImpActiviti implements InfActiviti {
 	//add by hb end
 
 	@Override
-	public Task getActivitiTaskByProcessInstanceId(String processInstanceId) {
+	public List<Task> getActivitiTaskByProcessInstanceId(String processInstanceId) {
 		//get all task by processInstanceId
-		Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
-
-		return task;
+		List<Task> list = new ArrayList<Task>();
+		String[] instanceId = processInstanceId.split(",");
+		for (String id : instanceId) {
+			Task task = taskService.createTaskQuery().processInstanceId(id).singleResult();
+			list.add(task);
+		}
+		return list;
 	}
 
 	@Override
 	public String getAssigneeTimeByProcessInstanceId(String processInstanceId) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-		
-		HistoricProcessInstance hpi = historyService
-				.createHistoricProcessInstanceQuery()
-				.processInstanceId(processInstanceId).singleResult();
-		
-		String assigneedTime = sdf.format(hpi.getStartTime());
+		String time = "";
+		String[] instanceId = processInstanceId.split(",");
+		for (String id : instanceId) {
+			HistoricProcessInstance hpi = historyService
+					.createHistoricProcessInstanceQuery()
+					.processInstanceId(id).singleResult();
+			
+			String assigneedTime = sdf.format(hpi.getStartTime());
+			if(!"".equals(time)&&time != null){
+				time = time + "," + assigneedTime;
+			}else{
+				time = assigneedTime;
+			}
+		}
 
-		return assigneedTime;
+		return time;
 	}
 
 	@Override
 	public String getHisVariableByProcessInstanceId(String processInstanceId,String variable) {
-		List<HistoricVariableInstance> hpi = historyService.createHistoricVariableInstanceQuery().processInstanceId(processInstanceId).list();
-				
-		String firstAssignee = "";
-		for (HistoricVariableInstance historicVariableInstance : hpi) {
-			if(variable.equals(historicVariableInstance.getVariableName())){
-				firstAssignee = historicVariableInstance.getValue().toString();
+		String[] instanceId = processInstanceId.split(",");
+		String assignee = "";
+		for (String id : instanceId) {
+			List<HistoricVariableInstance> hpi = historyService.createHistoricVariableInstanceQuery().processInstanceId(processInstanceId).list();
+			
+			String firstAssignee = "";
+			for (HistoricVariableInstance historicVariableInstance : hpi) {
+				if(variable.equals(historicVariableInstance.getVariableName())){
+					firstAssignee = historicVariableInstance.getValue().toString();
+				}
+			}
+			if(!"".equals(assignee)&&assignee!=null){
+				assignee = assignee + "," + firstAssignee;
+			}else{
+				assignee = firstAssignee;
 			}
 		}
-		return firstAssignee;
+		
+		return assignee;
 		
 	}
 

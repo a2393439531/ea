@@ -2,6 +2,7 @@ package com.app.common.activiti.model;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.activiti.engine.task.Task;
 
@@ -36,8 +37,16 @@ public class BusinessWithProcessModel<T> {
 				if("Done".equals(processInstanceStatus)){
 					processTaskName = "Process has been done!";
 				}else{
-					Task t = infActiviti.getActivitiTaskByProcessInstanceId(para);
-					processTaskName = t.getName();
+					List<Task> t = infActiviti.getActivitiTaskByProcessInstanceId(para);
+					for (Task task : t) {
+						if(task != null){
+							if(!"".equals(processTaskName) && processTaskName != null){
+								processTaskName = processTaskName + "," + task.getName();
+							}else{
+								processTaskName = task.getName();
+							}
+						}
+					}
 				}
 				processAssigneedTime = infActiviti.getAssigneeTimeByProcessInstanceId(para);
 				processAssigneedName = infActiviti.getHisVariableByProcessInstanceId(para, "firstAssignee");

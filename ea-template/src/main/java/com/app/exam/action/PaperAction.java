@@ -164,13 +164,25 @@ public class PaperAction extends BaseEaAction {
 					break;
 				}
 			}
-			//如果是excel导入的，就把所有题目显示出来
+			//如果是excel导入的，就把所有题目显示出来//目前只显示了单选。因为，目前通过excel导入只能是单选题
 			if(byexcel){
 				Template template = paper.getTemplate();
 				Set<Item> singleitems = new HashSet<Item>();
+				Set<Item> multiitems = new HashSet<Item>();
+				Set<Item> blankitems = new HashSet<Item>();
+				Set<Item> essayitems = new HashSet<Item>();
 				Collection<Item> reqsingleitems = template.getReqItem("1");
+				Collection<Item> reqmultiitems = template.getReqItem("2");
+				Collection<Item> reqblankitems = template.getReqItem("3");
+				Collection<Item> reqessayitems = template.getReqItem("4");
 				singleitems.addAll(reqsingleitems);
+				multiitems.addAll(reqmultiitems);
+				blankitems.addAll(reqblankitems);
+				essayitems.addAll(reqessayitems);
 				rhs.put("singleitems", singleitems);
+				rhs.put("multiitems", multiitems);
+				rhs.put("blankitems", blankitems);
+				rhs.put("essayitems", essayitems);
 				rhs.put("paper", paper);
 				rhs.put("template", template);
 			}

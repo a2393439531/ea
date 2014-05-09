@@ -357,9 +357,18 @@ public class ItemUtil {
 								break;
 							case 4:
 								//item refkey
-								if(cellValue.matches("[1-" + (cellNum-5) + "]")){
-									item.setRefkey(cellValue);
+								//if(cellValue.split(",").length > 1){
+								//没考虑填空题和问答题的答案情况，先用英文逗号分隔多选题答案
+								for (String val : cellValue.split(",")) {
+									if(val.matches("[1-" + (cellNum-5) + "]")){
+										if(!"".equals(item.getRefkey()) && item.getRefkey() != null){
+											item.setRefkey(item.getRefkey() + "," + val);
+										}else{
+											item.setRefkey(val);
+										}
+									}
 								}
+								//}
 								break;
 							default:
 								//choiceitem

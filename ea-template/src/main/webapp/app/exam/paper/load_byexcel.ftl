@@ -34,8 +34,14 @@
 							<td><@i18n "title_single" /></td>
 							<td colspan="2"><@i18n "title_req" />:<input type="text" disabled name="paper.template.singlechoice" value="<#if rhs["paper"]?exists >${rhs["paper"].template.singlechoice}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
 							<td><@i18n "title_totalmark" /></td>
-							<td><input type="text" disabled name="totalmark" value="<#if rhs["paper"]?exists >${rhs["paper"].totalmark?if_exists}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
+							<td><input type="text" disabled name="totalmark" value="<#if rhs["paper"]?exists >${rhs["paper"].totalmark?if_exists}</#if>" /></td>
 							<input type="hidden" name="paper.totalmark" value="<#if rhs["paper"]?exists >${rhs["paper"].totalmark?if_exists}</#if>" />
+						</tr>
+						<tr>
+							<td><@i18n "title_multi" /></td>
+							<td colspan="2"><@i18n "title_req" />:<input type="text" disabled name="paper.template.multichoice" value="<#if rhs["paper"]?exists >${rhs["paper"].template.multichoice}</#if>" /></td>
+							<td></td>
+							<td></td>
 						</tr>
 						<tr>
 							<td><@i18n "title_examtime" />(minutes)</td>

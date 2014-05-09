@@ -35,6 +35,7 @@ title_title            =Title
 title_passmark         =Pass Mark
 title_totalmark        =Total Mark
 title_examtime         =Exam Time
+title_status           =Exam Status
 title_operation        =Operation
 title_type             =Type
 title_result           =Result

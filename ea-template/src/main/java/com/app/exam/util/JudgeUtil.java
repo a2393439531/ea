@@ -1,6 +1,7 @@
 package com.app.exam.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -49,9 +50,9 @@ public class JudgeUtil implements JavaDelegate {
 		String recordsId = String.valueOf(dataMap.get("allrecord"));
 		if(recordsId.split(",").length == 1){
 			recordsId = String.valueOf(infActiviti.getVariableByProcessInstanceId(processInstanceId, "recordsId"));
-		}else{
-			allrecord = recordsId.split(",");
 		}
+		allrecord = recordsId.split(",");
+
 		
 		
 		Set<Examrecord> examrecords = null;

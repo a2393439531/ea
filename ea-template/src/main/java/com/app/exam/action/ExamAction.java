@@ -66,6 +66,10 @@ public class ExamAction extends BaseProcessAction {
 			
 			
 			if("start".equals(method)){
+				Map<String,Object> dataMap = (Map<String, Object>) Cache.get(getCurrentAccount());
+				if(dataMap == null){
+					dataMap = new HashMap<String, Object>();
+				}
 				//先判断eception
 				String exception = String.valueOf(infActiviti.getVariableByTaskId(taskId, "exception"));
 				if(!"".equals(exception) && exception != null && Boolean.valueOf(exception)){
@@ -121,14 +125,29 @@ public class ExamAction extends BaseProcessAction {
 								item.getChoiceitem();
 							}
 						}
-						putSessionValue("items", alldata);
-						Map<String,Object> dataMap = new HashMap<String, Object>();
+						//putSessionValue("items", alldata);
 						dataMap.put("items", alldata);
 						Cache.set(getCurrentAccount(), dataMap);
-						rhs.put("index", 0);
+						rhs.put("index", dataMap.get("index") == null? 0: dataMap.get("index"));
 						//放入第一题
-						rhs.put("item", alldata.get(0));
-						rhs.put("score", getSessionValue("score"));
+						rhs.put("item", alldata.get(Integer.valueOf(dataMap.get("index") == null? 0:(Integer)dataMap.get("index"))));
+						rhs.put("score", dataMap.get("score") == null? 0: dataMap.get("score"));
+						if(dataMap.get("paper") != null){
+							paper = (Paper) dataMap.get("paper");
+						}
+						if(dataMap.get("template") != null){
+							template = (Template) dataMap.get("template");
+						}
+						//用于考试异常中断的时候，能够拿到最后一次的examrecordid。以便继续考。(否则会新建一条examrecord，这不合理)。
+						if(dataMap.get("allrecord") != null){
+							String[] recordsId = ((String) dataMap.get("allrecord")).split(",");
+							if(recordsId == null || ((Integer)dataMap.get("index")) == 0){
+								rhs.put("examrecordId","");
+							}else{
+								rhs.put("examrecordId", recordsId[recordsId.length - 1]);
+							}
+						}
+						
 					}
 					//同时设置exception为true，只有考生正确complete exam，exception才为false。
 					//String processInstanceId = task.getProcessInstanceId();
@@ -176,7 +195,6 @@ public class ExamAction extends BaseProcessAction {
 				rhs.put("blankitems", blankitems);
 				rhs.put("essayitems", essayitems);
 			}
-			
 			
 			rhs.put("paper", paper);
 			rhs.put("template", template);
@@ -254,10 +272,14 @@ public class ExamAction extends BaseProcessAction {
 			String processInstanceId = "";
 			if(assignees.length > 1){
 				for (String assignee : assignees) {
-					processInstanceId = processInstanceId + ","+ infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignee, var);
+					if("".equals(processInstanceId)){
+						processInstanceId = infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignee, var);
+					}else{
+						processInstanceId = processInstanceId + ","+ infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignee, var);
+					}
 				}
 			}else{
-				processInstanceId = assignees[0];
+				processInstanceId = infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignees[0], var);
 			}
 			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperId));
 			paper.setProcessInstanceId(processInstanceId);
@@ -346,27 +368,27 @@ public class ExamAction extends BaseProcessAction {
 		
 	}
 
-	//计算当前一个题目的分数，并且继续下一题
+	//计算当前一个题目的分数，并且继续下一题，该方法只能被用于以single方式打开试卷的时候。
 	public String complete_task_single(){
+		boolean finsh = false;
+		Examrecord examrecord = null;
+		String allrecordid = "";
 		Map<String, Object> var = new HashMap<String, Object>();
 		Map<String, Object> dataMap = (Map<String, Object>) Cache.get(getCurrentAccount());
-		//List<Item> items = (List<Item>) getSessionValue("items");
 		List<Item> items = (List<Item>) dataMap.get("items");
 		int index = Integer.valueOf(((getpara("index").equals(""))?"0":getpara("index")));
 		int score = Integer.valueOf(((getpara("score").equals(""))?"0":getpara("score")));
 		String examrecordId = getpara("examrecordId");
-		Examrecord examrecord = null;
-		String allrecordid = "";
+		allrecordid = String.valueOf(dataMap.get("allrecord"));
 		if("".equals(examrecordId)){
 			examrecord = new Examrecord();
 			baseDao.create(examrecord);
-			allrecordid = String.valueOf(dataMap.get("allrecord"));
 			if(!"".equals(allrecordid) &&!"null".equals(allrecordid)&& allrecordid != null){
 				allrecordid = allrecordid + "," + examrecord.getId();
 				dataMap.put("allrecord", allrecordid);
-				//Cache.set(getCurrentAccount(), dataMap);
 			}else{
-				dataMap.put("allrecord", examrecord.getId());
+				allrecordid = String.valueOf(examrecord.getId());
+				dataMap.put("allrecord", allrecordid);
 			}
 		}else{
 			examrecord = (Examrecord)baseDao.loadById("Examrecord", Long.valueOf(examrecordId));
@@ -375,29 +397,23 @@ public class ExamAction extends BaseProcessAction {
 		String taskId = getpara("taskId");
 		Task task = infActiviti.getTaskById(taskId);
 		String paperId = (String)infActiviti.getVariableByTaskId(taskId, "formId");
-		//Paper paper = (Paper) getSessionValue("paper");
 		Paper paper = (Paper) dataMap.get("paper");
 		if(paper == null){
 			paper = (Paper) baseDao.loadById("Paper", Long.valueOf(paperId));
 			Papergroup papergroup = paper.getPapergroup();
-			Set<Paper> papers = papergroup.getPapers();
-			for (Paper paper2 : papers) {
+			if(papergroup != null){
+				Set<Paper> papers = papergroup.getPapers();
+				for (Paper paper2 : papers) {
+				}
 			}
-			//putSessionValue("paper", paper);
-			//Cache.set("paper", paper);
-			//Cache.set("allpaper", paper.getId());
 			dataMap.put("paper", paper);
 			dataMap.put("allpaper", paper.getId());
-			//Cache.set(getCurrentAccount(), dataMap);
 		}
 		//Template template = (Template)getSessionValue("template");
 		Template template = (Template) dataMap.get("template");
 		if(template == null){
 			template = paper.getTemplate();
-			//putSessionValue("template", template);
-			//Cache.set("template", template);
 			dataMap.put("template", template);
-			//Cache.set(getCurrentAccount(), dataMap);
 		}
 		//计算结果
 		Set<Result> resultset = new HashSet<Result>();
@@ -406,7 +422,7 @@ public class ExamAction extends BaseProcessAction {
 				continue;
 			}
 			Item item = (Item) baseDao.loadById("Item", res.getItem().getId());
-			if(res.getAnswer().equals(item.getRefkey())){
+			if(res.getAnswer()!=null&&res.getAnswer().equals(item.getRefkey())){
 				if(item.getMark().equals("")){
 					switch (item.getType()) {
 					case 1:
@@ -449,32 +465,35 @@ public class ExamAction extends BaseProcessAction {
 		//同时应该新建一条examrecord来记录下一个试卷的result
 		if(score > paper.getPassmark()){
 			Papergroup papergroup = paper.getPapergroup();
-			Paper temppaper = papergroup.getNextPaper(papergroup.getPapers(), paper);
-			if(temppaper != null){
-				paper = temppaper;
-				template = (Template)baseDao.loadById("Template", paper.getTemplate().getId());
-				items = template.getAllItem(template);
-				for (Item item : items) {
-					if(item.getChoiceitem().size() >0){
-						item.getChoiceitem();
+			if(papergroup != null){
+				//下一个试卷是由试卷组的所有试卷，按照id从小到大排列，来定义的
+				Paper temppaper = papergroup.getNextPaper(papergroup.getPapers(), paper);
+				if(temppaper != null){
+					String allpaperid = "";
+					index = -1;
+					score = 0;
+					//该试卷记录完毕，应该把examrecordId变为空，从而新建一个examrecord。参考line382
+					examrecordId = "";
+					paper = temppaper;
+					template = (Template)baseDao.loadById("Template", paper.getTemplate().getId());
+					items = template.getAllItem(template);
+					for (Item item : items) {
+						if(item.getChoiceitem().size() >0){
+							item.getChoiceitem();
+						}
 					}
+					allpaperid = String.valueOf( dataMap.get("allpaper"));
+					if(!"".equals(allpaperid) && allpaperid != null){
+						allpaperid = allpaperid + "," + paper.getId();
+					}
+					dataMap.put("allpaper", allpaperid);
+					dataMap.put("items", items);
+					dataMap.put("paper", paper);
+					dataMap.put("template", template);
+					
+				}else{
+					log.debug("Last paper!!");
 				}
-				
-				String allpaperid = "";
-				allpaperid = String.valueOf( dataMap.get("allpaper"));
-				if(!"".equals(allpaperid) && allpaperid != null){
-					allpaperid = allpaperid + "," + paper.getId();
-				}
-				dataMap.put("allpaper", allpaperid);
-				dataMap.put("items", items);
-				dataMap.put("paper", paper);
-				dataMap.put("template", template);
-				
-				index = -1;
-				score = 0;
-				examrecordId = "";
-			}else{
-				log.debug("Last paper!!");
 			}
 		}
 		
@@ -492,7 +511,7 @@ public class ExamAction extends BaseProcessAction {
 			infActiviti.completeTaskVar(taskId, paperId, getCurrentAccount(), var);
 			rhs.put("finsh", true);
 			//把缓存清空
-			Cache.set(getCurrentAccount(), new HashMap<String, Object>());
+			finsh = true;
 		}else{
 			index ++;
 			rhs.put("finsh", false);
@@ -502,7 +521,13 @@ public class ExamAction extends BaseProcessAction {
 		rhs.put("score",score);
 		rhs.put("task", task);
 		rhs.put("examrecordId", examrecordId);
-		Cache.set(getCurrentAccount(), dataMap);
+		dataMap.put("index", index);
+		dataMap.put("score", score);
+		if(finsh){
+			Cache.delete(getCurrentAccount());
+		}else{
+			Cache.set(getCurrentAccount(), dataMap);
+		}
 		return "success";
 	}
 	

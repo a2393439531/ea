@@ -28,6 +28,9 @@ public class LoginAction extends BaseEaAction {
 		String account = getpara("account");
 		String password = getpara("password");
 		String sysName = getpara("sysName");
+		if("".equals(getSessionValue("lang"))||getSessionValue("lang") == null ){
+			putSessionValue("lang", "en");
+		}
 		if (account.equals("")) {
 			rhs.put("tipInfo", "用户不能为空");
 			return "fail";

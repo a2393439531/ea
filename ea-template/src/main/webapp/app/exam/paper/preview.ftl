@@ -34,5 +34,46 @@
 				<#assign i = i + 1 > 
 		  	</#list>
       	</table>
+      	<#assign i = 0 >
+  		<#if (rhs["multiitems"]?size>0)>
+  		<table class="table table-condensed table-bordered table-striped">
+		  	<strong><@i18n "title_multi" /></strong>(total:${rhs["template"].multichoice + rhs["template"].rmdmultichoice})
+		  	<#list rhs["multiitems"]?sort_by("id") as multiitem>
+				<tr>
+					<td><strong>${multiitem_index+1}.&nbsp;${multiitem.content}</strong><div class="pull-right">&nbsp;&nbsp;&nbsp;Score:<#if multiitem.mark?exists&&multiitem.mark!="">${multiitem.mark}<#else>${rhs["paper"].multichoicemark}</#if></div></td>
+				<tr>
+				<#list multiitem.choiceitem?sort_by("id") as choiceitem>
+					<tr>
+						<td><input disabled type="checkbox" value="${choiceitem.refid}" name="result[${i}].answer"/> ${choiceitem.value}</td>
+					</tr>
+				</#list>
+				<#assign i = i + 1 >
+		  	</#list>
+      	</table>
+      	</#if>
+      	<#assign i = 0 >
+  		<#if (rhs["blankitems"]?size>0)>
+  		<table class="table table-condensed table-bordered table-striped">
+		  	<strong><@i18n "title_multi" /></strong>(total:${rhs["template"].multichoice + rhs["template"].rmdmultichoice})
+		  	<#list rhs["blankitems"]?sort_by("id") as blankitem>
+				<tr>
+					<td><strong>${blankitem_index+1}.&nbsp;${blankitem.content}</strong><div class="pull-right">&nbsp;&nbsp;&nbsp;Score:<#if blankitem.mark?exists&&blankitem.mark!="">${blankitem.mark}<#else>${rhs["paper"].blankmark}</#if></div></td>
+				<tr>
+				<#assign i = i + 1 >
+		  	</#list>
+      	</table>
+      	</#if>
+      	<#assign i = 0 >
+  		<#if (rhs["essayitems"]?size>0)>
+  		<table class="table table-condensed table-bordered table-striped">
+		  	<strong><@i18n "title_multi" /></strong>(total:${rhs["template"].multichoice + rhs["template"].rmdmultichoice})
+		  	<#list rhs["essayitems"]?sort_by("id") as essayitem>
+				<tr>
+					<td><strong>${essayitem_index+1}.&nbsp;${essayitem.content}</strong><div class="pull-right">&nbsp;&nbsp;&nbsp;Score:<#if essayitem.mark?exists&&essayitem.mark!="">${essayitem.mark}<#else>${rhs["paper"].essaymark}</#if></div></td>
+				<tr>
+				<#assign i = i + 1 >
+		  	</#list>
+      	</table>
+      	</#if>
       </div>
 </div>
