@@ -37,6 +37,7 @@ public class Examrecord extends BaseModel {
 	private int multichoicemark;
 	private int blankmark;
 	private int essaymark;
+	private String recorddate;
 	
 	private String remark;
 	
@@ -79,6 +80,14 @@ public class Examrecord extends BaseModel {
 
 	public void setEssaymark(int essaymark) {
 		this.essaymark = essaymark;
+	}
+
+	public String getRecorddate() {
+		return recorddate;
+	}
+
+	public void setRecorddate(String recorddate) {
+		this.recorddate = recorddate;
 	}
 
 	public String getUserid() {

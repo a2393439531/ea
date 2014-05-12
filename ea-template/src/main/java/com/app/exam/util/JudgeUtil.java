@@ -1,6 +1,8 @@
 package com.app.exam.util;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -26,6 +28,7 @@ public class JudgeUtil implements JavaDelegate {
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		log.debug("----------------------------------->"+execution.getCurrentActivityName());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		BaseDao baseDao = (BaseDao)SpringContext.getBean("eaDaoTarget");
 		InfActiviti infActiviti = (InfActiviti)SpringContext.getBean("infActiviti");
 		String processInstanceId = execution.getProcessInstanceId();
@@ -33,27 +36,33 @@ public class JudgeUtil implements JavaDelegate {
 		String[] allrecord = {};
 		String assignee = (String)infActiviti.getVariableByProcessInstanceId(processInstanceId, "assignee");
 		Map<String, Object> dataMap = (Map<String, Object>) Cache.get(assignee);
-		String paperid = String.valueOf(dataMap.get("allpaper"));
-		if(paperid.split(",").length == 1){
+		String paperid = null;
+		String recordsId = null;
+		if(dataMap != null){
+			paperid = String.valueOf(dataMap.get("allpaper"));
+			if(paperid.split(",").length == 1){
+				
+			}else{
+				String[] tempid = paperid.split(",");
+				for (String id : tempid) {
+					Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(id));
+					allpaper.add(paper);
+				}
+			}
+			
+	
+		    recordsId = String.valueOf(dataMap.get("allrecord"));
+			if(recordsId.split(",").length == 1){
+			
+			}
+		}else{
 			paperid = (String) infActiviti.getVariableByProcessInstanceId(processInstanceId, "formId");
 			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperid));
 			allpaper.add(paper);
-		}else{
-			String[] tempid = paperid.split(",");
-			for (String id : tempid) {
-				Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(id));
-				allpaper.add(paper);
-			}
-		}
-		
-
-		String recordsId = String.valueOf(dataMap.get("allrecord"));
-		if(recordsId.split(",").length == 1){
 			recordsId = String.valueOf(infActiviti.getVariableByProcessInstanceId(processInstanceId, "recordsId"));
 		}
-		allrecord = recordsId.split(",");
-
 		
+		allrecord = recordsId.split(",");
 		
 		Set<Examrecord> examrecords = null;
 		int index = 0;
@@ -105,6 +114,7 @@ public class JudgeUtil implements JavaDelegate {
 			record.setBlankmark(blankmark);
 			record.setEssaymark(essaymark);
 			record.setRemark("Success, auto judge");
+			record.setRecorddate(sdf.format(new Date()));
 			baseDao.update(record);
 		}
 		log.debug("-------------------------->Auto Judge Done<-------------------------");

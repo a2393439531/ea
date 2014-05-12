@@ -264,10 +264,10 @@ public class ItemAction extends BaseEaAction {
 		template.setMultichoice(j);
 		template.setBlank(k);
 		template.setEssay(l);
-		template.setTitle("Auto Template_" + new Date().toLocaleString());
+		template.setTitle(fileName.substring(0, fileName.lastIndexOf(".")) + new Date().toLocaleString());
 		baseDao.create(template);
 		Paper paper = new Paper();
-		paper.setName("Auto Paper_" + new Date().toLocaleString());
+		paper.setName(fileName.substring(0, fileName.lastIndexOf("."))  + new Date().toLocaleString());
 		paper.setTemplate(template);
 		paper.setTotalmark(totalmark);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");

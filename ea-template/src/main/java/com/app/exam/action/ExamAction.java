@@ -575,7 +575,14 @@ public class ExamAction extends BaseProcessAction {
 		String useraccount = getCurrentAccount();
 		List<Examrecord> dataList = new ArrayList<Examrecord>();
 		Map<String,List<Examrecord>> dataMap = new HashMap<String, List<Examrecord>>();
-		String sql = " from Examrecord r where r.userid=" + "'" +useraccount+"'";
+		
+		String sql = ""; 
+		if(!"admin".equals(getCurrentUser().getAccount())){
+			sql = " from Examrecord r where r.userid=" + "'" +useraccount+"'";
+		}else{
+			sql = "from Examrecord r";
+		}
+		
 		
 		getPageData(sql);
 		
