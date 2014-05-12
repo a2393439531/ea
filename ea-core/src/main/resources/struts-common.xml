@@ -68,7 +68,9 @@
 		<action name="adminmenu" class="menuAction" method="adminmenu">
 			<result name="success">pmenu.ftl</result>
 		</action>
-		
+		<action name="top" class="menuAction" method="top">
+			<result name="success">top.ftl</result>
+		</action>
 		
    		<action name="lang" class="langAction" method="execute">
    		   <result name="login">login.ftl</result>

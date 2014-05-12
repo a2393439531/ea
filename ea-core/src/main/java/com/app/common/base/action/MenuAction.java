@@ -29,4 +29,13 @@ public class MenuAction extends BaseEaAction {
 		log.debug("用户数" + infEa.getAllUser().size());
 		return "success";
 	}
+	public String top(){
+		String sysName = getpara("sysName");
+		Resource resource = (Resource) infEa.getBaseModelByAlias("Resource",
+				sysName);
+		rhs.put("resource", resource);
+		rhs.put("userlist", infEa.getAllUser());
+		log.debug("用户数" + infEa.getAllUser().size());
+		return "success";
+	}
 }
