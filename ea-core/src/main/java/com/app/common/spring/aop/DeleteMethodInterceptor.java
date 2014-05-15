@@ -25,7 +25,8 @@ public class DeleteMethodInterceptor implements MethodInterceptor {
 		for (User user : getDeleteUser(invocation.getArguments())) {
 			log.warn(" 参数[ " + user.getId() +", " +user.getAccount() + ", " + user.getName() + " ] ");
 		}
-		return null;
+		Object obj = invocation.proceed();
+		return obj;
 	}
 
 	private List<User> getDeleteUser(Object[] para){

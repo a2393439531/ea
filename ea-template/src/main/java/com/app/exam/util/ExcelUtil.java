@@ -92,7 +92,7 @@ public class ExcelUtil {
 			if(dataMap.size() > 0){
 	            HSSFRow firstrow = sheet.createRow(1);
 	            HSSFCell cell = null;
-	            String[] names = {"Category", "Question", "Score", "", "Category", "Total Score"};
+	            String[] names = {"Category", "Question", "Date" ,"Score", "", "Category", "Total Score"};
 	            
 	            HSSFCellStyle style = getUserStyle(workbook, HSSFColor.LIGHT_GREEN.index);
 	            
@@ -126,14 +126,17 @@ public class ExcelUtil {
 	        			//question
 	        			HSSFCell questioncell = row.createCell((short) 2);
 	        			questioncell.setCellValue(result.getItem().getContent());
+	        			//date
+	        			HSSFCell datecell = row.createCell((short) 3);
+	        			datecell.setCellValue(result.getExamrecord().getRecorddate());
 	        			//score
-	        			HSSFCell scorecell = row.createCell((short) 3);
+	        			HSSFCell scorecell = row.createCell((short) 4);
 	        			scorecell.setCellValue(result.getMark());
 	        			score += result.getMark();
 	        			i++;
 					}
-	        		HSSFCell categorycell = row.createCell((short)5);
-	        		HSSFCell totalscorecell = row.createCell((short)6);
+	        		HSSFCell categorycell = row.createCell((short)6);
+	        		HSSFCell totalscorecell = row.createCell((short)7);
 	        		categorycell.setCellValue(knowledge.getName());
 	        		totalscorecell.setCellValue(score);
 	        		
