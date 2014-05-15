@@ -17,6 +17,13 @@
   			 <a  href="common_monitor_home.do" target=_blank" class="btn btn-xs btn-default" title="https://code.google.com/p/javamelody/wiki/UserGuide">健壮性</a>
 			 <a  href="" target=_blank" class="btn btn-xs btn-default">安全性</a>	           
 	          <a  href="common_test_zxing.do" target=_blank" class="btn btn-xs btn-default">二维码</a>	    
+              <a  href="common/appframework-2-1-0" target=_blank" class="btn btn-xs btn-default">appframework-2-1-0</a>
+               <a  href="common/appframework-2-1-0/tom。html" target=_blank" class="btn btn-xs btn-default">appframework-2-1-0测试</a>
+	         <a  href="app/common/test/mobile/jquerymobile/index.ftl" target=_blank" class="btn btn-xs btn-default">Jquery Mobile</a>
+			 <a  href="app/common/test/mobile/jqm_index.ftl" target=_blank" class="btn btn-xs btn-default">Jquery Mobile</a>
+			 
+			 <a  href="app/common/test/mobile/af_index.ftl" target=_blank" class="btn btn-xs btn-default">JQmobi</a>
+			 <a  href="app/common/test/mobile/touchdemo/index.ftl" target=_blank" class="btn btn-xs btn-default">Sencha touch</a>	 
 	  		</p>
 			</div>
 		</div>
