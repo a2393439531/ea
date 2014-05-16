@@ -42,20 +42,7 @@
   <div class="bs-sidebar hidden-print" >
     <ul class="nav bs-sidenav">
 	  <li class="nav-header"></li>
-	  	  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>通用后台</strong>
-		  <li ><a href="ea_organize_index.do" target="mainFrame"><@i18n "menu_organize" /></a></li>
-		  <li ><a href="ea_user_menu_user.do" target="mainFrame"><@i18n "menu_user" /></a></li>
-		  <li ><a href="ea_rule_menu_rule.do" target="mainFrame"><@i18n "menu_infocenter" /></a></li>
-		  <li ><a href="ea_smtp_menu_smtp.do" target="mainFrame">邮箱系统</a></li>
-		  <li ><a href="ea_systempara_menu_systempara.do" target="mainFrame">系统参数</a></li>
-		  <li ><a href="common_edit_list_file.do" target="mainFrame"><@i18n "menu_edit_para" /></a></li>
-		  <li ><a href="ea_resource_menu_resource.do" target="mainFrame">权限</a></li>
- 		  <li ><a href="common_monitor_home.do" target="mainFrame">运行状态</a></li>
-		  <li ><a href="common_activiti_menu_process_definition.do" target="mainFrame">工作流管理</a></li>
-		  <li ><a href="common_svn_svn_list.do" target="_blank">文档管理</a></li>
- 		  <li ><a href="common_activiti_index_demo.do" target="mainFrame">工作流演示</a></li>
-		  <li ><a href="common_chat_chat.do" target="_blank">在线支持</a></li>
-		  <li ><hr/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>考试系统后台</strong></li>
+		  <li >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>考试系统后台</strong></li>
 		  <li ><a href="exam_item_list.do" target="mainFrame"><@i18n "menu_item" /></a></li>
 		  <li ><a href="exam_item_import_itembyxls.do" target="mainFrame"><@i18n "menu_item_import" /></a></li>
 		  <li ><a href="exam_paper_list.do" target="mainFrame"><@i18n "menu_paper" /></a></li>

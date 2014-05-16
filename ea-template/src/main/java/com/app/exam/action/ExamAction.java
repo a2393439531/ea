@@ -628,7 +628,7 @@ public class ExamAction extends BaseProcessAction {
 		
 		response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-disposition", 
-                "attachment; filename="+ paper.getName() +"_result.xls");
+                "attachment; filename="+ java.net.URLEncoder.encode(paper.getName(), "UTF-8") +"_result.xls");
         ServletOutputStream os = response.getOutputStream();
 		ExcelUtil.exportToExcel(paper, os);
 		os.close();

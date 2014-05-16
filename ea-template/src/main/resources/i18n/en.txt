@@ -1,5 +1,5 @@
 submit                 =SUBMIT
-return                 =RETURN11111
+return                 =RETURN
 menu_organize          =Organize
 menu_user              =User Management
 menu_user_new          =Add User
