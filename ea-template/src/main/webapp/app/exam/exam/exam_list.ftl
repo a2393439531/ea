@@ -58,6 +58,5 @@
 	  if(window.name=="fullscreen")return;   
 	  var a =window.open("","fullscreen","fullscreen=1,scrollbars=yes")   
 	  a.location = url
-	  window.opener=null   
 	}
 </script>

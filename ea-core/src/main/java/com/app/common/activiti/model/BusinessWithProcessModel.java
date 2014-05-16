@@ -31,11 +31,12 @@ public class BusinessWithProcessModel<T> {
 			processInstanceStatus = infActiviti.processInstanceStatus(para);
 			if("New".equals(processInstanceStatus)){
 				processTaskName = "Process not started!";
-				processAssigneedName = "Process has not assigneed!";
-				processAssigneedTime = "Process has not assigneed!";
+				processAssigneedName = "Not assigneed!";
+				processAssigneedTime = "Not assigneed!";
 			}else{
 				if("Done".equals(processInstanceStatus)){
 					processTaskName = "Process has been done!";
+					processAssigneedName = (String) infActiviti.getHisVariableByProcessInstanceId(para, "assignee");
 				}else{
 					List<Task> t = infActiviti.getActivitiTaskByProcessInstanceId(para);
 					for (Task task : t) {
@@ -46,10 +47,14 @@ public class BusinessWithProcessModel<T> {
 								processTaskName = task.getName();
 							}
 						}
+						if(!"".equals(processAssigneedName) && processAssigneedName != null){
+							processAssigneedName = processAssigneedName + "," +(String) infActiviti.getVariableByTaskId(task.getId(), "assignee");
+						}else{
+							processAssigneedName = (String) infActiviti.getVariableByTaskId(task.getId(), "assignee");
+						}
 					}
+					processAssigneedTime = infActiviti.getAssigneeTimeByProcessInstanceId(para);
 				}
-				processAssigneedTime = infActiviti.getAssigneeTimeByProcessInstanceId(para);
-				processAssigneedName = infActiviti.getHisVariableByProcessInstanceId(para, "firstAssignee");
 			}
 		} catch (SecurityException e) {
 			e.printStackTrace();

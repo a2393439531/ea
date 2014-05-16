@@ -1,6 +1,9 @@
 package com.app.common.activiti.action;
 
+import java.util.List;
+
 import org.activiti.engine.task.Task;
+import org.apache.struts2.ServletActionContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -82,7 +85,17 @@ public class TaskLogAction extends BaseProcessAction {
 			mail += initiatorUser.getEmail();
 		}
 		if(initiatorUser.getEmail2() != null && !"".equals(initiatorUser.getEmail2())){
-			mail =";" + initiatorUser.getEmail2() + ";";
+			mail ="," + initiatorUser.getEmail2();
+		}
+		String assignee  = (String) infActiviti.getVariableByTaskId(t.getId(), "assignee");
+		User assigneeUser = (User)baseDao.loadByFieldValue(User.class, "account", assignee);
+		if(assigneeUser != null){
+			if(assigneeUser.getEmail() != null && !"".equals(assigneeUser.getEmail())){
+				mail = mail + "," + assigneeUser.getEmail();
+			}
+			if(assigneeUser.getEmail2() != null && !"".equals(assigneeUser.getEmail2())){
+				mail ="," + assigneeUser.getEmail2();
+			}
 		}
 		String content = user.getName()
 				+ "has add log for task: <font color='red'>" + t.getName()
