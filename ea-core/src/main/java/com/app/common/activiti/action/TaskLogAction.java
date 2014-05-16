@@ -60,6 +60,9 @@ public class TaskLogAction extends BaseProcessAction {
 		if("undefined".equals(processInstanceId) || "".equals(processInstanceId)){
 			processInstanceId = t.getProcessInstanceId();
 		}
+		if(t == null){
+			t = infActiviti.getActivitiTaskByProcessInstanceId(processInstanceId).get(0);
+		}
 		User user = (User) getSessionValue("userlogined");
 		model = new TaskLog();
 		model.setLog(getpara("log"));
@@ -77,7 +80,7 @@ public class TaskLogAction extends BaseProcessAction {
 //		} else { // edit
 //			baseDao.update(model);
 //		}
-		//send Email after log has been insert. start at 2013/03/17
+		//send Email after log has been insert. start at 2014/03/17
 		String initiator = (String) infActiviti.getVariableByTaskId(t.getId(), "initiator");
 		User initiatorUser = (User) baseDao.loadByFieldValue(User.class, "account", initiator);
 		String mail = "";
