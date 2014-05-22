@@ -46,6 +46,7 @@ public class TestAction extends BaseEaAction {
 		String url ="http:/"+HardInfo.findNonLocalhostIp()+":"+getRequest().getLocalPort()+getRequest().getContextPath();
 		String url_apk =url+"/ea-android.apk";
 		
+		
 		int width = 200;
 		int height = 200;
 		String format = "png";
@@ -53,7 +54,11 @@ public class TestAction extends BaseEaAction {
 		hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
 		genQR(url_apk, width, height, format, hints,getWebroot()+"/url_apk.png");
 		genQR(url, width, height, format, hints,getWebroot()+"/url.png");
-		
+		String url_moblie =url+"/app_login.ftl";
+		genQR(url_moblie, width, height, format, hints,getWebroot()+"/url_mobile.png");
+		rhs.put("url", url);
+		rhs.put("url_apk", url_apk);
+		rhs.put("url_moblie", url_moblie);
 		return "success"; 
 	}
 
