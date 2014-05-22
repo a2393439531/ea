@@ -26,7 +26,7 @@ a {font-family: "宋体";font-size: 12px;color: #000;text-decoration: none;curso
 <#macro roletext_user_important role userId><@frame role.name/> <@show_user_by_id role , userId/></#macro>	
 
   
-<#macro draw>
+<#macro draw >
 	var OrgShows=new OrgShow(n1);
 	OrgShows.Top=135;
 	OrgShows.Left=20;
@@ -127,12 +127,15 @@ a {font-family: "宋体";font-size: 12px;color: #000;text-decoration: none;curso
 	</#list> 
 </#macro>
 
-<#macro digui_role_v treeNodes  varname  width=20 height=50>
+<#macro digui_role_v treeNodes  varname  width=20 height=50 link='yes'>
    	<#list treeNodes as role>
    	    var ${varname}${role_index+1}=new OrgNode();
 		${varname}${role_index+1}.Text="<@roletext role />";
 		${varname}${role_index+1}.Description="${role.name?if_exists}:管理人数${role.allUserUnderRole()?size}人"
+		<#if link=='yes'>
 		${varname}${role_index+1}.Link="window.open ('ea_view_picture_role_user_v.do?roleId=${role.id?if_exists}&img=yes&width=50&height=80', 'newwindow', '');";
+		<#else>
+		</#if>
 		${varname}.Nodes.Add(${varname}${role_index+1});
 		<#if !(role.getChildRoles()?size<1)> 
 			<@digui_role_v role.getChildRoles()?sort_by("id") ,'${varname}${role_index+1}'/>	

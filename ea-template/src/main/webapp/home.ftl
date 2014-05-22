@@ -43,6 +43,11 @@
 				&nbsp;&nbsp;&nbsp;&nbsp;h). 能够在线阅卷，当所分配的试卷是含有填空和主观题的时候，系统并不会自动判卷，需要人工来进行打分。<br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;i). 能够查询考试的历史，结果根据试卷来分类，倒叙排序，即，最近一次考试成绩会排在最上面。<br/>
 			<strong>2. 手机端任务悬赏系统</strong><br/>
+			<a href="ea_app_show_scope.do" target=_blank class="btn btn-xs btn-default">显示势力范围ea_app_show_scope.do</a>
+			<a href="ea_view_picture_organize_v.do?show=user" target=_blank class="btn btn-xs btn-default">部门地位ea_app_show_scope.do</a>
+			<a href="ea_app_show_power.do?img=yes&width=50&height=80" target=_blank class="btn btn-xs btn-default">江湖地位ea_app_show_power.do?img=yes&width=50&height=80</a>
+			<a href="ea_app_show_power.do?img=no" target=_blank class="btn btn-xs btn-default">江湖地位(无照片)ea_app_show_power.do?img=no</a>
+
 		</div>
 	</div>
 	
