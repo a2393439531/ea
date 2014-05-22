@@ -24,7 +24,7 @@
 		  	<strong><@i18n "title_single" /></strong>(total:${rhs["template"].singlechoice + rhs["template"].rmdsinglechoice})
 		  	<#list rhs["singleitems"]?sort_by("id") as singleitem>
 				<tr>
-					<td><strong>${singleitem_index+1}.&nbsp;${singleitem.content}</strong><div class="pull-right">&nbsp;&nbsp;&nbsp;Score:<#if singleitem.mark?exists&&singleitem.mark!="">${singleitem.mark}<#else>${rhs["paper"].singlechoicemark}</#if></div></td>
+					<td><strong>${singleitem_index+1}.&nbsp;${singleitem.content}</strong><div class="pull-right">&nbsp;&nbsp;&nbsp;Score:<#if singleitem.mark?exists&&singleitem.mark!="0">${singleitem.mark}<#else>${rhs["paper"].singlechoicemark}</#if></div></td>
 				<tr>
 				<#list singleitem.choiceitem?sort_by("id") as choiceitem>
 					<tr>
@@ -40,7 +40,7 @@
 		  	<strong><@i18n "title_multi" /></strong>(total:${rhs["template"].multichoice + rhs["template"].rmdmultichoice})
 		  	<#list rhs["multiitems"]?sort_by("id") as multiitem>
 				<tr>
-					<td><strong>${multiitem_index+1}.&nbsp;${multiitem.content}</strong><div class="pull-right">&nbsp;&nbsp;&nbsp;Score:<#if multiitem.mark?exists&&multiitem.mark!="">${multiitem.mark}<#else>${rhs["paper"].multichoicemark}</#if></div></td>
+					<td><strong>${multiitem_index+1}.&nbsp;${multiitem.content}</strong><div class="pull-right">&nbsp;&nbsp;&nbsp;Score:<#if multiitem.mark?exists&&multiitem.mark!="0">${multiitem.mark}<#else>${rhs["paper"].multichoicemark}</#if></div></td>
 				<tr>
 				<#list multiitem.choiceitem?sort_by("id") as choiceitem>
 					<tr>
@@ -57,7 +57,7 @@
 		  	<strong><@i18n "title_multi" /></strong>(total:${rhs["template"].multichoice + rhs["template"].rmdmultichoice})
 		  	<#list rhs["blankitems"]?sort_by("id") as blankitem>
 				<tr>
-					<td><strong>${blankitem_index+1}.&nbsp;${blankitem.content}</strong><div class="pull-right">&nbsp;&nbsp;&nbsp;Score:<#if blankitem.mark?exists&&blankitem.mark!="">${blankitem.mark}<#else>${rhs["paper"].blankmark}</#if></div></td>
+					<td><strong>${blankitem_index+1}.&nbsp;${blankitem.content}</strong><div class="pull-right">&nbsp;&nbsp;&nbsp;Score:<#if blankitem.mark?exists&&blankitem.mark!="0">${blankitem.mark}<#else>${rhs["paper"].blankmark}</#if></div></td>
 				<tr>
 				<#assign i = i + 1 >
 		  	</#list>
@@ -69,7 +69,7 @@
 		  	<strong><@i18n "title_multi" /></strong>(total:${rhs["template"].multichoice + rhs["template"].rmdmultichoice})
 		  	<#list rhs["essayitems"]?sort_by("id") as essayitem>
 				<tr>
-					<td><strong>${essayitem_index+1}.&nbsp;${essayitem.content}</strong><div class="pull-right">&nbsp;&nbsp;&nbsp;Score:<#if essayitem.mark?exists&&essayitem.mark!="">${essayitem.mark}<#else>${rhs["paper"].essaymark}</#if></div></td>
+					<td><strong>${essayitem_index+1}.&nbsp;${essayitem.content}</strong><div class="pull-right">&nbsp;&nbsp;&nbsp;Score:<#if essayitem.mark?exists&&essayitem.mark!="0">${essayitem.mark}<#else>${rhs["paper"].essaymark}</#if></div></td>
 				<tr>
 				<#assign i = i + 1 >
 		  	</#list>

@@ -8,6 +8,9 @@
 	<div class="panel panel-default">    
 		<div class="panel-heading"><strong>业务系统</strong></div>
 		<div class="panel-body">
+			<a href="exam_paper_create.do?method=newpaper" target=_blank class="btn btn-xs btn-default">直接生成试卷</a>
+			<a href="exam_item_import_itembyxls.do" target=_blank class="btn btn-xs btn-default">根据Excel生成试卷</a>
+			<a href="exam_template_save.do?method=show" target=_blank class="btn btn-xs btn-default">根据模板生成试卷</a><br/><br/>
 			<strong>1. 考试系统</strong><br/>
 			<pre>
 a). 生成试卷分为两种方式：通过在线生成模板和导入题目excel<br/>

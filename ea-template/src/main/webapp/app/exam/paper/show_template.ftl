@@ -1,8 +1,9 @@
 <#include "../../../common/freemarker/include_header.ftl">
 <script type="text/javascript" src="<@context_module/>template.js"></script>
-			<form name="form_item" action="exam_template_save.do" metiod="post">
-				<input type="hidden" name="method" value='<#if !rhs["template"]?exists >savermd<#else>savereq</#if>' />
+			<form name="form_item" action="exam_paper_create.do" metiod="post">
+				<input type="hidden" name="method" value='setitem' />
 				<input type="hidden" name="template.id" value='<#if rhs["template"]?exists >${rhs["template"].id?if_exists }</#if>' />
+				<input type="hidden" name="paperid" value='<#if rhs["paper"]?exists>${rhs["paper"].id}</#if>' />
 				<div class="panel panel-primary">
 				    <div class="panel-heading">
 				    	<@i18n "menu_template_new" />
@@ -10,9 +11,6 @@
 					<div class="panel-body">
 					 <table class="table table-condensed table-bordered table-striped">
 						<tr>
-							<td> <@i18n "title_name" /> </td>
-							<td style="width:300px;"> <input type="text" name="template.title" value="<#if rhs["template"]?exists >${rhs["template"].title?if_exists}</#if>" style="width:300px;"/></td>
-							
 							<td><@i18n "title_knowledge" /></td>
 							<td>
 								<#list rhs["knowledgeRootList"] as knowledge>
@@ -29,6 +27,9 @@
 									</#if>
 								</#list>
 							</td>
+							<td> </td>
+							<td style="width:300px;"> </td>
+							
 						</tr>
 						<tr>
 							<td><@i18n "title_single_rmd" /></td>
@@ -105,7 +106,7 @@
 						<tr>
 							<td colspan="4" >
 							    <input type="button" class="btn btn-xs btn-info" value="Save" id="submitButton"/>
-							    <a  class="btn btn-xs btn-info" href="exam_template_list.do">Return</a>
+							    <#--<a  class="btn btn-xs btn-info" href="exam_template_list.do">Return</a>-->
 							</td>
 						</tr>
 					</table>

@@ -133,5 +133,12 @@ public class PapergroupAction extends BaseEaAction {
 		list();
 		return "success";
 	}
-
+	public String change_rank() throws Exception {
+		common_change_rank(); 
+		load();
+		rhs.put("info_type", "success");
+		rhs.put("info", "改变顺序成功!");
+		return "success";
+	}
+	
 }

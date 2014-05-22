@@ -1,4 +1,5 @@
 <#include "../../../common/freemarker/include_header.ftl">
+<#include "macro_papergroup_input.ftl">
 <script type="text/javascript" src="<@context_module/>papergroup.js"></script>
 			<form name="form_item" action="exam_papergroup_save.do" metiod="post">
 				<input type="hidden" name="method" value='edit' />
@@ -18,14 +19,11 @@
 								<button <#if rhs.readonly>disabled</#if> onclick="javascript:addpaper(${rhs["papergroup"].id?if_exists });return false;" class="btn btn-xs btn-info"><@i18n "menu_paper_new" /></button>
 							</td>
 							<td>
-								<div style="height:150px;overflow:auto;" id="paperid">
-									<#if rhs["papergroup"].getPapers()?exists>
-										<#list rhs["papergroup"].getPapers()?sort_by("id") as paper>
-												<a href="#" onclick="javascript:ajax_show_paper('exam_paper_load.do','method=show&id=${paper.id}');" >${paper.name}</a><br/>
-												<input type="hidden" name="paperid" value="${paper.id}">
-										</#list>
-									</#if>
-								</div>
+								<#if rhs["papergroup"].getPapers()?exists>
+									<div style="height:150px;overflow:auto;" id="paperid">
+											<@digui_papergroup rhs["papergroup"].getPapers()?sort_by("sortNob"),'${rhs["readonly"]?string}',rhs["papergroup"] />
+									</div>
+								</#if>
 							</td>
 						</tr>
 						<tr>

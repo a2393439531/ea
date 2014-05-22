@@ -34,9 +34,10 @@
 									<td><strong>></strong></td>
 									<td><strong>User ID</strong></td>
 									<td ><strong><@i18n "title_result" /></strong></td>
-									<td colspan="2"></td>
+									<td><strong><@i18n "title_time" /></strong></td>
+									<td></td>
 								</tr>
-								<#list rhs["datalist"][papername] as record>
+								<#list (rhs["datalist"][papername]?sort_by("id"))?reverse as record>
 									<tr>
 										<td>${i}</td>
 										<#--<td ></td><a href="exam_exam_exam_record_detail.do?paperId=${record.paper.id}&recordsId=${record.id}" ></a>-->
@@ -44,7 +45,8 @@
 										<#--<td>${record.paper.totalmark}</td>-->
 										<#--<td>${record.paper.passmark}</td>-->
 										<td>${record.singlechoicemark?number + record.multichoicemark?number + record.blankmark?number + record.essaymark?number}</td>
-										<td colspan="2"></td>
+										<td>${record.recorddate?if_exists}</td>
+										<td></td>
 										<#--<td >${record.remark?if_exists}</td>-->
 									</tr>
 									<#assign i = i + 1 />

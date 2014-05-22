@@ -44,6 +44,18 @@
 							<td></td>
 						</tr>
 						<tr>
+							<td><@i18n "title_blank" /></td>
+							<td colspan="2"><@i18n "title_req" />:<input type="text" disabled name="paper.template.blank" value="<#if rhs["paper"]?exists >${rhs["paper"].template.blank}</#if>" /></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td><@i18n "title_essay" /></td>
+							<td colspan="2"><@i18n "title_req" />:<input type="text" disabled name="paper.template.essay" value="<#if rhs["paper"]?exists >${rhs["paper"].template.essay}</#if>" /></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
 							<td><@i18n "title_examtime" />(minutes)</td>
 							<td colspan="2"><input type="text" <#if rhs.readonly>disabled</#if> name="paper.time" value="<#if rhs["paper"]?exists >${rhs["paper"].time}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
 							<td> <@i18n "title_template" /></td>

@@ -78,7 +78,8 @@ public class ItemAction extends BaseEaAction {
 			Collection<Item> itemlist = knowledge.getItems();
 			
 			for (Item item : itemlist) {
-				if(type.equals(String.valueOf(item.getType())) && (item.getMark() == null||"".equals(item.getMark()))){
+				//有分值的题目不能被复用，因为是通过excel上传的
+				if(type.equals(String.valueOf(item.getType())) && (item.getMark() == null||"0".equals(item.getMark()))){
 					dataList.add(item);
 				}
 			}
@@ -264,10 +265,10 @@ public class ItemAction extends BaseEaAction {
 		template.setMultichoice(j);
 		template.setBlank(k);
 		template.setEssay(l);
-		template.setTitle(fileName.substring(0, fileName.lastIndexOf(".")) + new Date().toLocaleString());
+		template.setTitle(fileName.substring(0, fileName.lastIndexOf(".")) + "_"+new Date().toLocaleString());
 		baseDao.create(template);
 		Paper paper = new Paper();
-		paper.setName(fileName.substring(0, fileName.lastIndexOf("."))  + new Date().toLocaleString());
+		paper.setName(fileName.substring(0, fileName.lastIndexOf("."))  + "_"+new Date().toLocaleString());
 		paper.setTemplate(template);
 		paper.setTotalmark(totalmark);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");

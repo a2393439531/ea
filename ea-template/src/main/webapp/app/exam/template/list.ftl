@@ -26,7 +26,7 @@
 			    <td class=nob >${x_index+1}</td>
 				<td>${x.title?if_exists}</td>
 				<td><a href="exam_template_load.do?method=edit&id=${x.id}"><@i18n "title_edit" /></a> | <a href="exam_template_load.do?method=show&id=${x.id}"> <@i18n "title_view" /></a> | <a href="exam_template_delete.do?id=${x.id}"><@i18n "title_delete" /></a></td>
-				<td></td>
+				<td><a  class="btn btn-xs btn-info " href="exam_paper_save.do?method=choicetemplate&templateid=${x.id}"><@i18n "title_generate_paper" /></a></td>
 			</tr>
 			</#list>
 		</tbody>

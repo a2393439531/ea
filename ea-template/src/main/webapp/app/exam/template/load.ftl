@@ -11,7 +11,8 @@
 					 <table class="table table-condensed table-bordered table-striped">
 						<tr>
 							<td> <@i18n "title_name" /> </td>
-							<td style="width:300px;"> <input <#if rhs.readonly>disabled</#if> type="text" name="template.title" value="${rhs["template"].title?if_exists}" style="width:300px;"/></td>
+							<td style="width:300px;"> <input type="text" name="template.title" value="<#if rhs["template"]?exists >${rhs["template"].title?if_exists}</#if>" style="width:300px;"/></td>
+							
 							<td><@i18n "title_knowledge" /></td>
 							<td>
 								<#list rhs["knowledgeRootList"] as knowledge>
@@ -26,7 +27,7 @@
 									</#if>
 								</#list>
 							</td>
-						</tr>
+							</tr>
 						<tr>
 							<td><@i18n "title_single_rmd" /></td>
 							<td><input <#if rhs.readonly>disabled</#if> type="text" name="template.rmdsinglechoice" value="${rhs["template"].rmdsinglechoice?if_exists}" id="rmdsinglechoice" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>

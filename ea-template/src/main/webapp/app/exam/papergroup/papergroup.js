@@ -39,3 +39,16 @@ function ajax_show_paper(url, data){
 		}
 	});
 }
+function action_paper(url,para){
+	var divid="paperid";
+	  $.ajax({
+	         type:"POST",
+	         url: "exam_papergroup_"+url,
+	         data:"beanname=Paper&"+para,
+	         cache: false,
+	         success: function(html){
+		        document.getElementById(divid).innerHTML =  html;
+	         }
+	           
+	  });  
+	}

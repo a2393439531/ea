@@ -87,18 +87,25 @@ public class Paper extends ProcessModel  {
 	//		this.resultdetail = resultdetail;
 	//	}
 
+	public Long getSortNob() {
+		return sortNob;
+	}
+
+	public void setSortNob(Long sortNob) {
+		this.sortNob = sortNob;
+	}
 
 	@Override
 	public int compareTo(Object o) {
 		// TODO Auto-generated method stub
 		if(o instanceof Paper){
-			if(this.id > (((Paper) o).getId())){
+			if(this.sortNob > (((Paper) o).getSortNob())){
 				return 1;
 			}
-			if(this.id < (((Paper) o).getId())){
+			if(this.sortNob < (((Paper) o).getSortNob())){
 				return -1;
 			}
-			if(this.id == (((Paper) o).getId())){
+			if(this.sortNob == (((Paper) o).getSortNob())){
 				return 0;
 			}
 		}
