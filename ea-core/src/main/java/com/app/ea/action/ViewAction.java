@@ -43,7 +43,7 @@ public class ViewAction extends EaAction {
 	
 	public String picture_role_user_v() {
 		Role role=null;
-		if(getpara("id")==""){
+		if(getpara("roleId")==""){
 			List roleList = baseDao
 					.find(" from Role where parent_id = null");
 			 role =(Role) roleList.get(0);

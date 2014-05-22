@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.Cookie;
+
+import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
@@ -28,17 +31,23 @@ public class LoginAction extends BaseEaAction {
 		String account = getpara("account");
 		String password = getpara("password");
 		String sysName = getpara("sysName");
+		String type = getpara("type"); // app 端登录
+		boolean saveCookie = false;
+		if(getpara("saveCookie") != null && !"".equals(getpara("saveCookie"))) saveCookie = Boolean.parseBoolean(getpara("saveCookie"));
+		
 		if("".equals(getSessionValue("lang"))||getSessionValue("lang") == null ){
 			putSessionValue("lang", "en");
 		}
 		if (account.equals("")) {
 			rhs.put("tipInfo", "用户不能为空");
+			if("app".equals(type)) return "app_fail";
 			return "fail";
 		}
 		System.out.println("EA查出用户个数=" + infEa.getAllUser().size());
 		User user = (User) infEa.getUserbyAccount(account);
 		if (user==null) {
 			rhs.put("tipInfo", "用户名不存在");
+			if("app".equals(type)) return "app_fail";
 			return "fail";
 		}
 		String result = "";
@@ -76,13 +85,31 @@ public class LoginAction extends BaseEaAction {
 				putSessionValue("currnetDepartment", departmentOrganize);
 			}
 			
+			//added by xiao
+			if(saveCookie){
+				Cookie c1 = new Cookie("accountInfo", user.getAccount());
+				c1.setMaxAge(60*60*24*365);  //1年
+				ServletActionContext.getResponse().addCookie(c1);
+				Cookie c2 = new Cookie("pwdInfo", user.getPasswd());
+				c2.setMaxAge(60*60*24*365); //1年
+				ServletActionContext.getResponse().addCookie(c2);
+				log.debug("cookie 添加完毕..");
+			}
+			
+			if("mobile".equals(type)){
+				return "app_success";
+			}
+			//added by xiao
+			
+			
 			if (user.getAccount().equals("admin")) { 
 				return "admin";
 			}		
-			
+			if("app".equals(type)) return "app_success";
 			return "success";
 		}
 
+		if("app".equals(type)) return "app_fail";
 		return "fail";
 	}
 

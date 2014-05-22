@@ -76,6 +76,8 @@ public class User extends BaseModel {
 
 	public String positiondescription;
 	public String kpidescription;
+	
+	public String goldnumber; //added by xiaoqinghong
 
 	/**
 	 * inverseJoinColumns: inverse反转的意思，在JPA中可以理解为被维护端
@@ -121,8 +123,20 @@ public class User extends BaseModel {
 	//	}
 	//end
 	
+	
+	
+	
+	
 	public String getAccount() {
 		return account;
+	}
+
+	public String getGoldnumber() {
+		return goldnumber;
+	}
+
+	public void setGoldnumber(String goldnumber) {
+		this.goldnumber = goldnumber;
 	}
 
 	public void setAccount(String account) {
