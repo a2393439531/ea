@@ -14,6 +14,16 @@
 			<pattern>[demo-activiti]%d{HH:mm:ss.SSS} [%thread]  %-3level [%file:%line]：%msg %n</pattern>
 		</encoder>
 	</appender>	
+     <appender name="log_login" class="ch.qos.logback.core.FileAppender">
+		<file>log_login.txt</file>
+		<append>true</append>
+		<encoder>
+			<pattern>%d{YYYY-MM-DD HH:mm:ss.SSS} %msg %n</pattern>
+		</encoder>
+	</appender>	
+	<logger name="com.app.common.base.action.LoginAction" level="info" additivity="false">		
+	    <appender-ref ref="log_login" />
+	</logger>
 
 	<logger name="java">
 		<appender-ref ref="stdout" />

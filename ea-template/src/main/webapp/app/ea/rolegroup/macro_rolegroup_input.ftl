@@ -10,7 +10,7 @@
 			  
 			</td>
 			<td width=200px>		 	     
-				<a  title="本项由管理层定义，符合该岗位的基本素质" href="ea_ea_edit_bean_property.do?objectname=Rolegroup&id=${rolegroup.id?if_exists}&op=r&propertyname=positiondescription" onclick="return hs.htmlExpand(this, { objectType: 'iframe' })" class="ui-icon ui-icon-pencil"></a>               
+				<a  title="本项由管理层定义，符合该岗位的基本素质" href="common_edit_edit_bean_property.do?objectname=Rolegroup&id=${rolegroup.id?if_exists}&op=r&propertyname=positiondescription" onclick="return hs.htmlExpand(this, { objectType: 'iframe' })" class="ui-icon ui-icon-pencil"></a>               
 			
   		  		<a  onclick="javascript:action_rolegroup('create.do','id=${rolegroup.id}');" class="ui-icon ui-icon-plus" ></a>
  			               
