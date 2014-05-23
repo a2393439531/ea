@@ -32,8 +32,8 @@
 	<div class="panel panel-default">    
 		<div class="panel-heading"><strong>业务系统</strong></div>
 		<div class="panel-body">
-			<strong> <a href="exam_pframe.ftl" target=_blank class="btn btn-xs btn-primary">1. 考试系统</a><br/></strong>
-				<#--&nbsp;&nbsp;&nbsp;&nbsp;a). 生成试卷分为两种方式：通过在线生成模板和导入题目excel<br/>
+			<strong>1. 考试系统</strong><br/>
+				&nbsp;&nbsp;&nbsp;&nbsp;a). 生成试卷分为两种方式：通过在线生成模板和导入题目excel<br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;b). 通过Excel导入题型。导入题型后，会默认以文件名来新建模板(所有题目会被添加为必做题并且不会有随机题)和试卷。<br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;c). 在线定义模板，包括模板名称、模板知识领域、必做和随机的各类题型。<br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;d). 在线定义试卷，首先选定模板，然后定义各类题型的分数、知识领域、考试时间、通过分。<br/>
@@ -41,9 +41,13 @@
 				&nbsp;&nbsp;&nbsp;&nbsp;f). 能够在线定义试卷组，当用户所答的分数大于试卷组中试卷所定义的通过分，则系统会继续拿出试卷组中的下一张试卷来开始作答。否则考试结束。<br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;g). 能够在线答题，可以选择一次整张作答和一题一题作答，前者需要回答完毕并且提交，才有分数。后者每做一题则计算一次分数，可以中途退出，然后继续做，和试卷组概念挂钩。<br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;h). 能够在线阅卷，当所分配的试卷是含有填空和主观题的时候，系统并不会自动判卷，需要人工来进行打分。<br/>
-				&nbsp;&nbsp;&nbsp;&nbsp;i). 能够查询考试的历史，结果根据试卷来分类，倒叙排序，即，最近一次考试成绩会排在最上面。<br/>-->
-			<br/>	
-			<strong> <a href="#" target=_blank class="btn btn-xs btn-primary">2. 手机端任务悬赏系统</a><br/></strong>
+				&nbsp;&nbsp;&nbsp;&nbsp;i). 能够查询考试的历史，结果根据试卷来分类，倒叙排序，即，最近一次考试成绩会排在最上面。<br/>
+			<strong>2. 手机端任务悬赏系统</strong><br/>
+			<a href="ea_app_show_scope.do" target=_blank class="btn btn-xs btn-default">显示势力范围ea_app_show_scope.do</a>
+			<a href="ea_view_picture_organize_v.do?show=user" target=_blank class="btn btn-xs btn-default">部门地位ea_app_show_scope.do</a>
+			<a href="ea_app_show_power.do?img=yes&width=50&height=80" target=_blank class="btn btn-xs btn-default">江湖地位ea_app_show_power.do?img=yes&width=50&height=80</a>
+			<a href="ea_app_show_power.do?img=no" target=_blank class="btn btn-xs btn-default">江湖地位(无照片)ea_app_show_power.do?img=no</a>
+
 		</div>
 	</div>
 	

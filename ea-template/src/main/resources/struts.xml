@@ -37,7 +37,7 @@
 		</global-results> 		
 		
         <action name="*_*_*"   class="{2}Action"  method="{3}" >
-            <!-- <interceptor-ref name="authenticate-interceptor"/>-->
+             <!--  <interceptor-ref name="authenticate-interceptor"/>  -->
             <result name="success">app/{1}/{2}/{3}.ftl</result>
             <result name="list">app/{1}/{2}/list.ftl</result>
             <result name="complete_task">app/common/activiti/complete_task.ftl</result>
@@ -56,7 +56,9 @@
    		<action name="login" class="loginAction" method="execute">
    		    <result name="admin">pframe.ftl</result>
 			<result name="success">frame.ftl</result>
+			<result name="app_success">app_home.ftl</result>
 			<result name="fail">login.ftl</result>
+			<result name="app_fail">app_login.ftl</result>
 			<result name="ajaxResetPassword">ajax_result_info.ftl</result>
 			
 			
