@@ -33,40 +33,33 @@
 						<tr>
 							<td><@i18n "title_single" /></td>
 							<td colspan="2"><@i18n "title_req" />:<input type="text" disabled name="paper.template.singlechoice" value="<#if rhs["paper"]?exists >${rhs["paper"].template.singlechoice}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
-							<td><@i18n "title_totalmark" /></td>
-							<td><input type="text" disabled name="totalmark" value="<#if rhs["paper"]?exists >${rhs["paper"].totalmark?if_exists}</#if>" /></td>
-							<input type="hidden" name="paper.totalmark" value="<#if rhs["paper"]?exists >${rhs["paper"].totalmark?if_exists}</#if>" />
-						</tr>
-						<tr>
 							<td><@i18n "title_multi" /></td>
 							<td colspan="2"><@i18n "title_req" />:<input type="text" disabled name="paper.template.multichoice" value="<#if rhs["paper"]?exists >${rhs["paper"].template.multichoice}</#if>" /></td>
-							<td></td>
-							<td></td>
 						</tr>
 						<tr>
 							<td><@i18n "title_blank" /></td>
 							<td colspan="2"><@i18n "title_req" />:<input type="text" disabled name="paper.template.blank" value="<#if rhs["paper"]?exists >${rhs["paper"].template.blank}</#if>" /></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
 							<td><@i18n "title_essay" /></td>
 							<td colspan="2"><@i18n "title_req" />:<input type="text" disabled name="paper.template.essay" value="<#if rhs["paper"]?exists >${rhs["paper"].template.essay}</#if>" /></td>
-							<td></td>
-							<td></td>
 						</tr>
 						<tr>
 							<td><@i18n "title_examtime" />(minutes)</td>
 							<td colspan="2"><input type="text" <#if rhs.readonly>disabled</#if> name="paper.time" value="<#if rhs["paper"]?exists >${rhs["paper"].time}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
-							<td> <@i18n "title_template" /></td>
-							<td> <input type="text" disabled name="paper.template.title" value="<#if rhs["paper"]?exists >${rhs["paper"].template.title}</#if>"<td>
+							<td><@i18n "title_totalmark" /></td>
+							<td><input type="text" disabled name="totalmark" value="<#if rhs["paper"]?exists >${rhs["paper"].totalmark?if_exists}</#if>" /></td>
+							<input type="hidden" name="paper.totalmark" value="<#if rhs["paper"]?exists >${rhs["paper"].totalmark?if_exists}</#if>" />
+							<#--<@i18n "title_template" />-->
+							<#-- <input type="text" disabled name="paper.template.title" value="<#if rhs["paper"]?exists >${rhs["paper"].template.title}</#if>"/>-->
 							<input type="hidden" value="<#if rhs["paper"]?exists >${rhs["paper"].template.id}</#if>" name="templateid"/>
 						</tr>
 						<tr>
 							<td><@i18n "title_passmark" /></td>
-							<td><input type="text" <#if rhs.readonly>disabled</#if>  name="paper.passmark" value="<#if rhs["paper"]?exists >${rhs["paper"].passmark}</#if>" /></td>
+							<td colspan="2"><input type="text" <#if rhs.readonly>disabled</#if>  name="paper.passmark" value="<#if rhs["paper"]?exists >${rhs["paper"].passmark}</#if>" /></td>
 							<td><@i18n "title_createtime" /></td>
-							<td><input type="text" <#if rhs.readonly>disabled</#if>  name="paper.createdate" value="<#if rhs["paper"]?exists >${rhs["paper"].createdate?if_exists}</#if>" /></td>
+							<td><input type="text" disabled  name="paper.createdate" value="<#if rhs["paper"]?exists >${rhs["paper"].createdate?if_exists}</#if>" /></td>
+							<input type="hidden" name="paper.createdate" value="<#if rhs["paper"]?exists >${rhs["paper"].createdate?if_exists}</#if>" />
+							<input type="hidden" name="paper.createuser" value="<#if rhs["paper"]?exists >${rhs["paper"].createuser?if_exists}</#if>" />
+							<input type="hidden" name="paper.papergroup.id" value="<#if rhs["paper"].papergroup?exists >${rhs["paper"].papergroup.id?if_exists}</#if>" />
 						</tr>
 						<tr>
 							<td colspan="5" >

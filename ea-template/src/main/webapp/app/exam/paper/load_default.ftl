@@ -60,13 +60,19 @@
 						<tr>
 							<td><@i18n "title_examtime" />(minutes)</td>
 							<td colspan="2"><input type="text" <#if rhs.readonly>disabled</#if> name="paper.time" value="<#if rhs["paper"]?exists >${rhs["paper"].time}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
-							<td> <@i18n "title_template" /></td>
-							<td> <input type="text" disabled name="paper.template.title" value="<#if rhs["paper"]?exists >${rhs["paper"].template.title}</#if>"<td>
+							<td><@i18n "title_totalmark" /> </td><#--<@i18n "title_template" />-->
+							<td><input type="text" disabled name="totalmark" value="<#if rhs["paper"]?exists >${rhs["paper"].totalmark?if_exists}</#if>" /> <td><#--<input type="text" disabled name="paper.template.title" value="<#if rhs["paper"]?exists >${rhs["paper"].template.title}</#if>" />-->
 							<input type="hidden" value="<#if rhs["paper"]?exists >${rhs["paper"].template.id}</#if>" name="templateid"/>
+							<input type="hidden" name="paper.totalmark" value="<#if rhs["paper"]?exists >${rhs["paper"].totalmark?if_exists}</#if>" />
 						</tr>
 						<tr>
 							<td><@i18n "title_passmark" /></td>
-							<td colspan="4"><input type="text" <#if rhs.readonly>disabled</#if>  name="paper.passmark" value="<#if rhs["paper"]?exists >${rhs["paper"].passmark}</#if>" /></td>
+							<td><input type="text" <#if rhs.readonly>disabled</#if>  name="paper.passmark" value="<#if rhs["paper"]?exists >${rhs["paper"].passmark}</#if>" /></td>
+							<td><@i18n "title_createtime" /></td>
+							<td colspan="3"><input type="text" disabled  name="paper.createdate" value="<#if rhs["paper"]?exists >${rhs["paper"].createdate?if_exists}</#if>" /></td>
+							<input type="hidden" name="paper.createdate" value="<#if rhs["paper"]?exists >${rhs["paper"].createdate?if_exists}</#if>" />
+							<input type="hidden" name="paper.createuser" value="<#if rhs["paper"]?exists >${rhs["paper"].createuser?if_exists}</#if>" />
+							<input type="hidden" name="paper.papergroup.id" value="<#if rhs["paper"].papergroup?exists >${rhs["paper"].papergroup.id?if_exists}</#if>" />
 						</tr>
 						<tr>
 							<td colspan="5" >

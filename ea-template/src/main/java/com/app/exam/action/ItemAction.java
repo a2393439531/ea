@@ -273,6 +273,7 @@ public class ItemAction extends BaseEaAction {
 		paper.setTotalmark(totalmark);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		paper.setCreatedate(sdf.format(new Date()));
+		paper.setCreateuser(getCurrentAccount());
 		baseDao.create(paper);
 //跳转到paper页面
 		return "success";

@@ -423,7 +423,7 @@ public class ExamAction extends BaseProcessAction {
 			}
 			Item item = (Item) baseDao.loadById("Item", res.getItem().getId());
 			if(res.getAnswer()!=null&&res.getAnswer().equals(item.getRefkey())){
-				if(item.getMark().equals("")){
+				if("0".equals(item.getMark()) || "".equals(item.getMark())){
 					switch (item.getType()) {
 					case 1:
 						score += paper.getSinglechoicemark();
@@ -466,7 +466,7 @@ public class ExamAction extends BaseProcessAction {
 		if(score > paper.getPassmark()){
 			Papergroup papergroup = paper.getPapergroup();
 			if(papergroup != null){
-				//下一个试卷是由试卷组的所有试卷，按照id从小到大排列，来定义的
+				//下一个试卷是由试卷组的所有试卷，按照sortnob从小到大排列，来定义的
 				Paper temppaper = papergroup.getNextPaper(papergroup.getPapers(), paper);
 				if(temppaper != null){
 					String allpaperid = "";

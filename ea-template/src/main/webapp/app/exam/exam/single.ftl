@@ -30,6 +30,7 @@
 								<td><input type="radio" value="${choiceitem.refid}" name="result[${rhs["index"]}].answer"/> ${choiceitem.value}</td>
 							</tr>
 						</#list>
+						<input type="hidden" value="<#if rhs["item"].mark?exists >${rhs["item"].mark}<#else>${rhs["paper"].singlechoicemark}</#if>" name="result[${rhs["index"]}].mark" />
 					</#if>
 					<#if rhs["item"].type == 2>
 						<#list rhs["item"].choiceitem?sort_by("id") as choiceitem>
@@ -37,21 +38,23 @@
 								<td><input type="checkbox" value="${choiceitem.refid}" name="result[${rhs["index"]}].answer"/> ${choiceitem.value}</td>
 							</tr>
 						</#list>
+						<input type="hidden" value="<#if rhs["item"].mark?exists >${rhs["item"].mark}<#else>${rhs["paper"].multichoicemark}</#if>" name="result[${rhs["index"]}].mark" />
 					</#if>
 					<#if rhs["item"].type == 3>
 						<tr>
 							<td><input type="text"  name="result[${rhs["index"]}].answer"/></td>
 						</tr>
+						<input type="hidden" value="<#if rhs["item"].mark?exists >${rhs["item"].mark}<#else>${rhs["paper"].blankmark}</#if>" name="result[${rhs["index"]}].mark" />
 					</#if>
 					<#if rhs["item"].type == 4>
 						<tr>
 							<td><textarea name="result[${rhs["index"]}].answer"> </textarea></td>
 						</tr>
+						<input type="hidden" value="<#if rhs["item"].mark?exists >${rhs["item"].mark}<#else>${rhs["paper"].essaymark}</#if>" name="result[${rhs["index"]}].mark" />
 					</#if>
 				<input type="hidden" value="${rhs["item"].id}" name="result[${rhs["index"]}].item.id" />
 				<input type="hidden" value="${rhs["index"]}" name="index" />
 				<input type="hidden" value="${rhs["score"]?if_exists}" name="score" />
-				<input type="hidden" value="<#if rhs["item"].mark?exists >${rhs["item"].mark}<#else>${rhs["paper"].singlechoicemark}</#if>" name="result[${rhs["index"]}].mark" />
       	</table>
 	    <table class="table table-condensed table-bordered table-striped">
 	    	<tr>

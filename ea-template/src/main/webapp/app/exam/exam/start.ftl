@@ -95,7 +95,7 @@
 		var btn = $(this);
 		btn.button('loading');
 		document.getElementsByName("form_item")[0].submit();
-		window.close();
+		//window.close();
 	});
 	$(document).ready(function(){
      	window.opener=null;

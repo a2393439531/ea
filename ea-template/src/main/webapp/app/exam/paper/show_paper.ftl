@@ -60,8 +60,8 @@
 						<tr>
 							<td><@i18n "title_examtime" />(minutes)</td>
 							<td colspan="2"><input type="text" name="paper.time" value="<#if rhs["paper"]?exists >${rhs["paper"].time}</#if>" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></td>
-							<td> <@i18n "title_template" /></td>
-							<td> <input type="text" disabled name="paper.template.title" value="<#if rhs["paper"]?exists >${rhs["paper"].template.title}</#if>"<td>
+							<td> </td><#--<@i18n "title_template" />-->
+							<td><td><#-- <input type="text" disabled name="paper.template.title" value="<#if rhs["paper"]?exists >${rhs["paper"].template.title}</#if>" />-->
 							<input type="hidden" value="<#if rhs["paper"]?exists >${rhs["paper"].template.id}</#if>" name="templateid"/>
 						</tr>
 						<tr>

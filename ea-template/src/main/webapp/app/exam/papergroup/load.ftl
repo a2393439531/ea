@@ -19,11 +19,11 @@
 								<button <#if rhs.readonly>disabled</#if> onclick="javascript:addpaper(${rhs["papergroup"].id?if_exists });return false;" class="btn btn-xs btn-info"><@i18n "menu_paper_new" /></button>
 							</td>
 							<td>
-								<#if rhs["papergroup"].getPapers()?exists>
-									<div style="height:150px;overflow:auto;" id="paperid">
-											<@digui_papergroup rhs["papergroup"].getPapers()?sort_by("sortNob"),'${rhs["readonly"]?string}',rhs["papergroup"] />
-									</div>
-								</#if>
+								<div style="height:150px;overflow:auto;" id="paperid">
+									<#if rhs["papergroup"].getPapers()?exists>
+												<@digui_papergroup rhs["papergroup"].getPapers()?sort_by("sortNob"),'${rhs["readonly"]?string}',rhs["papergroup"] />
+									</#if>
+								</div>
 							</td>
 						</tr>
 						<tr>

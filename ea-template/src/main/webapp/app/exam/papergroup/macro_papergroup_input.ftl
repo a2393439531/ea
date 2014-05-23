@@ -9,7 +9,11 @@
 				<td>
 					<#if flag?string=="false">
 					<#if index?string=="0">
-					 	<a  onclick="javascript:action_paper('change_rank.do','id_from=${paper.id?if_exists}&id_to=${paperNodes[paper_index+1].id}&id=${paperroot.id}')"  class="ui-icon ui-icon-arrowthick-1-s" title=下移></a>
+						<#if (paperNodes?size >= 2 )>
+					 		<a  onclick="javascript:action_paper('change_rank.do','id_from=${paper.id?if_exists}&id_to=${paperNodes[paper_index+1].id}&id=${paperroot.id}')"  class="ui-icon ui-icon-arrowthick-1-s" title=下移></a>
+						<#else>
+							
+						</#if>
 					<#else>
 					 <#if paper_has_next>
 					 	 <a  onclick="javascript:action_paper('change_rank.do','id_from=${paper.id?if_exists}&id_to=${paperNodes[paper_index+1].id}&id=${paperroot.id}')"  class="ui-icon ui-icon-arrowthick-1-s" title=下移></a>

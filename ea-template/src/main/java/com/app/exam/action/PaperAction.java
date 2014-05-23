@@ -115,9 +115,14 @@ public class PaperAction extends BaseEaAction {
 				rhs.put("page", "addpage");
 				return "success";
 			} else{ // 保存各各题型的分数,考试时间
-
+				Papergroup pg = (Papergroup)baseDao.loadById("Papergroup", paper.getPapergroup().getId());
+				paper.setPapergroup(pg);
 				paper.setKnowledge(knowledge);
 				paper.setTemplate(template);
+				long sortnob = ((Paper)baseDao.loadById("Paper", paper.getId())).getSortNob();
+				String processInstanceId = ((Paper)baseDao.loadById("Paper", paper.getId())).getProcessInstanceId();
+				paper.setSortNob(sortnob);
+				paper.setProcessInstanceId(processInstanceId);
 				
 				if(!Boolean.valueOf(getpara("byexcel"))){
 					//设置总分
@@ -145,6 +150,7 @@ public class PaperAction extends BaseEaAction {
 		String id = getpara("id");
 		Paper paper = (Paper) baseDao.loadById("Paper", Long.parseLong(id));
 		paper.setTemplate(null);
+		paper.setPapergroup(null);
 		
 		Set<Examrecord> record = paper.getResultdetail();
 		for (Examrecord examrecord : record) {

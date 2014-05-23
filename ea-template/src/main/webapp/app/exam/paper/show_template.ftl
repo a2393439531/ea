@@ -6,13 +6,13 @@
 				<input type="hidden" name="paperid" value='<#if rhs["paper"]?exists>${rhs["paper"].id}</#if>' />
 				<div class="panel panel-primary">
 				    <div class="panel-heading">
-				    	<@i18n "menu_template_new" />
+				    	<@i18n "menu_item_new" />
 				    </div>
 					<div class="panel-body">
 					 <table class="table table-condensed table-bordered table-striped">
 						<tr>
 							<td><@i18n "title_knowledge" /></td>
-							<td>
+							<td colspan="3">
 								<#list rhs["knowledgeRootList"] as knowledge>
 									<#if knowledge.getChildKnowledges()?exists >
 										<#list knowledge.getChildKnowledges() as knowledgenode>
@@ -27,9 +27,7 @@
 									</#if>
 								</#list>
 							</td>
-							<td> </td>
-							<td style="width:300px;"> </td>
-							
+							<input type="hidden" name="template.title" value="<#if rhs["template"]?exists >${rhs["template"].title?if_exists}</#if>" style="width:300px;"/>
 						</tr>
 						<tr>
 							<td><@i18n "title_single_rmd" /></td>

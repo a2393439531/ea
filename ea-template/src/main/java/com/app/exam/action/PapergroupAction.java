@@ -26,8 +26,8 @@ public class PapergroupAction extends BaseEaAction {
 		return "from Papergroup";
 	}
 
-	public String get_paperlist_sql() {
-		return "from Paper";
+	public String get_paperlist_sql(String papergroupid) {
+		return "from Paper where papergroup_id is null or papergroup_id = '" + papergroupid + "'";
 	}
 	
 	public String list() throws Exception {
@@ -72,7 +72,7 @@ public class PapergroupAction extends BaseEaAction {
 
 	public String listpaper() throws Exception {
 		Set<Papergroup> list = new HashSet<Papergroup>();
-		String sql = getSearchSql(get_paperlist_sql());
+		String sql = getSearchSql(get_paperlist_sql(getpara("papergroupid")));
 		getPageData(sql);
 		list.addAll((Collection<? extends Papergroup>) rhs.get("dataList"));
 		rhs.put("paperlist", list);
@@ -104,6 +104,8 @@ public class PapergroupAction extends BaseEaAction {
 		
 		baseDao.update(papergroup);
 		rhs.put("datalist", papers);
+		rhs.put("papergroup", papergroup);
+		rhs.put("readonly", false);
 		return "success";
 	}
 
