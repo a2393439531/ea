@@ -98,7 +98,7 @@
 		//window.close();
 	});
 	$(document).ready(function(){
-     	window.opener=null;
+     	//window.opener=null;
 	});
 	document.oncontextmenu=function(){
     	alert('禁止鼠标右键菜单!');
@@ -151,7 +151,7 @@
     
     //窗口关闭后给出提示  
     window.onunload = function()  {
-    	document.getElementsByName("form_item")[0].submit();
+    	//document.getElementsByName("form_item")[0].submit();
         alert("已成功提交考试！");  
     }
 </script>

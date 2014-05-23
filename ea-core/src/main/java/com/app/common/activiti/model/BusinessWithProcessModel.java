@@ -46,11 +46,11 @@ public class BusinessWithProcessModel<T> {
 							}else{
 								processTaskName = task.getName();
 							}
-						}
-						if(!"".equals(processAssigneedName) && processAssigneedName != null){
-							processAssigneedName = processAssigneedName + "," +(String) infActiviti.getVariableByTaskId(task.getId(), "assignee");
-						}else{
-							processAssigneedName = (String) infActiviti.getVariableByTaskId(task.getId(), "assignee");
+							if(!"".equals(processAssigneedName) && processAssigneedName != null){
+								processAssigneedName = processAssigneedName + "," +(String) infActiviti.getVariableByTaskId(task.getId(), "assignee");
+							}else{
+								processAssigneedName = (String) infActiviti.getVariableByTaskId(task.getId(), "assignee");
+							}
 						}
 					}
 					processAssigneedTime = infActiviti.getAssigneeTimeByProcessInstanceId(para);

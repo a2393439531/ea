@@ -73,12 +73,12 @@
 								</#list>
 							</td>
 						</tr>
-						<tr>
+								<input class='input' <#if rhs.readonly>disabled</#if> type='hidden' value='<#if rhs["item"].mark?exists>${rhs["item"].mark}<#else>0</#if>' name='item.mark' />
+						<#--<tr>
 							<td><@i18n "title_mark" /></td>
 							<td>
-								<input class='input' <#if rhs.readonly>disabled</#if> type='text' value='<#if rhs["item"].mark?exists>${rhs["item"].mark}<#else>0</#if>' name='item.mark' />
 							</td>
-						</tr>
+						</tr>-->
 						<tr>
 							<td colspan="2" >
 								<#if !rhs.readonly>

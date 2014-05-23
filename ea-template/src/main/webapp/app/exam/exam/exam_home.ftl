@@ -28,9 +28,14 @@
 							<#--<a href="common_activiti_process_diagram.do?processInstanceId=${item.task.processInstanceId}" target=_blank>
 								View
 							</a>-->
-							<a  <#if item.method == "Start"> onclick="javascript:toFull('${item.handleTaskUrl?if_exists}&taskId=${item.task.id}')"<#else>href="${item.handleTaskUrl?if_exists}&taskId=${item.task.id}"</#if> class="btn btn-xs btn-primary">
+							<a  href="${item.handleTaskUrl?if_exists}&taskId=${item.task.id}" target=_self class="btn btn-xs btn-primary"><#--<#if item.method == "Start"> onclick="javascript:toFull('${item.handleTaskUrl?if_exists}&taskId=${item.task.id}')"<#else></#if>-->
 								${item.method}
 							</a>
+							<#if item.method == "Start">
+								<a target=_self onclick="javascript:toFull('${item.handleTaskUrl?if_exists}&taskId=${item.task.id}&format=single')" class="btn btn-xs btn-info">
+									${item.method}(Single)
+								</a>
+							</#if>
 						</td>
 					</tr>
 					</#if>
@@ -78,7 +83,13 @@
 						<td>${index}</td>
 						<td>${papername} </td><#--onclick="javascript:showresult(${rhs["datalist"][papername][0].paper.id});"-->
 						<td>${rhs["datalist"][papername][0].paper.passmark}</td>
-						<td>${record.singlechoicemark?number + record.multichoicemark?number + record.blankmark?number + record.essaymark?number}</td>
+						<td>
+							<#if record.remark == "Wait for judge">
+								${record.remark}
+							<#else>
+								${record.singlechoicemark?number + record.multichoicemark?number + record.blankmark?number + record.essaymark?number}
+							</#if>
+						</td>
 						<td>${record.recorddate?if_exists}</td><#--<#if rhs["export"]><div class="pull-right"><a href="exam_exam_export_record.do?paperId=${rhs["datalist"][papername][0].paper.id}" class="btn btn-xs btn-primary" >Export to Excel</a></div></#if>-->
 					</tr>
 					<#assign index = index + 1 />

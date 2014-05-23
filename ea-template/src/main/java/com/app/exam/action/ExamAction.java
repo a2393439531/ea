@@ -1,8 +1,10 @@
 package com.app.exam.action;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -286,10 +288,12 @@ public class ExamAction extends BaseProcessAction {
 			baseDao.update(paper);
 		}else if("start".equals(method)){
 			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperId));
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 			Examrecord record = new Examrecord();
 			record.setUserid(getCurrentAccount());
+			record.setRecorddate(sdf.format(new Date()));
 			record.setPaper(paper);
-			//record.setRemark("Wait for judge");
+			record.setRemark("Wait for judge");
 			baseDao.create(record);
 			for (Result res : result) {
 				//res.setPaper(paper);

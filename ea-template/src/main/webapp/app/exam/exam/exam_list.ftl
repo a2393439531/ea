@@ -30,7 +30,7 @@
 							<#--<a href="common_activiti_process_diagram.do?processInstanceId=${item.task.processInstanceId}" target=_blank>
 								View
 							</a>-->
-							<a  href="${item.handleTaskUrl?if_exists}&taskId=${item.task.id}" class="btn btn-xs btn-primary"><#--<#if item.method == "Start"> onclick="javascript:toFull('${item.handleTaskUrl?if_exists}&taskId=${item.task.id}')"<#else></#if>-->
+							<a  href="${item.handleTaskUrl?if_exists}&taskId=${item.task.id}" target=_blank class="btn btn-xs btn-primary"><#--<#if item.method == "Start"> onclick="javascript:toFull('${item.handleTaskUrl?if_exists}&taskId=${item.task.id}')"<#else></#if>-->
 								${item.method}
 							</a>
 							<#if item.method == "Start">

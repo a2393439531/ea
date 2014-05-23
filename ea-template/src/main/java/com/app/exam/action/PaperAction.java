@@ -193,6 +193,7 @@ public class PaperAction extends BaseEaAction {
 			}
 			paper.setKnowledge(knowledge);
 			paper.setTemplate(template);
+			template.setKnowledge(knowledge);
 			paper.setCreatedate(sdf.format(new Date()));
 			paper.setCreateuser(getCurrentAccount());
 			

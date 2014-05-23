@@ -14,6 +14,10 @@
 						</#list>
 					</#if>
 				</#list>
+				<input type="checkbox" name="itemtype" value="1"/>&nbsp;&nbsp;单选&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="checkbox" name="itemtype" value="2"/>&nbsp;&nbsp;多选&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="checkbox" name="itemtype" value="3"/>&nbsp;&nbsp;填空&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="checkbox" name="itemtype" value="4"/>&nbsp;&nbsp;主观&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<input type="button" class="btn btn-default btn-xs" value="Search" onclick="javascript: submit_form('','search')" />
 				<#--Order By: 
 				<a href="#" onclick="javascript: submit_form('priority')">优先级</a>

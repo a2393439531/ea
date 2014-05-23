@@ -38,6 +38,7 @@ public class ItemAction extends BaseEaAction {
 	public Item item = new Item();
 	public List<String> choiceitemvalue = new ArrayList<String>();
 	public List<String> knowledgevalue = new ArrayList<String>();
+	public List<String> itemtype = new ArrayList<String>();
 	public List<String> choiceitemid = new ArrayList<String>();
 
 	public String get_list_sql() {
@@ -47,6 +48,7 @@ public class ItemAction extends BaseEaAction {
 	public String list() throws Exception {
 		String sql = getSearchSql(get_list_sql());
 		Set<Item> list = new HashSet<Item>();
+		Set<Item> data = new HashSet<Item>();
 		getPageData(sql);
 		if(knowledgevalue.size() != 0){
 			for (String knowledge : knowledgevalue) {
@@ -56,7 +58,19 @@ public class ItemAction extends BaseEaAction {
 		}else{
 			list.addAll((Collection<? extends Item>) rhs.get("dataList"));
 		}
-		rhs.put("dataList", list);
+
+		if(itemtype.size() != 0 &&list.size() != 0){
+			for (String type : itemtype) {
+				for (Item item : list) {
+					if(item.getType() == Integer.valueOf(type)){
+						data.add(item);
+					}
+				}
+			}
+		}else{
+			data.addAll(list);
+		}
+		rhs.put("dataList", data);
 		rhs.put("knowledgeRootList", common_get_tree_root("Knowledge"));
 		return "success";
 	}
