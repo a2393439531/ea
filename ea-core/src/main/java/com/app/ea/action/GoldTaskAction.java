@@ -124,6 +124,13 @@ public class GoldTaskAction extends BaseEaAction {
 		return "success";
 	}
 	
+	//所有交易记录(财产公开)
+	public String allgoldrecords() throws Exception {
+				//String[] params = {getCurrentAccount(),getCurrentAccount()};
+				rhs.put("datalist", baseDao.find("from GoldTransaction order by payDate desc"));
+				return "success";
+	}
+	
 	//金币支付
 	public String pay() throws Exception {
 		
