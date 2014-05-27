@@ -32,7 +32,7 @@ public interface InfEa {
 
 	public List getAllUser();
 
-
+	public List getUserNotAdmin();
 	public User getUserbyAccount(String account);
 
 	public User getUserbyName(String name);

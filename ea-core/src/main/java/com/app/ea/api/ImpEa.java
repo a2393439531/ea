@@ -80,6 +80,20 @@ public class ImpEa implements InfEa  {
 		ArrayList rootList = (ArrayList) baseDao.find(Hsql.All_USER);
 		return rootList;
 	}
+	
+	@Override
+	public List getUserNotAdmin() {
+		System.out.println("查询所有的用户接口调用");
+		ArrayList rootList = (ArrayList) baseDao.find(Hsql.All_USER);
+		User admin=getUserbyAccount("admin");
+		for (Iterator iterator = admin.getChildUsers().iterator(); iterator.hasNext();) {
+			User user = (User) iterator.next();
+			rootList.remove(user);
+		}
+		rootList.remove(admin);
+		return rootList;
+	}	
+	
 
 	@Override
 	public List getAllUserByOrganize(Organize organize) {

@@ -3,6 +3,7 @@ package com.utils.spring.ok;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Before;
@@ -10,6 +11,8 @@ import org.junit.Test;
 
 import com.app.common.spring.ssh.dao.BaseDao;
 import com.app.common.spring.ssh.page.Pagination;
+import com.app.ea.api.InfEa;
+import com.app.ea.model.User;
 import com.app.model.Tb1;
 
 
@@ -19,15 +22,26 @@ import com.app.model.Tb1;
 public class testCase1 extends AbstractBaseTestCase {
 	
 	private BaseDao baseDao;
-  
+	private InfEa infEa;
 	@Before
 	public void prepare() {
 		baseDao = (BaseDao) applicationContext
 		.getBean("eaDaoTarget");
+		infEa = (InfEa) applicationContext
+		.getBean("impEa");		
 		 Tb1 tb1=new Tb1();
 		 tb1.setName("tom");
 		 tb1.setPassword("123");
 		 baseDao.create(tb1);
+	}
+	@Test
+	public void testgetUserNotAdmin() throws Exception {
+		for (Iterator iterator = infEa.getUserNotAdmin().iterator(); iterator
+				.hasNext();) {
+			User user = (User) iterator.next();
+			System.out.println((user.getName()));
+		}
+
 	}
 	@Test
 	public void create() {
@@ -35,7 +49,7 @@ public class testCase1 extends AbstractBaseTestCase {
 	    baseDao.create(tb1);
 	    assertEquals("加上初始化的1条，应该是2条", 2,  baseDao.find("from Tb1").size()); 
 		assertEquals("加上初始化的1条，应该是2条", 2, baseDao.loadAll(Tb1.class).size()); 
-	}
+	}	
 	@Test
 	public void load() {
 		 Tb1 tb1=(Tb1)baseDao.loadById("Tb1", Long.parseLong("1"));

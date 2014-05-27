@@ -15,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.app.common.spring.ssh.model.BaseModel;
@@ -78,6 +80,9 @@ public class User extends BaseModel {
 	public String kpidescription;
 	
 	public String goldnumber; //added by xiaoqinghong
+	
+	public Set<User> childUsers = new HashSet<User>();
+	public User parentModel;	//added by tom 账户关联，比如出差，或者2个账户拥有共同的权限
 
 	/**
 	 * inverseJoinColumns: inverse反转的意思，在JPA中可以理解为被维护端
@@ -86,6 +91,28 @@ public class User extends BaseModel {
 	 * */
 
 	private Set roles = new HashSet();
+
+	
+	
+	
+	
+	@OneToMany(mappedBy = "parentModel", cascade = CascadeType.ALL)
+	public Set<User> getChildUsers() {
+		return childUsers;
+	}
+
+	public void setChildUsers(Set<User> childUsers) {
+		this.childUsers = childUsers;
+	}
+	@ManyToOne(cascade = { CascadeType.ALL })
+	@JoinColumn(name = "parent_id", nullable = true)
+	public User getParentModel() {
+		return parentModel;
+	}
+
+	public void setParentModel(User parentModel) {
+		this.parentModel = parentModel;
+	}
 
 	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Role.class, fetch = FetchType.LAZY)
 	@JoinTable(name = "manager_ea_role_user", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
