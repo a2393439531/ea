@@ -7,20 +7,24 @@
 	<#--
 	<a href="ea_ea_menu_person_deploy.do" target="_blank">&nbsp;&nbsp;人员部署</a>  
 	<a href="ea_ea_report_user_check.do?resultftl=menu_check_deploy_error" target="_blank">&nbsp;&nbsp;人员分配合理性检查</a><br>
+		<a href="ea_user_menu_user.do?sortName=assessLev" >评级</a>
 	-->
 	  &nbsp;&nbsp; &nbsp;&nbsp; <span class="glyphicon glyphicon-sort"></span>:
 	
-		<a href="ea_user_menu_user.do?sortName=assessLev" >评级</a>
+	
 		<a href="ea_user_menu_user.do?sortName=account" >帐号</a></li>
 		<a href="ea_user_menu_user.do?sortName=name" >姓名</a></li>
+		
+	
 	&nbsp;&nbsp; <span class="glyphicon glyphicon-glass"></span>:
-	                                                      级别
+	              <#--                                        级别
 					<select  style="width:50px" onchange="javascript:action_user('search_by_level.do','assessLev='+escape(encodeURIComponent(this.value)))" >
 					    <option value="T">T</option>
 		  				<option value="A">A</option>
 		  				<option value="B">B</option>
 		  				<option value="C">C</option>
 		 			<select>
+		-->
 		 			<#if  rhs["system_para_map"]["user-status"]?exists>
 			                            在职状态
 					<select  style="width:60px" onchange="javascript:action_user('search_by_status.do','status='+escape(encodeURIComponent(this.value)))" >

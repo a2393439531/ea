@@ -13,6 +13,8 @@
 			</#if>
 			
 			<th>email</th>
+			<th>金币数</th>
+			<th>关联帐号</th>		
 			<#---
 			<th>身份证</th>						
 			<th>QQ</th>	
@@ -46,10 +48,9 @@
 				</select> 	
 			</td>			
 			</#if>
-			
+			<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  style="width:150px"   type="text"  value='${x.email?if_exists}' onchange="javascript:action_user('update.do','column=email&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /></td>					
+			<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  style="width:50px"   type="text"  value='${x.goldnumber?if_exists}' onchange="javascript:action_user('update.do','column=goldnumber&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /></td>					
 
-			
-			<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  style="width:200px"   type="text"  value='${x.email?if_exists}' onchange="javascript:action_user('update.do','column=email&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /></td>					
 			<#--
 		    <td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input style="width:100px"  type="text"  value='${x.identityCard?if_exists}'   onchange="javascript:action_user('update.do','column=identityCard&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /></td>
    		   	<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  style="width:100px" type="text"  value='${x.qq?if_exists}'  onchange="javascript:action_user('update.do','column=qq&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))"  />
@@ -67,13 +68,30 @@
 			<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  style="width:30px"   type="text"  value='${x.sognumber?if_exists}' onchange="javascript:action_user('update.do','column=sognumber&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /></td>					
 			<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  style="width:30px"   type="text"  value='${x.ksonumber?if_exists}' onchange="javascript:action_user('update.do','column=ksonumber&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /></td>					
 			-->
-			
+			<td> 
+			    	<select   style="width:70px"  onchange="javascript:action_user('link_account.do','id=${x.id?if_exists}&parentId='+this.value)">
+						<#if x.getParentModel()?exists>
+						 <option value="${x.getParentModel().id}"> ${x.getParentModel().account?if_exists}</option>
+						<#else>
+						<option value=""> 无</option>
+						</#if>
+						<option value=""> 无</option>
+				         <#list rhs["dataList"]?sort_by(sortName) as u>         
+						   <option value="${u.id}">${u.name?if_exists}</option>
+						</#list>
+					</select> 	
+				     <#--
+				    <#list x。getParentModel as p>
+					   <option value="${key}">${rhs["system_para_map"]["user-status"][key]?if_exists}</option>
+					</#list>
+					--> 			
+			</td>
 			<td >
 			<span style="width:220px">
 			
 				<a  class="btn btn-xs btn-info" href='ea_user_profile_edit.do?id=${x.id?if_exists}' onclick="return hs.htmlExpand(this, { objectType: 'iframe' })">信息</a>
 			     <a target="mainFrame" href='common_edit_edit_bean_property.do?objectname=User&op=r&propertyname=mark&id=${x.id?if_exists}' onclick="return hs.htmlExpand(this, { objectType: 'iframe' })">评价</a>&nbsp;&nbsp;
-	   <a  href="common_notify_send_email.do?userId=${x.id?if_exists}" onclick="return hs.htmlExpand(this, { objectType: 'iframe' })">email</a>&nbsp;&nbsp;
+	            <a  href="common_notify_send_email.do?userId=${x.id?if_exists}" onclick="return hs.htmlExpand(this, { objectType: 'iframe' })">email</a>&nbsp;&nbsp;
 				
 	   
 	    
