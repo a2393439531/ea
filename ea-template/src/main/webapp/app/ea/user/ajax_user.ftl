@@ -7,14 +7,16 @@
 			<th>帐号</th>
 			<th>密码</th>
 			<th>手机号码</th>
-			<th>身份证</th>						
-			<th>QQ</th>	
+			
 			<#if rhs["system_para_map"]?exists&& rhs["system_para_map"]["user-status"]?exists>
 			<th>状态</th>
 			</#if>
-			<th>级别</th>
+			
 			<th>email</th>
 			<#---
+			<th>身份证</th>						
+			<th>QQ</th>	
+			<th>级别</th>
 			<th>score</th>
 			<th>kso</th>
 			<th>sog</th>
@@ -31,8 +33,6 @@
 			<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input style="width:100px"  type="text"  value='${x.account?if_exists}'   onchange="javascript:action_user('update.do','column=account&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /></td>
 			<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input style="width:100px"  type="text"  value='${x.passwd?if_exists}' onchange="javascript:action_user('update.do','column=passwd&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))"/></td>
 	        <td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  style="width:100px" type="text"  value='${x.phoneNumber?if_exists}'  onchange="javascript:action_user('update.do','column=phoneNumber&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /></td>
-		    <td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input style="width:100px"  type="text"  value='${x.identityCard?if_exists}'   onchange="javascript:action_user('update.do','column=identityCard&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /></td>
-   		   	<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  style="width:100px" type="text"  value='${x.qq?if_exists}'  onchange="javascript:action_user('update.do','column=qq&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))"  />
    		   
 					
 			<#if  rhs["system_para_map"]?exists&&rhs["system_para_map"]["user-status"]?exists>
@@ -47,6 +47,13 @@
 			</td>			
 			</#if>
 			
+
+			
+			<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  style="width:200px"   type="text"  value='${x.email?if_exists}' onchange="javascript:action_user('update.do','column=email&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /></td>					
+			<#--
+		    <td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input style="width:100px"  type="text"  value='${x.identityCard?if_exists}'   onchange="javascript:action_user('update.do','column=identityCard&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /></td>
+   		   	<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  style="width:100px" type="text"  value='${x.qq?if_exists}'  onchange="javascript:action_user('update.do','column=qq&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))"  />
+			
 			<td onmouseover="rowOver(this)" onmouseout="rowOut(this)">
 				<select  style="width:50px" onchange="javascript:action_user('update.do','column=assessLev&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" >
 				    <option value="${x.assessLev?if_exists}">${x.assessLev?if_exists}</option>
@@ -55,10 +62,7 @@
 	  				<option value="B">B</option>
 	  				<option value="C">C</option>
 	  			<select>
-			</td>
-			
-			<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  style="width:200px"   type="text"  value='${x.email?if_exists}' onchange="javascript:action_user('update.do','column=email&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /></td>					
-			<#--
+			</td>			
 			<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  style="width:30px"   type="text"  value='${x.score?if_exists}' onchange="javascript:action_user('update.do','column=score&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /></td>					
 			<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  style="width:30px"   type="text"  value='${x.sognumber?if_exists}' onchange="javascript:action_user('update.do','column=sognumber&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /></td>					
 			<td onmouseover="rowOver(this)" onmouseout="rowOut(this)"><input  style="width:30px"   type="text"  value='${x.ksonumber?if_exists}' onchange="javascript:action_user('update.do','column=ksonumber&id=${x.id?if_exists}&columnValue='+escape(encodeURIComponent(this.value)))" /></td>					

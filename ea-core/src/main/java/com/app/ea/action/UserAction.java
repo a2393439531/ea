@@ -88,7 +88,20 @@ public class UserAction extends BaseEaAction {
 		} 
 		return list();
 	}
+
 	
+	public String link_account() throws Exception {
+		User user = (User) baseDao.loadById("User", Long.parseLong(getpara("id")));
+		if ("".equals(getpara("parentId"))) {
+			user.setParentModel(null);
+		}else{
+			
+			User user_parent = (User) baseDao.loadById("User", Long.parseLong(getpara("parentId")));
+			user.setParentModel(user_parent);
+		}
+			getPageData(Hsql.All_USER);
+		return "success";
+	}	
 	public String load() throws Exception {
 		String id = getpara("id");
 		if ("".equals(getpara("id"))) {
