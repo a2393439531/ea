@@ -250,6 +250,8 @@ public class ExamAction extends BaseProcessAction {
 	
 	public String complete_task(){
 		Map<String, Object> var = new HashMap<String, Object>();
+		//完成task后的跳转页面
+		String page = "exam_exam_exam_record_list.do";
 		String taskId = getpara("taskId"); //如果method为assigne，则taskid为空
 		String paperId = (String)infActiviti.getVariableByTaskId(taskId, "formId");
 		String method = getpara("method");
@@ -286,6 +288,7 @@ public class ExamAction extends BaseProcessAction {
 			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperId));
 			paper.setProcessInstanceId(processInstanceId);
 			baseDao.update(paper);
+			page = "exam_paper_list.do";
 		}else if("start".equals(method)){
 			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperId));
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -314,6 +317,7 @@ public class ExamAction extends BaseProcessAction {
 			infActiviti.setVariableByProcessInstanceId(processInstanceId, "recordsId", record.getId());
 			//end
 			infActiviti.completeTaskVar(taskId, paperId, getCurrentAccount(), var);
+			page = "exam_exam_exam_home.do";
 		}else if("reason".equals(method)){
 			String reason = getpara("reason");
 			Examrecord record = new Examrecord();
@@ -365,8 +369,10 @@ public class ExamAction extends BaseProcessAction {
 			baseDao.update(record);
 			
 			infActiviti.completeTaskVar(taskId, paperId, getCurrentAccount(), var);
+			page = "exam_exam_exam_list.do";
 		}
 		
+		rhs.put("page", page);
 		rhs.put("resultMessage", "成功完成任务。");
 		return "success";
 		
@@ -648,12 +654,14 @@ public class ExamAction extends BaseProcessAction {
 		Set<Result> multiitems = new HashSet<Result>();
 		Set<Result> blankitems = new HashSet<Result>();
 		Set<Result> essayitems = new HashSet<Result>();
-		String assignee = getCurrentAccount();
+		String assignee = getpara("user"); 
+				//getCurrentAccount();
 		Set<Examrecord> allresults = paper.getResultdetailByAccountAndRecordId(assignee, recordsId);
 		
 		Set<Result> results = new HashSet<Result>();
 		for (Examrecord examrecord : allresults) {
 			results.addAll(examrecord.getResult());
+			rhs.put("examrecord", examrecord);
 		}
 		//上面拿到指定用户的结果
 		for (Result result : results) {

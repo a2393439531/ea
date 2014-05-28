@@ -1,6 +1,6 @@
 submit                 =提交
 return                 =返回
-menu_oragnize          =组织架构
+menu_organize          =组织架构
 menu_user              =用户管理
 menu_user_new          =新增用户
 menu_infocenter        =信息发布
@@ -83,3 +83,8 @@ title_judge            =选择判卷者
 title_paper            =试卷
 title_generate_paper   =由该模板生成试卷
 title_time             =考试日期
+title_exam_list        =考试信息
+title_history_list     =考试结果
+title_item             =试题
+title_paper            =试卷
+title_exam_result      =成绩

@@ -7,7 +7,7 @@
 		
 		
 	<div class="panel panel-primary" style="margin-top: 18px;">
-      <div class="panel-heading"><strong>Item List</strong></div>
+      <div class="panel-heading"><strong><@i18n "title_item" /></strong></div>
       <div class="panel-body">
 			
 			

@@ -1,3 +1,3 @@
 <script type="text/javascript">
-document.location.href = 'exam_exam_exam_home.do?resultMessage=${rhs["resultMessage"]}';
+document.location.href = '${rhs["page"]}?resultMessage=${rhs["resultMessage"]}';
 </script>

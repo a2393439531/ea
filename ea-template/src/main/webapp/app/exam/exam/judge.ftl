@@ -85,9 +85,11 @@
 </form>
 <script>
 	$('#submitButton').click(function () {
-		var btn = $(this);
-		btn.button('loading');
-		$('#dialog').dialog('open');
-		document.getElementsByName("form_item")[0].submit();
+		if (confirm("Are you sure submit the paper?")){
+			var btn = $(this);
+			btn.button('loading');
+			$('#dialog').dialog('open');
+			document.getElementsByName("form_item")[0].submit();
+		}
 	});
 </script>

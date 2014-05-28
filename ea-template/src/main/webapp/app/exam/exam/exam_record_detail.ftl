@@ -1,14 +1,14 @@
 <#include "../../../common/freemarker/include_header.ftl">
 <form name="form_item" action="exam_exam_complete_task.do" method="post">
 <div class="panel panel-primary" style="margin-top: 18px;">
-      <div class="panel-heading"><strong>Template List</strong></div>
+      <div class="panel-heading"><strong><@i18n "title_result" /></strong></div>
       <div class="panel-body">
       <table class="table table-condensed table-bordered table-striped">
       		<tr>
       			<td><strong><@i18n "title_name" /></strong></td>
       			<td><#if rhs["paper"]?exists > ${rhs["paper"].name}</#if></td>
-      			<td><strong><@i18n "title_examtime" /></strong></td>
-      			<td><#if rhs["paper"]?exists > ${rhs["paper"].time}</#if></td>
+      			<td><strong><@i18n "title_exam_result" /></strong></td>
+      			<td><#if rhs["paper"]?exists > ${rhs["examrecord"].singlechoicemark?number + rhs["examrecord"].multichoicemark?number + rhs["examrecord"].blankmark?number + rhs["examrecord"].essaymark?number}</#if></td>
       			<td><strong><@i18n "title_totalmark" /></strong></td>
       			<td><#if rhs["paper"]?exists > ${rhs["paper"].totalmark}</#if></td>
       			<td><strong><@i18n "title_passmark" /></strong></td>
@@ -64,7 +64,7 @@
 					<td><strong>${essayitem_index+1}.&nbsp;${essayitem.item.content}</strong> <div class="pull-right"><@i18n "title_score" />：<input disabled type="text" name="essaymark" value="${essayitem.mark}" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');if(this.value.split('.').length>2){this.value=this.value.split('.')[0]+'.'+this.value.split('.')[1]}"/></div></td>
 				<tr>
 				<tr>
-					<td><textarea disabled name="">${essayitem.answer}</textarea> <@i18n "title_refkey" />：<font color=red>${essayitem.item.refkey}</font></td>
+					<td><textarea style="width:400px;height:100px;" disabled name="">${essayitem.answer}</textarea> <@i18n "title_refkey" />：<font color=red>${essayitem.item.refkey}</font></td>
 				</tr>
 				<#assign i = i + 1 > 
 	      	</#list>

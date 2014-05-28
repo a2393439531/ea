@@ -74,7 +74,7 @@
 					<td><strong>${essayitem_index+1}.&nbsp;${essayitem.content}</strong></td>
 				<tr>
 				<tr>
-					<td><textarea name="result[${i}].answer"> </textarea></td>
+					<td><textarea name="result[${i}].answer" style="width:400px;height:100px;"> </textarea></td>
 					<input type="hidden" value="${essayitem.id}" name="result[${i}].item.id" />
 					<input type="hidden" value="<#if essayitem.mark?exists>${essayitem.mark}<#else>${rhs["paper"].essaymark}</#if>" name="result[${i}].mark" />
 				</tr>

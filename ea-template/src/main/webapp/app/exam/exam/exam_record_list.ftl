@@ -2,7 +2,7 @@
 <div class="panel panel-primary">
        
   <div class="panel-heading">
-  	<strong>Exam History List</strong>
+  	<strong><@i18n "title_history_list" /></strong>
   </div>
   <div class="panel-body">
 		<table class="table table-condensed table-bordered">
@@ -33,15 +33,15 @@
 								<tr>
 									<td><strong>></strong></td>
 									<td><strong>User ID</strong></td>
-									<td ><strong><@i18n "title_result" /></strong></td>
+									<td ><strong><@i18n "title_exam_result" /></strong></td>
 									<td><strong><@i18n "title_time" /></strong></td>
 									<td></td>
 								</tr>
 								<#list (rhs["datalist"][papername]?sort_by("id"))?reverse as record>
 									<tr>
 										<td>${i}</td>
-										<#--<td ></td><a href="exam_exam_exam_record_detail.do?paperId=${record.paper.id}&recordsId=${record.id}" ></a>-->
-										<td>${record.userid}</td>
+										<#--<td ></td><a href="exam_exam_exam_record_detail.do?paperId=${record.paper.id}&recordsId=${record.id}&user=${record.userid}" ></a>-->
+										<td><a href="exam_exam_exam_record_detail.do?paperId=${record.paper.id}&recordsId=${record.id}&user=${record.userid}" >${record.userid}</a></td>
 										<#--<td>${record.paper.totalmark}</td>-->
 										<#--<td>${record.paper.passmark}</td>-->
 										<td>${record.singlechoicemark?number + record.multichoicemark?number + record.blankmark?number + record.essaymark?number}</td>
