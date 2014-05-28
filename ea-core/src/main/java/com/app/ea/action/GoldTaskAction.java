@@ -81,6 +81,19 @@ public class GoldTaskAction extends BaseEaAction {
 		return "success";
 	}
 	
+	//修改
+	public String update() throws Exception{
+		baseDao.update(goldtask);
+		rhs.put("result", "0000");
+		return "success";
+	}
+	//删除
+	public String delete() throws Exception{
+		baseDao.delete(goldtask);
+		rhs.put("result", "0000");
+		return "success";
+	}
+	
 	//发布task
 	public String release() throws Exception {
 		System.out.println("xxxx: " + goldtask.getTitle());
