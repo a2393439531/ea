@@ -27,14 +27,12 @@
   -webkit-appearance: none;
   box-sizing: border-box;
 }
-
 #afui form {
   position: relative;
 }
 #afui input[type="radio"],
 #afui input[type="checkbox"] {
   display: none;
-  
 }
 #afui input[type="radio"] + label,
 #afui input[type="checkbox"] + label {
@@ -94,7 +92,6 @@
   float: left;
   width: 33%;
   font-weight: normal;
-  
   font-size: 14px;
   color: inherit;
   text-align: right;

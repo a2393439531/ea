@@ -101,8 +101,7 @@
         scrollerCore.prototype = {
             //core default properties
             refresh: false,
-            //refreshContent: "Pull to Refresh",
-			refreshContent: "",
+            refreshContent: "Pull to Refresh",
             refreshHangTimeout: 2000,
             refreshHeight: 60,
             refreshElement: null,
@@ -589,8 +588,7 @@
                 this.refreshRunning = false;
                 if (this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
                 this.hideRefresh(false);
-				
-                //this.setRefreshContent("Pull to Refresh");
+                this.setRefreshContent("Pull to Refresh");
                 $.trigger(this, "refresh-cancel");
             //check for cancel when refresh is not running
             } else if (this.refresh && this.refreshTriggered && !this.refreshRunning && (this.el.scrollTop > -this.refreshHeight)) {
@@ -598,8 +596,7 @@
                 this.refreshRunning = false;
                 if (this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
                 this.hideRefresh(false);
-				
-                ///this.setRefreshContent("Pull to Refresh");
+                this.setRefreshContent("Pull to Refresh");
                 $.trigger(this, "refresh-cancel");
             }
 
@@ -616,7 +613,7 @@
         nativeScroller.prototype.showRefresh = function () {
             if (!this.refreshTriggered) {
                 this.refreshTriggered = true;
-               // this.setRefreshContent("Release to Refresh");
+                this.setRefreshContent("Release to Refresh");
                 $.trigger(this, "refresh-trigger");
             }
         };
@@ -706,8 +703,7 @@
                     that.el.scrollTop = 0;
                     that.logPos(that.el.scrollLeft, 0);
                     that.refreshRunning = false;
-					
-                    //that.setRefreshContent("Pull to Refresh");
+                    that.setRefreshContent("Pull to Refresh");
                     $.trigger(that, "refresh-finish");
                 }
             };
@@ -1199,12 +1195,11 @@
             if (this.refresh && !this.preventPullToRefresh) {
                 if (!this.refreshTriggered && this.lastScrollInfo.top > this.refreshHeight) {
                     this.refreshTriggered = true;
-                   // this.setRefreshContent("Release to Refresh");
+                    this.setRefreshContent("Release to Refresh");
                     $.trigger(this, "refresh-trigger");
                 } else if (this.refreshTriggered && this.lastScrollInfo.top < this.refreshHeight) {
                     this.refreshTriggered = false;
-					
-                   // this.setRefreshContent("Pull to Refresh");
+                    this.setRefreshContent("Pull to Refresh");
                     $.trigger(this, "refresh-cancel");
                 }
             }
@@ -1304,8 +1299,7 @@
             var that = this;
             if (this.preventHideRefresh) return;
             var endAnimationCb = function () {
-				
-               // that.setRefreshContent("Pull to Refresh");
+                that.setRefreshContent("Pull to Refresh");
                 $.trigger(that, "refresh-finish");
             };
             this.scrollerMoveCSS({x: 0, y: 0}, HIDE_REFRESH_TIME);

@@ -1099,15 +1099,8 @@
          * @param {string=} text
          * @title $.ui.showMask(text);
          */
-        showMask: function(text, isload) {
+        showMask: function(text) {
             if (!text) text = this.loadingText || "";
-			console.log("isload: " + isload);
-			if(isload == false){
-				$.query("#afui_mask").find("span").remove();	
-			}else{
-				$.query("#afui_mask").find("span").remove();
-				$.query("#afui_mask").append("<span class='ui-icon ui-icon-loading spin'></span>");
-			}
             $.query("#afui_mask>h1").html(text);
             $.query("#afui_mask").show();
         },
