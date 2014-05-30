@@ -21,7 +21,7 @@
       	</table>
       	<#assign i = 0 >
   		<table class="table table-condensed table-bordered table-striped">
-		  	<strong><@i18n "title_single" /></strong>(total:${rhs["template"].singlechoice + rhs["template"].rmdsinglechoice}, each: ${rhs["paper"].singlechoicemark})
+		  	<strong><@i18n "title_single" /></strong>(total:${rhs["paper"].singlechoice + rhs["paper"].rmdsinglechoice}, each: ${rhs["paper"].singlechoicemark})
 		  	<#list rhs["singleitems"]?sort_by("id") as singleitem>
 				<tr>
 					<td><strong>${singleitem_index+1}.&nbsp;${singleitem.content}</strong></td>
@@ -38,7 +38,7 @@
       	</table>
       	
       	<table class="table table-condensed table-bordered table-striped">
-	      	<strong><@i18n "title_multi" /></strong>(total:${rhs["template"].multichoice + rhs["template"].rmdmultichoice}, each: ${rhs["paper"].multichoicemark})
+	      	<strong><@i18n "title_multi" /></strong>(total:${rhs["paper"].multichoice + rhs["paper"].rmdmultichoice}, each: ${rhs["paper"].multichoicemark})
 	      	<#list rhs["multiitems"]?sort_by("id") as multiitem>
 	      		<tr>
 					<td><strong>${multiitem_index+1}.&nbsp;${multiitem.content}</strong></td>
@@ -54,7 +54,7 @@
 	      	</#list>
       	</table>
       	<table class="table table-condensed table-bordered table-striped">
-	      	<strong><@i18n "title_blank" /></strong>(total:${rhs["template"].blank + rhs["template"].rmdblank}, each: ${rhs["paper"].blankmark})
+	      	<strong><@i18n "title_blank" /></strong>(total:${rhs["paper"].blank + rhs["paper"].rmdblank}, each: ${rhs["paper"].blankmark})
 	      	<#list rhs["blankitems"]?sort_by("id") as blankitem>
 	      		<tr>
 					<td><strong>${blankitem_index+1}.&nbsp;${blankitem.content}</strong></td>
@@ -68,7 +68,7 @@
 	      	</#list>
       	</table>
       	<table class="table table-condensed table-bordered table-striped">
-	      	<strong><@i18n "title_essay" /></strong>(total:${rhs["template"].essay + rhs["template"].rmdessay}, each: ${rhs["paper"].essaymark})
+	      	<strong><@i18n "title_essay" /></strong>(total:${rhs["paper"].essay + rhs["paper"].rmdessay}, each: ${rhs["paper"].essaymark})
 	      	<#list rhs["essayitems"]?sort_by("id") as essayitem>
 	      		<tr>
 					<td><strong>${essayitem_index+1}.&nbsp;${essayitem.content}</strong></td>

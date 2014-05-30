@@ -20,6 +20,7 @@ public class TaskLog extends BaseModel {
 	private String taskId;
 	private String taskName;
 	private String createTime;
+	private String woid;
 
 	@Id
 	@GeneratedValue
@@ -86,4 +87,13 @@ public class TaskLog extends BaseModel {
 	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
+
+	public String getWoid() {
+		return woid;
+	}
+
+	public void setWoid(String woid) {
+		this.woid = woid;
+	}
+	
 }

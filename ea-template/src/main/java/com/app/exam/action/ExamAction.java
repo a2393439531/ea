@@ -30,7 +30,6 @@ import com.app.exam.model.Knowledge;
 import com.app.exam.model.Paper;
 import com.app.exam.model.Papergroup;
 import com.app.exam.model.Result;
-import com.app.exam.model.Template;
 import com.app.exam.util.ExcelUtil;
 import com.app.manager.action.Tpltb1Action;
 import com.utils.cache.Cache;
@@ -44,7 +43,6 @@ public class ExamAction extends BaseProcessAction {
 	public List<String> multichoicemark = new ArrayList<String>();
 	public List<String> blankmark = new ArrayList<String>();
 	public List<String> essaymark = new ArrayList<String>();
-	public Template template = new Template();
 	public List<String> examrecordIds = new ArrayList<String>();
 	
 	public String get_template_list_sql() {
@@ -64,7 +62,7 @@ public class ExamAction extends BaseProcessAction {
 		}else{
 			Task task = infActiviti.getTaskById(taskId);
 			Paper paper = (Paper) baseDao.loadById("Paper", Long.valueOf(paperId));
-			Template template = paper.getTemplate();
+			//Template template = paper.getTemplate();
 			
 			
 			if("start".equals(method)){
@@ -84,26 +82,26 @@ public class ExamAction extends BaseProcessAction {
 				}else{
 					//开始考试
 					Set<Item> singleitems = new HashSet<Item>();
-					Collection<Item> rmdsingleitems = template.getRmdItem("1", template.getRmdsinglechoice());
-					Collection<Item> reqsingleitems = template.getReqItem("1");
+					Collection<Item> rmdsingleitems = paper.getRmdItem("1", paper.getRmdsinglechoice());
+					Collection<Item> reqsingleitems = paper.getReqItem("1");
 					singleitems.addAll(reqsingleitems);
 					singleitems.addAll(rmdsingleitems);
 					
 					Set<Item> multiitems = new HashSet<Item>();
-					Collection<Item> rmdmultiitems = template.getRmdItem("2", template.getRmdmultichoice());
-					Collection<Item> reqmultiitems = template.getReqItem("2");
+					Collection<Item> rmdmultiitems = paper.getRmdItem("2", paper.getRmdmultichoice());
+					Collection<Item> reqmultiitems = paper.getReqItem("2");
 					multiitems.addAll(reqmultiitems);
 					multiitems.addAll(rmdmultiitems);
 					
 					Set<Item> blankitems = new HashSet<Item>();
-					Collection<Item> rmdblankitems = template.getRmdItem("3", template.getRmdblank());
-					Collection<Item> reqblankitems = template.getReqItem("3");
+					Collection<Item> rmdblankitems = paper.getRmdItem("3", paper.getRmdblank());
+					Collection<Item> reqblankitems = paper.getReqItem("3");
 					blankitems.addAll(reqblankitems);
 					blankitems.addAll(rmdblankitems);
 					
 					Set<Item> essayitems = new HashSet<Item>();
-					Collection<Item> rmdessayitems = template.getRmdItem("4", template.getRmdessay());
-					Collection<Item> reqessayitems = template.getReqItem("4");
+					Collection<Item> rmdessayitems = paper.getRmdItem("4", paper.getRmdessay());
+					Collection<Item> reqessayitems = paper.getReqItem("4");
 					essayitems.addAll(reqessayitems);
 					essayitems.addAll(rmdessayitems);
 					
@@ -137,9 +135,9 @@ public class ExamAction extends BaseProcessAction {
 						if(dataMap.get("paper") != null){
 							paper = (Paper) dataMap.get("paper");
 						}
-						if(dataMap.get("template") != null){
-							template = (Template) dataMap.get("template");
-						}
+						// if(dataMap.get("template") != null){
+						// template = (Template) dataMap.get("template");
+						// }
 						//用于考试异常中断的时候，能够拿到最后一次的examrecordid。以便继续考。(否则会新建一条examrecord，这不合理)。
 						if(dataMap.get("allrecord") != null){
 							String[] recordsId = ((String) dataMap.get("allrecord")).split(",");
@@ -199,7 +197,7 @@ public class ExamAction extends BaseProcessAction {
 			}
 			
 			rhs.put("paper", paper);
-			rhs.put("template", template);
+			//rhs.put("template", template);
 			rhs.put("task", task);
 			rhs.put("method", method);
 			rhs.put("taskPage", taskPage);
@@ -230,6 +228,7 @@ public class ExamAction extends BaseProcessAction {
 			}else if("usertask3".equals(taskname)){
 				oaTask.setMethod("Input Reason");
 			}
+			
 			allData.add(oaTask);
 		}
 
@@ -369,7 +368,7 @@ public class ExamAction extends BaseProcessAction {
 			baseDao.update(record);
 			
 			infActiviti.completeTaskVar(taskId, paperId, getCurrentAccount(), var);
-			page = "exam_exam_exam_list.do";
+			page = "exam_exam_exam_home.do";
 		}
 		
 		rhs.put("page", page);
@@ -380,6 +379,7 @@ public class ExamAction extends BaseProcessAction {
 
 	//计算当前一个题目的分数，并且继续下一题，该方法只能被用于以single方式打开试卷的时候。
 	public String complete_task_single(){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		boolean finsh = false;
 		Examrecord examrecord = null;
 		String allrecordid = "";
@@ -392,6 +392,9 @@ public class ExamAction extends BaseProcessAction {
 		allrecordid = String.valueOf(dataMap.get("allrecord"));
 		if("".equals(examrecordId)){
 			examrecord = new Examrecord();
+			examrecord.setUserid(getCurrentAccount());
+			examrecord.setRecorddate(sdf.format(new Date()));
+			examrecord.setRemark("Wait for judge");
 			baseDao.create(examrecord);
 			if(!"".equals(allrecordid) &&!"null".equals(allrecordid)&& allrecordid != null){
 				allrecordid = allrecordid + "," + examrecord.getId();
@@ -420,11 +423,11 @@ public class ExamAction extends BaseProcessAction {
 			dataMap.put("allpaper", paper.getId());
 		}
 		//Template template = (Template)getSessionValue("template");
-		Template template = (Template) dataMap.get("template");
-		if(template == null){
-			template = paper.getTemplate();
-			dataMap.put("template", template);
-		}
+		// Template template = (Template) dataMap.get("template");
+		// if(template == null){
+		// template = paper.getTemplate();
+		// dataMap.put("template", template);
+		// }
 		//计算结果
 		Set<Result> resultset = new HashSet<Result>();
 		for (Result res : result) {
@@ -433,7 +436,7 @@ public class ExamAction extends BaseProcessAction {
 			}
 			Item item = (Item) baseDao.loadById("Item", res.getItem().getId());
 			if(res.getAnswer()!=null&&res.getAnswer().equals(item.getRefkey())){
-				if("0".equals(item.getMark()) || "".equals(item.getMark())){
+				if("0".equals(item.getMark()) || "".equals(item.getMark()) || item.getMark() == null){
 					switch (item.getType()) {
 					case 1:
 						score += paper.getSinglechoicemark();
@@ -485,8 +488,8 @@ public class ExamAction extends BaseProcessAction {
 					//该试卷记录完毕，应该把examrecordId变为空，从而新建一个examrecord。参考line382
 					examrecordId = "";
 					paper = temppaper;
-					template = (Template)baseDao.loadById("Template", paper.getTemplate().getId());
-					items = template.getAllItem(template);
+					//template = (Template)baseDao.loadById("Template", paper.getTemplate().getId());
+					items = paper.getAllItem(paper);
 					for (Item item : items) {
 						if(item.getChoiceitem().size() >0){
 							item.getChoiceitem();
@@ -499,7 +502,7 @@ public class ExamAction extends BaseProcessAction {
 					dataMap.put("allpaper", allpaperid);
 					dataMap.put("items", items);
 					dataMap.put("paper", paper);
-					dataMap.put("template", template);
+					//dataMap.put("template", template);
 					
 				}else{
 					log.debug("Last paper!!");
@@ -508,7 +511,7 @@ public class ExamAction extends BaseProcessAction {
 		}
 		
 		rhs.put("score", score);
-		rhs.put("template", template);
+		//rhs.put("template", template);
 		rhs.put("paper", paper);
 		
 		if(index == items.size()-1){
@@ -550,36 +553,36 @@ public class ExamAction extends BaseProcessAction {
 		return "success";
 	}
 
-	public String show_record() throws Exception {
-		String templateid = getpara("templateid");
-		String useraccount = getCurrentAccount();
-		List<Examrecord> dataList = new ArrayList<Examrecord>();
-		if (!"".equals(templateid) && templateid != null) {
-			String sql = " from Template t where t.id=" + "'" + templateid
-					+ "'";
-			getPageData(sql);
-			template = ((List<Template>) rhs.get("dataList")).get(0);
-		}
-		Set<Paper> papers = template.getPapers();
-
-		for (Paper paper : papers) {
-			Set<Examrecord> examrecords = paper.getResultdetail();
-			for (Examrecord examrecord : examrecords) {
-				if (examrecord.getUserid().equals(useraccount)) {
-					dataList.add(examrecord);
-				}
-			}
-		}
-		for (Knowledge knowledge : template.getKnowledge()) {
-			if(knowledge.getName().equals("职业性格测试")){
-				rhs.put("page", "psychology");
-			}else{
-				rhs.put("page", "normal");
-			}
-		}
-		rhs.put("datalist", dataList);
-		return "success";
-	}
+//	public String show_record() throws Exception {
+//		String templateid = getpara("templateid");
+//		String useraccount = getCurrentAccount();
+//		List<Examrecord> dataList = new ArrayList<Examrecord>();
+//		if (!"".equals(templateid) && templateid != null) {
+//			String sql = " from Template t where t.id=" + "'" + templateid
+//					+ "'";
+//			getPageData(sql);
+//			template = ((List<Template>) rhs.get("dataList")).get(0);
+//		}
+//		Set<Paper> papers = template.getPapers();
+//
+//		for (Paper paper : papers) {
+//			Set<Examrecord> examrecords = paper.getResultdetail();
+//			for (Examrecord examrecord : examrecords) {
+//				if (examrecord.getUserid().equals(useraccount)) {
+//					dataList.add(examrecord);
+//				}
+//			}
+//		}
+//		for (Knowledge knowledge : template.getKnowledge()) {
+//			if(knowledge.getName().equals("职业性格测试")){
+//				rhs.put("page", "psychology");
+//			}else{
+//				rhs.put("page", "normal");
+//			}
+//		}
+//		rhs.put("datalist", dataList);
+//		return "success";
+//	}
 
 	public String exam_record_list() throws Exception{
 		String useraccount = getCurrentAccount();
@@ -649,7 +652,7 @@ public class ExamAction extends BaseProcessAction {
 		String paperId = getpara("paperId");
 		String recordsId = getpara("recordsId");
 		Paper paper = (Paper) baseDao.loadById("Paper", Long.valueOf(paperId));
-		Template template = paper.getTemplate();
+		//Template template = paper.getTemplate();
 		Set<Result> singleitems = new HashSet<Result>();
 		Set<Result> multiitems = new HashSet<Result>();
 		Set<Result> blankitems = new HashSet<Result>();
@@ -686,7 +689,7 @@ public class ExamAction extends BaseProcessAction {
 		rhs.put("blankitems", blankitems);
 		rhs.put("essayitems", essayitems);
 		rhs.put("paper", paper);
-		rhs.put("template", template);
+		//rhs.put("template", template);
 		
 		return "success";
 	}

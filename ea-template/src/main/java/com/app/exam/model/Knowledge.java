@@ -31,24 +31,26 @@ public class Knowledge extends BaseModel {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	private String name;
 	private String alias;
 	private String value;
-	
-	
-	private Set<Template> templates = new HashSet<Template>();
-	
-	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Template.class, fetch = FetchType.LAZY)
-	@JoinTable(name = "test_template_knowledge", joinColumns = { @JoinColumn(name = "knowledge_id") }, inverseJoinColumns = { @JoinColumn(name = "template_id") })
-	public Set getTemplates() {
-		return templates;
-	}
 
-	public void setTemplates(Set<Template> template) {
-		this.templates = template;
-	}
-
+	//
+	// private Set<Template> templates = new HashSet<Template>();
+	//
+	// @ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Template.class,
+	// fetch = FetchType.LAZY)
+	// @JoinTable(name = "test_template_knowledge", joinColumns = {
+	// @JoinColumn(name = "knowledge_id") }, inverseJoinColumns = {
+	// @JoinColumn(name = "template_id") })
+	// public Set getTemplates() {
+	// return templates;
+	// }
+	//
+	// public void setTemplates(Set<Template> template) {
+	// this.templates = template;
+	// }
 
 	private Knowledge parentModel;
 	private Set<Knowledge> childKnowledges = new HashSet<Knowledge>();
@@ -72,7 +74,6 @@ public class Knowledge extends BaseModel {
 		this.parentModel = parentModel;
 	}
 
-	
 	public String getName() {
 		return name;
 	}
@@ -98,7 +99,7 @@ public class Knowledge extends BaseModel {
 	}
 
 	private Set<Item> items = new HashSet<Item>();
-	
+
 	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Item.class, fetch = FetchType.LAZY)
 	@JoinTable(name = "test_item_knowledge", joinColumns = { @JoinColumn(name = "knowledge_id") }, inverseJoinColumns = { @JoinColumn(name = "item_id") })
 	public Set getItems() {
@@ -109,8 +110,8 @@ public class Knowledge extends BaseModel {
 		this.items = items;
 	}
 
-	private Set<Paper> papers = new HashSet<Paper>(); //被哪些试卷引用
-	
+	private Set<Paper> papers = new HashSet<Paper>(); // 被哪些试卷引用
+
 	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Paper.class, fetch = FetchType.LAZY)
 	@JoinTable(name = "test_paper_knowledge", joinColumns = { @JoinColumn(name = "knowledge_id") }, inverseJoinColumns = { @JoinColumn(name = "paper_id") })
 	public Set getPapers() {
@@ -120,6 +121,5 @@ public class Knowledge extends BaseModel {
 	public void setPapers(Set<Paper> papers) {
 		this.papers = papers;
 	}
-	
-	
+
 }

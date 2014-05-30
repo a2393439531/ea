@@ -5,12 +5,12 @@
 					<td>
 					  	<span style="auto;display:-moz-inline-box;display:inline-block;">
 					  		<input type="checkbox" style="width:30px" 
-					  		<#list rhs["template"].items as reqitem>
+					  		<#list rhs["paper"].items as reqitem>
 					  			<#if reqitem.id == item.id>
 					  				checked
 					  			</#if>
 					  		</#list>
-				   			onclick="javascript:action_item_admin('${rhs["template"].id}','${item.id}',${item.type});" > ${item.content}</input>
+				   			onclick="javascript:action_item_admin('${rhs["paper"].id}','${item.id}',${item.type});" > ${item.content}</input>
 				   		</span>
 			  	    <td>
 	  	    	</tr>

@@ -1,6 +1,6 @@
 <#include "../../../common/freemarker/include_header.ftl">
 <script type="text/javascript" src="<@context_module/>template.js"></script>
-			<form name="form_item" action="exam_paper_create.do" metiod="post">
+			<form name="form_item" action="exam_paper_setitem.do" metiod="post">
 				<input type="hidden" name="method" value='setitem' />
 				<input type="hidden" name="template.id" value='<#if rhs["template"]?exists >${rhs["template"].id?if_exists }</#if>' />
 				<input type="hidden" name="paperid" value='<#if rhs["paper"]?exists>${rhs["paper"].id}</#if>' />

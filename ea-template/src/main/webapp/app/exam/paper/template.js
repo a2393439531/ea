@@ -25,7 +25,7 @@ function additem(type,templateid) {
 	});
 }
 
-function action_item_admin(templateid, itemid, itemtype){
+function action_item_admin(paperid, itemid, itemtype){
 	var divid="";
 	switch(itemtype){
 	case 1:
@@ -43,11 +43,12 @@ function action_item_admin(templateid, itemid, itemtype){
 	}
 	$.ajax({
 		type : "POST",
-		url : "exam_template_addreqitem.do",
-		data : "templateid=" + templateid + "&type=" + itemtype + "&itemid=" + itemid,
+		url : "exam_paper_addreqitem.do",
+		data : "paperid=" + paperid + "&type=" + itemtype + "&itemid=" + itemid,
 		cache : false,
 		success : function(html) {
 			document.getElementById(divid).innerHTML =  html;
+			counttotalmark();
 		}
 	});
 }

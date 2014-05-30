@@ -1,6 +1,6 @@
 <p class="pull-right" >
       <div class="panel panel-info pull-right" style="width:auto">
-        <div class="panel-heading"><strong>query panel:</strong></div>
+        <div class="panel-heading"><strong><@i18n "title_search" />:</strong></div>
         <div class="panel-body">
  			 <form action="exam_paper_list.do" id="search_form" method="post" > <#-- 该ID需当参数传入分页的宏	-->
 				<input type="hidden" name="search" value="search">  					<#-- 这里必须加上，不然不会进行条件查询，且name和value不能修改其他值-->

@@ -8,6 +8,7 @@
 		<table class="table table-condensed table-hover table-bordered">
 				<tr>
 					<td width=25px><strong>#</strong></td>
+					<td ><strong><@i18n "title_user" /></strong></td>
 					<td ><strong><@i18n "title_name" /></strong></td>
 					<td ><strong><@i18n "title_passmark" /></strong></td>
 					<td ><strong><@i18n "title_totalmark" /></strong></td>
@@ -19,7 +20,8 @@
 					<#if item.obj?exists>
 					<tr>
 						<td>${item_index+1}</td>
-						<td>${item.obj.name}</td>
+						<td>${item.assignee}</td>
+						<td>${item.obj.name} </td>
 						<td >${item.obj.passmark}</td>
 						<td >${item.obj.totalmark}</td>
 						<td >${item.obj.time}</td>
@@ -78,7 +80,7 @@
 						<td><a href="exam_exam_exam_record_detail.do?paperId=${record.paper.id}&recordsId=${record.id}&user=${record.userid}" >${papername}</a> </td><#--onclick="javascript:showresult(${rhs["datalist"][papername][0].paper.id});"-->
 						<td>${rhs["datalist"][papername][0].paper.passmark}</td>
 						<td>
-							<#if record.remark == "Wait for judge">
+							<#if record.remark?exists && record.remark == "Wait for judge">
 								${record.remark}
 							<#else>
 								${record.singlechoicemark?number + record.multichoicemark?number + record.blankmark?number + record.essaymark?number}

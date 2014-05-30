@@ -28,7 +28,6 @@ import com.app.exam.model.Choiceitem;
 import com.app.exam.model.Item;
 import com.app.exam.model.Knowledge;
 import com.app.exam.model.Paper;
-import com.app.exam.model.Template;
 import com.app.exam.util.ItemUtil;
 
 @Scope("prototype")
@@ -80,8 +79,8 @@ public class ItemAction extends BaseEaAction {
 		
 		String knowledgesid = getpara("knowledgesid");
 		String type = getpara("type");
-		String templateid = getpara("templateid");
-		Template template = (Template)baseDao.loadById("Template", Long.valueOf(templateid));
+		String paperid = getpara("templateid");
+		Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperid));
 		
 		String[] knowledgeid = knowledgesid.split(",");
 		
@@ -103,7 +102,7 @@ public class ItemAction extends BaseEaAction {
 			rhs.put("info", "所选知识领域没有该题型");
 		}
 		rhs.put("itemlist", dataList);
-		rhs.put("template",template);
+		rhs.put("paper",paper);
 		return "success";
 		
 	}
@@ -186,23 +185,23 @@ public class ItemAction extends BaseEaAction {
 		String id = getpara("id");
 		Item item = (Item) baseDao.loadById("Item", Long.parseLong(id));
 		baseDao.delete(item);
-		Set<Template> templates = item.getTemplates();
-		for (Template template : templates) {
+		Set<Paper> papers = item.getPapers();
+		for (Paper paper : papers) {
 			switch(item.getType()){
 			case 1:
-				template.setSinglechoice(template.getSinglechoice() - 1);
+				paper.setSinglechoice(paper.getSinglechoice() - 1);
 				break;
 			case 2:
-				template.setMultichoice(template.getMultichoice() - 1);
+				paper.setMultichoice(paper.getMultichoice() - 1);
 				break;
 			case 3:
-				template.setBlank(template.getBlank() - 1);
+				paper.setBlank(paper.getBlank() - 1);
 				break;
 			case 4:
-				template.setEssay(template.getEssay() - 1);
+				paper.setEssay(paper.getEssay() - 1);
 				break;
 			}
-			baseDao.update(template);
+			baseDao.update(paper);
 		}
 		return list();
 	}
@@ -249,14 +248,14 @@ public class ItemAction extends BaseEaAction {
 			}
 		}
 		//然后自动生成一个模板，把这些题目变成必做题。然后拿到该模板的ID，新建一个该模板创建的试卷
-		Template template = new Template();
+		Paper paper = new Paper();
 		int p = 0,j = 0,k = 0,l = 0;
 		int totalmark = 0;
-		template.setItems(items);
-		template.setRmdsinglechoice(0);
-		template.setRmdmultichoice(0);
-		template.setRmdblank(0);
-		template.setRmdessay(0);
+		paper.setItems(items);
+		paper.setRmdsinglechoice(0);
+		paper.setRmdmultichoice(0);
+		paper.setRmdblank(0);
+		paper.setRmdessay(0);
 		
 		for (Item item : items) {
 			totalmark += Integer.valueOf(item.getMark());
@@ -275,15 +274,11 @@ public class ItemAction extends BaseEaAction {
 				break;
 			}
 		}
-		template.setSinglechoice(p);
-		template.setMultichoice(j);
-		template.setBlank(k);
-		template.setEssay(l);
-		template.setTitle(fileName.substring(0, fileName.lastIndexOf(".")) + "_"+new Date().toLocaleString());
-		baseDao.create(template);
-		Paper paper = new Paper();
+		paper.setSinglechoice(p);
+		paper.setMultichoice(j);
+		paper.setBlank(k);
+		paper.setEssay(l);
 		paper.setName(fileName.substring(0, fileName.lastIndexOf("."))  + "_"+new Date().toLocaleString());
-		paper.setTemplate(template);
 		paper.setTotalmark(totalmark);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		paper.setCreatedate(sdf.format(new Date()));
