@@ -66,18 +66,30 @@ public class Item extends BaseModel {
 		this.knowledge = knowledge;
 	}
 	
-	private Set<Template> templates = new HashSet<Template>();
+//	private Set<Template> templates = new HashSet<Template>();
+//	
+//	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Template.class, fetch = FetchType.LAZY)
+//	@JoinTable(name = "test_item_template", joinColumns = { @JoinColumn(name = "item_id") }, inverseJoinColumns = { @JoinColumn(name = "template_id") })
+//	public Set getTemplates() {
+//		return templates;
+//	}
+//
+//	public void setTemplates(Set<Template> templates) {
+//		this.templates = templates;
+//	}
+
+	private Set<Paper> papers = new HashSet<Paper>();
 	
-	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Template.class, fetch = FetchType.LAZY)
-	@JoinTable(name = "test_item_template", joinColumns = { @JoinColumn(name = "item_id") }, inverseJoinColumns = { @JoinColumn(name = "template_id") })
-	public Set getTemplates() {
-		return templates;
+	@ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Paper.class, fetch = FetchType.LAZY)
+	@JoinTable(name = "test_item_paper", joinColumns = { @JoinColumn(name = "item_id") }, inverseJoinColumns = { @JoinColumn(name = "paper_id") })
+	public Set<Paper> getPapers() {
+		return papers;
 	}
 
-	public void setTemplates(Set<Template> templates) {
-		this.templates = templates;
+	public void setPapers(Set<Paper> papers) {
+		this.papers = papers;
 	}
-
+	
 	@Column(length = 2000)
 	public String getContent() {
 		return content;

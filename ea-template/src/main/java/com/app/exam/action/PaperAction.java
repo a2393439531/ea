@@ -20,7 +20,6 @@ import com.app.exam.model.Item;
 import com.app.exam.model.Knowledge;
 import com.app.exam.model.Paper;
 import com.app.exam.model.Papergroup;
-import com.app.exam.model.Template;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 
@@ -30,7 +29,7 @@ public class PaperAction extends BaseEaAction {
 
 	public Collection<String> knowledgevalue = new ArrayList<String>();
 	public Paper paper = new Paper();
-	public Template template = new Template();
+	//public Template template = new Template();
 	public Collection<String> reqsinglechoice = new ArrayList<String>();
 	public Collection<String> reqmultichoice = new ArrayList<String>();
 	public Collection<String> reqblank = new ArrayList<String>();
@@ -99,16 +98,16 @@ public class PaperAction extends BaseEaAction {
 					knowledge.add(kn);
 				}
 			}
-			String templateid = getpara("templateid");
-			if (!"".equals(templateid) && templateid != null) {
-				template = (Template) baseDao.loadById("Template",
-						Long.valueOf(getpara("templateid")));
-			}
+//			String templateid = getpara("templateid");
+//			if (!"".equals(templateid) && templateid != null) {
+//				template = (Template) baseDao.loadById("Template",
+//						Long.valueOf(getpara("templateid")));
+//			}
 			if ("choicetemplate".equals(method)) {
 				if (paper.getId() == null) {
 					baseDao.create(paper);
-					paper.setTemplate(template);
-					baseDao.update(paper);
+					//paper.setTemplate(template);
+					//baseDao.update(paper);
 				}
 
 				rhs.put("paper", paper);
@@ -118,18 +117,21 @@ public class PaperAction extends BaseEaAction {
 				Papergroup pg = (Papergroup)baseDao.loadById("Papergroup", paper.getPapergroup().getId());
 				paper.setPapergroup(pg);
 				paper.setKnowledge(knowledge);
-				paper.setTemplate(template);
+				//paper.setTemplate(template);
 				long sortnob = ((Paper)baseDao.loadById("Paper", paper.getId())).getSortNob();
 				String processInstanceId = ((Paper)baseDao.loadById("Paper", paper.getId())).getProcessInstanceId();
 				paper.setSortNob(sortnob);
 				paper.setProcessInstanceId(processInstanceId);
 				
+				Set<Item> paperItems = ((Paper)baseDao.loadById("Paper", paper.getId())).getItems();
+				paper.setItems(paperItems);
+				
 				if(!Boolean.valueOf(getpara("byexcel"))){
 					//设置总分
-					int singlecount = paper.getTemplate().getSinglechoice() + paper.getTemplate().getRmdsinglechoice();
-					int multicount = paper.getTemplate().getMultichoice() + paper.getTemplate().getRmdmultichoice();
-					int blankcount = paper.getTemplate().getBlank() + paper.getTemplate().getRmdblank();
-					int essaycount = paper.getTemplate().getEssay() + paper.getTemplate().getRmdessay();
+					int singlecount = paper.getSinglechoice() + paper.getRmdsinglechoice();
+					int multicount = paper.getMultichoice() + paper.getRmdmultichoice();
+					int blankcount = paper.getBlank() + paper.getRmdblank();
+					int essaycount = paper.getEssay() + paper.getRmdessay();
 					
 					paper.setTotalmark(singlecount
 							* Integer.valueOf(paper.getSinglechoicemark())
@@ -149,7 +151,6 @@ public class PaperAction extends BaseEaAction {
 	public String delete() throws Exception {
 		String id = getpara("id");
 		Paper paper = (Paper) baseDao.loadById("Paper", Long.parseLong(id));
-		paper.setTemplate(null);
 		paper.setPapergroup(null);
 		
 		Set<Examrecord> record = paper.getResultdetail();
@@ -176,48 +177,38 @@ public class PaperAction extends BaseEaAction {
 		}
 		String method = getpara("method");
 		if("newpaper".equals(method)){
-			if (template.getId() == null) {
-				template.setTitle("Temp_template_"+sdf.format(new Date()));
-				baseDao.create(template);
-				if(paper.getId() == null){
-					paper.setTemplate(template);
-				}
-			}
+			// if (template.getId() == null) {
+			// baseDao.create(template);
+			// if(paper.getId() == null){
+			// paper.setTemplate(template);
+			// }
+			// }
+			baseDao.create(paper);
 			rhs.put("page", "setpaper");
 			rhs.put("paper", paper);
+			//rhs.put("template", template);
 		}else if("setpaper".equals(method)){
-			String templateid = getpara("templateid");
-			if (!"".equals(templateid) && templateid != null) {
-				template = (Template) baseDao.loadById("Template",
-						Long.valueOf(getpara("templateid")));
-			}
+			//String templateid = getpara("templateid");
+			//if (!"".equals(templateid) && templateid != null) {
+				//template = (Template) baseDao.loadById("Template",
+						//Long.valueOf(getpara("templateid")));
+			//}
+			//template.setTitle("Temp_template_"+sdf.format(new Date()));
 			paper.setKnowledge(knowledge);
-			paper.setTemplate(template);
-			template.setKnowledge(knowledge);
+			//paper.setTemplate(template);
+			//template.setKnowledge(knowledge);
 			paper.setCreatedate(sdf.format(new Date()));
 			paper.setCreateuser(getCurrentAccount());
+			long sortnob = ((Paper)baseDao.loadById("Paper", paper.getId())).getSortNob();
+			paper.setSortNob(sortnob);
 			
-			if(!Boolean.valueOf(getpara("byexcel"))){
-				//设置总分
-				int singlecount = paper.getTemplate().getSinglechoice() + paper.getTemplate().getRmdsinglechoice();
-				int multicount = paper.getTemplate().getMultichoice() + paper.getTemplate().getRmdmultichoice();
-				int blankcount = paper.getTemplate().getBlank() + paper.getTemplate().getRmdblank();
-				int essaycount = paper.getTemplate().getEssay() + paper.getTemplate().getRmdessay();
-				
-				paper.setTotalmark(singlecount
-						* Integer.valueOf(paper.getSinglechoicemark())
-						+ multicount
-						* Integer.valueOf(paper.getMultichoicemark())
-						+ blankcount * Integer.valueOf(paper.getBlankmark())
-						+ essaycount * Integer.valueOf(paper.getEssaymark()));
-			}
-			baseDao.create(paper);
+			
+			//baseDao.create(paper);
 			baseDao.update(paper);
-			knowledgevalue.clear();
-			rhs.put("page", "setitem");
-			rhs.put("template", template);
+			//knowledgevalue.clear();
+			//rhs.put("template", template);
 			rhs.put("paper", paper);
-		}else if("setitem".equals(method)){
+		//}else if("setitem".equals(method)){
 			String paperid = getpara("paperid");
 			Set<Item> items = new HashSet<Item>();
 			//添加必选题
@@ -226,10 +217,10 @@ public class PaperAction extends BaseEaAction {
 			int blank = reqblank.size();
 			int essay = reqessay.size();
 			
-			template.setSinglechoice(singlechoice);
-			template.setMultichoice(multichoice);
-			template.setBlank(blank);
-			template.setEssay(essay);
+			paper.setSinglechoice(singlechoice);
+			paper.setMultichoice(multichoice);
+			paper.setBlank(blank);
+			paper.setEssay(essay);
 			
 			List<String> datalist = new ArrayList<String>();
 			datalist.addAll(reqsinglechoice);
@@ -241,14 +232,14 @@ public class PaperAction extends BaseEaAction {
 				Item item = (Item) baseDao.loadById("Item", Long.valueOf(itemid));
 				items.add(item);
 			}
-			template.setItems(items);
-			template.setKnowledge(knowledge);// 添加知识领域
-			baseDao.update(template);
+			paper.setItems(items);
+			paper.setKnowledge(knowledge);// 添加知识领域
+			baseDao.update(paper);
 			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperid));
-			int singlecount = paper.getTemplate().getSinglechoice() + paper.getTemplate().getRmdsinglechoice();
-			int multicount = paper.getTemplate().getMultichoice() + paper.getTemplate().getRmdmultichoice();
-			int blankcount = paper.getTemplate().getBlank() + paper.getTemplate().getRmdblank();
-			int essaycount = paper.getTemplate().getEssay() + paper.getTemplate().getRmdessay();
+			int singlecount = paper.getSinglechoice() + paper.getRmdsinglechoice();
+			int multicount = paper.getMultichoice() + paper.getRmdmultichoice();
+			int blankcount = paper.getBlank() + paper.getRmdblank();
+			int essaycount = paper.getEssay() + paper.getRmdessay();
 			paper.setTotalmark(singlecount
 					* Integer.valueOf(paper.getSinglechoicemark())
 					+ multicount
@@ -265,12 +256,139 @@ public class PaperAction extends BaseEaAction {
 		return "success";
 	}
 	
+	public String edititem() throws Exception{
+		//String templateid = getpara("templateid");
+		String paperid = getpara("paperid");
+		List<Knowledge> knowledgerootlist = common_get_tree_root("Knowledge");
+		rhs.put("knowledgeRootList", knowledgerootlist);
+		//Template temp = (Template)baseDao.loadById("Template", Long.valueOf(templateid));
+		Paper temppaper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperid));
+		
+		rhs.put("page", "setpaper");
+		rhs.put("paper", temppaper);
+		//rhs.put("template", temp);
+		return "success";
+	}
+	
+
+	public String addreqitem() {
+		int p = 0,j = 0,k = 0,l = 0;
+		Set<Item> datalist = new HashSet<Item>();
+		String paperid = getpara("paperid");
+		String itemtype = getpara("type");
+		String itemid = getpara("itemid");
+		Set<Item> items = new HashSet<Item>();
+
+		Paper paper = (Paper) baseDao.loadById("Paper",
+				Long.valueOf(paperid));
+		items = paper.getItems();
+
+		Item item = (Item) baseDao.loadById("Item", Long.valueOf(itemid));
+		
+		if(!items.contains(item)){
+			items.add(item);
+		}else{
+			items.remove(item);
+		}
+		paper.setItems(items);
+		for (Item tempitem : items) {
+			switch(tempitem.getType()){
+			case 1:
+				p++;
+				break;
+			case 2:
+				j++;
+				break;
+			case 3:
+				k++;
+				break;
+			case 4:
+				l++;
+				break;
+			}
+		}
+		paper.setSinglechoice(p);
+		paper.setMultichoice(j);
+		paper.setBlank(k);
+		paper.setEssay(l);
+		paper.setTotalmark((p + paper.getRmdsinglechoice())
+				* paper.getSinglechoicemark() + (j + paper.getRmdmultichoice())
+				* paper.getMultichoicemark() + (k + paper.getRmdblank())
+				* paper.getBlankmark() + (l + paper.getRmdessay())
+				* paper.getEssaymark());
+		baseDao.update(paper);
+		
+		for (Item reqitem : items) {
+			if(itemtype.equals(String.valueOf(reqitem.getType()))){
+				datalist.add(reqitem);
+			}
+		}
+		rhs.put("datalist", datalist);
+		rhs.put("itemtype", itemtype);
+		return "success";
+	}
+	
+	public String setitem() throws Exception{
+		Set<Knowledge> knowledge = new HashSet<Knowledge>();
+		List<Knowledge> knowledgerootlist = common_get_tree_root("Knowledge");
+		rhs.put("knowledgeRootList", knowledgerootlist);
+		if (knowledgevalue.size() > 0) {
+			for (String value : knowledgevalue) {
+				Knowledge kn = getKnowledgeById(knowledgerootlist, value);
+				knowledge.add(kn);
+			}
+		}
+		String paperid = getpara("paperid");
+		Set<Item> items = new HashSet<Item>();
+		//添加必选题
+		int singlechoice = reqsinglechoice.size();
+		int multichoice = reqmultichoice.size();
+		int blank = reqblank.size();
+		int essay = reqessay.size();
+		
+		paper.setSinglechoice(singlechoice);
+		paper.setMultichoice(multichoice);
+		paper.setBlank(blank);
+		paper.setEssay(essay);
+		
+		List<String> datalist = new ArrayList<String>();
+		datalist.addAll(reqsinglechoice);
+		datalist.addAll(reqmultichoice);
+		datalist.addAll(reqblank);
+		datalist.addAll(reqessay);
+		
+		for (String itemid : datalist) {
+			Item item = (Item) baseDao.loadById("Item", Long.valueOf(itemid));
+			items.add(item);
+		}
+		paper.setItems(items);
+		paper.setKnowledge(knowledge);// 添加知识领域
+		//baseDao.update(template);
+		Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperid));
+		int singlecount = paper.getSinglechoice() + paper.getRmdsinglechoice();
+		int multicount = paper.getMultichoice() + paper.getRmdmultichoice();
+		int blankcount = paper.getBlank() + paper.getRmdblank();
+		int essaycount = paper.getEssay() + paper.getRmdessay();
+		paper.setTotalmark(singlecount
+				* Integer.valueOf(paper.getSinglechoicemark())
+				+ multicount
+				* Integer.valueOf(paper.getMultichoicemark())
+				+ blankcount * Integer.valueOf(paper.getBlankmark())
+				+ essaycount * Integer.valueOf(paper.getEssaymark()));
+		baseDao.update(paper);
+		rhs.put("page", "editpage");
+		knowledgevalue.clear();
+		list();
+		rhs.put("knowledgeRootList", knowledgerootlist);
+		rhs.put("page", "editpage");
+		return "success";
+	}
 	
 	public String assign(){
 		String id = getpara("id");
 		Paper paper = (Paper) baseDao.loadById("Paper", Long.parseLong(id));
-		Template template = paper.getTemplate();
-		if(template.getRmdblank() != 0 || template.getBlank() != 0 || template.getEssay() != 0 || template.getRmdessay() != 0 ){
+		//Template template = paper.getTemplate();
+		if(paper.getRmdblank() != 0 || paper.getBlank() != 0 || paper.getEssay() != 0 || paper.getRmdessay() != 0 ){
 			rhs.put("autojudge", false);
 		}
 		rhs.put("paper", paper);
@@ -290,7 +408,7 @@ public class PaperAction extends BaseEaAction {
 			} else if ("edit".equals(getpara("method"))) {
 				rhs.put("readonly", false);
 			}
-			Set<Item> items = paper.getTemplate().getItems();
+			Set<Item> items = paper.getItems();
 			for (Item item : items) {
 				if(!"0".equals(item.getMark()) && item.getMark() != null){
 					byexcel = true;
@@ -299,19 +417,19 @@ public class PaperAction extends BaseEaAction {
 			}
 			//如果是excel导入的，就把所有题目显示出来//目前只显示了单选。因为，目前通过excel导入只能是单选题
 			//if(byexcel){
-				Template template = paper.getTemplate();
+				//Template template = paper.getTemplate();
 				Set<Item> singleitems = new HashSet<Item>();
 				Set<Item> multiitems = new HashSet<Item>();
 				Set<Item> blankitems = new HashSet<Item>();
 				Set<Item> essayitems = new HashSet<Item>();
-				Collection<Item> reqsingleitems = template.getReqItem("1");
-				Collection<Item> rmdsingleitems = template.getRmdItem("1", template.getRmdsinglechoice());
-				Collection<Item> reqmultiitems = template.getReqItem("2");
-				Collection<Item> rmdmultiitems = template.getRmdItem("2", template.getRmdmultichoice());
-				Collection<Item> reqblankitems = template.getReqItem("3");
-				Collection<Item> rmdblankitems = template.getRmdItem("3", template.getRmdblank());
-				Collection<Item> reqessayitems = template.getReqItem("4");
-				Collection<Item> rmdessayitems = template.getRmdItem("4", template.getRmdessay());
+				Collection<Item> reqsingleitems = paper.getReqItem("1");
+				Collection<Item> rmdsingleitems = paper.getRmdItem("1", paper.getRmdsinglechoice());
+				Collection<Item> reqmultiitems = paper.getReqItem("2");
+				Collection<Item> rmdmultiitems = paper.getRmdItem("2", paper.getRmdmultichoice());
+				Collection<Item> reqblankitems = paper.getReqItem("3");
+				Collection<Item> rmdblankitems = paper.getRmdItem("3", paper.getRmdblank());
+				Collection<Item> reqessayitems = paper.getReqItem("4");
+				Collection<Item> rmdessayitems = paper.getRmdItem("4", paper.getRmdessay());
 				singleitems.addAll(reqsingleitems);
 				singleitems.addAll(rmdsingleitems);
 				multiitems.addAll(reqmultiitems);
@@ -325,7 +443,7 @@ public class PaperAction extends BaseEaAction {
 				rhs.put("blankitems", blankitems);
 				rhs.put("essayitems", essayitems);
 				rhs.put("paper", paper);
-				rhs.put("template", template);
+				//rhs.put("template", template);
 			//}
 		}
 		rhs.put("byexcel", byexcel);
@@ -374,4 +492,13 @@ public class PaperAction extends BaseEaAction {
 	public void setKnowledgevalue(Collection<String> knowledgevalue) {
 		this.knowledgevalue = knowledgevalue;
 	}
+
+	public Paper getPaper() {
+		return paper;
+	}
+
+	public void setPaper(Paper paper) {
+		this.paper = paper;
+	}
+	
 }

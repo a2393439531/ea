@@ -1,11 +1,10 @@
 <#include "../../../common/freemarker/include_header.ftl">
 <body> 
-		<br><br>
-		<a style="margin-left:7px;margin-top:5px;" class="btn btn-info "  href="exam_papergroup_save.do?method=show"><@i18n "menu_papergroup_new" /></a>
-		<a class="btn btn-xs btn-info" style="margin-top:10px;" onclick="javascript:window.location.href='exam_paper_list.do';"><@i18n "return" /></a>
+		<a style="margin-left:7px;margin-top:15px;" class="btn btn-xs btn-info "  href="exam_papergroup_save.do?method=show"><@i18n "menu_papergroup_new" /></a>
+		<a class="btn btn-xs btn-info" style="margin-top:15px;" onclick="javascript:window.location.href='exam_paper_list.do';"><@i18n "return" /></a>
 		
-	<div class="panel panel-primary" style="margin-top: 18px;">
-      <div class="panel-heading"><strong>Paper Group List</strong></div>
+	<div class="panel panel-primary" style="margin-top: 10px;">
+      <div class="panel-heading"><strong><@i18n "title_papergroup" /></strong></div>
       <div class="panel-body">
 			
 			

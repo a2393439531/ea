@@ -2,11 +2,11 @@
 <body> 
    		<#include "include_add_search.ftl">
 		<br><br>
-		<a style="margin-left:7px;margin-top:5px;" class="btn btn-primary "  href="exam_item_save.do?method=show"><@i18n "menu_item_new" /></a>
-		<a style="margin-left:10px;margin-top:5px;" class="btn btn-xs btn-info "  href="exam_knowledge_menu_knowledge.do"><@i18n "menu_knowledge" /></a>
+		<a style="margin-left:7px;margin-top:15px;" class="btn btn-xs btn-info "  href="exam_item_save.do?method=show"><@i18n "menu_item_new" /></a>
+		<a style="margin-left:10px;margin-top:15px;" class="btn btn-xs btn-info "  href="exam_knowledge_menu_knowledge.do"><@i18n "menu_knowledge" /></a>
 		
 		
-	<div class="panel panel-primary" style="margin-top: 18px;">
+	<div class="panel panel-primary" style="margin-top: 25px;">
       <div class="panel-heading"><strong><@i18n "title_item" /></strong></div>
       <div class="panel-body">
 			

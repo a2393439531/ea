@@ -12,7 +12,6 @@ import com.app.common.base.action.BaseEaAction;
 import com.app.exam.model.Knowledge;
 import com.app.exam.model.Paper;
 import com.app.exam.model.Papergroup;
-import com.app.exam.model.Template;
 
 @Scope("prototype")
 @Component("papergroupAction")

@@ -20,7 +20,7 @@
       		</tr>
       	</table>
   		<table class="table table-condensed table-bordered table-striped">
-		  	<strong><@i18n "title_single" /></strong>(total:${rhs["template"].singlechoice + rhs["template"].rmdsinglechoice}, each: ${rhs["paper"].singlechoicemark})
+		  	<strong><@i18n "title_single" /></strong>(total:${rhs["paper"].singlechoice + rhs["paper"].rmdsinglechoice}, each: ${rhs["paper"].singlechoicemark})
 					<tr>
 						<td><strong>#.&nbsp;${rhs["item"].content}</strong></td>
 					<tr>
@@ -48,7 +48,7 @@
 					</#if>
 					<#if rhs["item"].type == 4>
 						<tr>
-							<td><textarea name="result[${rhs["index"]}].answer"> </textarea></td>
+							<td><textarea name="result[${rhs["index"]}].answer" style="width:400px;height:100px;"> </textarea></td>
 						</tr>
 						<input type="hidden" value="<#if rhs["item"].mark?exists >${rhs["item"].mark}<#else>${rhs["paper"].essaymark}</#if>" name="result[${rhs["index"]}].mark" />
 					</#if>
