@@ -12,18 +12,9 @@
   display: block;
   list-style: none;
   position: relative;
-  padding: 20px 0px 20px 10px;
+  padding: 20px 20px 20px 10px;
   border-bottom: 1px solid #ccc;
 }
-/*xiaoqinghong*/
-#afui .list .listcol3 {
-	position: relative;
- 	width: 33%;
- 	
- 	background-color: green;
-}
-
-
 #afui .list li:first-child {
   border-top: 1px solid #ccc;
 }
@@ -54,7 +45,6 @@
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   content: "\f054";
-  
   top: 50%;
   margin-top: -0.5em;
   color:inherit;

@@ -10,80 +10,62 @@
 		return obj.afAccordionID;
 	};
 	$.fn.accordion=function(opts){
-		accid = 0;
 		opts=opts||{};
 		if(this.length===0) return;
 		var tmp, id;
 		for(var i = 0; i < this.length; i++) {
 			//cache system
 			id = objId(this[i]);
-			
 			if(!cache[id]) {
 				if(!opts) opts = {};
 				tmp = new Accordion(this[i], opts);
 				cache[id] = tmp;
 			} else {
 				tmp = cache[id];
-				
-				var $el = $(this[i]);
-				$el.find("div>table").css("display", "none");
-				var items = $el.find("div");
-				for(var i =0; i < items.length; i++){
-					var id = $(items[i]).attr("id");
-					if(!id) $(items[i]).attr("id", "accid_" + (accid++));
-				}
 			}
 		}
 		return this.length == 1 ? tmp : this;
 	};
-	var accid = 0;
+
 	function Accordion(el,opts){
 		var time=opts&&opts.time;
 		var $el=$(el);
-		
 		if(time){
-			$el.find("div>li").vendorCss("TransitionDuration",time);
-			$el.find("div>table").css("display", "none");
-			var items = $el.find("div");
-			for(var i =0; i < items.length; i++){
-				var id = $(items[i]).attr("id");
-				if(!id) $(items[i]).attr("id", "accid_" + (accid++));
-			}
+			$el.find("li>div").vendorCss("TransitionDuration",time);
 		}
-		
 		$el.one('destroy', function(e){
            var id = el.afAccordionID;
            if(cache[id]) delete cache[id];
            e.stopPropagation();
            $el.off("click","li");
         });
+
         $el.on("click","li",function(e){
-			var $e = $(e.target).siblings("table");
-			showhidecontent($e);
-			
-			e.preventDefault();
+
+		var $e = $(e.target).siblings("div");
+		$e.parent().addClass("active");
+		$el.find("li").not($e.parent().get(0)).removeClass("active");
+		$el.find("div: first").not($e.get(0)).css("height", "0px"); //xiao 查找第一个div
+		
+		window.setTimeout(function () {
+//			//xiao
+//			var display = $e.css("display");
+//			if(display == "none"){
+//				$e.css("display", "block");
+//			}else{
+//				$e.css("display", "none");
+//			}
+		if ($e.get(0).clientHeight > 0)
+		    $e.css("height", "0");
+		else {
+		    var to = $e.data("height");
+		    if (to == null)
+		        to = "auto";
+		    $e.css("height", to);
+		}
+		});
+		e.preventDefault();
         });
 
 	}
 })(af,window);
-
-function showhidecontent(obj){
-	var $e = obj;
-	var pid = $e.parent().attr("id");
-	var acc = $e.parent().parent();
-	var items = acc.find("div");
-	
-	//先关闭其它 ITEM 的内容
-	for(var i =0; i < items.length; i++){
-		if($(items[i]).attr("id") == pid){
-			continue;
-		}
-		$(items[i]).find("div>table").css("display", "none");
-	}
-	var display = $e.css("display");
-	if(display == "none"){
-		$e.css("display", "block");
-	}else{
-		$e.css("display", "none");
-	}
-}

@@ -2,7 +2,6 @@
 #afui .grid {
   width: 100%;
   overflow:hidden; /* hack to take up height*/
-  
 }
 #afui .col2,
 #afui .col3,
@@ -10,13 +9,12 @@
 #afui .col2-3 {
   float: none;
   width: 100%;
-  
 }
 #afui .grid:after {
   content: '';
   clear: both;
 }
-@media handheld, only screen and (min-width: 100px) {
+@media handheld, only screen and (min-width: 768px) {
   #afui .col2 {
     width: 50%;
     float: left;
@@ -24,7 +22,6 @@
   #afui .col3 {
     width: 33.3%;
     float: left;
-    
   }
   #afui .col1-3 {
     width: 33.3%;
