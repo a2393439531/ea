@@ -23,6 +23,7 @@ public class OaTask{
 	public String method;
 	//end
 	public Object obj;
+	public String assignee;
 	
 	public OaTask(){
 		super();
@@ -35,6 +36,14 @@ public class OaTask{
 	
 	public ProcessModel getBusinessModel() {
 		return businessModel;
+	}
+
+	public String getAssignee() {
+		return assignee;
+	}
+
+	public void setAssignee(String assignee) {
+		this.assignee = assignee;
 	}
 
 	public void setBusinessModel(ProcessModel businessModel) {

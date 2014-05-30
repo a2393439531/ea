@@ -32,11 +32,12 @@ public class TaskLogAction extends BaseProcessAction {
 	public String list(){
 		String taskId = getpara("taskId");
 		String processInstanceId = getpara("processInstanceId");
+		String woid = getpara("woid");
 		
-		if(processInstanceId.equals("") || "undefined".equals(processInstanceId))
-			processInstanceId = getTask(taskId).getProcessInstanceId();
+		//if(processInstanceId.equals("") || "undefined".equals(processInstanceId))
+			//processInstanceId = getTask(taskId).getProcessInstanceId();
 
-		rhs.put("list", baseDao.find("from TaskLog where processInstanceId='" + processInstanceId + "' order by createTime desc"));
+		rhs.put("list", baseDao.find("from TaskLog where woid='" + woid + "' order by createTime desc"));
 		rhs.put("taskId", taskId);
 		rhs.put("processInstanceId", processInstanceId);
 		return "list";
@@ -55,7 +56,7 @@ public class TaskLogAction extends BaseProcessAction {
 	
 	public String save() throws Exception {
 		Task t = getTask(getpara("taskId"));
-		
+		String woid = getpara("woid");
 		String processInstanceId = getpara("processInstanceId");
 		if("undefined".equals(processInstanceId) || "".equals(processInstanceId)){
 			processInstanceId = t.getProcessInstanceId();
@@ -71,6 +72,7 @@ public class TaskLogAction extends BaseProcessAction {
 			model.setTaskName(t.getName());
 		}
 		model.setProcessInstanceId(processInstanceId);
+		model.setWoid(woid);
 		model.setCreateTime(TimeUtil.getTimeStr("yyyy-MM-dd HH:mm:ss"));
 		model.setUserAccount(user.getAccount());
 		model.setUserName(user.getName());

@@ -567,7 +567,9 @@ public class ImpActiviti implements InfActiviti {
 			oaTask.setHandleTaskUrl(formService.getTaskFormData(task.getId()).getFormKey());
 			oaTask.setProcessDefinition(getProcessDefinitionByTask(task));
 			String initiator = (String) getVariableByTaskId(task.getId(), "initiator");
+			String assignee = (String)getVariableByTaskId(task.getId(), "assignee");
 			oaTask.setInitiator(initiator);
+			oaTask.setAssignee(assignee);
 			/*String busiDesc = (String) getVariableByTaskId(task.getId(), "busiDesc");
 			log.debug("查询busiDesc："+busiDesc);
 			oaTask.setBusiDesc(busiDesc);*/
