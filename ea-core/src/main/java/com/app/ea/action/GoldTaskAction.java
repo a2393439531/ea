@@ -1,15 +1,33 @@
 package com.app.ea.action;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+
 
 import com.app.common.base.action.BaseEaAction;
 import com.app.common.spring.ssh.action.BaseAction;
@@ -19,9 +37,11 @@ import com.app.ea.model.GoldTransaction;
 import com.app.ea.model.GoldTask;
 import com.app.ea.model.Rule;
 import com.app.ea.model.User;
+import com.utils.path.PathUtils;
 
 
 import org.apache.commons.beanutils.BeanUtils;
+
 
 @Component("goldtaskAction")
 @Scope("prototype")
@@ -29,16 +49,28 @@ public class GoldTaskAction extends BaseEaAction {
 	private final Logger log = LoggerFactory.getLogger(GoldTaskAction.class);
 	public GoldTask goldtask = new GoldTask();
 	public GoldTransaction goldtran = new GoldTransaction();
+	public User user = new User();
+	
 
-
-
-
-	public GoldTask getGoldtask() {
-		return goldtask;
-	}
-
-	public void setGoldtask(GoldTask goldtask) {
-		this.goldtask = goldtask;
+	//读取登录日志文件 
+	public String menu_log() throws Exception{
+		String path = PathUtils.getHomePath(PathUtils.SYSTEM_DATA_CLASS) + "log_login.txt";
+		BufferedReader br = null;
+		List<String> list = new ArrayList<String>();
+		try{
+			br = new BufferedReader(new FileReader(path));
+			String str = null;
+			int count = 0;
+			while((str = br.readLine()) != null){
+				list.add(str);
+				if(count++ >= 5) break;
+			}
+			rhs.put("datalist", list);
+		}finally{
+			br.close();
+		}
+		
+		return "success";
 	}
 	
 	public String menu_allgoldtask() throws Exception{
@@ -46,6 +78,11 @@ public class GoldTaskAction extends BaseEaAction {
 		return "success";
 	}
 	public String menu_usrgoldtask() throws Exception{
+		if("-1".equals(getpara("maxSize")) && "1".equals(getpara("isUsrRel"))){
+			List datalist = baseDao.find("from GoldTask where usrAccount = '"+getCurrentAccount()+"' order by createDate desc");
+			rhs.put("dataList", datalist);
+			return "success";
+		}
 		getPageData("from GoldTask where usrAccount = '"+getCurrentAccount()+"' or usrAccountArray like '%"+getCurrentAccount()+"%'  order by createDate desc");
 		return "success";
 	}
@@ -77,7 +114,7 @@ public class GoldTaskAction extends BaseEaAction {
 		else gt.setUsrAccountArray(usrAccount);
 		baseDao.update(gt);
 		rhs.put("result", "0000");
-		log.info("done............");
+		log.info(usrAccount + " 投标了 " + gt.getTitle());
 		return "success";
 	}
 	
@@ -96,7 +133,6 @@ public class GoldTaskAction extends BaseEaAction {
 	
 	//发布task
 	public String release() throws Exception {
-		System.out.println("xxxx: " + goldtask.getTitle());
 		goldtask.setUsrAccount(getCurrentAccount());
 		if(goldtask.getEndDate() != null){
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -115,9 +151,7 @@ public class GoldTaskAction extends BaseEaAction {
 			long l =  baseDao.create(goldtask);
 			rhs.put("result", "0000");
 		}
-		
-		
-		
+		log.info(goldtask.getUsrAccount() + "发布了 " + goldtask.getTitle());
 		return "success";
 	}
 	
@@ -125,15 +159,19 @@ public class GoldTaskAction extends BaseEaAction {
 	//获取所有用户
 	public String menu_usr() throws Exception {
 		
-		List datalist = baseDao.find("from User");
+//		List datalist =infEa.getUserNotAdmin();
+		List datalist =baseDao.find("from User");
+	
+		ComparatorUser cu = new ComparatorUser();
+		Collections.sort(datalist, cu);
 		rhs.put("datalist", datalist);
+		
 		return "success";
 	}
 	
 	//交易记录
 	public String goldrecords() throws Exception {
-		String[] params = {getCurrentAccount(),getCurrentAccount()};
-		rhs.put("datalist", baseDao.find("from GoldTransaction where fromUsrAccount = ? or toUsrAccount = ? order by payDate desc",params));
+		rhs.put("datalist", baseDao.find("from GoldTransaction order by payDate desc"));
 		return "success";
 	}
 	
@@ -199,12 +237,70 @@ public class GoldTaskAction extends BaseEaAction {
 			return "success";
 		}
 	
+		
+		//修改用户信息
+		public String updateuser(){
+			
+			User logineduser = (User)getSessionValue("userlogined");
+			copyProperties(user,logineduser);
+			baseDao.update(logineduser);
+			rhs.put("result", "0000");
+			putSessionValue("userlogined", logineduser);
+			return "success";
+		}
+		
+		
+		/**
+		 * 属性拷贝
+		 * 
+		 * @param source
+		 * @param target
+		 */
+		public void copyProperties(Object source, Object target) {
 
+			Class sourceClz = source.getClass();
+			Class targetClz = target.getClass();
+			// 得到Class对象所表征的类的所有属性(包括私有属性)
+			Field[] fields = sourceClz.getDeclaredFields();
+			for (int i = 0; i < fields.length; i++) {
+				String fieldName = fields[i].getName();
+				Field targetField = null;
+				Field sourceField = null;
+				try {
+					// 得到targetClz对象所表征的类的名为fieldName的属性，不存在就进入下次循环
+					sourceField = fields[i];
+					targetField = targetClz.getDeclaredField(fieldName);
+					
+					sourceField.setAccessible(true);
+					targetField.setAccessible(true);
+					Object v = sourceField.get(source);
+					if(v != null){
+						targetField.set(target, v);
+					}
+				} catch (SecurityException e) {
+					e.printStackTrace();
+					break;
+				} catch (NoSuchFieldException e) {
+					e.printStackTrace();
+					continue;
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
 	
-	
-	
-	
-	
-	
-	
+}
+
+class ComparatorUser implements Comparator{
+	@Override
+	public int compare(Object arg0, Object arg1) {
+		User u1 = (User)arg0;
+		User u2 = (User)arg1;
+		if(Integer.parseInt(u1.getGoldnumber()) > Integer.parseInt(u2.getGoldnumber())){
+			return -1;
+		}
+		return 1;
+	}
 }
