@@ -105,7 +105,10 @@ public class LoginAction extends BaseEaAction {
 			if (user.getAccount().equals("admin")) { 
 				return "admin";
 			}		
-			if("app".equals(type)) return "app_success";
+			if("app".equals(type)) {
+				log.info(user.getName() + " 登录成功");
+				return "app_success";
+				}
 			return "success";
 		}
 
