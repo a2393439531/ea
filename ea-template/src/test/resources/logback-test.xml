@@ -18,10 +18,10 @@
 		<file>log_login.txt</file>
 		<append>true</append>
 		<encoder>
-			<pattern>%d{YYYY-MM-DD HH:mm:ss.SSS} %msg %n</pattern>
+			<pattern>%d{YYYY-MM-dd HH:mm:ss}| %msg %n</pattern>
 		</encoder>
 	</appender>	
-	<logger name="com.app.common.base.action.LoginAction" level="info" additivity="false">		
+	<logger name="com.app" level="info" additivity="false">		
 	    <appender-ref ref="log_login" />
 	</logger>
 
