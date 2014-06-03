@@ -439,19 +439,18 @@
 							$("#myGoldOrder").text(Number(i));
 						}else{
 							$("#header").find("h1").text("通讯录["+jsonobj[i].name+"]");
-						}						
-						continue;
+						}
 					}
 					//通讯录添加 元素
-					if(what.id == "contactPage" && jsonobj[i].account != loginedAccount){
+					if(what.id == "contactPage"){
 						
-						var childLi = '<li ><div class="grid">'+
+						var childLi = '<li style="padding: 10px 20px 10px 10px;"><div class="grid">'+
 							'<div class="col3">'+jsonobj[i].name+'</div>'+
 							'<div class="col3">'+jsonobj[i].phoneNumber+'</div>'+
 							'<div class="col3">'+
 							'	<a href="tel: '+jsonobj[i].phoneNumber+'" class="icon phone" style="font-size: 12px;"></a>&nbsp;'+
 							'	<a href="tel: '+jsonobj[i].phoneNumber+'" class="icon message" style="font-size: 12px;"></a>&nbsp;'+
-							'</div></div></li>';
+							'</div></div><div style="color: #8693AC;">email: '+jsonobj[i].email+'</div></li>';
 			
 						$("#contactPage").find("ul").append(childLi);
 						
