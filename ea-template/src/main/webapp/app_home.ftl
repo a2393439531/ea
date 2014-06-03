@@ -349,7 +349,7 @@
 	var curPage1 = 1, pageSize1 = 0; //所有任务页面 当前页数， 总页数
 	var curPage2 = 1, pageSize2 = 0; //可投标任务页面 当前页数， 总页数
 	var curPage3 = 1, pageSize3 = 0; //我的任务页面 当前页数， 总页数
-	var maxSize = 2;
+	var maxSize = 10;
 	var taskPageIsEdit = false; //发布任务页面是否为编辑
 	var usrMap; //所有用户
 	var tmpTaskId; //任务ID （用于编辑）
@@ -394,6 +394,20 @@
 		}
 		
 		
+	}
+	
+	function loadmarquee(){
+		//加载滚动条
+		$("#marquee").html("");
+		var url = "ea_goldtask_menu_log.do";
+		sendRequest(url, function(jsonstr){
+			var msgList = JSON.parse(jsonstr).options;
+			for(var i = 0; i < msgList.length; i++){
+				$("#marquee").append('<span>'+msgList[i]+'</span><br/>');
+			}
+			
+		});
+		setTimeout(function(){loadmarquee();}, 10*1000); //１０秒刷新一次滚动条i
 	}
 	
 	function loadPanel(what){
@@ -443,18 +457,6 @@
 					}
 				}
 			});
-			
-			//加载滚动条
-			$("#marquee").html("");
-			url = "ea_goldtask_menu_log.do";
-			sendRequest(url, function(jsonstr){
-				var msgList = JSON.parse(jsonstr).options;
-				for(var i = 0; i < msgList.length; i++){
-					$("#marquee").append('<span>'+msgList[i]+'</span><br/>');
-				}
-				
-			});
-			
 		}
 		else if(what && what.id == "usrInfoPage"){
 			
@@ -710,6 +712,8 @@
 		bindscroller($("#goldTaskPage"));
 		bindscroller($("#bidGoldTaskPage"));
 		bindscroller($("#usrGoldTaskPage"));
+		
+		setTimeout(function(){loadmarquee();}, 3*1000); //3秒后加载滚动条
 		
 	});
 	

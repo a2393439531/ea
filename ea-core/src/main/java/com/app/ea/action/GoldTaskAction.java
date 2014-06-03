@@ -144,7 +144,10 @@ public class GoldTaskAction extends BaseEaAction {
 	
 	//修改
 	public String update() throws Exception{
-		baseDao.update(goldtask);
+		
+		GoldTask gt = (GoldTask)baseDao.find("from GoldTask where id = ?", goldtask.getId()).get(0);
+		copyProperties(goldtask, gt);
+		baseDao.update(gt);
 		rhs.put("result", "0000");
 		return "success";
 	}
