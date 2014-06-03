@@ -213,9 +213,9 @@
 					      排名: 第<span style="color: #C70505;font-weight: bold;" id="myGoldOrder"></span>位
 					</#if>
 				</div>
-				<marquee scrolldelay="10" scrollamount="1"  id="marquee" direction=up height="20px" style="float: right;">
+				<marquee scrolldelay="10" scrollamount="1"  id="marquee" direction=up height="40px" style="float: right;color:#4B8005;">
 				</marquee>
-				<br/>&nbsp;
+				<br/>&nbsp;<br/>&nbsp;
 					
 				
 				<ul class="list" >
@@ -278,6 +278,7 @@
 			
 			<!--支出金币页面 start--->
 			<div id="payGoldPage" data-load="loadPanel" class="panel" data-footer="payGoldFooter" data-tab="navbar_paygold">
+				<div align="center">可用金币:  <span style="color: #C70505;font-weight: bold;" id="pay_goldnum"></span>&nbsp;</div>
 				<form action="" method="post">
 				<br />
 				<label for="payGoldNum">支出金币数: </label><input id="payGoldNum" type="number" placeholder="请输入金币数量">
@@ -594,6 +595,8 @@
 			if(!usrMap){
 				return;
 			}
+			$("#pay_goldnum").text(currUsr.goldNumber);
+			
 			$("#tousrlist").html("");
 			for(var key in usrMap){
 				if(key != currUsr.account){
@@ -624,7 +627,7 @@
 					for(var i = 0; i < allGoldTraRec.length; i++){
 						if(allGoldTraRec[i].toUsrAccount == key){
 							recFlag = 1;
-							cdiv3.append('<span class="col1-3">'+allGoldTraRec[i].fromUsrAccount+'/&nbsp;'+allGoldTraRec[i].goldNumber+'</span>'+
+							cdiv3.append('<span class="col1-3">'+usrMap[allGoldTraRec[i].fromUsrAccount].name+'/&nbsp;'+allGoldTraRec[i].goldNumber+'</span>'+
 									'<span class="col2-3">'+allGoldTraRec[i].payDate.substring(0,11)+'&nbsp;'+allGoldTraRec[i].payRemarks+'</span>');
 						}	
 					}
