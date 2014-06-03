@@ -41,9 +41,13 @@
 			width: 25%;
     		float: left;
 		}
+	
+		
 		#afui .button {
 			border:1px solid #D3DADE;
 			border-radius:0px;
+			color: #646464;
+			
 		}
 		
 		#afui .header h1 {
@@ -102,19 +106,7 @@
 	
 	
 <script>	
-	var loginedUsrAccount = '<#if Session?exists && Session["userlogined"]?exists>${Session["userlogined"].account?if_exists}</#if>';
-	var allGoldTask, usrGoldTask, bidGoldTask; //所有任务, 当前用户发布和投过标的任务, 当前用户可投标的任务 (分页数据)
-	var allMaxSize = 10, allCurrPage = 0; allMaxPage = 0;
-	var usrMaxSize = 10, usrCurrPage = 0; usrMaxPage = 0;
-	var bidMaxSize = 10, bidCurrPage = 0; bidMaxPage = 0;
-	var usrlist, usrMap; //用户列表 , 用户键(account)值(obj)对
-	var goldIncome = 0, goldOutlay = 0; //金币收收, 金币支出
-	var myGoldNum = 0;
-	var taskPageIsEdit = false;
-	var allUsrTaskList; //当前用户发布的所有任务
-	var resResutl = false; //服务端响应的结果(用于发布任务后更新用户发布的所有任务)
-	var serverReqTimeout = 2000; //服务端请求超时时间
-	var allGoldTraRec; //所有金币交易记录
+	
 	
 	var popoupobj; //弹框对象
 	
@@ -196,8 +188,8 @@
 			<a href="#usrGoldTaskPage" id="navbar_usrtask" class="icon info" data-transition="slide">我的任务</a>
 		</footer>
 		<footer id="payGoldFooter">
+			<a href="#payGoldPage"  id="navbar_paygold" class="icon info" data-transition="slide">支付金币</a>
 			<a href="#goldTranRecPage" id="navbar_goldTranRec" class="icon info" data-transition="slide">交易记录</a>
-			<a href="#payGoldPage" id="navbar_paygold" class="icon info" data-transition="slide">支付金币</a>
 		</footer>
 		
 		<footer id="mainFooter">
@@ -212,24 +204,23 @@
 		<div id="content">
 			<div  id="main" class="panel" data-load="loadPanel" selected="true" data-footer="mainFooter" data-header="homeHeader" data-tab="navbar_main">
 				<div >
-					<span style="color: #C70505;font-weight: bold;" id="labLoginedName"><#if Session?exists && Session["userlogined"]?exists>${Session["userlogined"].name?if_exists}</#if></span>&nbsp;
-					<img src="common/images/android/gold.png" /><span style="color: #C70505;font-weight: bold;" id="myGoldNum"><#if Session?exists && Session["userlogined"]?exists>${Session["userlogined"].goldNumber?if_exists}</#if></span>&nbsp;
-					<#if Session["userlogined"].getParentModel()?exists&&Session["userlogined"].getParentModel().account=='admin'>
-						<#else>
+					
+					<span style="color: #C70505;font-weight: bold;" id="labLoginedName"></span>&nbsp;
+					<img src="common/images/android/gold.png" />
+					<span style="color: #C70505;font-weight: bold;" id="myGoldNum"></span>&nbsp;
+					<#if Session["userlogined"]?exists && Session["userlogined"].getParentModel()?exists&&Session["userlogined"].getParentModel().account=='admin'>
+					<#else>
 					      排名: 第<span style="color: #C70505;font-weight: bold;" id="myGoldOrder"></span>位
 					</#if>
-					<br/>
-					
-					<marquee scrolldelay="10" scrollamount="2" behavior="alternate"  direction="right"></marquee>
-				</div><br />
-				<marquee scrolldelay="10" scrollamount="2" behavior="alternate" id="marquee">
+				</div>
+				<marquee scrolldelay="10" scrollamount="1"  id="marquee" direction=up height="20px" style="float: right;">
 				</marquee>
-				
+				<br/>&nbsp;
 					
 				
 				<ul class="list" >
 					<li><a href="#goldTaskPage" >赚取金币</a></li>
-					<li><a href="#goldTranRecPage" >金币交易</a></li>
+					<li><a href="#payGoldPage" >金币交易</a></li>
 					<li><a href="#goldOrderPage" >排行榜</a></li>
 					<li><a href="#testpage" >组织架构</a></li>
 				
@@ -247,24 +238,19 @@
 			
 			<!--所有任务页面 start--->
 			<div id="goldTaskPage"  class="panel" data-load="loadPanel" data-header="gainGoldHeader" data-footer="gainGoldFooter" data-tab="navbar_alltask">
-				<div id="allTaskList">
-				</div>
+				<div id="contentList"></div>
 			</div>
 			<!--所有任务页面 end--->
 			
 			<!--可投标任务页面 start--->
 			<div id="bidGoldTaskPage" class="panel" data-load="loadPanel" data-header="gainGoldHeader" data-footer="gainGoldFooter">	
-				
-				<div id="bidTaskList">
-				</div>
+				<div id="contentList"></div>
 			</div>
 			<!--可投标任务页面 end--->
 			
 			<!--我的任务页面 start--->
 			<div id="usrGoldTaskPage"  class="panel" data-load="loadPanel" data-header="gainGoldHeader" data-footer="gainGoldFooter" data-tab="navbar_usrtask">	
-			
-				<div id="usrTaskList">
-				</div>
+				<div id="contentList"></div>
 			</div>
 			<!--我的任务页面 end--->
 			
@@ -326,10 +312,10 @@
 			
 			<!--个人信息页面 start--->
 			<div id="usrInfoPage" class="panel" data-load="loadPanel" data-footer="mainFooter">
-				<label for="usrName">名称: </label><input id="usrName" type="text" value='<#if Session?exists && Session["userlogined"]?exists>${Session["userlogined"].name?if_exists}</#if>'>
-				<label for="usrEmail">邮箱: </label><input id="usrEmail" type="email" value='<#if Session?exists && Session["userlogined"]?exists>${Session["userlogined"].email?if_exists}</#if>'>
-				<label for="usrQQ">QQ: </label><input id="usrQQ" type="number" value='<#if Session?exists && Session["userlogined"]?exists>${Session["userlogined"].qq?if_exists}</#if>'>
-				<label for="usrPhoneNo">电话号码: </label><input id="usrPhoneNo" type="text" value='<#if Session?exists && Session["userlogined"]?exists>${Session["userlogined"].phoneNumber?if_exists}</#if>'>
+				<label for="usrName">名称: </label><input id="usrName" type="text" >
+				<label for="usrEmail">邮箱: </label><input id="usrEmail" type="email" >
+				<label for="usrQQ">QQ: </label><input id="usrQQ" type="number" >
+				<label for="usrPhoneNo">电话号码: </label><input id="usrPhoneNo" type="text" >
 				<a class="button" style="float: right;" onclick="usrInfoClick($(this))">编辑个人资料</a>
 				
 			</div>
@@ -357,7 +343,43 @@
 
 	
 <script>
+	var loginedAccount = '<#if Session?exists && Session["userlogined"]?exists>${Session["userlogined"].account?if_exists}</#if>';
+	var serverReqTimeout = 2000; //超时时间
+	var currUsr; //当前用户
+	var curPage1 = 1, pageSize1 = 0; //所有任务页面 当前页数， 总页数
+	var curPage2 = 1, pageSize2 = 0; //可投标任务页面 当前页数， 总页数
+	var curPage3 = 1, pageSize3 = 0; //我的任务页面 当前页数， 总页数
+	var maxSize = 2;
+	var taskPageIsEdit = false; //发布任务页面是否为编辑
+	var usrMap; //所有用户
+	var tmpTaskId; //任务ID （用于编辑）
 	
+	//处理请求， 会显示等待框.. 过800毫秒才发送请求
+	function optRequest(url, callback){
+		showFullLoad("");
+		setTimeout(function(){
+			sendRequest(url,function(resstr){
+				hideFullLoad();
+				if(callback){
+					callback(resstr);
+				}
+				if(resstr && resstr.trim() == "0000"){
+					showmask("操作成功", false);
+				}else{
+					showmask("操作失败: " + resstr, false);
+				}
+				
+				setTimeout(function(){$.ui.hideMask();},700);
+				
+				if(resstr && resstr.trim() == "0000"){
+					$.ui.goBack();
+				}
+				
+			});
+		}, 800);
+	}
+	
+	//个人信息页面点击按， 
 	function usrInfoClick(obj){
 		var txt = obj.text();
 		if(txt == "编辑个人资料"){
@@ -367,27 +389,8 @@
 		}
 		
 		if(txt == "修改"){
-			var usrid = '<#if Session?exists && Session["userlogined"]?exists>${Session["userlogined"].id?if_exists}</#if>';
-		
-			var url = "ea_goldtask_updateuser.do?user.name="+$("#usrName").val()+"&user.email="+$("#usrEmail").val()+"&user.qq="+$("#usrQQ").val()+"&user.phoneNumber="+$("#usrPhoneNo").val()+"&user.id="+usrid;
-			showFullLoad("");
-			setTimeout(function(){
-				sendRequest(url,function(resstr){
-					hideFullLoad();
-					if(resstr && resstr.trim() == "0000"){
-						usrMap[loginedUsrAccount].name=$("#usrName").val();
-						usrMap[loginedUsrAccount].email=$("#usrEmail").val();
-						usrMap[loginedUsrAccount].qq=$("#usrQQ").val();
-						usrMap[loginedUsrAccount].phoneNumber=$("#usrPhoneNo").val();
-						showmask("操作成功", false);
-						$.ui.goBack();
-					}else{
-						showmask("操作失败: " + resstr, false);
-					}
-					setTimeout(function(){$.ui.hideMask();},700);
-				});
-			},1000);
-			return;
+			var url = "ea_goldtask_updateuser.do?user.name="+$("#usrName").val()+"&user.email="+$("#usrEmail").val()+"&user.qq="+$("#usrQQ").val()+"&user.phoneNumber="+$("#usrPhoneNo").val()+"&user.id="+currUsr.id;
+			optRequest(url,null);
 		}
 		
 		
@@ -395,45 +398,249 @@
 	
 	function loadPanel(what){
 		
-		$("#gainGoldHeader").find("h1").remove();
-		
-		//$("#header").find("a[id='backButton']").remove();   //去掉页头的返回按钮
-		console.log("load....panel.......");
-		
-		if(what && what.id == "main"){
-			if(usrMap) {
-				$("#homeHeader").find("h1").text("金钱游戏["+usrMap[loginedUsrAccount].name+"]");
-				$("#myGoldNum").text(usrMap[loginedUsrAccount].goldNumber);
-			}	
-		}else if(what && what.id == "goldTaskPage"){
-			$("#gainGoldHeader").append('<h1>所有任务['+usrMap[loginedUsrAccount].name+']</h1>');
-		}else if(what && what.id == "bidGoldTaskPage"){
-			$("#gainGoldHeader").append('<h1>可投标任务['+usrMap[loginedUsrAccount].name+']</h1>');
-		}else if(what && what.id == "usrGoldTaskPage"){
-			$("#gainGoldHeader").append('<h1>我的任务['+usrMap[loginedUsrAccount].name+']</h1>');
-			
-		}else if (what && what.id == "taskPage") {
-			if(taskPageIsEdit == true){
-				taskPageIsEdit = false;
-			}else{
-				$("#taskTmpDiv").html("");
-				$("#taskTmpDiv").html('<input type="button" class="button" value="发布" style="float:right;" onclick="releaseTask()">');
-			}
-			$("#header").find("h1").text("发布任务["+usrMap[loginedUsrAccount].name+"]");
-		}else if(what && what.id == "goldTranRecPage"){
-			$("#header").find("h1").text("交易记录["+usrMap[loginedUsrAccount].name+"]");
-		}else if(what && what.id == "payGoldPage"){
-			$("#header").find("h1").text("金币支出["+usrMap[loginedUsrAccount].name+"]");
-		}else if(what && what.id == "goldOrderPage"){
-			$("#header").find("h1").text("排行榜["+usrMap[loginedUsrAccount].name+"]");
-		}else if(what && what.id == "usrInfoPage"){
-			$("#header").find("h1").text("个人信息["+usrMap[loginedUsrAccount].name+"]");
-			$("#usrInfoPage").find("input").attr("disabled", "true");
-			 
-		}else if(what && what.id == "contactPage"){
-			$("#header").find("h1").text("通讯录["+usrMap[loginedUsrAccount].name+"]");
+		if(what && (what.id != "main" && what.id != "contactPage") && !currUsr){
+			return;
 		}
 		
+		//首页， 通讯录  请求所有用户
+		if(what && (what.id == "main" || what.id == "contactPage")){
+			//首页加载
+			var url = "ea_goldtask_menu_usr.do";
+			sendRequest(url, function(jsonstr){
+				if(!jsonstr || jsonstr.trim() == "") return;
+				var jsonobj = JSON.parse(jsonstr);
+				if(what.id == "contactPage"){
+					$("#contactPage").find("ul").html("")
+				}
+				usrMap = {};
+				for(var i = 0; i < jsonobj.length; i++){
+					usrMap[jsonobj[i].account] = jsonobj[i];
+					if(jsonobj[i].account == loginedAccount){
+						currUsr = jsonobj[i];
+						if(what.id == "main"){
+							$("#homeHeader").find("h1").text("金钱游戏["+jsonobj[i].name+"]");
+							$("#labLoginedName").text(jsonobj[i].name);
+							$("#myGoldNum").text(jsonobj[i].goldNumber);
+							$("#myGoldOrder").text(Number(i));
+						}else{
+							$("#header").find("h1").text("通讯录["+jsonobj[i].name+"]");
+						}						
+						continue;
+					}
+					//通讯录添加 元素
+					if(what.id == "contactPage" && jsonobj[i].account != loginedAccount){
+						
+						var childLi = '<li ><div class="grid">'+
+							'<div class="col3">'+jsonobj[i].name+'</div>'+
+							'<div class="col3">'+jsonobj[i].phoneNumber+'</div>'+
+							'<div class="col3">'+
+							'	<a href="tel: '+jsonobj[i].phoneNumber+'" class="icon phone" style="font-size: 12px;"></a>&nbsp;'+
+							'	<a href="tel: '+jsonobj[i].phoneNumber+'" class="icon message" style="font-size: 12px;"></a>&nbsp;'+
+							'</div></div></li>';
+			
+						$("#contactPage").find("ul").append(childLi);
+						
+					}
+				}
+			});
+			
+			//加载滚动条
+			$("#marquee").html("");
+			url = "ea_goldtask_menu_log.do";
+			sendRequest(url, function(jsonstr){
+				var msgList = JSON.parse(jsonstr).options;
+				for(var i = 0; i < msgList.length; i++){
+					$("#marquee").append('<span>'+msgList[i]+'</span><br/>');
+				}
+				
+			});
+			
+		}
+		else if(what && what.id == "usrInfoPage"){
+			
+			$("#header").find("h1").text("个人信息["+currUsr.name+"]");
+			$("#usrName").val(currUsr.name);
+			$("#usrEmail").val(currUsr.email);
+			$("#usrQQ").val(currUsr.qq);
+			$("#usrPhoneNo").val(currUsr.phoneNumber);	
+			
+			$("#usrInfoPage").find("input").attr("disabled", "true");
+			
+			
+			 
+		}
+		else if(what && what.id == "goldTaskPage"){
+		//所有任务
+			$("#gainGoldHeader").find("h1").text('所有任务['+currUsr.name+']');
+			curPage1 = 1;
+			pageTask(what.id, "ea_goldtask_menu_allgoldtask.do?&pageId=1&maxSize=" + maxSize, false);
+			
+		}
+		else if (what && what.id == "taskPage") {
+		///发布任务
+			if(taskPageIsEdit == true){
+				
+				var url = "ea_goldtask_get_task.do?taskId=" + tmpTaskId;
+				sendRequest(url, function(jsonstr){					
+					if(!jsonstr) return;
+					$("#taskTmpDiv").html("");
+					var jsonobj = JSON.parse(jsonstr);
+					jsonobj = jsonobj[0];
+					
+					$("#taskName").val(jsonobj.title);
+					$("#taskRemarks").val(jsonobj.detail);
+					$("#endDate").val(jsonobj.endDate);
+					$("#gold").val(jsonobj.goldNumber);
+					
+					
+					if(jsonobj.usrAccountArray && jsonobj.usrAccountArray.length >= 1){
+						$("#releaseTaskForm").find("input").attr("disabled", "true");
+					
+						var array = jsonobj.usrAccountArray.split(",");
+						var tmphtml = '<label>中标人员</label>';
+						for(var j = 0; j < array.length; j++){
+							var tmpaccount = array[j];
+							tmphtml +='<input id="aa_'+j+'" type="radio" name="finishAccount" value="'+tmpaccount+'"><label for="aa_'+j+'">'+usrMap[tmpaccount].name+'</label>';
+						}
+						tmphtml += '<br style="clear:both">';
+						$("#taskTmpDiv").append(tmphtml);
+						var bidbtn = $('<a class="button" style="float: right;">结束投票</a>');
+						bidbtn.bind("click", function(){
+							var tmpaccount = $('input[name=finishAccount]:checked').val();
+							if(!tmpaccount || tmpaccount.trim() == ""){
+								popuMsg("操作失败: 没有选择中标人员");
+								return;
+							}
+							optRequest("ea_goldtask_finish_bid.do?bidUsrAccount="+tmpaccount+"&taskId=" + tmpTaskId);
+						});
+						$("#taskTmpDiv").append(bidbtn);
+						return;
+					}
+					var upateBtn = $('<a class="button" style="float: right;">修改</a>');
+					var deleteBtn = $('<a class="button" style="float: right;">删除</a>');
+					upateBtn.bind("click", function(){
+						var formobj = validtionTask();
+						if(!formobj)return;
+						optRequest("ea_goldtask_update.do?goldtask.id="+tmpTaskId+"&goldtask.title="+formobj.title+"&goldtask.detail="+formobj.detail+"&goldtask.endDate="+formobj.endDate+"&goldtask.goldNumber="+formobj.goldNumber+"&goldtask.usrAccount="+formobj.usrAccount);
+					});
+					deleteBtn.bind("click", function(){
+						optRequest("ea_goldtask_delete.do?goldtask.id="+tmpTaskId);
+					
+					});
+					
+					$("#taskTmpDiv").append(deleteBtn);
+					$("#taskTmpDiv").append(upateBtn);
+					
+				});
+				
+			
+				taskPageIsEdit = false;
+				$("#header").find("h1").text("编辑任务["+currUsr.name+"]");
+			}else{
+				$("#releaseTaskForm").find("input").removeAttr("disabled");
+				$("#taskTmpDiv").html("");
+				$("#taskTmpDiv").html('<input type="button" class="button" value="发布" style="float:right;" onclick="releaseTask()">');
+				$("#header").find("h1").text("发布任务["+currUsr.name+"]");
+			}
+			
+		}
+		else if(what && what.id == "bidGoldTaskPage"){
+		//可投标任务
+			$("#gainGoldHeader").find("h1").text('可投标任务['+currUsr.name+']');
+			curPage2 = 1;
+			pageTask(what.id, "ea_goldtask_menu_bidgoldtask.do?&pageId=1&maxSize=" + maxSize, false);
+		}
+		else if(what && what.id == "usrGoldTaskPage"){
+		//我的任务
+			$("#gainGoldHeader").find("h1").text('我的任务['+currUsr.name+']');
+			curPage3 = 1;
+			pageTask(what.id, "ea_goldtask_menu_usrgoldtask.do?&pageId=1&maxSize=" + maxSize, false);
+			
+		}else if(what && what.id == "goldTranRecPage"){
+			$("#header").find("h1").text("交易记录["+currUsr.name+"]");
+			
+			sendRequest("ea_goldtask_goldrecords.do?isCurrr=1", function(jsonstr){
+				$("#goldTranList").html("");
+				var jsonobj = $.parseJSON(jsonstr);
+				var goldOutlay = 0, goldIncome = 0;
+				for (var i = 0; i < jsonobj.length; i++) {
+					var tmpName, tmpicon;
+					var data = jsonobj[i];
+					if(data.fromUsrAccount == currUsr.account){
+						tmpName = usrMap[data.toUsrAccount].name; 
+						tmpicon = '-';
+						goldOutlay += Number(data.goldNumber);
+					}else if(data.toUsrAccount == currUsr.account){
+						
+						tmpName = usrMap[data.fromUsrAccount].name; 
+						tmpicon = '+';
+						goldIncome += Number(data.goldNumber);
+					}
+					
+					var tmpremarks = data.payRemarks.length > 12 ? data.payRemarks.substring(0,12) + "..." : data.payRemarks;
+					var tmpHtml = '<li style="padding: 10px 20px 10px 10px;"><font style="font-weight: bold;">'+tmpName+'</font>&nbsp;&nbsp;&nbsp;<font style="font-size: 10px; color: #696969;">'+tmpremarks+'</font><span style="float: right; color: #F00308;"> <img src="common/images/android/gold.png" /> &nbsp;'+tmpicon + data.goldNumber+'</span><br><font style="color: #919191; font-size: 10px;padding-left: 20px;">'+data.payDate.substring(0,11)+'</font></li>';
+					$("#goldTranList").append(tmpHtml);	
+		
+					
+				}
+				$("#goldIncome").text(goldIncome);
+				$("#goldOutlay").text(goldOutlay);
+			});
+			
+		}else if(what && what.id == "payGoldPage"){
+			$("#header").find("h1").text("金币支出["+currUsr.name+"]");
+			if(!usrMap){
+				return;
+			}
+			$("#tousrlist").html("");
+			for(var key in usrMap){
+				if(key != currUsr.account){
+					$("#tousrlist").append('<option value="'+key+'">'+usrMap[key].name+'</option>');
+				}
+			}
+			
+			
+		}else if(what && what.id == "goldOrderPage"){
+			$("#header").find("h1").text("排行榜["+currUsr.name+"]");
+			sendRequest("ea_goldtask_goldrecords.do", function(jsonstr){
+				$("#goldOrderPage").html("");
+				var allGoldTraRec = JSON.parse(jsonstr);
+				var cul = $('<ul class="list accordion" ></ul>');
+				for(var key in usrMap){
+					//排除 管理员， 
+					if(key == "admin" || usrMap[key].parentModel.account == "admin"){
+						continue;
+					}
+					var cli = $('<li style="padding: 15px 20px 15px 10px;"></li>');
+					var cdiv1 = $('<a>' + usrMap[key].name + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="common/images/android/gold.png" />&nbsp;'+usrMap[key].goldNumber + '</a>');
+					var cdiv2 = $('<div style="color: #999999;"><br /></div>');
+					var cdiv3 = $('<span class="grid" ></span>');
+					
+					cdiv3.append('<span class="col1-3" style="font-weight: bold;">支付人/金币</span>'+
+							'<span class="col2-3" style="font-weight: bold;">说明</span>');
+					var recFlag = 0;
+					for(var i = 0; i < allGoldTraRec.length; i++){
+						if(allGoldTraRec[i].toUsrAccount == key){
+							recFlag = 1;
+							cdiv3.append('<span class="col1-3">'+allGoldTraRec[i].fromUsrAccount+'/&nbsp;'+allGoldTraRec[i].goldNumber+'</span>'+
+									'<span class="col2-3">'+allGoldTraRec[i].payDate.substring(0,11)+'&nbsp;'+allGoldTraRec[i].payRemarks+'</span>');
+						}	
+					}
+					cdiv2.append(cdiv3);
+					if(recFlag == 0){
+						cdiv2.html("<br/>无记录");
+					}
+					cli.append(cdiv1);
+					cli.append(cdiv2);
+					cul.append(cli);
+				}
+				$("#goldOrderPage").append(cul);
+				cul.accordion({time:"0.2s"});
+				setTimeout(function(){cli.find("div").css("height", "40px");}, 1000);
+				
+			});
+			
+		}
 		
 		else if (what && what.id == "testpage") {
 			$("#testIF").attr("src", "ea_view_picture_role_user_v.do?roleId=1&img=yes&width=50&height=80");
@@ -448,305 +655,175 @@
 			
 	}
 	
-	
-	
-	function initdata(){
-		allMaxSize = 10, allCurrPage = 1; allMaxPage = 0;
-		usrMaxSize = 10, usrCurrPage = 1; usrMaxPage = 0;
-		bidMaxSize = 10, bidCurrPage = 1; bidMaxPage = 0;
-	}
-	
-	
-	
-	function payRemarksClick(){
+	function payRemarksClick (){
 		if($("#payRemarks").val() && $("#payRemarks").val() != ""){
 			return;
 		}
-		var msg = '';
-		console.log("msg: " + allUsrTaskList);
-		for (var i = 1; i < allUsrTaskList.length; i++) {
-			msg += '<input id="aa_'+i+'" type="radio" name="taskTitle" value="'+allUsrTaskList[i].title+'=='+allUsrTaskList[i].goldNumber+'"><label for="aa_'+i+'">'+allUsrTaskList[i].title+'</label>';
-		}
-		if(msg == ""){
-			return;
-		}
-		msg += "<br />&nbsp;<br />&nbsp;";
-		
-		$("#afui").popup({message:  msg, cancelText: "确定", cancelOnly: true, title: "Task 选择",
-			cancelCallback: function () {
-				var val = $('input[name="taskTitle"]:checked').val();
-				if(val && val != ""){
-					
-					if(!$("#payGoldNum").val()) $("#payGoldNum").val(val.split("==")[1]);
-					$("#payRemarks").val(val.split("==")[0]);
-				}
-			}
-		});
-	}
-	
-	//获取用户登录日志
-	function loadLoginLog(){
-		
-		sendRequest("ea_goldtask_menu_log.do?", function(jsonstr){
+		sendRequest("ea_goldtask_menu_usrgoldtask.do?isUsrRel=1&maxSize=-1", function(jsonstr){
+			
 			var jsonobj = $.parseJSON(jsonstr);
-			if(!jsonobj) return;
-			$("#marquee").html("");
-			for(var index in jsonobj.options){
-				$("#marquee").append('<span>'+jsonobj.options[index].split("|")[1]+'</span>&nbsp;&nbsp;');
+			var msg = '';
+			for (var i = 1; i < jsonobj.length; i++) {
+				msg += '<input id="aa_'+i+'" type="radio" name="taskTitle" value="'+jsonobj[i].title+'=='+jsonobj[i].goldNumber+'"><label for="aa_'+i+'">'+jsonobj[i].title+'</label>';
 			}
+			if(msg == ""){
+				return;
+			}
+			msg += "<br />&nbsp;<br />&nbsp;";
+			
+			$("#afui").popup({message:  msg, cancelText: "确定", cancelOnly: true, title: "Task 选择",
+				cancelCallback: function () {
+					var val = $('input[name="taskTitle"]:checked').val();
+					if(val && val != ""){
+						if(!$("#payGoldNum").val()) $("#payGoldNum").val(val.split("==")[1]);
+						$("#payRemarks").val(val.split("==")[0]);
+					}
+				}
+			});
 			
 		});
-		setTimeout(function(){loadLoginLog();}, 1000*10); //10秒
+		
 	}
+	
+	//支付金币
+	function payGold (){
+		var payGoldNum = $("#payGoldNum").val();
+		var toUsr = $("#tousrlist").val();
+		var payRemarks = $("#payRemarks").val();
+		if(!payGoldNum || payGoldNum.trim() == ""){
+			popuMsg("金币数不能为空!");
+			return;
+		}
+		if(isNaN(payGoldNum)){
+			popuMsg("金币必需为数字");
+			return;
+		}
+		var url = "ea_goldtask_pay.do?goldtran.goldNumber="+payGoldNum+"&goldtran.toUsrAccount="+toUsr+"&goldtran.payRemarks="+payRemarks;
+		optRequest(url, null);
+	
+	}
+	
 	
 	$.ui.ready(function(){
 		$.ui.backButtonText = "返回";
-		$("#allTaskList").html("");
-		$("#usrTaskList").html("");
-		$("#bidTaskList").html("");
-		allGoldTask = null;
-		usrGoldTask = null;
-		bidGoldTask = null;
-		goldIncome = 0, goldOutlay = 0;
-		myGoldNum = 0;
 		
-		//获取用户发布的所有task
-		sendRequest("ea_goldtask_menu_usrgoldtask.do?isUsrRel=1&maxSize=-1", function(jsonstr){
-			var jsonobj = $.parseJSON(jsonstr);
-			allUsrTaskList = jsonobj;
-		});
-		
-		initdata();
-		
-		refUsrList();
-		
-		setTimeout(readyData, 200); //后续需要用到usrmap, 延缓2毫秒用于usrmap获取到所有的值 
-		
-		
-		
-		
+		bindscroller($("#goldTaskPage"));
+		bindscroller($("#bidGoldTaskPage"));
+		bindscroller($("#usrGoldTaskPage"));
 		
 	});
 	
-	//请求所有用户列表
-	function refUsrList(){
-		sendRequest("ea_goldtask_menu_usr.do", function(jsonstr){
-			$("#tousrlist").html("");
-			
-			var jsonobj = $.parseJSON(jsonstr);
-			usrlist = jsonobj;
-			usrMap = {};
-			
-			for(var i = 0; i < jsonobj.length; i++){
-				jsonobj[i].goldOrder = Number(i + 1);
-				if(!jsonobj[i].goldNumber) jsonobj[i].goldNumber = 0;
-				var tmpaccount = jsonobj[i].account;
-				usrMap[tmpaccount] = jsonobj[i];
-				if(tmpaccount != loginedUsrAccount){
-					$("#tousrlist").append('<option value="'+jsonobj[i].account+'">'+jsonobj[i].name+'</option>');	
-				}else{
-					//$("#myGoldOrder").text(topI + 1);	
-				}
-				
+	
+	//请求每页任务 LIST (页对象 ， URl)
+	function pageTask(pageId, url, isAppend){
+		var pageObj = $("#" + pageId);
+		
+		if(isAppend == false){
+			pageObj.find("div[id=contentList]").html("");
+		}
+		sendRequest(url, function(jsonstr){
+			if(!jsonstr || jsonstr == "") return;
+			var jsonobj = JSON.parse(jsonstr);
+			if(pageId == "goldTaskPage") pageSize1 =jsonobj[0].maxPage;
+			else if(pageId == "bidGoldTaskPage") pageSize2 =jsonobj[0].maxPage;
+			else if(pageId == "usrGoldTaskPage") pageSize3 =jsonobj[0].maxPage;
+			for(var i = 1; i < jsonobj.length; i++){
+				appendTaskItem(jsonobj[i], pageObj.find("div[id=contentList]"));
 			}
-			$("#homeHeader").find("h1").text("金钱游戏["+usrMap[loginedUsrAccount].name+"]");
 		});
 	}
 	
-	
-	//加载排行榜页面
-	function loadGoldOrderPage(){
-		$("#goldOrderPage").html("");
-		var cul = $('<ul class="list accordion" ></ul>');
-			
-		for(var key in usrMap){
-			
-			if(key == "admin" || usrMap[key].parentModel.account == "admin"){
-				continue;
-			}
-			var cli = $('<li style="padding: 15px 20px 15px 10px;"></li>');
-//			var cdiv1 = $('<div class="grid"><div class="col2">'+usrMap[key].name+'</div><div class="col2">'+usrMap[key].goldNumber+'</div></div>');
-			var cdiv1 = $('<a>' + usrMap[key].name + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="common/images/android/gold.png" />&nbsp;'+usrMap[key].goldNumber + '</a>');
-			var cdiv2 = $('<div style="color: #999999;"><br /></div>');
-			var cdiv3 = $('<div class="grid" ></div>');
-			
-			cdiv3.append('<div class="col1-3" style="font-weight: bold;">支付人/金币</div>'+
-						
-							'<div class="col2-3" style="font-weight: bold;">说明</div>'
-							
-							);
-			var recFlag = 0;
-			for(var i = 0; i < allGoldTraRec.length; i++){
-				if(allGoldTraRec[i].toUsrAccount == key){
-					recFlag = 1;
-					cdiv3.append('<div class="col1-3">'+allGoldTraRec[i].fromUsrAccount+'/&nbsp;'+allGoldTraRec[i].goldNumber+'</div>'+
-							'<div class="col2-3">'+allGoldTraRec[i].payDate.substring(0,11)+'&nbsp;'+allGoldTraRec[i].payRemarks+'</div>');
-				}	
-			}
-			cdiv2.append(cdiv3);
-			if(recFlag == 0){
-				cdiv2.html("<br/>无记录");
-			}
-				
-			cli.append(cdiv1);
-			cli.append(cdiv2);
-			//cdiv2.css("display", "none");
-			cul.append(cli);
-		}
-		$("#goldOrderPage").append(cul);
-		cul.accordion({time:"0.2s"});
-	}
-	
-	function readyData(){
+	//绑定页面刷新， 加载事件
+	function bindscroller(elobj){
 		
-		//加载通讯录
-		$("#contactPage").find("ul").html("");
-		for(var key in usrMap){
-			if(key == loginedUsrAccount) continue;
-			
-			var childLi = '<li ><div class="grid">'+
-							'<div class="col3">'+usrMap[key].name+'</div>'+
-							'<div class="col3">'+usrMap[key].phoneNumber+'</div>'+
-							'<div class="col3">'+
-							'	<a href="tel: '+usrMap[key].phoneNumber+'" class="icon phone" style="font-size: 12px;"></a>&nbsp;'+
-							'	<a href="tel: '+usrMap[key].phoneNumber+'" class="icon message" style="font-size: 12px;"></a>&nbsp;'+
-							'</div></div></li>';
-			
-			$("#contactPage").find("ul").append(childLi);
-		}
-		
-		
-		sendRequest("ea_goldtask_menu_allgoldtask.do?&pageId=" + allCurrPage + "&maxSize=" + allMaxSize, function(jsonstr){readData("0", jsonstr);});
-		sendRequest("ea_goldtask_menu_usrgoldtask.do?&pageId=" + usrCurrPage + "&maxSize=" + usrMaxSize, function(jsonstr){readData("1", jsonstr);});
-		sendRequest("ea_goldtask_menu_bidgoldtask.do?&pageId=" + bidCurrPage + "&maxSize=" + bidMaxSize, function(jsonstr){readData("2", jsonstr);});
-		
-		sendRequest("ea_goldtask_goldrecords.do", function(jsonstr){
-			$("#goldTranList").html("");
-			var jsonobj = $.parseJSON(jsonstr);
-			allGoldTraRec = jsonobj;
-			for (var i = 0; i < jsonobj.length; i++) {
-				if(jsonobj[i].toUsrAccount == loginedUsrAccount || jsonobj[i].fromUsrAccount == loginedUsrAccount){
-					appendGoldTran(jsonobj[i]);	
-				}
-			}
-			$("#goldIncome").text(goldIncome);
-			$("#goldOutlay").text(goldOutlay);
-			
-			//加载排行榜
-			loadGoldOrderPage();
-			
-		});
-		bindscroller($("#goldTaskPage"), 0);
-		bindscroller($("#usrGoldTaskPage"), 1);
-		bindscroller($("#bidGoldTaskPage"), 2);
-		
-		loadLoginLog();
-	}
-	
-	function appendGoldTran(data, isFirst){
-		var tmpaccount, tmpicon;
-		if(data.fromUsrAccount == loginedUsrAccount){
-			tmpaccount = data.toUsrAccount; 
-			tmpicon = '-';
-			goldOutlay += Number(data.goldNumber);
-		}else if(data.toUsrAccount == loginedUsrAccount){
-			tmpaccount = data.fromUsrAccount;
-			tmpicon = '+';
-			goldIncome += Number(data.goldNumber);
-		}
-		var tmpremarks = data.payRemarks.length > 12 ? data.payRemarks.substring(0,12) + "..." : data.payRemarks;
-		var tmpHtml = '<li style="padding: 10px 20px 10px 10px;"><font style="font-weight: bold;">'+tmpaccount+'</font>&nbsp;&nbsp;&nbsp;<font style="font-size: 10px; color: #696969;">'+tmpremarks+'</font><span style="float: right; color: #F00308;"> <img src="common/images/android/gold.png" /> &nbsp;'+tmpicon + data.goldNumber+'</span><br><font style="color: #919191; font-size: 10px;padding-left: 20px;">'+data.payDate.substring(0,11)+'</font></li>';
-		
-		if (isFirst == true) {
-			$("#goldTranList").prepend(tmpHtml);
-		}else{
-			$("#goldTranList").append(tmpHtml);	
-		}
-		
-		
-		
-	}
-	//绑定刷新下下拉加载数据
-	function bindscroller(elobj, type){
 		var myScroller = elobj.scroller();
 		myScroller.addInfinite();
 		myScroller.addPullToRefresh();
 		myScroller.refreshHangTimeout=700;
 		myScroller.refreshContent="加载中...";
-
-		$.bind(myScroller, "refresh-release", function () {
+		
+		$.bind(myScroller, 'scrollend', function () {
+			console.log("scroll end");
 			myScroller.setRefreshContent("加载中...");
-			
-			refData(type, myScroller);
 		});
-	
-		$.bind(myScroller, "infinite-scroll", function () {
-			
-			$.bind(myScroller, "infinite-scroll-end", function () {
-				
-				$.unbind(myScroller, "infinite-scroll-end");
-				var action, curpage, maxsize, maxpage;
-				if(type == "0") {
-					action = "ea_goldtask_menu_allgoldtask.do";
-					curpage = allCurrPage;
-					maxsize = allMaxSize;
-					maxpage = allMaxPage;
-				}
-				else if(type == "1") {
-					action = "ea_goldtask_menu_usrgoldtask.do";
-					curpage = usrCurrPage;
-					maxsize = usrMaxSize;
-					maxpage = usrMaxPage;
-				}
-				else if(type == "2") {
-					action = "ea_goldtask_menu_bidgoldtask.do";
-					curpage = bidCurrPage;
-					maxsize = bidMaxSize;
-					maxpage = bidMaxPage;
-				}
-				
-				if(curpage > maxpage){
-					showmask("没有数据了....", false);
-					setTimeout(function(){$.ui.hideMask();myScroller.clearInfinite();}, 2000);
-					return;
-				}
-				var url = action + "?pageId=" + curpage + "&maxSize=" + maxsize;
-				sendRequest(url, function(jsonstr){
-					readData(type, jsonstr);
-					myScroller.clearInfinite();
-				});
-			});
+		$.bind(myScroller, 'scrollstart', function () {
+			console.log("scroll start");
+			myScroller.setRefreshContent("加载中...");
 		});
-	}
-	
-	function refData(type, scrollerObj){
-		initdata();
-		var action;
-		if(type == "0") {
-			action = "ea_goldtask_menu_allgoldtask.do";
-			$("#allTaskList").html("");
-		}
-		else if(type == "1") {
-			action = "ea_goldtask_menu_usrgoldtask.do";
-			$("#usrTaskList").html("");
-		}
-		else if(type == "2") {
-			action = "ea_goldtask_menu_bidgoldtask.do";
-			$("#bidTaskList").html("");
-		}
-		var url = action + "?pageId=1&maxSize=10";
-		sendRequest(url, function(jsonstr){
-			readData(type, jsonstr);
-			showmask("刷新成功....", false);
-			
-			if(scrollerObj){
-				setTimeout(function(){$.ui.hideMask();scrollerObj.clearInfinite();}, 1000);
-			}else{
-				setTimeout(function(){$.ui.hideMask();}, 1000);
+		$.bind(myScroller, 'refresh-trigger', function () {
+			console.log("Refresh trigger");
+			myScroller.setRefreshContent("加载中...");
+		});
+		
+		
+		
+		//绑定下拉刷新事件 
+		$.bind(myScroller, "refresh-release", function () {
+			console.log("refresh-release.....");
+			myScroller.setRefreshContent("加载中...");
+			var url;
+			if(elobj.attr("id") == "goldTaskPage"){
+				url = "ea_goldtask_menu_allgoldtask.do?pageId=1&maxSize=" + maxSize;
+				curPage1 = 1;
+			}
+			else if(elobj.attr("id") == "bidGoldTaskPage"){
+				url = "ea_goldtask_menu_bidgoldtask.do?pageId=1&maxSize=" + maxSize;
+				curPage2 = 1;
+			}
+			else if(elobj.attr("id") == "usrGoldTaskPage"){
+				url = "ea_goldtask_menu_usrgoldtask.do?pageId=1&maxSize=" + maxSize;
+				curPage3 = 1;
 			}
 			
+			pageTask(elobj.attr("id"), url, false);
+			
+			
 		});
+		
+		//绑定上拉加载事件
+		$.bind(myScroller, "infinite-scroll", function () {
+			console.log("infinite-scroll.....");
+			$.bind(myScroller, "infinite-scroll-end", function () {
+				$.unbind(myScroller, "infinite-scroll-end");
+				var url;
+				if(elobj.attr("id") == "goldTaskPage"){
+					curPage1 += 1;
+					console.log("curPage1: " + curPage1 + " pageSize1: " + pageSize1);
+					if(isLastPage(curPage1, pageSize1, myScroller)) return;
+					url = "ea_goldtask_menu_allgoldtask.do?pageId=" + curPage1 + "&maxSize="+maxSize;
+					
+				}
+				else if(elobj.attr("id") == "bidGoldTaskPage"){
+					curPage2 += 1;
+					if(isLastPage(curPage2, pageSize2, myScroller)) return;
+					url = "ea_goldtask_menu_bidgoldtask.do?pageId=" + curPage2 + "&maxSize="+maxSize;
+					
+				}
+				else if(elobj.attr("id") == "usrGoldTaskPage"){
+					curPage3 += 1;
+					if(isLastPage(curPage3, pageSize3, myScroller)) return;
+					url = "ea_goldtask_menu_usrgoldtask.do?pageId=" + curPage3 + "&maxSize="+maxSize;
+					
+				}
+				
+				pageTask(elobj.attr("id"), url, true);
+				setTimeout(function (){myScroller.clearInfinite();}, serverReqTimeout);
+				
+			});
+		});
+	
 	}
+	
+	function isLastPage(curPageIndex, pageSize, scrollerobj){
+		if(curPageIndex > pageSize){
+			showmask("没有数据了....", false);
+			setTimeout(function(){$.ui.hideMask();scrollerobj.clearInfinite();}, 2000);
+			return true;
+		}
+		return false;
+	}
+	
+	
 	
 	//数据请求
 	function sendRequest(url, callback){
@@ -771,62 +848,36 @@
 	}	
 	
 	
-	function readData(type, jsonstr){
-		
-		var jsonobj = $.parseJSON(jsonstr);
-		var elObj;
-		if(type == "0"){ //all
-			elObj = $("#allTaskList");
-			allGoldTask = jsonobj;
-			allMaxSize = allGoldTask[0].maxSize;
-			allCurrPage = ++allGoldTask[0].currentPage;
-			allMaxPage = allGoldTask[0].maxPage;
-		}else if(type == "1"){
-			elObj = $("#usrTaskList");
-			usrGoldTask = jsonobj;
-			usrMaxSize = usrGoldTask[0].maxSize;
-			usrCurrPage = ++usrGoldTask[0].currentPage;
-			usrMaxPage = usrGoldTask[0].maxPage;
-		}else if(type == "2"){
-			elObj = $("#bidTaskList");
-			bidGoldTask = jsonobj;
-			bidMaxSize = bidGoldTask[0].maxSize;
-			bidCurrPage = ++bidGoldTask[0].currentPage;
-			bidMaxPage = bidGoldTask[0].maxPage;
-		}
-		for(var i = 1; i < jsonobj.length; i++){
-			appendTaskItem(type, jsonobj[i], elObj);
-		}
-		
-	}
+	
 	
 	//添加任务(所有任务, 我的任务, 可投标任务)
-	function appendTaskItem(type, data, elobj, isFirst){
-		var usrAccountArray = data.usrAccountArray;
-		var curUsr = "",otherUsr = "";
-		var index = elobj.find("div").length + 1;
-		if(usrAccountArray){
-			var array = usrAccountArray.split(",");
-			for(var j = 0; j < array.length; j++){
-				if(loginedUsrAccount == array[j]){
-					curUsr = loginedUsrAccount;
-				}else {
-					if(otherUsr != "") otherUsr += "," + array[j];
-					else  otherUsr += usrMap[array[j]].name;
-				}
-			}	
+	function appendTaskItem(data, elobj, isFirst){
+		//var usrAccountArray = data.usrAccountArray;
+		
+		
+		var btnhtml = '';
+		
+		if(data.usrAccountArray.indexOf(currUsr.account) < 0 && !data.bidUsrAccount && data.usrAccount != currUsr.account){
+			btnhtml = "<a class='button' onclick=bidTask("+data.id+") style='border:1px solid #D3DADE;border-radius:0px;color: #646464;'>投我</a>"
+		}else if((!data.bidUsrAccount || data.bidUsrAccount.trim() == "") && data.usrAccount == currUsr.account){
+			btnhtml = "<a class='button' onclick=editTask("+data.id+") href='#taskPage' style='border:1px solid #D3DADE;border-radius:0px;color: #646464;'>编辑</a>"
 		}
 		
-		var btnhtml = '<a class="button" onclick="bidTask('+type+', '+data.id+', '+index+')">投我</a>';
-		if(((curUsr == loginedUsrAccount || loginedUsrAccount == data.usrAccount) && loginedUsrAccount != "") || data.bidUsrAccount != ""){
-			btnhtml = "";
-		}
-	
-		if((!data.bidUsrAccount || data.bidUsrAccount.trim() == "") && data.usrAccount == loginedUsrAccount){
-			btnhtml += "<a class='button' onclick=editTask("+type+","+data.id+","+index+") href='#taskPage' style='border:1px solid #D3DADE;border-radius:0px;color: #646464;'>编辑</a>"
-		}
+		
 		var tmpbidusr = usrMap[data.bidUsrAccount] ? usrMap[data.bidUsrAccount].name : "";
-		var tmpcurusr =  usrMap[curUsr] ? usrMap[curUsr].name : "";
+		
+		var tmpBidNames = "";
+		var accountarray = data.usrAccountArray.split(",");
+		for (var i=0; i < accountarray.length; i++){
+			if(!accountarray[i] || accountarray[i] == "") continue;
+			if(accountarray[i] == currUsr.account){
+				tmpBidNames +="<span style='color: red;'>"+currUsr.name+"</span>&nbsp;&nbsp;";
+			}else{
+				tmpBidNames += usrMap[accountarray[i]].name + "&nbsp;&nbsp;";
+			}
+			
+		}
+		
 		
 		
 		var childDiv = $('<div style="background-color:#FFFFFF;border-radius: 1px;border:1px solid #D3DADE;position: relative; top: 10px;">'+
@@ -841,114 +892,28 @@
 						'			<div class="tmpcol2_1"><span style="float: right;">悬赏截止日期:&nbsp;&nbsp;</span></div>'+
 						'			<div class="tmpcol2_2">'+data.endDate+'&nbsp;</div>'+
 						'			<div class="tmpcol2_1"><span style="float: right;">已投标成员:&nbsp;&nbsp;</span></div>'+
-						'			<div class="tmpcol2_2">'+otherUsr+'&nbsp;<font color="#C70505">'+tmpcurusr+'</font></div>'+
+						'			<div class="tmpcol2_2">'+tmpBidNames+'&nbsp;</div>'+
 						'			<div class="tmpcol2_1"><span style="float: right;">中标成员:&nbsp;&nbsp;</span></div>'+
 						'			<div class="tmpcol2_2">'+tmpbidusr+'&nbsp;</div>'+
 						'       </div> </div>'+
 						'	<div class="button-grouped" style="width:100%;margin-left: 10px;">'+ btnhtml + '</div></div><br /> ');
 
 
-
+		
 		if(isFirst == true){
 			elobj.prepend(childDiv);
 		}else {
 			elobj.append(childDiv);
 		}
+		
 	}
 	
 	
-	//操作task (增,删,改, 投标), 用户信息修改
-	function oprationTask(url){
-		showFullLoad("");
-		setTimeout(function(){
-			sendRequest(url,function(resstr){
-				hideFullLoad();
-				if(resstr && resstr.trim() == "0000"){
-					resResutl = true;
-					showmask("操作成功", false);
-					refData(0);
-					refData(1);
-					refData(2);
-					$.ui.goBack();
-				}else{
-					showmask("操作失败: " + resstr, false);
-				}
-				setTimeout(function(){$.ui.hideMask();},700);
-			});
-		},1000);
-	}
 	
 	//编辑task 打开task页面
-	function editTask(type, taskId, index){
+	function editTask(taskId){
 		taskPageIsEdit = true;
-		
-		var obj;
-		if(type == 0) obj = allGoldTask;
-		else if(type == 1) obj = usrGoldTask;
-		if(!obj) {
-			console.log("出错  obj is null");
-			return;
-		}
-		var flag = false;
-		for(var i = 0; i < obj.length; i++){
-			if(obj[i].id == taskId){
-				obj = obj[i];
-				flag = true;
-				break;
-			}
-		}
-		if(!flag){
-			console.log("找不到id为: " + taskId);
-			return;
-		}
-		
-		$("#taskName").val(obj.title);
-		$("#taskRemarks").val(obj.detail);
-		$("#endDate").val(obj.endDate);
-		$("#gold").val(obj.goldNumber);
-		$("#taskTmpDiv").html("");
-		
-		//如果已经有人投过标, 就显示结束投标按钮
-		if(obj.usrAccountArray && obj.usrAccountArray.length >= 1){
-			var usrAccountArray = obj.usrAccountArray;
-			var array = usrAccountArray.split(",");
-			var tmphtml = '<label>中标人员</label>';
-			for(var j = 0; j < array.length; j++){
-				var tmpaccount = array[j];
-				tmphtml +='<input id="aa_'+j+'" type="radio" name="finishAccount" value="'+tmpaccount+'"><label for="aa_'+j+'">'+usrMap[tmpaccount].name+'</label>';
-			}
-			
-			tmphtml += "<br />&nbsp;<br />&nbsp;";
-			$("#taskTmpDiv").append( tmphtml);
-				
-			var bidbtn = $('<a class="button" style="float: right;">结束投票</a>');
-			bidbtn.bind("click", function(){
-				var tmpaccount = $('input[name=finishAccount]:checked').val();
-				if(!tmpaccount || tmpaccount.trim() == ""){
-					popuMsg("操作失败: 没有选择中标人员");
-					return;
-				}
-				oprationTask("ea_goldtask_finish_bid.do?bidUsrAccount="+tmpaccount+"&taskId=" + taskId);
-			});
-			$("#taskTmpDiv").append(bidbtn);
-			return;	
-		}
-		
-		
-		var upateBtn = $('<a class="button" style="float: right;">修改</a>');
-		var deleteBtn = $('<a class="button" style="float: right;">删除</a>');
-		upateBtn.bind("click", function(){
-			var formobj = validtionTask();
-			if(!formobj)return;
-			oprationTask("ea_goldtask_update.do?goldtask.createDate="+obj.createDate+"&goldtask.id="+taskId+"&goldtask.title="+formobj.title+"&goldtask.detail="+formobj.detail+"&goldtask.endDate="+formobj.endDate+"&goldtask.goldNumber="+formobj.goldNumber+"&goldtask.usrAccount="+formobj.usrAccount);
-		});
-		deleteBtn.bind("click", function(){
-			oprationTask("ea_goldtask_delete.do?goldtask.id="+taskId);
-		
-		});
-		
-		$("#taskTmpDiv").append(deleteBtn);
-		$("#taskTmpDiv").append(upateBtn);
+		tmpTaskId = taskId;
 	}
 	
 	//验证任务表单
@@ -979,7 +944,7 @@
 			popuMsg("悬赏金币必需为数字");
 			return;
 		}
-		var obj = {title: taskName, detail: taskRemarks, endDate: endDate, goldNumber: goldNumber, usrAccount : loginedUsrAccount};
+		var obj = {title: taskName, detail: taskRemarks, endDate: endDate, goldNumber: goldNumber, usrAccount : currUsr.account};
 		return obj;
 	}
 	
@@ -988,8 +953,10 @@
 	
 	
 	//投标
-	function bidTask(type,taskId, index){
-		oprationTask("ea_goldtask_bid.do?taskId=" + taskId);
+	function bidTask(taskId){
+		//oprationTask("ea_goldtask_bid.do?taskId=" + taskId);
+		optRequest("ea_goldtask_bid.do?taskId=" + taskId, null);
+		
 	}
 	
 	function popuMsg(msg){
@@ -998,57 +965,15 @@
 	
 	//发布任务
 	function releaseTask(){	
-		resResutl = false;
+		
 		var formobj = validtionTask();
 		if(!formobj) return;
-		oprationTask("ea_goldtask_release.do?goldtask.title="+formobj.title+"&goldtask.detail="+formobj.detail+"&goldtask.endDate="+formobj.endDate+"&goldtask.goldNumber="+formobj.goldNumber+"&goldtask.usrAccount="+formobj.usrAccount);
-		
-		//更新用户发布task 对象
-		setTimeout(function(){
-			if(resResutl){
-				allUsrTaskList.push(formobj);
-				resResutl = false;
-			}
-		}, serverReqTimeout + 100);
-		
+		//oprationTask("ea_goldtask_release.do?goldtask.title="+formobj.title+"&goldtask.detail="+formobj.detail+"&goldtask.endDate="+formobj.endDate+"&goldtask.goldNumber="+formobj.goldNumber+"&goldtask.usrAccount="+formobj.usrAccount);
+		optRequest("ea_goldtask_release.do?goldtask.title="+formobj.title+"&goldtask.detail="+formobj.detail+"&goldtask.endDate="+formobj.endDate+"&goldtask.goldNumber="+formobj.goldNumber+"&goldtask.usrAccount="+formobj.usrAccount);
 		
 	}
 	
-	//支付
-	function payGold(){
-
-		var payGoldNum = $("#payGoldNum").val();
-		var toUsr = $("#tousrlist").val();
-		var payRemarks = $("#payRemarks").val();
-		if(!payGoldNum || payGoldNum.trim() == ""){
-			popuMsg("金币数不能为空!");
-			return;
-		}
-		if(isNaN(payGoldNum)){
-			popuMsg("金币必需为数字");
-			return;
-		}
-		showFullLoad("");
-		setTimeout(function(){
-			sendRequest("ea_goldtask_pay.do?goldtran.goldNumber="+payGoldNum+"&goldtran.toUsrAccount="+toUsr+"&goldtran.payRemarks="+payRemarks,
-			function(resstr){
-				hideFullLoad();
-				if(resstr && resstr.trim() == "0000"){
-					showmask("操作成功",false);
-					usrMap[toUsr].goldNumber = Number(usrMap[toUsr].goldNumber) +  Number(payGoldNum);
-					usrMap[loginedUsrAccount].goldNumber = (usrMap[loginedUsrAccount].goldNumber -  payGoldNum);
-					var data={goldNumber: payGoldNum, toUsrAccount: toUsr, payRemarks: payRemarks, payDate: getDateStr(), fromUsrAccount: loginedUsrAccount};
-					appendGoldTran(data, true);
-					$("#goldIncome").text(goldIncome);
-					$("#goldOutlay").text(goldOutlay);
-					$.ui.goBack();
-				}else{
-					showmask("操作失败: " + resstr ,false);
-				}
-				setTimeout(function(){$.ui.hideMask();},700);
-			});
-		}, 1000);
-	}
+	
 
 	
 	//切换账号
