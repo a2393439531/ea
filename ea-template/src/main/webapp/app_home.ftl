@@ -53,6 +53,25 @@
 		#afui .header h1 {
 			font-size: 14px;
 		}
+		
+		@media handheld, only screen and (min-width: 100px) {
+		  #afui .col2 {
+		    width: 50%;
+		    float: left;
+		  }
+		  #afui .col3 {
+		    width: 33.3%;
+		    float: left;
+		  }
+		  #afui .col1-3 {
+		    width: 33.3%;
+		    float: left;
+		  }
+		  #afui .col2-3 {
+		    width: 66.6%;
+		    float: left;
+		  }
+		}
 			
 	</style>
 	
@@ -355,8 +374,8 @@
 	var usrMap; //所有用户
 	var tmpTaskId; //任务ID （用于编辑）
 	
-	//处理请求， 会显示等待框.. 过800毫秒才发送请求
-	function optRequest(url, callback){
+	//处理请求， 会显示等待框.. 过800毫秒才发送请求 url, callback, goback
+	function optRequest(url, callback, gb){
 		showFullLoad("");
 		setTimeout(function(){
 			sendRequest(url,function(resstr){
@@ -372,7 +391,7 @@
 				
 				setTimeout(function(){$.ui.hideMask();},700);
 				
-				if(resstr && resstr.trim() == "0000"){
+				if(resstr && resstr.trim() == "0000" && gb != false){
 					$.ui.goBack();
 				}
 				
@@ -861,48 +880,99 @@
 		//var usrAccountArray = data.usrAccountArray;
 		
 		
-		var btnhtml = '';
+//		var btnhtml = '';
+//		
+//		if(data.usrAccountArray.indexOf(currUsr.account) < 0 && !data.bidUsrAccount && data.usrAccount != currUsr.account){
+//			btnhtml = "<a class='button' onclick=bidTask("+data.id+", "+$(this)+") style='border:1px solid #D3DADE;border-radius:0px;color: #646464;'>投我</a>"
+//		}else if((!data.bidUsrAccount || data.bidUsrAccount.trim() == "") && data.usrAccount == currUsr.account){
+//			btnhtml = "<a class='button' onclick=editTask("+data.id+") href='#taskPage' style='border:1px solid #D3DADE;border-radius:0px;color: #646464;'>编辑</a>"
+//		}
+		
+		var btn = $('');
+		var bidCurName = $("<span style='color: red;'></span>");
+		var bidOtherNames = $("<span ></span>");
 		
 		if(data.usrAccountArray.indexOf(currUsr.account) < 0 && !data.bidUsrAccount && data.usrAccount != currUsr.account){
-			btnhtml = "<a class='button' onclick=bidTask("+data.id+") style='border:1px solid #D3DADE;border-radius:0px;color: #646464;'>投我</a>"
+			btn = $("<a class='button' style='border:1px solid #D3DADE;border-radius:0px;color: #646464;'>投我</a>");
+			btn.bind("click", function(){
+				optRequest("ea_goldtask_bid.do?taskId=" + data.id, function(){
+					setTimeout(function(){btn.remove();bidCurName.text(currUsr.name + " ");},100);
+				}, false);
+			});
 		}else if((!data.bidUsrAccount || data.bidUsrAccount.trim() == "") && data.usrAccount == currUsr.account){
-			btnhtml = "<a class='button' onclick=editTask("+data.id+") href='#taskPage' style='border:1px solid #D3DADE;border-radius:0px;color: #646464;'>编辑</a>"
+			btn = $("<a class='button' href='#taskPage' style='border:1px solid #D3DADE;border-radius:0px;color: #646464;'>编辑</a>");
+			btn.bind("click", function(){
+				taskPageIsEdit = true;
+				tmpTaskId = data.id;
+			});
 		}
 		
 		
 		var tmpbidusr = usrMap[data.bidUsrAccount] ? usrMap[data.bidUsrAccount].name : "";
-		
-		var tmpBidNames = "";
 		var accountarray = data.usrAccountArray.split(",");
+		
 		for (var i=0; i < accountarray.length; i++){
 			if(!accountarray[i] || accountarray[i] == "") continue;
 			if(accountarray[i] == currUsr.account){
-				tmpBidNames +="<span style='color: red;'>"+currUsr.name+"</span>&nbsp;&nbsp;";
+				bidCurName.text(currUsr.name + " ");
 			}else{
-				tmpBidNames += usrMap[accountarray[i]].name + "&nbsp;&nbsp;";
+				var tmptxt = bidOtherNames.text() ? bidOtherNames.text() : "";
+				bidOtherNames.text(tmptxt + usrMap[accountarray[i]].name + " ");
 			}
-			
 		}
 		
+//		var tmpBidNames = "";
+//		for (var i=0; i < accountarray.length; i++){
+//			if(!accountarray[i] || accountarray[i] == "") continue;
+//			if(accountarray[i] == currUsr.account){
+//				tmpBidNames +="<span style='color: red;'>"+currUsr.name+"</span>&nbsp;&nbsp;";
+//			}else{
+//				tmpBidNames += usrMap[accountarray[i]].name + "&nbsp;&nbsp;";
+//			}
+//		}
+		
+		var childDiv = $('<div style="background-color:#FFFFFF;border-radius: 1px;border:1px solid #D3DADE;position: relative; top: 10px;"></div>');
+		var c1 = $('<div  style=" padding: 10px 20px 10px 20px; " ></div>');
+		c1.append('<img src="common/images/android/gold.png" />&nbsp;'+data.goldNumber+'&nbsp;&nbsp;&nbsp;' + data.createDate.substring(0,11) + '&nbsp;' + data.title + '&nbsp; <br />');
+		var cgrid = $('<div class="grid" style="font-size: 10px;color: #999999;"></div>');
+		cgrid.append('<div class="tmpcol2_1"><span style="float: right;">悬赏人:&nbsp;&nbsp;</span></div>');
+		cgrid.append('<div class="tmpcol2_2">'+usrMap[data.usrAccount].name+'&nbsp;</div>');
+		cgrid.append('<div class="tmpcol2_1"><span style="float: right;">任务说明:&nbsp;&nbsp;</span></div>');
+		cgrid.append('<div class="tmpcol2_2">'+data.detail+'&nbsp;</div>');
+		cgrid.append('<div class="tmpcol2_1"><span style="float: right;">悬赏截止日期:&nbsp;&nbsp;</span></div>');
+		cgrid.append('<div class="tmpcol2_2">'+data.endDate+'&nbsp;</div>');
+		cgrid.append('<div class="tmpcol2_1"><span style="float: right;">已投标成员:&nbsp;&nbsp;</span></div>');
+		var cbid = $('<div class="tmpcol2_2">&nbsp;</div>');
+		cbid.append(bidCurName);
+		cbid.append(bidOtherNames);
+		cgrid.append(cbid);
+		cgrid.append('<div class="tmpcol2_1"><span style="float: right;">中标成员:&nbsp;&nbsp;</span></div>');
+		cgrid.append('<div class="tmpcol2_2">'+tmpbidusr+'&nbsp;</div>');
+		c1.append(cgrid);
+		var cbtndiv = $('<div class="button-grouped" style="width:100%;margin-left: 10px;"></div>');
+		cbtndiv.append(btn);
+		c1.append(cbtndiv);
+		childDiv.append(c1);
 		
 		
-		var childDiv = $('<div style="background-color:#FFFFFF;border-radius: 1px;border:1px solid #D3DADE;position: relative; top: 10px;">'+
-						'	<div  style=" padding: 10px 20px 10px 20px; " ><img src="common/images/android/gold.png" />&nbsp;'+data.goldNumber+'&nbsp;&nbsp;&nbsp;'+
-						data.createDate.substring(0,11) + '&nbsp;' + data.title + '&nbsp; <br />'+
-						//'		<span style="font-size: 10px;color: #999999;">&nbsp;<br/>悬赏人: '+usrMap[data.usrAccount].name+' <img src="common/images/android/gold.png" />'+data.goldNumber+'</span><br />'+
-						'		<div class="grid" style="font-size: 10px;color: #999999;">'+
-						'			<div class="tmpcol2_1"><span style="float: right;">悬赏人:&nbsp;&nbsp;</span></div>'+
-						'			<div class="tmpcol2_2">'+usrMap[data.usrAccount].name+'&nbsp;</div>'+
-						'			<div class="tmpcol2_1"><span style="float: right;">任务说明:&nbsp;&nbsp;</span></div>'+
-						'			<div class="tmpcol2_2">'+data.detail+'&nbsp;</div>'+
-						'			<div class="tmpcol2_1"><span style="float: right;">悬赏截止日期:&nbsp;&nbsp;</span></div>'+
-						'			<div class="tmpcol2_2">'+data.endDate+'&nbsp;</div>'+
-						'			<div class="tmpcol2_1"><span style="float: right;">已投标成员:&nbsp;&nbsp;</span></div>'+
-						'			<div class="tmpcol2_2">'+tmpBidNames+'&nbsp;</div>'+
-						'			<div class="tmpcol2_1"><span style="float: right;">中标成员:&nbsp;&nbsp;</span></div>'+
-						'			<div class="tmpcol2_2">'+tmpbidusr+'&nbsp;</div>'+
-						'       </div> </div>'+
-						'	<div class="button-grouped" style="width:100%;margin-left: 10px;">'+ btnhtml + '</div></div><br /> ');
+		
+		
+//		var childDiv = $('<div style="background-color:#FFFFFF;border-radius: 1px;border:1px solid #D3DADE;position: relative; top: 10px;">'+
+//						'	<div  style=" padding: 10px 20px 10px 20px; " ><img src="common/images/android/gold.png" />&nbsp;'+data.goldNumber+'&nbsp;&nbsp;&nbsp;'+
+//						data.createDate.substring(0,11) + '&nbsp;' + data.title + '&nbsp; <br />'+
+//						'		<div class="grid" style="font-size: 10px;color: #999999;">'+
+//						'			<div class="tmpcol2_1"><span style="float: right;">悬赏人:&nbsp;&nbsp;</span></div>'+
+//						'			<div class="tmpcol2_2">'+usrMap[data.usrAccount].name+'&nbsp;</div>'+
+//						'			<div class="tmpcol2_1"><span style="float: right;">任务说明:&nbsp;&nbsp;</span></div>'+
+//						'			<div class="tmpcol2_2">'+data.detail+'&nbsp;</div>'+
+//						'			<div class="tmpcol2_1"><span style="float: right;">悬赏截止日期:&nbsp;&nbsp;</span></div>'+
+//						'			<div class="tmpcol2_2">'+data.endDate+'&nbsp;</div>'+
+//						'			<div class="tmpcol2_1"><span style="float: right;">已投标成员:&nbsp;&nbsp;</span></div>'+
+//						'			<div class="tmpcol2_2">'+tmpBidNames+'&nbsp;</div>'+
+//						'			<div class="tmpcol2_1"><span style="float: right;">中标成员:&nbsp;&nbsp;</span></div>'+
+//						'			<div class="tmpcol2_2">'+tmpbidusr+'&nbsp;</div>'+
+//						'       </div> </div>'+
+//						'	<div class="button-grouped" style="width:100%;margin-left: 10px;">'+ btnhtml + '</div></div><br /> ');
 
 
 		
@@ -911,16 +981,17 @@
 		}else {
 			elobj.append(childDiv);
 		}
+		elobj.append("<br />&nbsp;");
 		
 	}
 	
 	
 	
-	//编辑task 打开task页面
-	function editTask(taskId){
-		taskPageIsEdit = true;
-		tmpTaskId = taskId;
-	}
+//	//编辑task 打开task页面
+//	function editTask(taskId){
+//		taskPageIsEdit = true;
+//		tmpTaskId = taskId;
+//	}
 	
 	//验证任务表单
 	function validtionTask(){
@@ -959,11 +1030,22 @@
 	
 	
 	//投标
-	function bidTask(taskId){
-		//oprationTask("ea_goldtask_bid.do?taskId=" + taskId);
-		optRequest("ea_goldtask_bid.do?taskId=" + taskId, null);
-		
-	}
+//	function bidTask(taskId, obj){
+//		console.log("gggg.g");
+//		console.log("$(this): ", obj);
+//		$(this).remove();
+//		return;
+//		
+//		//oprationTask("ea_goldtask_bid.do?taskId=" + taskId);
+//		optRequest("ea_goldtask_bid.do?taskId=" + taskId, function(){
+//			setTimeout(function(){
+////				$.ui.loadContent("goldTaskPage",false,false,"flip");
+//				var what = $.query("#fff").get(0)
+//				$.ui.loadContentData(what,false,false,"up");
+//			}, 100);
+//		},false);
+//		
+//	}
 	
 	function popuMsg(msg){
 		$("#afui").popup({message: msg, cancelText: "确定", cancelOnly: true, title: "提示消息"});
