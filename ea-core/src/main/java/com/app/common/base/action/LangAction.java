@@ -23,6 +23,7 @@ import com.app.ea.model.User;
 
 import com.opensymphony.xwork2.ActionContext;
 
+import com.utils.hardinfo.HardInfo;
 import com.utils.path.PathUtils;
 
 @Component("langAction")
@@ -32,6 +33,7 @@ public class LangAction extends BaseEaAction {
 
 	public String execute() throws Exception {
 		// 如果是第一次，langString=first,则根据，问题是，不一定有我们已经有的语言，所以需要一个MAP
+		String url ="http:/"+HardInfo.findNonLocalhostIp()+":"+getRequest().getLocalPort()+getRequest().getContextPath();
 		String langString = getpara("lang");
 		if (langString.equals("first")) { // 如果不是第一次，认证错误了的话
 			HttpServletRequest requestServelt = ServletActionContext.getRequest();
@@ -46,6 +48,7 @@ public class LangAction extends BaseEaAction {
 		// 如果不是第一次，还有用户名密码
 		Map sessionMap = ActionContext.getContext().getSession();
 		sessionMap.put("lang", langString);
+		rhs.put("url", url);
 		return "login"; // login.ftl
 	}
 }

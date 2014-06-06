@@ -768,6 +768,22 @@ public class ExamAction extends BaseProcessAction {
 			}
 			rhs.put("export", true);
 		}
+		
+		Map<String,List<Monitor>> monitorData = new HashMap<String, List<Monitor>>();
+		for (Examrecord examrecord : recordList) {
+			String paperid = String.valueOf(examrecord.getPaper().getId());
+			String taskid = examrecord.getTaskid();
+			String userid = examrecord.getUserid();
+			
+			String monitor_sql = "from Monitor m where m.userid='" + userid + "' and m.taskid='" + taskid + "' and m.paperid='" + paperid + "'";
+			
+			getPageData(monitor_sql);
+			
+			List<Monitor> monitorList = (List)rhs.get("dataList");
+			
+			monitorData.put(String.valueOf(examrecord.getId()), monitorList);
+		}
+		rhs.put("monitorlist", monitorData);
 		rhs.put("datalist", dataMap);
 		return "success";
 	}

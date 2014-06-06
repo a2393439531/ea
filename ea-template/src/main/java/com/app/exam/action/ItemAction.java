@@ -69,6 +69,8 @@ public class ItemAction extends BaseEaAction {
 		}else{
 			data.addAll(list);
 		}
+		rhs.put("knowledgevalue", knowledgevalue);
+		rhs.put("itemtype", itemtype);
 		rhs.put("dataList", data);
 		rhs.put("knowledgeRootList", common_get_tree_root("Knowledge"));
 		return "success";

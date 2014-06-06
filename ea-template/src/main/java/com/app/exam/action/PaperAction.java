@@ -76,6 +76,11 @@ public class PaperAction extends BaseEaAction {
 			papers.add(object);
 			dataMap.put(pgname, papers);
 		}
+		List<String> condition = new ArrayList<String>();
+		for (String value : knowledgevalue) {
+			condition.add(value);
+		}
+		rhs.put("knowledgevalue", condition);
 		rhs.put("dataList", dataMap);
 		rhs.put("knowledgeRootList", common_get_tree_root("Knowledge"));
 		return "success";
