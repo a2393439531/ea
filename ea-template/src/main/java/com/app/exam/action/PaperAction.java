@@ -376,7 +376,7 @@ public class PaperAction extends BaseEaAction {
 				+ blankcount * Integer.valueOf(paper.getBlankmark())
 				+ essaycount * Integer.valueOf(paper.getEssaymark()));
 		baseDao.update(paper);
-		rhs.put("page", "editpage");
+		//rhs.put("page", "editpage");
 		knowledgevalue.clear();
 		list();
 		rhs.put("knowledgeRootList", knowledgerootlist);
@@ -447,6 +447,7 @@ public class PaperAction extends BaseEaAction {
 			//}
 		}
 		rhs.put("byexcel", byexcel);
+		rhs.put("method", getpara("method"));
 		return "success";
 	}
 

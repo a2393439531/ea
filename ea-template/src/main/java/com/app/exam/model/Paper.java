@@ -166,7 +166,7 @@ public class Paper extends ProcessModel  {
 	}
 	
 
-	// 随机生成指定数量和指定类型的题目
+	// 随机生成指定数量和指定类型的题目，目前能够随机到有分值的题目
 	public Set<Item> getRmdItem(String type, int count) {
 		Set<Item> datalist = new HashSet<Item>();
 		Set<Item> data = new HashSet<Item>();

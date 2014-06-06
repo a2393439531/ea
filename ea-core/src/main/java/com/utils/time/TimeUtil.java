@@ -21,6 +21,13 @@ public class TimeUtil {
 	static Pattern minutes = Pattern.compile("^([0-9]+)mi?n$");
 	static Pattern seconds = Pattern.compile("^([0-9]+)s$");
 
+
+	 private static final long ONE_MINUTE = 60;
+	 private static final long ONE_HOUR = 3600;
+	 private static final long ONE_DAY = 86400;
+	 private static final long ONE_MONTH = 2592000;
+	 private static final long ONE_YEAR = 31104000;
+	
 	/**
 	 * 字符串转日期
 	 * 
@@ -62,7 +69,133 @@ public class TimeUtil {
 		return yNow - date1.getYear();
 
 	}
+	
+	public static String fromDeadline(Date date) {
+	     long deadline = date.getTime() / 1000;
+	     long now = (new Date().getTime()) / 1000;
+	     long remain = deadline - now;
+	     if (remain <= ONE_HOUR)
+	         return remain / ONE_MINUTE + "Minutes";
+	     else if (remain <= ONE_DAY)
+	         return remain / ONE_HOUR + "Hours"
+	                 + (remain % ONE_HOUR / ONE_MINUTE) + "Minutes";
+	     else {
+	         long day = remain / ONE_DAY;
+	         long hour = remain % ONE_DAY / ONE_HOUR;
+	         long minute = remain % ONE_DAY % ONE_HOUR / ONE_MINUTE;
+	         return  + day + "Days" + hour + "Hours" + minute + "Minutes";
+	     }
+	}
+	
+	public static String compareDate(Date current, Date deadline) {
+		// use 24H
+		// SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		StringBuilder sb = new StringBuilder();
 
+		Calendar calendar_deadline = Calendar.getInstance();
+		calendar_deadline.setTime(deadline);
+
+		Calendar calendar_current = Calendar.getInstance();
+		calendar_current.setTime(current);
+
+		if (calendar_current.before(calendar_deadline)) {
+			Long diff = (calendar_deadline.getTimeInMillis() - calendar_current
+					.getTimeInMillis());
+
+			long days = diff / (24*60*60*1000);
+
+			long diffHours = diff / (60*60*1000)-days*24;
+			long diffMinutes = (diff/(60*1000))-days*24*60-diffHours*60;
+			long diffSeconds = diff /1000-days*24*60*60-diffHours*60*60-diffMinutes*60;
+			if(days != 0){
+				sb.append(days).append(" Days,");
+			}
+			if(diffHours != 0){
+				sb.append(diffHours).append(" Hours,");
+			}
+			if(diffMinutes != 0){
+				sb.append(diffMinutes).append(" Minutes,");
+			}
+			if(diffSeconds != 0){
+				sb.append(diffSeconds).append(" Seconds");
+			}
+		}else{
+			sb.append("Ongoing");
+		}
+
+		return sb.toString();
+	}
+	
+	public static String toToday(Date date) {
+	     long time = date.getTime() / 1000;
+	     long now = (new Date().getTime()) / 1000;
+	     long ago = now - time;
+	     if (ago <= ONE_HOUR)
+	         return ago / ONE_MINUTE + "分钟";
+	     else if (ago <= ONE_DAY)
+	         return ago / ONE_HOUR + "小时" + (ago % ONE_HOUR / ONE_MINUTE) + "分钟";
+	     else if (ago <= ONE_DAY * 2)
+	         return "昨天" + (ago - ONE_DAY) / ONE_HOUR + "点" + (ago - ONE_DAY)
+	                 % ONE_HOUR / ONE_MINUTE + "分";
+	     else if (ago <= ONE_DAY * 3) {
+	         long hour = ago - ONE_DAY * 2;
+	         return "前天" + hour / ONE_HOUR + "点" + hour % ONE_HOUR / ONE_MINUTE
+	                 + "分";
+	     } else if (ago <= ONE_MONTH) {
+	         long day = ago / ONE_DAY;
+	         long hour = ago % ONE_DAY / ONE_HOUR;
+	         long minute = ago % ONE_DAY % ONE_HOUR / ONE_MINUTE;
+	         return day + "天前" + hour + "点" + minute + "分";
+	     } else if (ago <= ONE_YEAR) {
+	         long month = ago / ONE_MONTH;
+	         long day = ago % ONE_MONTH / ONE_DAY;
+	         long hour = ago % ONE_MONTH % ONE_DAY / ONE_HOUR;
+	         long minute = ago % ONE_MONTH % ONE_DAY % ONE_HOUR / ONE_MINUTE;
+	         return month + "个月" + day + "天" + hour + "点" + minute + "分前";
+	     } else {
+	         long year = ago / ONE_YEAR;
+	         long month = ago % ONE_YEAR / ONE_MONTH;
+	         long day = ago % ONE_YEAR % ONE_MONTH / ONE_DAY;
+	         return year + "年前" + month + "月" + day + "天";
+	     }
+	}
+
+	public static String fromToday(Date date) {
+	     Calendar calendar = Calendar.getInstance();
+	     calendar.setTime(date);
+	     long time = date.getTime() / 1000;
+	     long now = new Date().getTime() / 1000;
+	     long ago = now - time;
+	     if (ago <= ONE_HOUR)
+	         return ago / ONE_MINUTE + "分钟前";
+	     else if (ago <= ONE_DAY)
+	         return ago / ONE_HOUR + "小时" + (ago % ONE_HOUR / ONE_MINUTE)
+	                 + "分钟前";
+	     else if (ago <= ONE_DAY * 2)
+	         return "昨天" + calendar.get(Calendar.HOUR_OF_DAY) + "点"
+	                 + calendar.get(Calendar.MINUTE) + "分";
+	     else if (ago <= ONE_DAY * 3)
+	         return "前天" + calendar.get(Calendar.HOUR_OF_DAY) + "点"
+	                 + calendar.get(Calendar.MINUTE) + "分";
+	     else if (ago <= ONE_MONTH) {
+	         long day = ago / ONE_DAY;
+	         return day + "天前" + calendar.get(Calendar.HOUR_OF_DAY) + "点"
+	                 + calendar.get(Calendar.MINUTE) + "分";
+	     } else if (ago <= ONE_YEAR) {
+	         long month = ago / ONE_MONTH;
+	         long day = ago % ONE_MONTH / ONE_DAY;
+	         return month + "个月" + day + "天前"
+	                 + calendar.get(Calendar.HOUR_OF_DAY) + "点"
+	                 + calendar.get(Calendar.MINUTE) + "分";
+	     } else {
+	         long year = ago / ONE_YEAR;
+	         int month = calendar.get(Calendar.MONTH) + 1;// JANUARY which is 0 so month+1
+	         return year + "年前" + month + "月" + calendar.get(Calendar.DATE)
+	                 + "日";
+	     }
+	 }
+
+	
 	public static String getStrHowManyYearToNow(String var1) {
 		try {
 			int result = getHowManyYearToNow(var1);
@@ -529,6 +662,7 @@ public class TimeUtil {
 	}
 	public static void main(String[] args) {
 		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd hh:mm");
 			// log.debug(DateUtil.getTimeStr("yyyy-MM-dd"));
 			// log.debug(DateUtil.getOhterDayByNumnber("2010-01-27", 5));
 			// log.debug(DateUtil.compareDayStr("2010-01-27", "2010-01-3"));
@@ -536,6 +670,7 @@ public class TimeUtil {
 			System.out.println("天数"+TimeUtil.getHowManyDayFromNow("2013-10-01"));
 			System.out.println(TimeUtil.getConstellationNumber("1989-12-27"));
 			// log.debug(DateUtil.compareDate("2013-08-25",null,0) );
+			System.out.println(TimeUtil.fromDeadline(sdf.parse("2014-06-05 17:30")));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

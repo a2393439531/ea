@@ -33,6 +33,7 @@ public class Examrecord extends BaseModel {
 	
 	
 	private String userid ;
+	private String taskid;
 	private int singlechoicemark;
 	private int multichoicemark;
 	private int blankmark;
@@ -40,7 +41,18 @@ public class Examrecord extends BaseModel {
 	private String recorddate;
 	
 	private String remark;
+	private String examarrangeid;
 	
+	
+	
+	public String getExamarrangeid() {
+		return examarrangeid;
+	}
+
+	public void setExamarrangeid(String examarrangeid) {
+		this.examarrangeid = examarrangeid;
+	}
+
 	@Column(length = 2000)
 	public String getRemark() {
 		return remark;
@@ -120,6 +132,14 @@ public class Examrecord extends BaseModel {
 
 	public void setResult(Set<Result> result) {
 		this.result = result;
+	}
+
+	public String getTaskid() {
+		return taskid;
+	}
+
+	public void setTaskid(String taskid) {
+		this.taskid = taskid;
 	}
 	
 }
