@@ -24,6 +24,7 @@ public class OaTask{
 	//end
 	public Object obj;
 	public String assignee;
+	public String starttime;
 	
 	public OaTask(){
 		super();
@@ -136,6 +137,14 @@ public class OaTask{
 
 	public void setMethod(String method) {
 		this.method = method;
+	}
+
+	public String getStarttime() {
+		return starttime;
+	}
+
+	public void setStarttime(String starttime) {
+		this.starttime = starttime;
 	}
 	
 	
