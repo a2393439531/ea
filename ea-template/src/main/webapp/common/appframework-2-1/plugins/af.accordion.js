@@ -45,16 +45,8 @@
 		var $e = $(e.target).siblings("div");
 		$e.parent().addClass("active");
 		$el.find("li").not($e.parent().get(0)).removeClass("active");
-		$el.find("div: first").not($e.get(0)).css("height", "0px"); //xiao 查找第一个div
-		
+		$el.find("div").not($e.get(0)).css("height", "0px");
 		window.setTimeout(function () {
-//			//xiao
-//			var display = $e.css("display");
-//			if(display == "none"){
-//				$e.css("display", "block");
-//			}else{
-//				$e.css("display", "none");
-//			}
 		if ($e.get(0).clientHeight > 0)
 		    $e.css("height", "0");
 		else {

@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -55,21 +56,44 @@ public class GoldTaskAction extends BaseEaAction {
 	//读取登录日志文件 
 	public String menu_log() throws Exception{
 		String path = PathUtils.getHomePath(PathUtils.SYSTEM_DATA_CLASS) + "log_login.txt";
-		BufferedReader br = null;
+		RandomAccessFile raf = null;
 		List<String> list = new ArrayList<String>();
 		try{
-			br = new BufferedReader(new FileReader(path));
-			String str = null;
-			int count = 0;
-			while((str = br.readLine()) != null){
-				list.add(str);
-				if(count++ >= 5) break;
-			}
+			
+			raf = new RandomAccessFile(path, "r");
+			long start = raf.getFilePointer();
+			long len = raf.length();
+			long cur = start + len - 1;
+			raf.seek(cur);
+			int c = -1;
+			while(cur>=start && ( c = raf.read()) != -1){
+				if(c == 10 || c == 13){
+					String str = raf.readLine();
+					if(str != null && str.length() > 0) {
+						str = new String(str.getBytes("8859_1"),"utf-8");
+						list.add(str);
+					}
+				}
+				if(list.size() >= 5) break;
+				cur-=1;
+				if(cur <0 ) {
+					raf.seek(0);
+					list.add(raf.readLine());
+					break;
+				}else raf.seek(cur);
+	        }			
 			rhs.put("datalist", list);
 		}finally{
-			br.close();
+			raf.close();
 		}
 		
+		return "success";
+	}
+	
+	//获取当前Task 根据　taskid
+	public String get_task() throws Exception{
+			
+		rhs.put("datalist", baseDao.find("from GoldTask where id = ?", Long.parseLong(getpara("taskId"))));
 		return "success";
 	}
 	
@@ -97,7 +121,7 @@ public class GoldTaskAction extends BaseEaAction {
 		String taskId = getpara("taskId");
 //		String usrAccount = getpara("usrAccount");
 		String usrAccount = getCurrentAccount();
-		log.info("bid_goldtask==> taskId=" + taskId + " usrAccount=" + usrAccount);
+		
 		rhs.put("result", "-1");
 		GoldTask gt = (GoldTask) (baseDao.find("from GoldTask gt where id = ?", Long.parseLong(taskId)).get(0));
 		if(gt.getBidUsrAccount() != null && gt.getBidUsrAccount().length() >= 1){
@@ -114,13 +138,16 @@ public class GoldTaskAction extends BaseEaAction {
 		else gt.setUsrAccountArray(usrAccount);
 		baseDao.update(gt);
 		rhs.put("result", "0000");
-		log.info(usrAccount + " 投标了 " + gt.getTitle());
+		log.info(getCurrentUser().getName() + " 投标了 " + gt.getTitle());
 		return "success";
 	}
 	
 	//修改
 	public String update() throws Exception{
-		baseDao.update(goldtask);
+		
+		GoldTask gt = (GoldTask)baseDao.find("from GoldTask where id = ?", goldtask.getId()).get(0);
+		copyProperties(goldtask, gt);
+		baseDao.update(gt);
 		rhs.put("result", "0000");
 		return "success";
 	}
@@ -151,7 +178,7 @@ public class GoldTaskAction extends BaseEaAction {
 			long l =  baseDao.create(goldtask);
 			rhs.put("result", "0000");
 		}
-		log.info(goldtask.getUsrAccount() + "发布了 " + goldtask.getTitle());
+		log.info(getCurrentUser().getName() + "发布了 " + goldtask.getTitle());
 		return "success";
 	}
 	
@@ -177,9 +204,8 @@ public class GoldTaskAction extends BaseEaAction {
 	
 	//所有交易记录(财产公开)
 	public String allgoldrecords() throws Exception {
-				//String[] params = {getCurrentAccount(),getCurrentAccount()};
-				rhs.put("datalist", baseDao.find("from GoldTransaction order by payDate desc"));
-				return "success";
+		rhs.put("datalist", baseDao.find("from GoldTransaction order by payDate desc"));
+		return "success";
 	}
 	
 	//金币支付
@@ -210,8 +236,8 @@ public class GoldTaskAction extends BaseEaAction {
 		baseDao.update(tu);
 		
 		putSessionValue("userlogined", fu);
+		log.info(fu.getName() + " 支付了" + goldtran.getGoldNumber() + " 块金币给 " + tu.getName());
 		
-		System.out.println("fu: " + fu.getGoldnumber() + " tu: " + tu.getGoldnumber());
 		
 		rhs.put("result", "0000");
 		return "success";
@@ -221,8 +247,7 @@ public class GoldTaskAction extends BaseEaAction {
 		public String finish_bid() throws Exception {
 			String taskId = getpara("taskId");
 			String bidUsrAccount = getpara("bidUsrAccount");
-			String usrAccount = getCurrentAccount();
-			log.info("finish_bid==> taskId=" + taskId + " usrAccount=" + usrAccount);
+			
 			rhs.put("result", "-1");
 			GoldTask gt = (GoldTask) (baseDao.find("from GoldTask gt where id = ?", Long.parseLong(taskId)).get(0));
 			if(gt.getBidUsrAccount() != null && gt.getBidUsrAccount().length() >= 1){
@@ -233,7 +258,7 @@ public class GoldTaskAction extends BaseEaAction {
 			gt.setBidUsrAccount(bidUsrAccount);
 			baseDao.update(gt);
 			rhs.put("result", "0000");
-			log.info("done............");
+			log.info(getCurrentUser().getName() + " 结束了　" + gt.getTitle());
 			return "success";
 		}
 	
