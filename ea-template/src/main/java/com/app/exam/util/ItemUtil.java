@@ -303,13 +303,13 @@ public class ItemUtil {
 			if(rowNum > 0){
 				Knowledge rootkn = (Knowledge)baseDao.loadByFieldValue(Knowledge.class, "name", "auto_knowledge");
 				for(int r = 1; r < rowNum; r++){
+					row = sheet.getRow(r);
 					if(row==null){
 						rowNum=rowNum+1;
 					}else{
 						Item item = new Item();
 						Set<Choiceitem> choiceitems = null;
 						Set<Knowledge> knowledges = new HashSet<Knowledge>();
-						row = sheet.getRow(r);
 						//开始读取该行的数据
 						int cellNum = row.getLastCellNum();//拿到该行cell数量
 						String cellValue = "";
