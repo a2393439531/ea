@@ -515,7 +515,7 @@ public class ExamAction extends BaseProcessAction {
 			baseDao.update(record);
 			
 			infActiviti.completeTaskVar(taskId, paperId, getCurrentAccount(), var);
-			page = "exam_exam_exam_home.do";
+			//page = "exam_exam_exam_home.do";
 		}
 		
 		rhs.put("page", page);
