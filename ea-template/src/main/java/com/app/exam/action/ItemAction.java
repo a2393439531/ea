@@ -52,7 +52,7 @@ public class ItemAction extends BaseEaAction {
 		if(knowledgevalue.size() != 0){
 			for (String knowledge : knowledgevalue) {
 				Knowledge kl = (Knowledge)baseDao.loadById("Knowledge", Long.valueOf(knowledge));
-				list.addAll(kl.getItems());
+				list.addAll(kl.getAllItem(kl));
 			}
 		}else{
 			list.addAll((Collection<? extends Item>) rhs.get("dataList"));
@@ -69,6 +69,8 @@ public class ItemAction extends BaseEaAction {
 		}else{
 			data.addAll(list);
 		}
+		rhs.put("knowledgevalue", knowledgevalue);
+		rhs.put("itemtype", itemtype);
 		rhs.put("dataList", data);
 		rhs.put("knowledgeRootList", common_get_tree_root("Knowledge"));
 		return "success";
@@ -184,7 +186,6 @@ public class ItemAction extends BaseEaAction {
 	public String delete() throws Exception{
 		String id = getpara("id");
 		Item item = (Item) baseDao.loadById("Item", Long.parseLong(id));
-		baseDao.delete(item);
 		Set<Paper> papers = item.getPapers();
 		for (Paper paper : papers) {
 			switch(item.getType()){
@@ -203,15 +204,19 @@ public class ItemAction extends BaseEaAction {
 			}
 			baseDao.update(paper);
 		}
+		baseDao.delete(item);
 		return list();
 	}
 	
 	public String import_itembyxls(){
+		String method = getpara("method");
 		
+		rhs.put("method", method);
 		return "success";
 	}
 	//上传文件并且导入题目
 	public String import_itembyxls_save() throws IOException{
+		String method = getpara("method");
 		String foreignId = "";
 		String folder = "item";
 		String filepath =ServletActionContext.getRequest().getRealPath("");
@@ -247,44 +252,47 @@ public class ItemAction extends BaseEaAction {
 				baseDao.create(choiceitem);
 			}
 		}
-		//然后自动生成一个模板，把这些题目变成必做题。然后拿到该模板的ID，新建一个该模板创建的试卷
-		Paper paper = new Paper();
-		int p = 0,j = 0,k = 0,l = 0;
-		int totalmark = 0;
-		paper.setItems(items);
-		paper.setRmdsinglechoice(0);
-		paper.setRmdmultichoice(0);
-		paper.setRmdblank(0);
-		paper.setRmdessay(0);
-		
-		for (Item item : items) {
-			totalmark += Integer.valueOf(item.getMark());
-			switch(item.getType()){
-			case 1:
-				p++;
-				break;
-			case 2:
-				j++;
-				break;
-			case 3:
-				k++;
-				break;
-			case 4:
-				l++;
-				break;
+		if("paper".equals(method)){
+			//然后自动生成一个模板，把这些题目变成必做题。然后拿到该模板的ID，新建一个该模板创建的试卷
+			Paper paper = new Paper();
+			int p = 0,j = 0,k = 0,l = 0;
+			int totalmark = 0;
+			paper.setItems(items);
+			paper.setRmdsinglechoice(0);
+			paper.setRmdmultichoice(0);
+			paper.setRmdblank(0);
+			paper.setRmdessay(0);
+			
+			for (Item item : items) {
+				totalmark += Integer.valueOf(item.getMark());
+				switch(item.getType()){
+				case 1:
+					p++;
+					break;
+				case 2:
+					j++;
+					break;
+				case 3:
+					k++;
+					break;
+				case 4:
+					l++;
+					break;
+				}
 			}
+			paper.setSinglechoice(p);
+			paper.setMultichoice(j);
+			paper.setBlank(k);
+			paper.setEssay(l);
+			paper.setName(fileName.substring(0, fileName.lastIndexOf("."))  + "_"+new Date().toLocaleString());
+			paper.setTotalmark(totalmark);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			paper.setCreatedate(sdf.format(new Date()));
+			paper.setCreateuser(getCurrentAccount());
+			baseDao.create(paper);
+			//跳转到paper页面
 		}
-		paper.setSinglechoice(p);
-		paper.setMultichoice(j);
-		paper.setBlank(k);
-		paper.setEssay(l);
-		paper.setName(fileName.substring(0, fileName.lastIndexOf("."))  + "_"+new Date().toLocaleString());
-		paper.setTotalmark(totalmark);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		paper.setCreatedate(sdf.format(new Date()));
-		paper.setCreateuser(getCurrentAccount());
-		baseDao.create(paper);
-//跳转到paper页面
+		rhs.put("method", method);
 		return "success";
 	}
 	

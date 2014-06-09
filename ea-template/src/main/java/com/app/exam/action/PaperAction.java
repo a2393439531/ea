@@ -52,7 +52,7 @@ public class PaperAction extends BaseEaAction {
 		if(knowledgevalue.size() != 0){
 			for (String knowledge : knowledgevalue) {
 				Knowledge kl = (Knowledge)baseDao.loadById("Knowledge", Long.valueOf(knowledge));
-				list.addAll(kl.getPapers());
+				list.addAll(kl.getAllPaper(kl));
 			}
 		}else{
 			list.addAll((Collection<? extends Paper>) rhs.get("dataList"));
@@ -76,6 +76,11 @@ public class PaperAction extends BaseEaAction {
 			papers.add(object);
 			dataMap.put(pgname, papers);
 		}
+		List<String> condition = new ArrayList<String>();
+		for (String value : knowledgevalue) {
+			condition.add(value);
+		}
+		rhs.put("knowledgevalue", condition);
 		rhs.put("dataList", dataMap);
 		rhs.put("knowledgeRootList", common_get_tree_root("Knowledge"));
 		return "success";
@@ -376,7 +381,7 @@ public class PaperAction extends BaseEaAction {
 				+ blankcount * Integer.valueOf(paper.getBlankmark())
 				+ essaycount * Integer.valueOf(paper.getEssaymark()));
 		baseDao.update(paper);
-		rhs.put("page", "editpage");
+		//rhs.put("page", "editpage");
 		knowledgevalue.clear();
 		list();
 		rhs.put("knowledgeRootList", knowledgerootlist);
@@ -447,6 +452,7 @@ public class PaperAction extends BaseEaAction {
 			//}
 		}
 		rhs.put("byexcel", byexcel);
+		rhs.put("method", getpara("method"));
 		return "success";
 	}
 

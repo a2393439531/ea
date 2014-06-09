@@ -58,7 +58,7 @@ public class TaskLogAction extends BaseProcessAction {
 		Task t = getTask(getpara("taskId"));
 		String woid = getpara("woid");
 		String processInstanceId = getpara("processInstanceId");
-		if("undefined".equals(processInstanceId) || "".equals(processInstanceId)){
+		if(("undefined".equals(processInstanceId) || "".equals(processInstanceId)) && t != null){
 			processInstanceId = t.getProcessInstanceId();
 		}
 		if(t == null){
@@ -83,33 +83,45 @@ public class TaskLogAction extends BaseProcessAction {
 //			baseDao.update(model);
 //		}
 		//send Email after log has been insert. start at 2014/03/17
-		String initiator = (String) infActiviti.getVariableByTaskId(t.getId(), "initiator");
-		User initiatorUser = (User) baseDao.loadByFieldValue(User.class, "account", initiator);
-		String mail = "";
-		if(initiatorUser.getEmail() != null && !"".equals(initiatorUser.getEmail())){
-			mail += initiatorUser.getEmail();
-		}
-		if(initiatorUser.getEmail2() != null && !"".equals(initiatorUser.getEmail2())){
-			mail ="," + initiatorUser.getEmail2();
-		}
-		String assignee  = (String) infActiviti.getVariableByTaskId(t.getId(), "assignee");
-		User assigneeUser = (User)baseDao.loadByFieldValue(User.class, "account", assignee);
-		if(assigneeUser != null){
-			if(assigneeUser.getEmail() != null && !"".equals(assigneeUser.getEmail())){
-				mail = mail + "," + assigneeUser.getEmail();
-			}
-			if(assigneeUser.getEmail2() != null && !"".equals(assigneeUser.getEmail2())){
-				mail ="," + assigneeUser.getEmail2();
-			}
-		}
-		String content = user.getName()
-				+ "has add log for task: <font color='red'>" + t.getName()
-				+ "</font>!<br/><br/>The log information as below:<br/><br/>"
-				+ "Log content: <font color='red'>" + model.getLog()
-				+ "</font>";
+		if (t != null) {
 
-		infEa.sendMailTheadBySmtpList(" Log added! ", content, 
-				mail, "", "", null);
+			String initiator = (String) infActiviti.getVariableByTaskId(
+					t.getId(), "initiator");
+			User initiatorUser = (User) baseDao.loadByFieldValue(User.class,
+					"account", initiator);
+			String mail = "";
+			if (initiatorUser.getEmail() != null
+					&& !"".equals(initiatorUser.getEmail())) {
+				mail += initiatorUser.getEmail();
+			}
+			if (initiatorUser.getEmail2() != null
+					&& !"".equals(initiatorUser.getEmail2())) {
+				mail = "," + initiatorUser.getEmail2();
+			}
+			String assignee = (String) infActiviti.getVariableByTaskId(
+					t.getId(), "assignee");
+			User assigneeUser = (User) baseDao.loadByFieldValue(User.class,
+					"account", assignee);
+			if (assigneeUser != null) {
+				if (assigneeUser.getEmail() != null
+						&& !"".equals(assigneeUser.getEmail())) {
+					mail = mail + "," + assigneeUser.getEmail();
+				}
+				if (assigneeUser.getEmail2() != null
+						&& !"".equals(assigneeUser.getEmail2())) {
+					mail = "," + assigneeUser.getEmail2();
+				}
+			}
+			String content = user.getName()
+					+ "has add log for task: <font color='red'>"
+					+ t.getName()
+					+ "</font>!<br/><br/>The log information as below:<br/><br/>"
+					+ "Log content: <font color='red'>" + model.getLog()
+					+ "</font>";
+
+			infEa.sendMailTheadBySmtpList(" Log added! ", content, mail, "",
+					"", null);
+		}
 		//end
 		
 		return list();

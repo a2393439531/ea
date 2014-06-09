@@ -1,8 +1,10 @@
 package com.app.exam.action;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,15 +26,18 @@ import org.springframework.stereotype.Component;
 import com.app.common.activiti.action.BaseProcessAction;
 import com.app.common.activiti.api.OaTask;
 import com.app.common.spring.ssh.page.Pagination;
+import com.app.ea.model.User;
+import com.app.exam.model.Examarrange;
 import com.app.exam.model.Examrecord;
 import com.app.exam.model.Item;
 import com.app.exam.model.Knowledge;
+import com.app.exam.model.Monitor;
 import com.app.exam.model.Paper;
 import com.app.exam.model.Papergroup;
 import com.app.exam.model.Result;
 import com.app.exam.util.ExcelUtil;
-import com.app.manager.action.Tpltb1Action;
 import com.utils.cache.Cache;
+import com.utils.time.TimeUtil;
 
 @Scope("prototype")
 @Component("examAction")
@@ -49,7 +54,7 @@ public class ExamAction extends BaseProcessAction {
 		return "from Template";
 	}
 	
-	public String open_exam(){
+	public String open_exam() throws ParseException{
 		String taskId = getpara("taskId");
 		String taskPage = getpara("taskPage");
 		String paperId = (String)infActiviti.getVariableByTaskId(taskId, "formId");
@@ -70,90 +75,117 @@ public class ExamAction extends BaseProcessAction {
 				if(dataMap == null){
 					dataMap = new HashMap<String, Object>();
 				}
-				//先判断eception
-				String exception = String.valueOf(infActiviti.getVariableByTaskId(taskId, "exception"));
-				if(!"".equals(exception) && exception != null && Boolean.valueOf(exception)){
-					//不是正常完成
-					Map<String,Object> var = new HashMap<String, Object>();
-					String assignee = (String) infActiviti.getVariableByTaskId(taskId, "assignee");
-					infActiviti.completeTaskVar(taskId, paperId, assignee, var);
-					method = "reason";
-					taskPage = "exam/reason.ftl";//应该跳转到一个提示页面，提示考试异常结束。而不是直接跳转到原因页面。
-				}else{
-					//开始考试
-					Set<Item> singleitems = new HashSet<Item>();
-					Collection<Item> rmdsingleitems = paper.getRmdItem("1", paper.getRmdsinglechoice());
-					Collection<Item> reqsingleitems = paper.getReqItem("1");
-					singleitems.addAll(reqsingleitems);
-					singleitems.addAll(rmdsingleitems);
+				//首先判断是否达到开考时间
+				String examarrangeid = String.valueOf(infActiviti.getVariableByTaskId(taskId, "examarrangeid"));
+				if(!"".equals(examarrangeid) && examarrangeid != null){
+					Examarrange examarrange = (Examarrange)baseDao.loadById("Examarrange", Long.valueOf(examarrangeid));
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+					String current_str = sdf.format(new Date());
+					Date current = sdf.parse(current_str);
+					Date start = sdf.parse(examarrange.getStarttime());
+					Date end = sdf.parse(examarrange.getEndtime());
+					Calendar calendar_current=Calendar.getInstance(); 
+					calendar_current.setTime(current);
 					
-					Set<Item> multiitems = new HashSet<Item>();
-					Collection<Item> rmdmultiitems = paper.getRmdItem("2", paper.getRmdmultichoice());
-					Collection<Item> reqmultiitems = paper.getReqItem("2");
-					multiitems.addAll(reqmultiitems);
-					multiitems.addAll(rmdmultiitems);
+					Calendar calendar_start=Calendar.getInstance(); 
+					calendar_start.setTime(start);
+					Calendar calendar_end=Calendar.getInstance(); 
+					calendar_end.setTime(end);
 					
-					Set<Item> blankitems = new HashSet<Item>();
-					Collection<Item> rmdblankitems = paper.getRmdItem("3", paper.getRmdblank());
-					Collection<Item> reqblankitems = paper.getReqItem("3");
-					blankitems.addAll(reqblankitems);
-					blankitems.addAll(rmdblankitems);
-					
-					Set<Item> essayitems = new HashSet<Item>();
-					Collection<Item> rmdessayitems = paper.getRmdItem("4", paper.getRmdessay());
-					Collection<Item> reqessayitems = paper.getReqItem("4");
-					essayitems.addAll(reqessayitems);
-					essayitems.addAll(rmdessayitems);
-					
-					rhs.put("singleitems", singleitems);
-					rhs.put("multiitems", multiitems);
-					rhs.put("blankitems", blankitems);
-					rhs.put("essayitems", essayitems);
-					
-					//以单个题显示,默认显示全部试题
-					if(getpara("format").equals("single")){
-						//首先跳转页面要改变
-						taskPage = "exam/single.ftl";
-						//把所有题目放入session
-						List<Item> alldata = new ArrayList<Item>();
-						alldata.addAll(singleitems);
-						alldata.addAll(multiitems);
-						alldata.addAll(blankitems);
-						alldata.addAll(essayitems);
-						for (Item item : alldata) {
-							if(item.getChoiceitem().size() >0){
-								item.getChoiceitem();
+					if(calendar_current.before(calendar_start)|| calendar_current.after(calendar_end)){
+						method = "error";
+						rhs.put("info", "Invalid Start Time!!");
+						taskPage = "exam/error.ftl";
+					}else{
+						//先判断eception
+						String exception = String.valueOf(infActiviti.getVariableByTaskId(taskId, "exception"));
+						if(!"".equals(exception) && exception != null && Boolean.valueOf(exception)){
+							//不是正常完成
+							Map<String,Object> var = new HashMap<String, Object>();
+							String assignee = (String) infActiviti.getVariableByTaskId(taskId, "assignee");
+							infActiviti.completeTaskVar(taskId, paperId, assignee, var);
+							method = "reason";
+							taskPage = "exam/reason.ftl";//应该跳转到一个提示页面，提示考试异常结束。而不是直接跳转到原因页面。
+						}else{
+							//开始考试
+							Set<Item> singleitems = new HashSet<Item>();
+							Collection<Item> rmdsingleitems = paper.getRmdItem("1", paper.getRmdsinglechoice());
+							Collection<Item> reqsingleitems = paper.getReqItem("1");
+							singleitems.addAll(reqsingleitems);
+							singleitems.addAll(rmdsingleitems);
+							
+							Set<Item> multiitems = new HashSet<Item>();
+							Collection<Item> rmdmultiitems = paper.getRmdItem("2", paper.getRmdmultichoice());
+							Collection<Item> reqmultiitems = paper.getReqItem("2");
+							multiitems.addAll(reqmultiitems);
+							multiitems.addAll(rmdmultiitems);
+							
+							Set<Item> blankitems = new HashSet<Item>();
+							Collection<Item> rmdblankitems = paper.getRmdItem("3", paper.getRmdblank());
+							Collection<Item> reqblankitems = paper.getReqItem("3");
+							blankitems.addAll(reqblankitems);
+							blankitems.addAll(rmdblankitems);
+							
+							Set<Item> essayitems = new HashSet<Item>();
+							Collection<Item> rmdessayitems = paper.getRmdItem("4", paper.getRmdessay());
+							Collection<Item> reqessayitems = paper.getReqItem("4");
+							essayitems.addAll(reqessayitems);
+							essayitems.addAll(rmdessayitems);
+							
+							rhs.put("singleitems", singleitems);
+							rhs.put("multiitems", multiitems);
+							rhs.put("blankitems", blankitems);
+							rhs.put("essayitems", essayitems);
+							
+							//以单个题显示,默认显示全部试题
+							if(getpara("format").equals("single")){
+								//首先跳转页面要改变
+								taskPage = "exam/single.ftl";
+								//把所有题目放入Cache
+								List<Item> alldata = new ArrayList<Item>();
+								alldata.addAll(singleitems);
+								alldata.addAll(multiitems);
+								alldata.addAll(blankitems);
+								alldata.addAll(essayitems);
+								for (Item item : alldata) {
+									if(item.getChoiceitem().size() >0){
+										item.getChoiceitem();
+									}
+								}
+								//putSessionValue("items", alldata);
+								dataMap.put("items", alldata);
+								Cache.set(getCurrentAccount(), dataMap);
+								rhs.put("index", dataMap.get("index") == null? 0: dataMap.get("index"));
+								//放入第一题
+								rhs.put("item", alldata.get(Integer.valueOf(dataMap.get("index") == null? 0:(Integer)dataMap.get("index"))));
+								rhs.put("score", dataMap.get("score") == null? 0: dataMap.get("score"));
+								if(dataMap.get("paper") != null){
+									paper = (Paper) dataMap.get("paper");
+								}
+								// if(dataMap.get("template") != null){
+								// template = (Template) dataMap.get("template");
+								// }
+								//用于考试异常中断的时候，能够拿到最后一次的examrecordid。以便继续考。(否则会新建一条examrecord，这不合理)。
+								if(dataMap.get("allrecord") != null){
+									String[] recordsId = ((String) dataMap.get("allrecord")).split(",");
+									if(recordsId == null || ((Integer)dataMap.get("index")) == 0){
+										rhs.put("examrecordId","");
+									}else{
+										rhs.put("examrecordId", recordsId[recordsId.length - 1]);
+									}
+								}
+								
 							}
+							//同时设置exception为true，只有考生正确complete exam，exception才为false。
+							//String processInstanceId = task.getProcessInstanceId();
+							//infActiviti.setVariableByProcessInstanceId(processInstanceId, "exception", true);
 						}
-						//putSessionValue("items", alldata);
-						dataMap.put("items", alldata);
-						Cache.set(getCurrentAccount(), dataMap);
-						rhs.put("index", dataMap.get("index") == null? 0: dataMap.get("index"));
-						//放入第一题
-						rhs.put("item", alldata.get(Integer.valueOf(dataMap.get("index") == null? 0:(Integer)dataMap.get("index"))));
-						rhs.put("score", dataMap.get("score") == null? 0: dataMap.get("score"));
-						if(dataMap.get("paper") != null){
-							paper = (Paper) dataMap.get("paper");
-						}
-						// if(dataMap.get("template") != null){
-						// template = (Template) dataMap.get("template");
-						// }
-						//用于考试异常中断的时候，能够拿到最后一次的examrecordid。以便继续考。(否则会新建一条examrecord，这不合理)。
-						if(dataMap.get("allrecord") != null){
-							String[] recordsId = ((String) dataMap.get("allrecord")).split(",");
-							if(recordsId == null || ((Integer)dataMap.get("index")) == 0){
-								rhs.put("examrecordId","");
-							}else{
-								rhs.put("examrecordId", recordsId[recordsId.length - 1]);
-							}
-						}
-						
 					}
-					//同时设置exception为true，只有考生正确complete exam，exception才为false。
-					//String processInstanceId = task.getProcessInstanceId();
-					//infActiviti.setVariableByProcessInstanceId(processInstanceId, "exception", true);
+				}else{
+					method = "error";
+					rhs.put("info", "Invalid Exam!");
+					taskPage = "exam/error.ftl";
 				}
-				
 			}else if("reason".equals(method)){
 				
 			
@@ -205,7 +237,72 @@ public class ExamAction extends BaseProcessAction {
 		}
 	}
 	
-	public String exam_list(){
+	public String exam_complete(){
+		return "success";
+	}
+	
+	public String getstarttime() throws ParseException{
+		String taskid = getpara("taskid");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		String examarrangeid = String.valueOf(infActiviti.getVariableByTaskId(taskid, "examarrangeid"));
+		StringBuffer starttime = new StringBuffer();
+		if(!"".equals(examarrangeid) && examarrangeid != null){
+			Examarrange examarrange = (Examarrange)baseDao.loadById("Examarrange", Long.valueOf(examarrangeid));
+			Date start = sdf.parse(examarrange.getStarttime());
+			Date end = sdf.parse(examarrange.getEndtime());
+			String current_str = sdf.format(new Date());
+			Date current = sdf.parse(current_str);
+			if(current.before(start) || (current.before(end) && current.after(start))){
+				starttime.append(TimeUtil.compareDate(current, start));
+			}else{
+				starttime.append("Out of Date");
+			}
+		}else{
+			starttime.append("Start Time was not set!");
+		}
+		rhs.put("starttime", starttime.toString());
+		return "success";
+	}
+	
+	public String monitorexam(){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		String keycode = getpara("keycode");
+		String taskid = getpara("taskid");
+		String paperid = (String) infActiviti.getVariableByTaskId(taskid, "formId");
+		String assignee = (String)infActiviti.getVariableByTaskId(taskid, "assignee");
+		
+		
+		Monitor monitor = new Monitor();
+		monitor.setUserid(assignee);
+		monitor.setPaperid(paperid);
+		monitor.setTaskid(taskid);
+		monitor.setOperation(keycode);
+		monitor.setMonitordate(sdf.format(new Date()));
+		
+		baseDao.create(monitor);
+		
+		return null;
+	}
+	
+	public String showlog() throws Exception{
+		String taskid = getpara("taskid");
+		String userid = getpara("userid");
+		String paperid = getpara("paperid");
+		
+		String sql = "from Monitor m where m.userid='" + userid + "' and m.taskid='" + taskid + "' and m.paperid='" + paperid + "'";
+		
+		getPageData(sql);
+		
+		List<Monitor> list = (List)rhs.get("dataList");
+		
+		for (Monitor monitor : list) {
+			
+		}
+		
+		return "success";
+	}
+	
+	public String exam_list() throws ParseException{
 		String pageId = getpara("pageId");
 		String maxSize = getpara("maxSize");
 		if(pageId.equals("")) pageId = "1";
@@ -216,6 +313,7 @@ public class ExamAction extends BaseProcessAction {
 		List<OaTask> assigneeList = (List<OaTask>) map.get("dataList");
 		
 		List<OaTask> allData = new ArrayList< OaTask>();
+		List<OaTask> outData = new ArrayList< OaTask>();
 		
 		for (OaTask oaTask : assigneeList) {
 			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(oaTask.getFormId()));
@@ -229,11 +327,34 @@ public class ExamAction extends BaseProcessAction {
 				oaTask.setMethod("Input Reason");
 			}
 			
-			allData.add(oaTask);
+			String taskid = oaTask.getTask().getId();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+			String examarrangeid = String.valueOf(infActiviti.getVariableByTaskId(taskid, "examarrangeid"));
+			StringBuffer starttime = new StringBuffer();
+			if(!"".equals(examarrangeid) && examarrangeid != null){
+				Examarrange examarrange = (Examarrange)baseDao.loadById("Examarrange", Long.valueOf(examarrangeid));
+				Date start = sdf.parse(examarrange.getStarttime());
+				Date end = sdf.parse(examarrange.getEndtime());
+				String current_str = sdf.format(new Date());
+				Date current = sdf.parse(current_str);
+				if(current.before(start) || (current.before(end) && current.after(start))){
+					starttime.append(TimeUtil.compareDate(current, start));
+					oaTask.setStarttime(starttime.toString());
+					allData.add(oaTask);
+				}else{
+					//过期的使用另一个数组存放
+					starttime.append("Out of Date");
+					oaTask.setStarttime(starttime.toString());
+					outData.add(oaTask);
+				}
+			}else{
+				starttime.append("Start Time was not set!");
+			}
 		}
 
 		Pagination p = (Pagination)map.get("pagination");
 		rhs.put("oatasklist", allData);
+		rhs.put("oatasklist_outdate", outData);
 		rhs.put("maxSize", p.getMaxSize());
 		rhs.put("count", p.getTotalSize());
 		rhs.put("maxPage", p.getTotalPage());
@@ -260,8 +381,8 @@ public class ExamAction extends BaseProcessAction {
 			paperId = getpara("paperid");
 		}
 		
-		
 		if("assign".equals(method)){
+			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperId));
 			String autojudge = getpara("autojudge");
 			if("".equals(autojudge) || autojudge == null){
 				var.put("auto", true);
@@ -271,30 +392,56 @@ public class ExamAction extends BaseProcessAction {
 				var.put("judge", judge);
 			}
 			String[] assignees = getpara("assignee").split(",");//拿到分配考试的人,有可能是多人
+			String starttime = getpara("starttime");
+			String endtime = getpara("endtime");
 			//针对每个人,启动流程
 			String processInstanceId = "";
 			if(assignees.length > 1){
+				Examarrange examarrange = new Examarrange();
+				examarrange.setStarttime(starttime);
+				examarrange.setEndtime(endtime);
+				examarrange.setPaperid(paperId);
+				examarrange.setUserid(getpara("assignee"));
+				baseDao.create(examarrange);
 				for (String assignee : assignees) {
+					var.put("examarrangeid", examarrange.getId());
 					if("".equals(processInstanceId)){
 						processInstanceId = infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignee, var);
 					}else{
 						processInstanceId = processInstanceId + ","+ infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignee, var);
 					}
+					//add send email function at 2014/06/09 by HB
+					String content = "The exam of paper:<font color='red'>"
+							+ paper.getName()
+							+ "</font> has been started! The exam time start at <font color='red'>"
+							+ starttime
+							+ "</font>, and end at <font color='red'>"
+							+ endtime + "</font>, please attend the exam on time!";
+					sendStartEmail(assignee, content);
+					//end
 				}
 			}else{
+				Examarrange examarrange = new Examarrange();
+				examarrange.setStarttime(starttime);
+				examarrange.setEndtime(endtime);
+				examarrange.setPaperid(paperId);
+				examarrange.setUserid(assignees[0]);
+				baseDao.create(examarrange);
+				var.put("examarrangeid", examarrange.getId());
 				processInstanceId = infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignees[0], var);
 			}
-			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperId));
 			paper.setProcessInstanceId(processInstanceId);
 			baseDao.update(paper);
 			page = "exam_paper_list.do";
 		}else if("start".equals(method)){
 			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperId));
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Examrecord record = new Examrecord();
 			record.setUserid(getCurrentAccount());
 			record.setRecorddate(sdf.format(new Date()));
 			record.setPaper(paper);
+			record.setTaskid(taskId);
+			record.setExamarrangeid(String.valueOf(infActiviti.getVariableByTaskId(taskId, "examarrangeid")));
 			record.setRemark("Wait for judge");
 			baseDao.create(record);
 			for (Result res : result) {
@@ -379,12 +526,13 @@ public class ExamAction extends BaseProcessAction {
 
 	//计算当前一个题目的分数，并且继续下一题，该方法只能被用于以single方式打开试卷的时候。
 	public String complete_task_single(){
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		boolean finsh = false;
 		Examrecord examrecord = null;
 		String allrecordid = "";
 		Map<String, Object> var = new HashMap<String, Object>();
 		Map<String, Object> dataMap = (Map<String, Object>) Cache.get(getCurrentAccount());
+		String taskId = getpara("taskId");
 		List<Item> items = (List<Item>) dataMap.get("items");
 		int index = Integer.valueOf(((getpara("index").equals(""))?"0":getpara("index")));
 		int score = Integer.valueOf(((getpara("score").equals(""))?"0":getpara("score")));
@@ -392,6 +540,8 @@ public class ExamAction extends BaseProcessAction {
 		allrecordid = String.valueOf(dataMap.get("allrecord"));
 		if("".equals(examrecordId)){
 			examrecord = new Examrecord();
+			examrecord.setTaskid(taskId);
+			examrecord.setExamarrangeid((String)infActiviti.getVariableByTaskId(taskId, "examarrangeid"));
 			examrecord.setUserid(getCurrentAccount());
 			examrecord.setRecorddate(sdf.format(new Date()));
 			examrecord.setRemark("Wait for judge");
@@ -407,7 +557,6 @@ public class ExamAction extends BaseProcessAction {
 			examrecord = (Examrecord)baseDao.loadById("Examrecord", Long.valueOf(examrecordId));
 		}
 		
-		String taskId = getpara("taskId");
 		Task task = infActiviti.getTaskById(taskId);
 		String paperId = (String)infActiviti.getVariableByTaskId(taskId, "formId");
 		Paper paper = (Paper) dataMap.get("paper");
@@ -628,8 +777,82 @@ public class ExamAction extends BaseProcessAction {
 			}
 			rhs.put("export", true);
 		}
+		
+		Map<String,List<Monitor>> monitorData = new HashMap<String, List<Monitor>>();
+		for (Examrecord examrecord : recordList) {
+			String paperid = String.valueOf(examrecord.getPaper().getId());
+			String taskid = examrecord.getTaskid();
+			String userid = examrecord.getUserid();
+			
+			String monitor_sql = "from Monitor m where m.userid='" + userid + "' and m.taskid='" + taskid + "' and m.paperid='" + paperid + "'";
+			
+			getPageData(monitor_sql);
+			
+			List<Monitor> monitorList = (List)rhs.get("dataList");
+			
+			monitorData.put(String.valueOf(examrecord.getId()), monitorList);
+		}
+		rhs.put("monitorlist", monitorData);
 		rhs.put("datalist", dataMap);
 		return "success";
+	}
+	
+	public String exam_arrange_list() throws Exception{
+		String sql = "from Examarrange";
+		Map<String,Paper> paperList = new HashMap<String, Paper>();
+		Map<String,List<Examrecord>> recordList = new HashMap<String, List<Examrecord>>();
+		getPageData(sql);
+		
+		List<Examarrange> arrangeList = (List<Examarrange>) rhs.get("dataList");
+		
+		for (Examarrange examarrange : arrangeList) {
+			List<Examrecord> examrecordList = new ArrayList<Examrecord>();
+			String paperid = examarrange.getPaperid();
+			String arrangeid = String.valueOf(examarrange.getId());
+			String[] userid = examarrange.getUserid().split(",");
+			Paper paper = (Paper) baseDao.loadById("Paper", Long.valueOf(paperid));
+			paperList.put(arrangeid, paper);
+			
+			if(userid.length > 1){
+				for (String user : userid) {
+					examrecordList.addAll(getExamRecord(user,paperid,arrangeid));
+				}
+			}else{
+				examrecordList.addAll(getExamRecord(userid[0],paperid,arrangeid));
+			}
+			recordList.put(arrangeid, examrecordList);
+		}
+		
+		rhs.put("export", true);
+		rhs.put("recordlist", recordList);
+		rhs.put("paperlist", paperList);
+		rhs.put("datalist", arrangeList);
+		return "success";
+	}
+	
+	public List<Examrecord> getExamRecord(String userid,String paperid,String examarrangeid) throws Exception{
+		String sql = "from Examrecord e where e.examarrangeid='"
+				+ examarrangeid + "' and e.userid='" + userid + "'";
+		
+		getPageData(sql);
+		
+		Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperid));
+		
+		Set<Examrecord> recordlisttmp = paper.getResultdetail();
+		
+		List<Examrecord> recordlist = (List<Examrecord>) rhs.get("dataList");
+		
+		List<Examrecord> datalist = new ArrayList<Examrecord>();
+		
+		for (Examrecord examrecord : recordlisttmp) {
+			for (Examrecord record : recordlist) {
+				if(examrecord.getId() == record.getId()){
+					datalist.add(examrecord);
+				}
+			}
+		}
+		
+		return datalist;
 	}
 	
 	public String export_record() throws IOException{
@@ -700,6 +923,30 @@ public class ExamAction extends BaseProcessAction {
 
 	public void setResults(List<Result> result) {
 		this.result = result;
+	}
+	
+	public void sendStartEmail(String account,String content){
+		User user = (User)baseDao.loadByFieldValue(User.class, "account", account);
+		String mail = "";
+		if(user != null){
+			if(user.getEmail() != null && !"".equals(user.getEmail())){
+				if(!"".equals(mail)){
+					mail = mail + "," + user.getEmail();
+				}else{
+					mail = mail + user.getEmail();
+				}
+			}
+			if(user.getEmail2() != null && !"".equals(user.getEmail2())){
+				if(!"".equals(mail)){
+					mail = mail + "," + user.getEmail2();
+				}else{
+					mail = mail + user.getEmail2();
+				}
+			}
+		}
+		//send mail
+		infEa.sendMailTheadBySmtpList("Exam has been Started!", content, 
+				mail, "", "", null);
 	}
 	
 }
