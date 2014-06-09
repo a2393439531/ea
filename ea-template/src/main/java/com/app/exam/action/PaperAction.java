@@ -52,7 +52,7 @@ public class PaperAction extends BaseEaAction {
 		if(knowledgevalue.size() != 0){
 			for (String knowledge : knowledgevalue) {
 				Knowledge kl = (Knowledge)baseDao.loadById("Knowledge", Long.valueOf(knowledge));
-				list.addAll(kl.getPapers());
+				list.addAll(kl.getAllPaper(kl));
 			}
 		}else{
 			list.addAll((Collection<? extends Paper>) rhs.get("dataList"));

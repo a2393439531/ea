@@ -122,4 +122,29 @@ public class Knowledge extends BaseModel {
 		this.papers = papers;
 	}
 
+	public Set<Item> getAllItem(Knowledge knowledge){
+		Set<Item> items = new HashSet<Item>();
+		if(knowledge.getChildKnowledges() != null && knowledge.getChildKnowledges().size() > 0){
+			Set<Knowledge> childknowledges = knowledge.getChildKnowledges();
+			for (Knowledge childknowledge : childknowledges) {
+				items.addAll(getAllItem(childknowledge));
+			}
+		}else{
+			items.addAll(knowledge.getItems());
+		}
+		return items;
+	}
+	
+	public Set<Paper> getAllPaper(Knowledge knowledge){
+		Set<Paper> items = new HashSet<Paper>();
+		if(knowledge.getChildKnowledges() != null && knowledge.getChildKnowledges().size() > 0){
+			Set<Knowledge> childknowledges = knowledge.getChildKnowledges();
+			for (Knowledge childknowledge : childknowledges) {
+				items.addAll(getAllPaper(childknowledge));
+			}
+		}else{
+			items.addAll(knowledge.getPapers());
+		}
+		return items;
+	}
 }

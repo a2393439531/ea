@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 import com.app.common.activiti.action.BaseProcessAction;
 import com.app.common.activiti.api.OaTask;
 import com.app.common.spring.ssh.page.Pagination;
+import com.app.ea.model.User;
 import com.app.exam.model.Examarrange;
 import com.app.exam.model.Examrecord;
 import com.app.exam.model.Item;
@@ -380,8 +381,8 @@ public class ExamAction extends BaseProcessAction {
 			paperId = getpara("paperid");
 		}
 		
-		
 		if("assign".equals(method)){
+			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperId));
 			String autojudge = getpara("autojudge");
 			if("".equals(autojudge) || autojudge == null){
 				var.put("auto", true);
@@ -409,6 +410,15 @@ public class ExamAction extends BaseProcessAction {
 					}else{
 						processInstanceId = processInstanceId + ","+ infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignee, var);
 					}
+					//add send email function at 2014/06/09 by HB
+					String content = "The exam of paper:<font color='red'>"
+							+ paper.getName()
+							+ "</font> has been started! The exam time start at <font color='red'>"
+							+ starttime
+							+ "</font>, and end at <font color='red'>"
+							+ endtime + "</font>, please attend the exam on time!";
+					sendStartEmail(assignee, content);
+					//end
 				}
 			}else{
 				Examarrange examarrange = new Examarrange();
@@ -420,7 +430,6 @@ public class ExamAction extends BaseProcessAction {
 				var.put("examarrangeid", examarrange.getId());
 				processInstanceId = infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignees[0], var);
 			}
-			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperId));
 			paper.setProcessInstanceId(processInstanceId);
 			baseDao.update(paper);
 			page = "exam_paper_list.do";
@@ -856,6 +865,30 @@ public class ExamAction extends BaseProcessAction {
 
 	public void setResults(List<Result> result) {
 		this.result = result;
+	}
+	
+	public void sendStartEmail(String account,String content){
+		User user = (User)baseDao.loadByFieldValue(User.class, "account", account);
+		String mail = "";
+		if(user != null){
+			if(user.getEmail() != null && !"".equals(user.getEmail())){
+				if(!"".equals(mail)){
+					mail = mail + "," + user.getEmail();
+				}else{
+					mail = mail + user.getEmail();
+				}
+			}
+			if(user.getEmail2() != null && !"".equals(user.getEmail2())){
+				if(!"".equals(mail)){
+					mail = mail + "," + user.getEmail2();
+				}else{
+					mail = mail + user.getEmail2();
+				}
+			}
+		}
+		//send mail
+		infEa.sendMailTheadBySmtpList("Exam has been Started!", content, 
+				mail, "", "", null);
 	}
 	
 }
