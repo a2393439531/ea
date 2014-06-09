@@ -797,6 +797,64 @@ public class ExamAction extends BaseProcessAction {
 		return "success";
 	}
 	
+	public String exam_arrange_list() throws Exception{
+		String sql = "from Examarrange";
+		Map<String,Paper> paperList = new HashMap<String, Paper>();
+		Map<String,List<Examrecord>> recordList = new HashMap<String, List<Examrecord>>();
+		getPageData(sql);
+		
+		List<Examarrange> arrangeList = (List<Examarrange>) rhs.get("dataList");
+		
+		for (Examarrange examarrange : arrangeList) {
+			List<Examrecord> examrecordList = new ArrayList<Examrecord>();
+			String paperid = examarrange.getPaperid();
+			String arrangeid = String.valueOf(examarrange.getId());
+			String[] userid = examarrange.getUserid().split(",");
+			Paper paper = (Paper) baseDao.loadById("Paper", Long.valueOf(paperid));
+			paperList.put(arrangeid, paper);
+			
+			if(userid.length > 1){
+				for (String user : userid) {
+					examrecordList.addAll(getExamRecord(user,paperid,arrangeid));
+				}
+			}else{
+				examrecordList.addAll(getExamRecord(userid[0],paperid,arrangeid));
+			}
+			recordList.put(arrangeid, examrecordList);
+		}
+		
+		rhs.put("export", true);
+		rhs.put("recordlist", recordList);
+		rhs.put("paperlist", paperList);
+		rhs.put("datalist", arrangeList);
+		return "success";
+	}
+	
+	public List<Examrecord> getExamRecord(String userid,String paperid,String examarrangeid) throws Exception{
+		String sql = "from Examrecord e where e.examarrangeid='"
+				+ examarrangeid + "' and e.userid='" + userid + "'";
+		
+		getPageData(sql);
+		
+		Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperid));
+		
+		Set<Examrecord> recordlisttmp = paper.getResultdetail();
+		
+		List<Examrecord> recordlist = (List<Examrecord>) rhs.get("dataList");
+		
+		List<Examrecord> datalist = new ArrayList<Examrecord>();
+		
+		for (Examrecord examrecord : recordlisttmp) {
+			for (Examrecord record : recordlist) {
+				if(examrecord.getId() == record.getId()){
+					datalist.add(examrecord);
+				}
+			}
+		}
+		
+		return datalist;
+	}
+	
 	public String export_record() throws IOException{
 		String paperId = getpara("paperId");
 		
