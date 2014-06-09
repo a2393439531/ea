@@ -441,7 +441,7 @@ public class ExamAction extends BaseProcessAction {
 			record.setRecorddate(sdf.format(new Date()));
 			record.setPaper(paper);
 			record.setTaskid(taskId);
-			record.setExamarrangeid((String)infActiviti.getVariableByTaskId(taskId, "examarrangeid"));
+			record.setExamarrangeid(String.valueOf(infActiviti.getVariableByTaskId(taskId, "examarrangeid")));
 			record.setRemark("Wait for judge");
 			baseDao.create(record);
 			for (Result res : result) {
