@@ -836,23 +836,23 @@ public class ExamAction extends BaseProcessAction {
 		
 		getPageData(sql);
 		
-		Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperid));
 		
-		Set<Examrecord> recordlisttmp = paper.getResultdetail();
 		
 		List<Examrecord> recordlist = (List<Examrecord>) rhs.get("dataList");
 		
-		List<Examrecord> datalist = new ArrayList<Examrecord>();
+		//Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperid));
+		// Set<Examrecord> recordlisttmp = paper.getResultdetail();
+		// List<Examrecord> datalist = new ArrayList<Examrecord>();
+		//
+		// for (Examrecord examrecord : recordlisttmp) {
+		// for (Examrecord record : recordlist) {
+		// if(examrecord.getId() == record.getId()){
+		// datalist.add(examrecord);
+		// }
+		// }
+		// }
 		
-		for (Examrecord examrecord : recordlisttmp) {
-			for (Examrecord record : recordlist) {
-				if(examrecord.getId() == record.getId()){
-					datalist.add(examrecord);
-				}
-			}
-		}
-		
-		return datalist;
+		return recordlist;
 	}
 	
 	public String export_record() throws IOException{
@@ -867,6 +867,34 @@ public class ExamAction extends BaseProcessAction {
                 "attachment; filename="+ java.net.URLEncoder.encode(paper.getName(), "UTF-8") +"_result.xls");
         ServletOutputStream os = response.getOutputStream();
 		ExcelUtil.exportToExcel(paper, os);
+		os.close();
+		return null;
+	}
+	
+	public String export_arrange_record() throws Exception{
+		String arrangeid = getpara("arrangeid");
+		String paperid = getpara("paperid");
+		Examarrange examarrange = (Examarrange) baseDao.loadById("Examarrange", Long.valueOf(arrangeid));
+		String userid = examarrange.getUserid();
+		String[] userstr = userid.split(",");
+		List<Examrecord> datalist = new ArrayList<Examrecord>();
+		for (String user : userstr) {
+			String sql = "from Examrecord e where e.examarrangeid='" + arrangeid + "' and e.userid='" +  user +"'";
+			getPageData(sql);
+			datalist.addAll((Collection<? extends Examrecord>) rhs.get("dataList"));
+		}
+		
+		Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperid));
+		
+		HttpServletResponse response = ServletActionContext.getResponse();
+		
+		response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", 
+                "attachment; filename="+ java.net.URLEncoder.encode(paper.getName(), "UTF-8") +"_result.xls");
+        ServletOutputStream os = response.getOutputStream();
+        if(datalist.size() != 0){
+        	ExcelUtil.exportArrangeToExcel(datalist, os);
+        }
 		os.close();
 		return null;
 	}
