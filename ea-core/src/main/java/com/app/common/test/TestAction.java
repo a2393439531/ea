@@ -72,7 +72,9 @@ public class TestAction extends BaseEaAction {
 		MatrixToImageWriter.writeToFile(bitMatrix, format, outputFile);
 	}
 			
-	
+	public String ckeditor(){
+		return "success";
+	}
 	public String menu_para() throws Exception {
 		rhs.put("system_para_map", 	infEa.getParaMap());
 		rhs.put("info_type", "success");
