@@ -1,5 +1,7 @@
 package com.app.ea.action;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -11,6 +13,7 @@ import com.app.common.base.action.BaseEaAction;
 import com.app.ea.hsql.Hsql;
 import com.app.ea.model.Organize;
 import com.app.ea.model.User;
+import com.utils.math.MathUtil;
 @Component("userAction")
 @Scope("prototype")
 @SuppressWarnings("unchecked")
@@ -25,8 +28,20 @@ public class UserAction extends BaseEaAction {
 	}
 
 	public String create() throws Exception {
+		//随机生成6位密码。
+		String[] num = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a",
+				"b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+				"n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y",
+				"z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
+				"L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W",
+				"X", "Y", "Z" };
+		StringBuilder sb = new StringBuilder();
+		List<Integer> list = MathUtil.generateRmdNum(0, num.length, 6);
+		for (Integer i : list) {
+			sb.append(num[i]);
+		}
 		
-		infEa.createUser("", "abc123");
+		infEa.createUser("", sb.toString());
 		getPageData(Hsql.All_USER);
 		rhs.put("system_para_map", 	infEa.getParaMap());
 		return "success";

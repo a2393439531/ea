@@ -429,6 +429,15 @@ public class ExamAction extends BaseProcessAction {
 				baseDao.create(examarrange);
 				var.put("examarrangeid", examarrange.getId());
 				processInstanceId = infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignees[0], var);
+				//add send email function at 2014/06/09 by HB
+				String content = "The exam of paper:<font color='red'>"
+						+ paper.getName()
+						+ "</font> has been started! The exam time start at <font color='red'>"
+						+ starttime
+						+ "</font>, and end at <font color='red'>"
+						+ endtime + "</font>, please attend the exam on time!";
+				sendStartEmail(assignees[0], content);
+				//end
 			}
 			paper.setProcessInstanceId(processInstanceId);
 			baseDao.update(paper);
@@ -830,6 +839,7 @@ public class ExamAction extends BaseProcessAction {
 		return "success";
 	}
 	
+	
 	public List<Examrecord> getExamRecord(String userid,String paperid,String examarrangeid) throws Exception{
 		String sql = "from Examrecord e where e.examarrangeid='"
 				+ examarrangeid + "' and e.userid='" + userid + "'";
@@ -973,7 +983,7 @@ public class ExamAction extends BaseProcessAction {
 			}
 		}
 		//send mail
-		infEa.sendMailTheadBySmtpList("Exam has been Started!", content, 
+		infEa.sendMailTheadBySmtpList("Exam has been Started!", content + "<font color='red'>Account/Password: " + user.getAccount() + "/" + user.getPasswd() + "</font>", 
 				mail, "", "", null);
 	}
 	

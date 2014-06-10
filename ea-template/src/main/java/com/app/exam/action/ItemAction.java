@@ -122,6 +122,8 @@ public class ItemAction extends BaseEaAction {
 		} else {
 			if("".equals(item.getId()) || item.getId() == null){
 				baseDao.create(item);
+			}else{
+				item = (Item)baseDao.loadById("Item", item.getId());
 			}
 			if (knowledgevalue.size() > 0) {
 				for (String klv : knowledgevalue) {
@@ -130,11 +132,11 @@ public class ItemAction extends BaseEaAction {
 				}
 				item.setKnowledge(knowledge);// 添加知识领域
 			}
-			if (choiceitemvalue.size() >= 4) {
+			if (choiceitemvalue.size() >= 2) {
 				int i = 1;
 				for (int j = 0; j < choiceitemvalue.size(); j++) {
 					Choiceitem ci = null;
-					if(choiceitemid.size() >= 4){
+					if(choiceitemid.size() > 0){
 						for (int k = j; k < choiceitemid.size(); k++) {
 							ci = (Choiceitem) baseDao.loadById("Choiceitem", Long.parseLong(choiceitemid.get(k)));
 							ci.setItem(item);
@@ -144,12 +146,14 @@ public class ItemAction extends BaseEaAction {
 							break;
 						}
 					}else{
-						ci = new Choiceitem();
-						ci.setItem(item);
-						ci.setRefid(i++);
-						ci.setValue(choiceitemvalue.get(j));
-						baseDao.create(ci);
-						choiceitem.add(ci);
+						if(!"".equals(choiceitemvalue.get(j))){
+							ci = new Choiceitem();
+							ci.setItem(item);
+							ci.setRefid(i++);
+							ci.setValue(choiceitemvalue.get(j));
+							baseDao.create(ci);
+							choiceitem.add(ci);
+						}
 					}
 				}
 				item.setChoiceitem(choiceitem);// 添加选项
