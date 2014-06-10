@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<#include "../../../common/freemarker/include_header.ftl">
 <html>
 <head>
     <title>CKEditor Classic Editing Sample</title>
     <!-- Make sure the path to CKEditor is correct. -->
-    <script src="ckeditor/ckeditor.js"></script>
+    <script src="common/ckeditor/ckeditor.js"></script>
 </head>
 <body>
     <form method="post">

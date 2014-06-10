@@ -14,3 +14,5 @@
 2014-06-10 11:05:24| 耗时com.app.ea.api.ImpEa.getAllUser()耗时0.006 秒  
 2014-06-10 12:12:08| 耗时com.app.ea.api.ImpEa.getAllUser()耗时0.021 秒  
 2014-06-10 12:12:08| 耗时com.app.ea.api.ImpEa.getAllUser()耗时0.006 秒  
+2014-06-10 12:20:57| 耗时com.app.ea.api.ImpEa.getAllUser()耗时0.026 秒  
+2014-06-10 12:20:57| 耗时com.app.ea.api.ImpEa.getAllUser()耗时0.006 秒  
