@@ -125,9 +125,11 @@ public class ItemAction extends BaseEaAction {
 			}else{
 				String content = item.getContent();
 				String refkey = item.getRefkey();
+				String score = item.getMark();
 				item = (Item)baseDao.loadById("Item", item.getId());
 				item.setContent(content);
 				item.setRefkey(refkey);
+				item.setMark(score);
 			}
 			if (knowledgevalue.size() > 0) {
 				for (String klv : knowledgevalue) {
@@ -135,6 +137,8 @@ public class ItemAction extends BaseEaAction {
 					knowledge.add(kn);
 				}
 				item.setKnowledge(knowledge);// 添加知识领域
+			}else{
+				item.setKnowledge(null);
 			}
 			if (choiceitemvalue.size() >= 2) {
 				int i = 1;

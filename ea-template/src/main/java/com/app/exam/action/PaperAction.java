@@ -450,12 +450,70 @@ public class PaperAction extends BaseEaAction {
 				rhs.put("paper", paper);
 				//rhs.put("template", template);
 			//}
+			Set<Knowledge> knowledges = paper.getKnowledge();
+			int maxsinglechoicecount = 0;
+			int maxmultichoicecount = 0;
+			for (Knowledge knowledge : knowledges) {
+				Set<Item> tmpitems = knowledge.getItems();
+				for (Item item : tmpitems) {
+					switch(item.getType()){
+					case 1:
+						maxsinglechoicecount ++;
+						break;
+					case 2:
+						maxmultichoicecount ++;
+						break;
+					case 3:
+						break;
+					case 4:
+						break;
+					}
+				}
+			}
+			rhs.put("maxmultichoicecount", maxmultichoicecount);
+			rhs.put("maxsinglechoicecount", maxsinglechoicecount);
 		}
 		rhs.put("byexcel", byexcel);
 		rhs.put("method", getpara("method"));
 		return "success";
 	}
 
+	public String getmaxitem() throws Exception{
+		int maxsinglechoicecount = 0;
+		int maxmultichoicecount = 0;
+		Set<Knowledge> knowledges = new HashSet<Knowledge>();
+		List<Knowledge> knowledgerootlist = common_get_tree_root("Knowledge");
+		String[] knowledgesid = getpara("knowledgesid").split(",");
+		if (knowledgesid.length > 0) {
+			for (String value : knowledgesid) {
+				Knowledge kn = getKnowledgeById(knowledgerootlist, value);
+				if(kn != null){
+					knowledges.add(kn);
+				}
+			}
+			for (Knowledge knowledge : knowledges) {
+				Set<Item> tmpitems = knowledge.getItems();
+				for (Item item : tmpitems) {
+					switch (item.getType()) {
+					case 1:
+						maxsinglechoicecount++;
+						break;
+					case 2:
+						maxmultichoicecount++;
+						break;
+					case 3:
+						break;
+					case 4:
+						break;
+					}
+				}
+			}
+		}
+		rhs.put("maxsinglechoicecount", maxsinglechoicecount);
+		rhs.put("maxmultichoicecount", maxmultichoicecount);
+		return "success";
+	}
+	
 	protected Knowledge getKnowledgeById(
 			Collection<Knowledge> knowledgerootlist, String id)
 			throws Exception {

@@ -74,19 +74,30 @@ public class ExcelUtil {
 		
 		for (String username : usernames) {
 			Map<Knowledge,Set<Result>> dataMap = new HashMap<Knowledge,Set<Result>>();
+			Knowledge k = new Knowledge();
+			k.setName("no category");
 			HSSFSheet sheet = workbook.createSheet(username);
 			Set<Result> results = map.get(username);
 			Set<Result> resultdata = null;
 			for (Result result : results) {
 				Item item = result.getItem();
 				Set<Knowledge> knowledges = item.getKnowledge();
-				for (Knowledge knowledge : knowledges) {
-					resultdata = (Set<Result>) dataMap.get(knowledge);
+				if(knowledges.size() > 0){
+					for (Knowledge knowledge : knowledges) {
+						resultdata = (Set<Result>) dataMap.get(knowledge);
+						if(resultdata == null){
+							resultdata = new HashSet<Result>();
+						}
+						resultdata.add(result);
+						dataMap.put(knowledge, resultdata);
+					}
+				}else{
+					resultdata = (Set<Result>) dataMap.get(k);
 					if(resultdata == null){
 						resultdata = new HashSet<Result>();
 					}
 					resultdata.add(result);
-					dataMap.put(knowledge, resultdata);
+					dataMap.put(k, resultdata);
 				}
 			}
 			//dataMap已经有数据
@@ -171,19 +182,30 @@ public class ExcelUtil {
 		
 		for (String username : usernames) {
 			Map<Knowledge,Set<Result>> dataMap = new HashMap<Knowledge,Set<Result>>();
+			Knowledge k = new Knowledge();
+			k.setName("no category");
 			HSSFSheet sheet = workbook.createSheet(username);
 			Set<Result> results = map.get(username);
 			Set<Result> resultdata = null;
 			for (Result result : results) {
 				Item item = result.getItem();
 				Set<Knowledge> knowledges = item.getKnowledge();
-				for (Knowledge knowledge : knowledges) {
-					resultdata = (Set<Result>) dataMap.get(knowledge);
+				if(knowledges.size() > 0){
+					for (Knowledge knowledge : knowledges) {
+						resultdata = (Set<Result>) dataMap.get(knowledge);
+						if(resultdata == null){
+							resultdata = new HashSet<Result>();
+						}
+						resultdata.add(result);
+						dataMap.put(knowledge, resultdata);
+					}
+				}else{
+					resultdata = (Set<Result>) dataMap.get(k);
 					if(resultdata == null){
 						resultdata = new HashSet<Result>();
 					}
 					resultdata.add(result);
-					dataMap.put(knowledge, resultdata);
+					dataMap.put(k, resultdata);
 				}
 			}
 			//dataMap已经有数据
