@@ -110,7 +110,7 @@ public class ItemAction extends BaseEaAction {
 	}
 
 	public String save() throws Exception {
-		Set<Choiceitem> choiceitem = new HashSet<Choiceitem>();
+		List<Choiceitem> choiceitem = new ArrayList<Choiceitem>();
 		Set<Knowledge> knowledge = new HashSet<Knowledge>();
 
 		List<Knowledge> knowledgerootlist = common_get_tree_root("Knowledge");
@@ -245,10 +245,10 @@ public class ItemAction extends BaseEaAction {
 		Uploadfile uploadFile = new Uploadfile(fileType, fileName, fileName, foreignId, "/file/" + folder + "/"  + newFileName);
 		baseDao.create(uploadFile);
 		//上传成功，然后开始生成题目
-		Map<Item,Set<Choiceitem>> data = ItemUtil.getDataByXLS(deskFile);
+		Map<Item,List<Choiceitem>> data = ItemUtil.getDataByXLS(deskFile);
 		Set<Item> items = data.keySet();
 		for (Item item : items) {
-			Set<Choiceitem> choiceitems = data.get(item);
+			List<Choiceitem> choiceitems = data.get(item);
 			item.setChoiceitem(choiceitems);
 			baseDao.create(item);
 			for (Choiceitem choiceitem : choiceitems) {

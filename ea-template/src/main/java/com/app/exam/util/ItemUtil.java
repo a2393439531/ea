@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -289,9 +290,9 @@ public class ItemUtil {
 		}
 	}
 	
-	public static Map<Item,Set<Choiceitem>> getDataByXLS(File file){
+	public static Map<Item,List<Choiceitem>> getDataByXLS(File file){
 		BaseDao baseDao = (BaseDao)SpringContext.getBean("eaDaoTarget");
-		Map<Item,Set<Choiceitem>> data = new HashMap<Item, Set<Choiceitem>>();
+		Map<Item,List<Choiceitem>> data = new HashMap<Item, List<Choiceitem>>();
 		HSSFWorkbook workbook = null;
         HSSFSheet sheet = null;
         HSSFRow row = null;
@@ -308,12 +309,12 @@ public class ItemUtil {
 						rowNum=rowNum+1;
 					}else{
 						Item item = new Item();
-						Set<Choiceitem> choiceitems = null;
+						List<Choiceitem> choiceitems = null;
 						Set<Knowledge> knowledges = new HashSet<Knowledge>();
 						//开始读取该行的数据
 						int cellNum = row.getLastCellNum();//拿到该行cell数量
 						String cellValue = "";
-						choiceitems = new HashSet<Choiceitem>();
+						choiceitems = new ArrayList<Choiceitem>();
 						// 这里cellNum要加上1
                         for (short c = 0; c < cellNum + 1; c++){
                         	cell = row.getCell(c);

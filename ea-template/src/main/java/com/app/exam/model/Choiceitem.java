@@ -1,5 +1,7 @@
 package com.app.exam.model;
 
+import java.util.Random;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -62,6 +64,21 @@ public class Choiceitem extends BaseModel {
 		this.value = value;
 	}
 	
+
+	@Override
+	public int compareTo(Object o) {
+		String[] seed = {"-1","1"};
+		// TODO Auto-generated method stub
+		if(o instanceof Choiceitem){
+			if(this.id == (((Choiceitem) o).getId())){
+				return 0;
+			}else{
+				int result = Math.random()>0.5?1:0; 
+				return Integer.valueOf(seed[result]);
+			}
+		}
+		return super.compareTo(o);
+	}
 	
 	
 }
