@@ -123,7 +123,11 @@ public class ItemAction extends BaseEaAction {
 			if("".equals(item.getId()) || item.getId() == null){
 				baseDao.create(item);
 			}else{
+				String content = item.getContent();
+				String refkey = item.getRefkey();
 				item = (Item)baseDao.loadById("Item", item.getId());
+				item.setContent(content);
+				item.setRefkey(refkey);
 			}
 			if (knowledgevalue.size() > 0) {
 				for (String klv : knowledgevalue) {
