@@ -137,7 +137,7 @@ public class ExcelUtil {
 	        			knowledgecell.setCellValue(knowledge.getName());
 	        			//question
 	        			HSSFCell questioncell = row.createCell((short) 2);
-	        			questioncell.setCellValue(result.getItem().getContent());
+	        			questioncell.setCellValue(result.getItem().getContent().replaceAll("<[^>]*>",""));
 	        			//date
 	        			HSSFCell datecell = row.createCell((short) 3);
 	        			datecell.setCellValue(result.getExamrecord().getRecorddate());
@@ -245,7 +245,7 @@ public class ExcelUtil {
 	        			knowledgecell.setCellValue(knowledge.getName());
 	        			//question
 	        			HSSFCell questioncell = row.createCell((short) 2);
-	        			questioncell.setCellValue(result.getItem().getContent());
+	        			questioncell.setCellValue(result.getItem().getContent().replaceAll("<[^>]*>",""));
 	        			//date
 	        			HSSFCell datecell = row.createCell((short) 3);
 	        			datecell.setCellValue(result.getExamrecord().getRecorddate());

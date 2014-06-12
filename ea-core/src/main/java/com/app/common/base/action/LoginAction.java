@@ -27,6 +27,7 @@ public class LoginAction extends BaseEaAction {
 	private final Logger log = LoggerFactory.getLogger(LoginAction.class);
 
 	public String execute() throws Exception {
+		String method = getpara("method");
 	    infEa.initData();
 		String account = getpara("account");
 		String password = getpara("password");
@@ -39,23 +40,58 @@ public class LoginAction extends BaseEaAction {
 			putSessionValue("lang", "en");
 		}
 		if (account.equals("")) {
-			rhs.put("tipInfo", "用户不能为空");
+			rhs.put("tipInfo", "Account can not be empty!");
 			if("app".equals(type)) return "app_fail";
+			if("forget".equals(method)){
+				return "forget";
+			}
 			return "fail";
 		}
 		System.out.println("EA查出用户个数=" + infEa.getAllUser().size());
 		User user = (User) infEa.getUserbyAccount(account);
 		if (user==null) {
-			rhs.put("tipInfo", "用户名不存在");
+			rhs.put("tipInfo", "Account can not be empty!");
 			if("app".equals(type)) return "app_fail";
+			if("forget".equals(method)){
+				return "forget";
+			}
 			return "fail";
 		}
+		//新增忘记密码
+		if("forget".equals(method)){
+			String content = "The Password has been sent to you by email!";
+			
+			String mail = "";
+			if(user != null){
+				if(user.getEmail() != null && !"".equals(user.getEmail())){
+					if(!"".equals(mail)){
+						mail = mail + "," + user.getEmail();
+					}else{
+						mail = mail + user.getEmail();
+					}
+				}
+				if(user.getEmail2() != null && !"".equals(user.getEmail2())){
+					if(!"".equals(mail)){
+						mail = mail + "," + user.getEmail2();
+					}else{
+						mail = mail + user.getEmail2();
+					}
+				}
+			}
+			//send mail
+			infEa.sendMailTheadBySmtpList("NRJ TOOLS PASSWORD!", "<font color='red'>Account/Password: " + user.getAccount() + "/" + user.getPasswd() + "</font>", 
+					mail, "", "", null);
+			
+			rhs.put("tipInfo", content);
+			return "fail";
+		}
+		
 		String result = "";
 		result = infEa.checkLogin(account, password);
 	
 		
 		if (result.equals("0001")) {
-			rhs.put("tipInfo", "用户不存在或者密码错误");
+			rhs.put("tipInfo", "Account was not exists or Password was incorrectly!");
 		}
 		if (result.equals("0000")) { // 验证成功
 

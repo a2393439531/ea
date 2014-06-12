@@ -91,7 +91,7 @@
 			        <tr><td>文件上传：<a href="common_test_upload.do" target=_blank class="btn btn-xs btn-default">文件上传</a>  <a href="common_test_upload.do" target=_blank class="btn btn-xs btn-default">图片上传</a></tr>
 			        
 			        <tr><td>编辑组件：<a href="common_test_ckeditor.do" target=_blank class="btn btn-xs btn-default">Ckedit</a>  <a href="common_test_upload.do" target=_blank class="btn btn-xs btn-default">boostrap</a></td></tr>
-			        
+			        <tr><td>除去文本中的html标签: String noHtmlContent = content.replaceAll("<[^>]*>",""); </td></tr>
 			        <tr><td>弹出框&对话框：<a href="common_test_upload.do" target=_blank class="btn btn-xs btn-default">DIV层</a>
 			                       <a href="common_test_dialog_bootstrap.do" target=_blank class="btn btn-xs btn-default">boostrap-dialog</a>
 			                      <a href="common_test_dialog_jquery.do" target=_blank class="btn btn-xs btn-default">jqeury-dialog</a>
