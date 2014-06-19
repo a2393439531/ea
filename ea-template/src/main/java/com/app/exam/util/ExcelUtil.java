@@ -18,6 +18,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.hssf.util.Region;
 
+import com.app.ea.model.User;
 import com.app.exam.model.Examrecord;
 import com.app.exam.model.Item;
 import com.app.exam.model.Knowledge;
@@ -273,6 +274,70 @@ public class ExcelUtil {
 		
 	}
 	
+	public static void exportUserToExcel(Map<String,List<Examrecord>> data, OutputStream os){
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		Map<String, Set<Result>> map = new HashMap<String, Set<Result>>();
+		Set<String> usernames = data.keySet();
+		
+		
+		for (String username : usernames) {
+			List<Examrecord> dataMap = data.get(username);
+			
+			HSSFSheet sheet = workbook.createSheet(username);
+			
+			//dataMap已经有数据
+			if(dataMap.size() > 0){
+	            HSSFRow firstrow = sheet.createRow(1);
+	            HSSFCell cell = null;
+	            String[] names = {"Paper Name", "Pass Score", "Result" ,"Date"};
+	            
+	            HSSFCellStyle style = getUserStyle(workbook, HSSFColor.LIGHT_GREEN.index);
+	            
+	            //设置头
+	            for (int i = 0; i < names.length; i++) {
+	                cell = firstrow.createCell(i+1);
+	                cell.setCellValue(new HSSFRichTextString(names[i]));
+	                cell.setCellStyle(style);
+	            }
+	            //设置内容
+	            int r = 2;
+	            	//total score
+	            	int score = 0;
+	            	int j = 2;
+	        		
+	        		int i = 0;
+	        		HSSFRow row = null;
+	        		for (Examrecord examrecord : dataMap) {
+	        			row = sheet.createRow(r + i);
+	        			//knowledge
+	        			HSSFCell papernamecell = row.createCell((short) 1);
+	        			papernamecell.setCellValue(examrecord.getPaper().getName());
+	        			//question
+	        			HSSFCell paperpassscorecell = row.createCell((short) 2);
+	        			paperpassscorecell.setCellValue(examrecord.getPaper().getPassmark());//.getContent().replaceAll("<[^>]*>","")
+	        			//date
+	        			HSSFCell datacell = row.createCell((short) 3);
+	        			datacell.setCellValue(examrecord.getSinglechoicemark()
+	        					+ examrecord.getMultichoicemark()
+	        					+ examrecord.getBlankmark()
+	        					+ examrecord.getEssaymark());
+	        			//score
+	        			HSSFCell recorddatecell = row.createCell((short) 4);
+	        			recorddatecell.setCellValue(examrecord.getRecorddate());
+	        			i++;
+					}
+	        		
+	        		r +=  dataMap.size();
+	            
+			}
+		}
+		try {
+			workbook.write(os);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
 	public static HSSFCellStyle getUserStyle(HSSFWorkbook workBook,short index){
 		HSSFCellStyle cellStyle1 = workBook.createCellStyle();

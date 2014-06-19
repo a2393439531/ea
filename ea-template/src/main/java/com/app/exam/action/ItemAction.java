@@ -28,6 +28,7 @@ import com.app.exam.model.Choiceitem;
 import com.app.exam.model.Item;
 import com.app.exam.model.Knowledge;
 import com.app.exam.model.Paper;
+import com.app.exam.model.Result;
 import com.app.exam.util.ItemUtil;
 
 @Scope("prototype")
@@ -93,10 +94,10 @@ public class ItemAction extends BaseEaAction {
 			Collection<Item> itemlist = knowledge.getItems();
 			
 			for (Item item : itemlist) {
-				//有分值的题目不能被复用，因为是通过excel上传的
-				if(type.equals(String.valueOf(item.getType())) && (item.getMark() == null||"0".equals(item.getMark()))){
+				//有分值的题目不能被复用，因为是通过excel上传的 -->取消
+				//if(type.equals(String.valueOf(item.getType())) && (item.getMark() == null||"0".equals(item.getMark()))){
 					dataList.add(item);
-				}
+				//}
 			}
 		}
 		
@@ -197,26 +198,44 @@ public class ItemAction extends BaseEaAction {
 	
 	public String delete() throws Exception{
 		String id = getpara("id");
+		boolean find = false;
 		Item item = (Item) baseDao.loadById("Item", Long.parseLong(id));
-		Set<Paper> papers = item.getPapers();
-		for (Paper paper : papers) {
-			switch(item.getType()){
-			case 1:
-				paper.setSinglechoice(paper.getSinglechoice() - 1);
-				break;
-			case 2:
-				paper.setMultichoice(paper.getMultichoice() - 1);
-				break;
-			case 3:
-				paper.setBlank(paper.getBlank() - 1);
-				break;
-			case 4:
-				paper.setEssay(paper.getEssay() - 1);
+		//判断Item是不是已经有result了，如果有了，则不让删除
+		String sql = "from Result";
+		getPageData(sql);
+		List<Result> list = (List<Result>) rhs.get("dataList");
+		for (Result result : list) {
+			Item tmpitem = result.getItem();
+			if(tmpitem.getId() == Long.valueOf(id)){
+				find = true;
 				break;
 			}
-			baseDao.update(paper);
 		}
-		baseDao.delete(item);
+		//end
+		if (!find) {
+			Set<Paper> papers = item.getPapers();
+			for (Paper paper : papers) {
+				switch (item.getType()) {
+				case 1:
+					paper.setSinglechoice(paper.getSinglechoice() - 1);
+					break;
+				case 2:
+					paper.setMultichoice(paper.getMultichoice() - 1);
+					break;
+				case 3:
+					paper.setBlank(paper.getBlank() - 1);
+					break;
+				case 4:
+					paper.setEssay(paper.getEssay() - 1);
+					break;
+				}
+				baseDao.update(paper);
+			}
+			baseDao.delete(item);
+		} else {
+			rhs.put("info", "Can not delete this question!");
+		}
+		rhs.put("flag", find);
 		return list();
 	}
 	

@@ -758,35 +758,68 @@ public class ExamAction extends BaseProcessAction {
 		getPageData(sql);
 		
 		List<Examrecord> recordList = (List)rhs.get("dataList");
-		
-		if(!"admin".equals(getCurrentUser().getAccount())){
-			for (Examrecord examrecord : recordList) {
-				if(useraccount.equals(examrecord.getUserid())&&examrecord.getPaper() != null){
-					String papername = examrecord.getPaper().getName();
-					List<Examrecord> examrecords = dataMap.get(papername);
-					if(examrecords == null){
-						examrecords = new ArrayList<Examrecord>();
+		if ("paper".equals(getpara("groupby"))) {
+			if (!"admin".equals(getCurrentUser().getAccount())) {
+				for (Examrecord examrecord : recordList) {
+					if (useraccount.equals(examrecord.getUserid())
+							&& examrecord.getPaper() != null) {
+						String papername = examrecord.getPaper().getName();
+						List<Examrecord> examrecords = dataMap.get(papername);
+						if (examrecords == null) {
+							examrecords = new ArrayList<Examrecord>();
+						}
+						examrecords.add(examrecord);
+						dataMap.put(papername, examrecords);
 					}
-					examrecords.add(examrecord);
-					dataMap.put(papername, examrecords);
 				}
+				rhs.put("export", false);
+			} else {
+				for (Examrecord examrecord : recordList) {
+					if (examrecord.getPaper() != null) {
+						String papername = examrecord.getPaper().getName();
+						List<Examrecord> examrecords = dataMap.get(papername);
+						if (examrecords == null) {
+							examrecords = new ArrayList<Examrecord>();
+						}
+						examrecords.add(examrecord);
+						dataMap.put(papername, examrecords);
+					}
+				}
+				rhs.put("export", true);
 			}
-			rhs.put("export", false);
+			rhs.put("groupby", "user");
 		}else{
-			for (Examrecord examrecord : recordList) {
-				if(examrecord.getPaper() != null){
-					String papername = examrecord.getPaper().getName();
-					List<Examrecord> examrecords = dataMap.get(papername);
-					if(examrecords == null){
-						examrecords = new ArrayList<Examrecord>();
+			//按照user分组
+			if (!"admin".equals(getCurrentUser().getAccount())) {
+				for (Examrecord examrecord : recordList) {
+					if (useraccount.equals(examrecord.getUserid())
+							&& examrecord.getPaper() != null) {
+						String username = examrecord.getUserid();
+						List<Examrecord> examrecords = dataMap.get(username);
+						if (examrecords == null) {
+							examrecords = new ArrayList<Examrecord>();
+						}
+						examrecords.add(examrecord);
+						dataMap.put(username, examrecords);
 					}
-					examrecords.add(examrecord);
-					dataMap.put(papername, examrecords);
 				}
+				rhs.put("export", false);
+			} else {
+				for (Examrecord examrecord : recordList) {
+					if (examrecord.getPaper() != null) {
+						String username = examrecord.getUserid();
+						List<Examrecord> examrecords = dataMap.get(username);
+						if (examrecords == null) {
+							examrecords = new ArrayList<Examrecord>();
+						}
+						examrecords.add(examrecord);
+						dataMap.put(username, examrecords);
+					}
+				}
+				rhs.put("export", true);
 			}
-			rhs.put("export", true);
+			rhs.put("groupby", "paper");
 		}
-		
 		Map<String,List<Monitor>> monitorData = new HashMap<String, List<Monitor>>();
 		for (Examrecord examrecord : recordList) {
 			String paperid = String.valueOf(examrecord.getPaper().getId());
@@ -953,6 +986,31 @@ public class ExamAction extends BaseProcessAction {
 		//rhs.put("template", template);
 		
 		return "success";
+	}
+	
+	//获得当前系统中，所有用户的考试情况
+	public String export_user_record() throws Exception{
+		List<User> users = infEa.getAllUser();
+		Map<String,List<Examrecord>> datamap = new HashMap<String, List<Examrecord>>();
+		for (User user : users) {
+			String username = user.getAccount();
+			String sql = "from Examrecord e where e.userid='" + username + "'";
+			getPageData(sql);
+			List<Examrecord> list = (List<Examrecord>) rhs.get("dataList");
+			datamap.put(username, list);
+		}
+		
+		HttpServletResponse response = ServletActionContext.getResponse();
+		
+		response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-disposition", 
+                "attachment; filename="+ java.net.URLEncoder.encode("All_User", "UTF-8") +"_result.xls");
+        ServletOutputStream os = response.getOutputStream();
+        if(datamap.size() != 0){
+        	ExcelUtil.exportUserToExcel(datamap, os);
+        }
+		os.close();
+		return null;
 	}
 	
 	public List<Result> getResults() {

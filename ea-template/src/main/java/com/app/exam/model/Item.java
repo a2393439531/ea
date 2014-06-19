@@ -43,7 +43,7 @@ public class Item extends BaseModel {
 	private String refkey; // 参考答案
 	private String createuser;
 	
-	//分值,如果item的分值不为空，则以该值为计算分数，否则则以试卷对象里面定义的分值来计算。
+	//分值,如果item的分值不为空，则以该值为计算分数，否则则以试卷对象里面定义的分值来计算。-->取消，目前没用到
 	private String mark;
 	
 	private List<Choiceitem> choiceitem = new ArrayList<Choiceitem>();
