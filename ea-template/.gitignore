@@ -1,6 +1,6 @@
 /target
-/.settings
+.settings
 log.txt
-/.classpath
+.classpath
 database-${online}.properties
 /lib-514
