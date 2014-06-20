@@ -37,6 +37,7 @@ import com.app.exam.model.Papergroup;
 import com.app.exam.model.Result;
 import com.app.exam.util.ExcelUtil;
 import com.utils.cache.Cache;
+import com.utils.hardinfo.HardInfo;
 import com.utils.time.TimeUtil;
 
 @Scope("prototype")
@@ -368,7 +369,7 @@ public class ExamAction extends BaseProcessAction {
 		return "success";
 	}
 	
-	public String complete_task(){
+	public String complete_task() throws Exception{
 		Map<String, Object> var = new HashMap<String, Object>();
 		//完成task后的跳转页面
 		String page = "exam_exam_exam_record_list.do";
@@ -411,12 +412,14 @@ public class ExamAction extends BaseProcessAction {
 						processInstanceId = processInstanceId + ","+ infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignee, var);
 					}
 					//add send email function at 2014/06/09 by HB
-					String content = "The exam of paper:<font color='red'>"
+					String url ="http:/"+HardInfo.findNonLocalhostIp()+":"+getRequest().getLocalPort()+getRequest().getContextPath();
+					String content = "<font color='red'>URL:<a href='"+url+"'>"+url+"</a><font>" + 
+							"<br/>The exam of paper:<font color='red'>"
 							+ paper.getName()
-							+ "</font> has been started! The exam time start at <font color='red'>"
+							+ "</font> has been started! <br/>The exam time start at <font color='red'>"
 							+ starttime
 							+ "</font>, and end at <font color='red'>"
-							+ endtime + "</font>, please attend the exam on time!";
+							+ endtime + "</font>, <br/>please attend the exam on time!";
 					sendStartEmail(assignee, content);
 					//end
 				}
@@ -790,6 +793,7 @@ public class ExamAction extends BaseProcessAction {
 			rhs.put("groupby", "user");
 		}else{
 			//按照user分组
+			List<User> users = infEa.getAllUser();
 			if (!"admin".equals(getCurrentUser().getAccount())) {
 				for (Examrecord examrecord : recordList) {
 					if (useraccount.equals(examrecord.getUserid())
@@ -805,7 +809,7 @@ public class ExamAction extends BaseProcessAction {
 				}
 				rhs.put("export", false);
 			} else {
-				for (Examrecord examrecord : recordList) {
+				/*for (Examrecord examrecord : recordList) {
 					if (examrecord.getPaper() != null) {
 						String username = examrecord.getUserid();
 						List<Examrecord> examrecords = dataMap.get(username);
@@ -815,6 +819,13 @@ public class ExamAction extends BaseProcessAction {
 						examrecords.add(examrecord);
 						dataMap.put(username, examrecords);
 					}
+				}*/
+				for (User user : users) {
+					String username = user.getAccount();
+					String datasql = "from Examrecord e where e.userid='" + username + "'";
+					getPageData(datasql);
+					List<Examrecord> list = (List<Examrecord>) rhs.get("dataList");
+					dataMap.put(username, list);
 				}
 				rhs.put("export", true);
 			}
@@ -1041,7 +1052,7 @@ public class ExamAction extends BaseProcessAction {
 			}
 		}
 		//send mail
-		infEa.sendMailTheadBySmtpList("Exam has been Started!", content + "<font color='red'>Account/Password: " + user.getAccount() + "/" + user.getPasswd() + "</font>", 
+		infEa.sendMailTheadBySmtpList("Exam has been Started!", content + "<br/><font color='red'>Account/Password: " + user.getAccount() + "/" + user.getPasswd() + "</font>", 
 				mail, "", "", null);
 	}
 	
