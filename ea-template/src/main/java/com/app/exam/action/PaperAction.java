@@ -155,9 +155,20 @@ public class PaperAction extends BaseEaAction {
 
 	public String delete() throws Exception {
 		String id = getpara("id");
+		boolean find = false;
 		Paper paper = (Paper) baseDao.loadById("Paper", Long.parseLong(id));
+		//查找examrecord表，如果试卷有记录，则不能被删除。
+		String sql = "from Examrecord";
+		getPageData(sql);
+		List<Examrecord> list = (List<Examrecord>) rhs.get("dataList");
+		for(Examrecord examrecord : list){
+			if(examrecord.getPaper().getId() == Long.valueOf(id)){
+				find = true;
+				break;
+			}
+		}
+		if(!find){
 		paper.setPapergroup(null);
-		
 		Set<Examrecord> record = paper.getResultdetail();
 		for (Examrecord examrecord : record) {
 			examrecord.setPaper(null);
@@ -166,6 +177,10 @@ public class PaperAction extends BaseEaAction {
 		paper.setResultdetail(null);
 		baseDao.update(paper);
 		baseDao.delete(paper);
+		}else {
+			rhs.put("info", "Can not delete this paper!");
+		}
+		rhs.put("flag", find);
 		return list();
 	}
 
