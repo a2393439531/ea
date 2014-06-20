@@ -433,12 +433,14 @@ public class ExamAction extends BaseProcessAction {
 				var.put("examarrangeid", examarrange.getId());
 				processInstanceId = infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignees[0], var);
 				//add send email function at 2014/06/09 by HB
-				String content = "The exam of paper:<font color='red'>"
+				String url ="http:/"+HardInfo.findNonLocalhostIp()+":"+getRequest().getLocalPort()+getRequest().getContextPath();
+				String content = "<font color='red'>URL:<a href='"+url+"'>"+url+"</a><font>" + 
+						"<br/>The exam of paper:<font color='red'>"
 						+ paper.getName()
-						+ "</font> has been started! The exam time start at <font color='red'>"
+						+ "</font> has been started! <br/>The exam time start at <font color='red'>"
 						+ starttime
 						+ "</font>, and end at <font color='red'>"
-						+ endtime + "</font>, please attend the exam on time!";
+						+ endtime + "</font>, <br/>please attend the exam on time!";
 				sendStartEmail(assignees[0], content);
 				//end
 			}
