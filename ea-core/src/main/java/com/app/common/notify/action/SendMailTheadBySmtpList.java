@@ -41,7 +41,7 @@ public class SendMailTheadBySmtpList extends Thread {
 		mailaddress = address;
 		ccaddress = cc;
 		bccaddress = bcc;
-		mailcontent = content + "<br><br><br> ****本邮件由系统自动发出，请勿直接回复！****";
+		mailcontent = content + "<br><br><br> ****PLEASE DO NOT REPLAY THIS EMAIL！****";
 	}
 
 	public void run() {
