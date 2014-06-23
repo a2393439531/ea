@@ -203,7 +203,7 @@ protected boolean authenticate(String group) {
 		return true;
 	}else{
 		setStatus(getAuthenticationFailureStatus(), "Authentication is required");
-		getResponse().setEntity(new StringRepresentation("验证失败"));//redirectTemporary("/demo/login.do");
+		getResponse().setEntity(new StringRepresentation("Authorization Filed!"));//redirectTemporary("/demo/login.do");
 		return false;
 	}
   }

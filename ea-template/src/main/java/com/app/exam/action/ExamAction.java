@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.activiti.engine.task.Task;
 import org.apache.struts2.ServletActionContext;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
@@ -1053,9 +1055,11 @@ public class ExamAction extends BaseProcessAction {
 				}
 			}
 		}
+		content = content + "<br/><font color='red'>Account/Password: " + user.getAccount() + "/" + user.getPasswd() + "</font>";
 		//send mail
-		infEa.sendMailTheadBySmtpList("Exam has been Started!", content + "<br/><font color='red'>Account/Password: " + user.getAccount() + "/" + user.getPasswd() + "</font>", 
-				mail, "", "", null);
+		 ClientResource client = new ClientResource("http://localhost:5051/apm/service/mail?maillist="+ mail + "&content=" + content);
+		//infEa.sendMailTheadBySmtpList("Exam has been Started!", content , mail, "", "", null);
+		 Representation result = client.get();
 	}
 	
 }

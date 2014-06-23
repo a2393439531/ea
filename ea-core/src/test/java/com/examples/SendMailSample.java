@@ -1,5 +1,8 @@
 package com.examples;
 
+import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
+
 import com.utils.mail.SendMail;
 
 /**
@@ -18,7 +21,10 @@ public class SendMailSample {
 				"from 163 用户发的", "test这是正文", null);
 		sendMail.close();
 		System.out.println("发送完毕");
-
+		//使用APM的webservice发送邮件
+//		ClientResource client = new ClientResource("http://localhost:5051/apm/service/mail?maillist=hongbin@gzericsson.com&content=Test Content");
+//		 Representation result = client.get();
+//		 System.out.println(result.getText());  
 	}
 
 }
