@@ -26,7 +26,7 @@ import org.restlet.engine.converter.ConverterHelper;
 import org.restlet.ext.jackson.JacksonConverter;
 import org.restlet.routing.Router;
 
-import com.app.webservice.util.TempletWebServiceInit;
+import com.webservice.util.TempletWebServiceInit;
 /**
  * @author Tijs Rademakers
  */
