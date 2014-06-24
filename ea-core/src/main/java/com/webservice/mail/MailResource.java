@@ -18,7 +18,7 @@ public class MailResource extends SecuredResource {
 		String maillist = form.getFirstValue("maillist");     //获取key=maillist的参数值
 		String content = form.getFirstValue("content");     //获取key=maillist的参数值  
 		infEa.sendMailTheadBySmtpList("Exam has been Started!", content , maillist, "", "", null);
-		return new StringRepresentation("测试Send Mail Web Service ----> Get Method!" + maillist + "|" + content);
+		return new StringRepresentation("Send Successfully! "+ maillist + "|" + content);
 	}
 	
 	
