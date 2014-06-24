@@ -20,6 +20,7 @@ import org.activiti.engine.task.Task;
 import org.apache.struts2.ServletActionContext;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
+import org.restlet.resource.ResourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
@@ -415,7 +416,7 @@ public class ExamAction extends BaseProcessAction {
 					}
 					//add send email function at 2014/06/09 by HB
 					String url ="http:/"+HardInfo.findNonLocalhostIp()+":"+getRequest().getLocalPort()+getRequest().getContextPath();
-					String content = "<font color='red'>URL:<a href='"+url+"'>"+url+"</a><font>" + 
+					String content = "<font color='red'>URL:<a href='"+url+"'>"+url+"</a></font>" + 
 							"<br/>The exam of paper:<font color='red'>"
 							+ paper.getName()
 							+ "</font> has been started! <br/>The exam time start at <font color='red'>"
@@ -436,7 +437,7 @@ public class ExamAction extends BaseProcessAction {
 				processInstanceId = infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignees[0], var);
 				//add send email function at 2014/06/09 by HB
 				String url ="http:/"+HardInfo.findNonLocalhostIp()+":"+getRequest().getLocalPort()+getRequest().getContextPath();
-				String content = "<font color='red'>URL:<a href='"+url+"'>"+url+"</a><font>" + 
+				String content = "<font color='red'>URL:<a href='"+url+"'>"+url+"</a></font>" + 
 						"<br/>The exam of paper:<font color='red'>"
 						+ paper.getName()
 						+ "</font> has been started! <br/>The exam time start at <font color='red'>"
@@ -1002,7 +1003,68 @@ public class ExamAction extends BaseProcessAction {
 		
 		return "success";
 	}
-	
+	public String show_answer(){
+		String paperId = getpara("paperId");
+		Paper paper = (Paper) baseDao.loadById("Paper", Long.valueOf(paperId));
+		Set<Result> list = null;
+		Map<String,Set<Result>> singleitems = new HashMap<String,Set<Result>>();
+		Map<String,Set<Result>> multiitems = new HashMap<String,Set<Result>>();
+		Map<String,Set<Result>> blankitems = new HashMap<String,Set<Result>>();
+		Map<String,Set<Result>> essayitems = new HashMap<String,Set<Result>>();
+		
+		Set<Examrecord> allresults = paper.getResultdetail();
+		
+		Set<Result> results = new HashSet<Result>();
+		for (Examrecord examrecord : allresults) {
+			results.addAll(examrecord.getResult());
+			rhs.put("examrecord", examrecord);
+		}
+		//上面拿到指定用户的结果
+		for (Result result : results) {
+			Item item = result.getItem(); 
+			Long itemid = item.getId();
+			switch (item.getType()) {
+			case 1:
+				list = (Set<Result>) singleitems.get(String.valueOf(itemid));
+				if(list == null){
+					list = new HashSet<Result>();
+				}
+				list.add(result);
+				singleitems.put(String.valueOf(itemid), list);
+				break;
+			case 2:
+				list = (Set<Result>) multiitems.get(String.valueOf(itemid));
+				if(list == null){
+					list = new HashSet<Result>();
+				}
+				list.add(result);
+				multiitems.put(String.valueOf(itemid), list);
+				break;
+			case 3:
+				list = (Set<Result>) blankitems.get(String.valueOf(itemid));
+				if(list == null){
+					list = new HashSet<Result>();
+				}
+				list.add(result);
+				blankitems.put(String.valueOf(itemid), list);
+				break;
+			case 4:
+				list = (Set<Result>) essayitems.get(String.valueOf(itemid));
+				if(list == null){
+					list = new HashSet<Result>();
+				}
+				list.add(result);
+				essayitems.put(String.valueOf(itemid), list);
+				break;
+			}
+		}
+		rhs.put("singleitems", singleitems);
+		rhs.put("multiitems", multiitems);
+		rhs.put("blankitems", blankitems);
+		rhs.put("essayitems", essayitems);
+		rhs.put("paper", paper);
+		return "success";
+	}
 	//获得当前系统中，所有用户的考试情况
 	public String export_user_record() throws Exception{
 		List<User> users = infEa.getAllUser();
@@ -1059,7 +1121,11 @@ public class ExamAction extends BaseProcessAction {
 		//send mail
 		 ClientResource client = new ClientResource("http://localhost:5051/apm/service/mail?maillist="+ mail + "&content=" + content);
 		//infEa.sendMailTheadBySmtpList("Exam has been Started!", content , mail, "", "", null);
-		 Representation result = client.get();
+		 try {
+			Representation result = client.get();
+		} catch (ResourceException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }
