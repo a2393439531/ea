@@ -122,10 +122,7 @@
 				<tr>
 					<td class="archiNam">手机开发架构</td>
 					<td class="archiCon">
-						<a href="common/appframework-2-1-0/tom.html" target="_blank" class="btn btn-xs btn-default">Appframework</a>
-						<a href="app/common/test/mobile/jquerymobile/index.ftl" target="_blank" class="btn btn-xs btn-default">Jquery Mobile</a>
-						<a  href="app/common/test/mobile/af_index.ftl" target="_blank" class="btn btn-xs btn-default">JQmobi</a>
-			 <a  href="app/common/test/mobile/touchdemo/index.ftl" target="_blank" class="btn btn-xs btn-default">Sencha touch</a>
+						<a  href="common_test_mobile.do" target=_blank" class="btn btn-xs btn-default">Mobile Web Framework</a>
 					</td>   
 				</tr>	
 				<tr>

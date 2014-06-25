@@ -131,4 +131,11 @@ public class UploadfileAction extends BaseEaAction {
 	public void setUploadFileName(String[] uploadFileName) {
 		this.uploadFileName = uploadFileName;
 	}
+	
+	//added by xiaoqinghong for mobile 2014-6-24
+	public String m_iframe_uploadfile(){
+		this.iframe_uploadfile();
+		return "success";
+	}
+	//added by xiaoqinghong for mobile 2014-6-24 end
 }

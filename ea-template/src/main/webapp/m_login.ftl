@@ -95,7 +95,7 @@
 				<form action="login.do" method="post" id="loginform">
 					<div class="input-group">
 						<input type="hidden" name="saveCookie" value="true" />
-						<input type="hidden" name="type" value="app" />
+						<input type="hidden" name="terType" value="task" />
                     <label for="account">Account: </label><input id="account" name="account" type="text" placeholder="Account" />
                     <label for="password">Password: </label><input  id="password" name="password" type="password" placeholder="Password" />
                     

@@ -59,7 +59,7 @@ public class GoldTaskAction extends BaseEaAction {
 		RandomAccessFile raf = null;
 		List<String> list = new ArrayList<String>();
 		try{
-			
+			if(new File(path).exists() == false) return "success";
 			raf = new RandomAccessFile(path, "r");
 			long start = raf.getFilePointer();
 			long len = raf.length();
@@ -84,7 +84,7 @@ public class GoldTaskAction extends BaseEaAction {
 	        }			
 			rhs.put("datalist", list);
 		}finally{
-			raf.close();
+			if(raf != null) raf.close();
 		}
 		
 		return "success";

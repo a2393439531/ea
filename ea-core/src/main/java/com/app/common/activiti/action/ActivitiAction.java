@@ -686,4 +686,17 @@ public class ActivitiAction extends BaseProcessAction {
 	public static void main(String[] args){
 		System.out.println(11/10);
 	}
+	
+	//added by xiaoqinghong for mobile 2014-6-24
+	public String m_open_task() throws Exception{
+		this.open_task();
+		return "success";
+	}
+	
+	public String m_menu_task_list() {
+		this.menu_task_list();
+		return "success";
+	}
+	
+	//added by xiaoqinghong for mobile 2014-6-24 end
 }
