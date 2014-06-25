@@ -32,7 +32,13 @@ public class LoginAction extends BaseEaAction {
 		String account = getpara("account");
 		String password = getpara("password");
 		String sysName = getpara("sysName");
-		String type = getpara("type"); // app 端登录
+		String terType = getpara("terType"); // app 端登录
+		String success = "success";
+		String fail = "fail";
+		if(terType != null && terType.length() > 0){
+			success = terType + "_" + success;
+			fail = terType + "_" + fail;
+		}
 		boolean saveCookie = false;
 		if(getpara("saveCookie") != null && !"".equals(getpara("saveCookie"))) saveCookie = Boolean.parseBoolean(getpara("saveCookie"));
 		
@@ -41,21 +47,21 @@ public class LoginAction extends BaseEaAction {
 		}
 		if (account.equals("")) {
 			rhs.put("tipInfo", "Account can not be empty!");
-			if("app".equals(type)) return "app_fail";
+			
 			if("forget".equals(method)){
 				return "forget";
 			}
-			return "fail";
+			return fail;
 		}
 		System.out.println("EA查出用户个数=" + infEa.getAllUser().size());
 		User user = (User) infEa.getUserbyAccount(account);
 		if (user==null) {
 			rhs.put("tipInfo", "Account can not be empty!");
-			if("app".equals(type)) return "app_fail";
+			
 			if("forget".equals(method)){
 				return "forget";
 			}
-			return "fail";
+			return fail;
 		}
 		//新增忘记密码
 		if("forget".equals(method)){
@@ -83,7 +89,7 @@ public class LoginAction extends BaseEaAction {
 					mail, "", "", null);
 			
 			rhs.put("tipInfo", content);
-			return "fail";
+			return fail;
 		}
 		
 		String result = "";
@@ -131,25 +137,18 @@ public class LoginAction extends BaseEaAction {
 				ServletActionContext.getResponse().addCookie(c2);
 				log.debug("cookie 添加完毕..");
 			}
-			
-			if("mobile".equals(type)){
-				return "app_success";
-			}
 			//added by xiao
 			
 			
 			if (user.getAccount().equals("admin")) { 
 				return "admin";
-			}		
-			if("app".equals(type)) {
-				log.info(user.getName() + " 登录成功");
-				return "app_success";
-				}
-			return "success";
+			}
+			
+			log.info(user.getName() + " 登录成功");
+			return success;
 		}
 
-		if("app".equals(type)) return "app_fail";
-		return "fail";
+		return fail;
 	}
 
 	public String changeProject() {

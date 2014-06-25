@@ -74,5 +74,12 @@ public class SelectuserAction extends BaseEaAction {
 		
 		return null;
 	}
+	
+	//added by xiaoqinghong for mobile 2014-6-24
+	public String m_select_userlist() throws Exception {
+		this.select_userlist();
+		return "success";	
+	}
+	//added by xiaoqinghong for mobile 2014-6-24 end
 
 }

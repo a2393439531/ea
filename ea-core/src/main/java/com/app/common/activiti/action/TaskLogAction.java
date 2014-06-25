@@ -143,4 +143,21 @@ public class TaskLogAction extends BaseProcessAction {
 		baseDao.delete(model);
 		return list();
 	}
+	
+	//added by xiaonqinghong for mobile 2014-6-24
+	public String m_list(){
+		this.list();
+		return "success";
+	}
+	
+	public String m_save() throws Exception {
+		this.save();
+		return m_list();
+	}
+	
+	public String m_delete() throws Exception {
+		this.delete();
+		return m_list();
+	}
+	//added by xiaonqinghong for mobile 2014-6-24 end
 }
