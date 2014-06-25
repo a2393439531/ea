@@ -171,4 +171,9 @@ public class TestAction extends BaseEaAction {
 	
 	}
 	
+	public String pagedata() throws Exception {
+		getPageData("from Item");
+		return "success";
+	}
+	
 }
