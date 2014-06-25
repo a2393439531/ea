@@ -2,7 +2,7 @@ package com.webservice.util;
 
 import org.restlet.routing.Router;
 
-import com.app.webservice.upload.UploadResource;
+import com.webservice.upload.UploadResource;
 import com.webservice.mail.MailResource;
 
 

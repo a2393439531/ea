@@ -1,5 +1,8 @@
 package com.webservice.mail;
 
+import java.util.Map;
+import java.util.Set;
+
 import org.activiti.rest.common.api.SecuredResource;
 import org.restlet.data.Form;
 import org.restlet.representation.Representation;
@@ -17,8 +20,17 @@ public class MailResource extends SecuredResource {
 		Form form = getRequest().getResourceRef().getQueryAsForm() ;    //获取查询参数
 		String maillist = form.getFirstValue("maillist");     //获取key=maillist的参数值
 		String content = form.getFirstValue("content");     //获取key=maillist的参数值  
-		infEa.sendMailTheadBySmtpList("Exam has been Started!", content , maillist, "", "", null);
-		return new StringRepresentation("Send Successfully! "+ maillist + "|" + content);
+		StringBuilder sb = new StringBuilder();
+		Map<String,String> result = infEa.sendMailBySmtpList("Exam has been Started!", content , maillist, "", "", null);
+		
+		Set<String> mail_list = result.keySet();
+		
+		for(String mail : mail_list){
+			String status = result.get(mail);
+			sb.append("Mail: "+ mail + ", Status: " + status + "\n");
+		}
+		
+		return new StringRepresentation(sb.toString());
 	}
 	
 	

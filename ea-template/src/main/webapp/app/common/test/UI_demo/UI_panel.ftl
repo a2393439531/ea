@@ -1,4 +1,4 @@
-<#include "common/freemarker/include_header.ftl">
+<#include "/common/freemarker/include_header.ftl">
 <body style="padding: 10px; ">
 <strong>面板</strong>
 	  <table>

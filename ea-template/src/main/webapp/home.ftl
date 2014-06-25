@@ -142,6 +142,7 @@
 						<a href="#" class="btn btn-xs btn-default" target="_blank">考试系统</a>
   						<a href="#" class="btn btn-xs btn-default" target="_blank">工作日报</a>
   						<a href="ea_smtp_menu_smtp.do" class="btn btn-xs btn-default" target="_blank">邮箱系统</a>
+						<a href="ea_smtp_index_demo.do" class="btn btn-xs btn-default" target="_blank">邮件发送</a>
   						<a href="ea_rule_menu_rule.do" class="btn btn-xs btn-default" target="_blank">通告发布</a>
   						<a href="common_edit_list_file.do" class="btn btn-xs btn-default" target="_blank">多国语言配置</a>
 					  	<a href="common_svn_svn_list.do" class="btn btn-xs btn-default" target="_blank">文档管理</a>

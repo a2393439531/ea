@@ -47,6 +47,7 @@ public class ItemAction extends BaseEaAction {
 
 	public String list() throws Exception {
 		String sql = getSearchSql(get_list_sql());
+		String formstyle = getpara("formstyle");
 		Set<Item> list = new HashSet<Item>();
 		Set<Item> data = new HashSet<Item>();
 		getPageData(sql);
@@ -73,6 +74,7 @@ public class ItemAction extends BaseEaAction {
 		rhs.put("knowledgevalue", knowledgevalue);
 		rhs.put("itemtype", itemtype);
 		rhs.put("dataList", data);
+		rhs.put("formstyle", "".equals(formstyle)? "none":formstyle);
 		rhs.put("knowledgeRootList", common_get_tree_root("Knowledge"));
 		return "success";
 	}
@@ -210,6 +212,11 @@ public class ItemAction extends BaseEaAction {
 				find = true;
 				break;
 			}
+		}
+		//判断Item是不是已经被选为必做题了，如果有了，则不能删除
+		Set<Paper> tmppaper = item.getPapers();
+		if(tmppaper.size() > 0){
+			find = true;
 		}
 		//end
 		if (!find) {

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.app.common.activiti.model.BusinessWithProcessModel;
 import com.app.common.base.action.BaseEaAction;
+import com.app.exam.model.Examarrange;
 import com.app.exam.model.Examrecord;
 import com.app.exam.model.Item;
 import com.app.exam.model.Knowledge;
@@ -47,7 +48,7 @@ public class PaperAction extends BaseEaAction {
 		Map<String,List<BusinessWithProcessModel<Paper>>> dataMap = new HashMap<String, List<BusinessWithProcessModel<Paper>>>();
 		String sql = getSearchSql(get_list_sql());
 		getPageData(sql);
-		
+		String formstyle = getpara("formstyle");
 		Set<Paper> list = new HashSet<Paper>();
 		if(knowledgevalue.size() != 0){
 			for (String knowledge : knowledgevalue) {
@@ -82,6 +83,7 @@ public class PaperAction extends BaseEaAction {
 		}
 		rhs.put("knowledgevalue", condition);
 		rhs.put("dataList", dataMap);
+		rhs.put("formstyle", "".equals(formstyle)? "none":formstyle);
 		rhs.put("knowledgeRootList", common_get_tree_root("Knowledge"));
 		return "success";
 	}
@@ -157,12 +159,12 @@ public class PaperAction extends BaseEaAction {
 		String id = getpara("id");
 		boolean find = false;
 		Paper paper = (Paper) baseDao.loadById("Paper", Long.parseLong(id));
-		//查找examrecord表，如果试卷有记录，则不能被删除。
-		String sql = "from Examrecord";
+		//查找examarrange表，如果试卷有记录，则不能被删除。
+		String sql = "from Examarrange";
 		getPageData(sql);
-		List<Examrecord> list = (List<Examrecord>) rhs.get("dataList");
-		for(Examrecord examrecord : list){
-			if(examrecord.getPaper().getId() == Long.valueOf(id)){
+		List<Examarrange> list = (List<Examarrange>) rhs.get("dataList");
+		for(Examarrange examarrange : list){
+			if(examarrange.getPaperid().equals(id)){
 				find = true;
 				break;
 			}
