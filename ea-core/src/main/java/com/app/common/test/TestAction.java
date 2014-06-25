@@ -166,4 +166,9 @@ public class TestAction extends BaseEaAction {
 		return "success";
 	}
 	
+	public String mobile() throws Exception {
+		return "success";
+	
+	}
+	
 }
