@@ -23,57 +23,57 @@
 	  			<tr class="templateEight">
 	  				<td class="templateGreen">
 	  					<ul>
-  							<li><a href="#">JAVA 7.0</a></li>
-  							<li><a href="#">Eclipse</a></li>
-  							<li><a href="#">Jetty</a></li>
-  							<li><a href="#">Tomcat</a></li>
+  							<li><a href="http://www.java.com" target="_blank">JAVA 7.0</a></li>
+  							<li><a href="http://www.eclipse.org" target="_blank">Eclipse</a></li>
+  							<li><a href="http://www.eclipse.org/jetty" target="_blank">Jetty</a></li>
+  							<li><a href="http://tomcat.apache.org" target="_blank">Tomcat</a></li>
 						</ul>
 	  				</td>	
 	  				<td class="templateGreen">
 	  					<ul>
-  							<li><a href="#">Spring</a></li>
-  							<li><a href="#">Struts</a></li>
-  							<li><a href="#">Hiberbate</a></li>
-  							<li><a href="#">Freemaker</a></li>
-  							<li><a href="#" title="Workflow Engine">Activiti</a></li>
-  							<li><a href="#" title="Report Engine">BIRT</a></li>
+  							<li><a href="http://www.springsource.org/" target="_blank">Spring</a></li>
+  							<li><a href="http://struts.apache.org/" target="_blank">Struts</a></li>
+  							<li><a href="http://www.hibernate.org" target="_blank">Hiberbate</a></li>
+  							<li><a href="http://www.freemarker.org/ " target="_blank">Freemaker</a></li>
+  							<li><a href="http://www.activiti.org/ " title="Workflow Engine" target="_blank">Activiti</a></li>
+  							<li><a href="http://www.eclipse.org/birt/" title="Report Engine" target="_blank">BIRT</a></li>
 						</ul>
 	  				</td>	
 	  				<td class="templateGreen">
 	  					<ul>
-  							<li><a href="#">H2</a></li>
-  							<li><a href="#">MYSQL</a></li>
+  							<li><a href="http://www.h2database.com/html/main.html" target="_blank">H2</a></li>
+  							<li><a href="http://www.mysql.com/ " target="_blank">MYSQL</a></li>
 						</ul>
 	  				</td>	
 	  				<td class="templateGreen">
 	  					<ul>
-  							<li><a href="#">Bootstrap</a></li>
-  							<li><a href="#">Jquery</a></li>
-  							<li><a href="#">Highslide</a></li>
-  							<li><a href="#">CKEditor</a></li>					
+  							<li><a href="http://www.bootcss.com/" target="_blank">Bootstrap</a></li>
+  							<li><a href="http://jquery.com/" target="_blank">Jquery</a></li>
+  							<li><a href="http://www.highslide.com/" target="_blank">Highslide</a></li>
+  							<li><a href="http://ckeditor.com/ " target="_blank">CKEditor</a></li>					
 						</ul>
 	  				</td>	
 	  				<td class="templateGreen">
 	  					<ul>
-  							<li><a href="#">GIT</a></li>
-  							<li><a href="#">Subversion</a></li>
+  							<li><a href="http://git-scm.com/ " target="_blank">GIT</a></li>
+  							<li><a href="http://subversion.apache.org" target="_blank">Subversion</a></li>
 						</ul>
 	  				</td>	
 	  				<td class="templateGreen">
 	  					<ul>
-  							<li><a href="#">Maven</a></li>
-  							<li><a href="#">Jenkins</a></li>						
+  							<li><a href="http://maven.apache.org/" target="_blank">Maven</a></li>
+  							<li><a href="http://jenkins-ci.org/" target="_blank">Jenkins</a></li>						
 						</ul>
 	  				</td>	
 	  				<td class="templateGreen">
 	  					<ul>
-  							<li><a href="#">EA 8.0</a></li>
+  							<li><a href="#" target="_blank">EA 8.0</a></li>
 						</ul>
 	  				</td>	
 	  				<td class="templateGreen">
 	  					<ul>
-  							<li><a href="#">Adile Strum</a></li>
-  							<li><a href="#">SONAR</a></li>		
+  							<li><a href="#" target="_blank">Agile Scrum</a></li>
+  							<li><a href="http://www.sonarqube.org/" target="_blank">SONAR</a></li>		
 						</ul>
 	  				</td>	
 	  			</tr>
@@ -113,9 +113,9 @@
 					<td class="archiNam">开发架构</td>
 					<td class="archiCon">
 						<a href="common_monitor_home.do" target="_blank" class="btn btn-xs btn-default">健壮性</a>
-						<a href="#" target="_blank" class="btn btn-xs btn-default">安全性</a>
+						<a href="ea_resource_menu_resource.do" target="_blank" class="btn btn-xs btn-default">安全性</a>
 						<a href="rule.ftl" target="_blank" class="btn btn-xs btn-default">后台规范</a> 
-						<a href="#" target="_blank" class="btn btn-xs btn-default">UI规范</a>
+						<a href="common_test_UI_demo.do" target="_blank" class="btn btn-xs btn-default">UI规范</a>
 						<a href="ea_ea_webservice.do" target="_blank" class="btn btn-xs btn-default">对外开放API(Webservice)</a>
 					</td>  
 				</tr>
@@ -136,8 +136,8 @@
 				<tr>
 					<td class="archiNam">通用业务功能</td>
 					<td class="archiCon">
-						<a href="#" class="btn btn-xs btn-default" target="_blank">考试系统</a>
-  						<a href="#" class="btn btn-xs btn-default" target="_blank">工作日报</a>
+						<a href="exam_pframe.ftl" class="btn btn-xs btn-default" target="_blank">考试系统</a>
+  						<a href="ea_report_report.do" class="btn btn-xs btn-default" target="_blank">工作日报</a>
   						<a href="ea_smtp_menu_smtp.do" class="btn btn-xs btn-default" target="_blank">邮箱系统</a>
 						<a href="ea_smtp_index_demo.do" class="btn btn-xs btn-default" target="_blank">邮件发送</a>
   						<a href="ea_rule_menu_rule.do" class="btn btn-xs btn-default" target="_blank">通告发布</a>
@@ -158,7 +158,7 @@
 				<tr>   
 					<td class="pubModuNam">组织架构操作</td>
 					<td class="pubModuCon"><a href="common_test_select_user.do" target="_blank" class="btn btn-xs btn-default">选人</a> 
-						<a href="common_test_date.do" target="_blank" class="btn btn-xs btn-default">如何获取当前用户的项目ID 公司ID</a>
+						<a href="common_test_date.do" target="_blank" class="btn btn-xs btn-default">如何获取当前日期</a>
 					</td>  
 				</tr>
 				<tr>

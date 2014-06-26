@@ -175,5 +175,7 @@ public class TestAction extends BaseEaAction {
 		getPageData("from Item");
 		return "success";
 	}
-	
+	public String UI_demo(){
+		return "success";
+	}
 }

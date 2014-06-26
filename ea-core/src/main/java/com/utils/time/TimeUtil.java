@@ -87,7 +87,7 @@ public class TimeUtil {
 	     }
 	}
 	
-	public static String compareDate(Date current, Date deadline) {
+	public static String compareTwoDate(Date current, Date deadline) {
 		// use 24H
 		// SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
 		StringBuilder sb = new StringBuilder();

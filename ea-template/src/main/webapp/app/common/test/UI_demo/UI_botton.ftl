@@ -1,4 +1,4 @@
-<#include "/common/freemarker/include_header.ftl">
+<#include "include_demo_header.ftl">
 <body style="padding: 10px; ">
   	<strong>按钮</strong>
 	<div class="panel panel-default">

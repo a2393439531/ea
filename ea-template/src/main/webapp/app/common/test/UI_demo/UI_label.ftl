@@ -1,4 +1,4 @@
-<#include "common/freemarker/include_header.ftl">
+<#include "include_demo_header.ftl">
 <body style="padding: 10px; ">
 	<strong>底色标签</strong><br>  
 	<span class="label label-default">Default</span>

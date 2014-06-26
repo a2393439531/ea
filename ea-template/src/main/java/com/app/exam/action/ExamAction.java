@@ -257,7 +257,7 @@ public class ExamAction extends BaseProcessAction {
 			String current_str = sdf.format(new Date());
 			Date current = sdf.parse(current_str);
 			if(current.before(start) || (current.before(end) && current.after(start))){
-				starttime.append(TimeUtil.compareDate(current, start));
+				starttime.append(TimeUtil.compareTwoDate(current, start));
 			}else{
 				starttime.append("Out of Date");
 			}
@@ -342,7 +342,7 @@ public class ExamAction extends BaseProcessAction {
 				String current_str = sdf.format(new Date());
 				Date current = sdf.parse(current_str);
 				if(current.before(start) || (current.before(end) && current.after(start))){
-					starttime.append(TimeUtil.compareDate(current, start));
+					starttime.append(TimeUtil.compareTwoDate(current, start));
 					oaTask.setStarttime(starttime.toString());
 					allData.add(oaTask);
 				}else{
