@@ -1,4 +1,4 @@
-<a  href="systempara_menu_systempara.do" target=_blank>数据词典的设置界面  </a>
+<a  href="ea_systempara_menu_systempara.do" target=_blank>数据词典的设置界面  </a>
 
 <pre>在action方法中，通过下面方式将 数据词典存入
 rhs.put("system_para_map", 	infEa.getParaMap());   见TestAction的menu_para方法

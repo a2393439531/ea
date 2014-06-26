@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.activiti.engine.delegate.DelegateExecution;
@@ -730,7 +731,43 @@ public class ImpEa implements InfEa  {
 		SendMailTheadBySmtpList.sendmail(smtpList,title, content,
 			 mailaddress, cc, bcc, filename);
 	}
-
+	@Override
+	public Map<String, String> sendMailBySmtpList(String title, String content,
+			String mailaddress, String cc, String bcc, String[] filename) {
+		ArrayList smtpList = (ArrayList) baseDao.find("from Smtp");
+		Map<String,String> result = new HashMap<String,String>();
+		long begin = System.currentTimeMillis();
+		boolean notsendflag = true;
+		int stmpNumber = 0;
+			while (notsendflag && stmpNumber < smtpList.size()) {
+			Smtp smtp=(Smtp)smtpList.get(
+					stmpNumber);
+			stmpNumber++;
+			try {
+				SendMail sendMail = new SendMail();
+				sendMail.connect(smtp.getHost(), smtp.getAccount(), smtp.getPasswd(), smtp.getPort());
+				try {
+					sendMail.send(smtp.getSender(), mailaddress, cc, bcc,
+							title, content, filename);
+					result.put(mailaddress, "Success");
+				} catch (Exception e) {
+					log.error("<br>向"+ mailaddress +"发送邮件失败.");
+					result.put(mailaddress, "Failed");
+					e.printStackTrace();
+				}
+				sendMail.close();
+				notsendflag = false;
+				log.info("Email Send Time = "
+						+ (System.currentTimeMillis() - begin));
+			} catch (Exception e) {
+				//log.error("Email send error = " + smtp.getTitle(), e);
+				log.error("<br>使用下面邮箱配置发送失败：" +smtp.getTitle()+smtp.getHost()+":"+smtp.getPort()+":"+smtp.getSender());
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
 	@Override
 	public Systempara create_systempara(String key,String value)
 			throws Exception {

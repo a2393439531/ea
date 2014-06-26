@@ -166,4 +166,16 @@ public class TestAction extends BaseEaAction {
 		return "success";
 	}
 	
+	public String mobile() throws Exception {
+		return "success";
+	
+	}
+	
+	public String pagedata() throws Exception {
+		getPageData("from Item");
+		return "success";
+	}
+	public String UI_demo(){
+		return "success";
+	}
 }

@@ -1,5 +1,6 @@
 <#include "../../../common/freemarker/include_header.ftl">
 <script type="text/javascript" src="<@context_module/>tpltb2.js"></script>
+<#if Session["userlogined"]?exists>
 <div class="container-fluid" >
 
 	<div class="panel panel-default">
@@ -39,6 +40,8 @@
 
 	</div>
 </div>
-
+<#else>
+You have not login system!
+</#if>
 						
 						

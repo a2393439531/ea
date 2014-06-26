@@ -32,6 +32,11 @@ public class SmtpAction extends BaseEaAction {
 		return "success";
 	}
 
+	public String index_demo(){
+		
+		return "success";
+	}
+	
 	public String create() throws Exception {
 		Smtp smtp = new Smtp();
 		

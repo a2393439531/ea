@@ -2,6 +2,7 @@ package com.app.ea.api;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.app.common.spring.ssh.dao.BaseDao;
@@ -84,6 +85,9 @@ public interface InfEa {
 	//add by hb for send mail by thread
 	public void sendMailTheadBySmtpList(String title,String content, 
 			String mailaddress, String cc, String bcc, String[] filename);
+	public Map<String,String> sendMailBySmtpList(String title,String content, 
+			String mailaddress, String cc, String bcc, String[] filename);
+	
 	
 	public Systempara create_systempara(String key, String value) throws Exception;
 	

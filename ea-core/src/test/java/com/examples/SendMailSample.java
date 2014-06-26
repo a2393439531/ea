@@ -18,7 +18,7 @@ public class SendMailSample {
 		SendMail sendMail = new SendMail();
 		sendMail.connect("smtp.live.com", "jing1058@hotmail.com", "19905018Hb", "587");
 		sendMail.send("gscsystem@163.com", "bin.hong@ericsson.com", "", "",
-				"from 163 用户发的", "test这是正文", null);
+				"from hotmil 用户发的", "test这是正文", null);
 		sendMail.close();
 		System.out.println("发送完毕");
 		//使用APM的webservice发送邮件
