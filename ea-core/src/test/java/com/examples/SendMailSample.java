@@ -16,8 +16,8 @@ import com.utils.mail.SendMail;
 public class SendMailSample {
 	public static void main(String[] args) throws Exception {
 		SendMail sendMail = new SendMail();
-		sendMail.connect("smtp.163.com", "gscsystem", "abc123", "25");
-		sendMail.send("gscsystem@163.com", "tom.ling@ericsson.com", "", "",
+		sendMail.connect("smtp.live.com", "jing1058@hotmail.com", "19905018Hb", "587");
+		sendMail.send("gscsystem@163.com", "bin.hong@ericsson.com", "", "",
 				"from 163 用户发的", "test这是正文", null);
 		sendMail.close();
 		System.out.println("发送完毕");

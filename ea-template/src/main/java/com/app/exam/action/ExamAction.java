@@ -1057,9 +1057,9 @@ public class ExamAction extends BaseProcessAction {
 		}
 		content = content + "<br/><font color='red'>Account/Password: " + user.getAccount() + "/" + user.getPasswd() + "</font>";
 		//send mail
-		 ClientResource client = new ClientResource("http://localhost:5051/apm/service/mail?maillist="+ mail + "&content=" + content);
-		//infEa.sendMailTheadBySmtpList("Exam has been Started!", content , mail, "", "", null);
-		 Representation result = client.get();
+		infEa.sendMailTheadBySmtpList("Exam has been Started!", content , mail, "", "", null);
+		 //ClientResource client = new ClientResource("http://localhost:5050/apm/service/mail?maillist="+ mail + "&content=" + content);
+		 //Representation result = client.get();
 	}
 	
 }

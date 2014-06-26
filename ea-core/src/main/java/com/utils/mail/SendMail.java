@@ -42,6 +42,12 @@ public class SendMail {
 				properties.put("mail.smtp.socketFactory.class", SSL_FACTORY);
 				properties.put("mail.smtp.socketFactory.fallback", "false");
 			}
+			//hotmail需要使用tls
+			if (smtpHost.indexOf("live") > 0) {
+				properties.put("mail.smtp.starttls.enable", "true"); //hotmail 需要起tls
+				properties.put("mail.transport.protocol", "smtp");    
+			}
+
 			if (uid == null || uid.equals("")) {
 				session = javax.mail.Session.getInstance(properties, null);
 			} else {
