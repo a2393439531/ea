@@ -79,8 +79,8 @@ public class User extends BaseModel {
 	public String positiondescription;
 	public String kpidescription;
 	
-	public String goldnumber; //added by xiaoqinghong
-	public String flowernumber; //added by xiaoqinghong
+	public String goldnumber="0"; //added by xiaoqinghong
+	public String flowernumber="0"; //added by xiaoqinghong
 	
 	public Set<User> childUsers = new HashSet<User>();
 	public User parentModel;	//added by tom 账户关联，比如出差，或者2个账户拥有共同的权限
