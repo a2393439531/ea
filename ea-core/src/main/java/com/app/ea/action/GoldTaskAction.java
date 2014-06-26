@@ -265,12 +265,14 @@ public class GoldTaskAction extends BaseEaAction {
 		
 		//修改用户信息
 		public String updateuser(){
-			
-			User logineduser = (User)getSessionValue("userlogined");
-			copyProperties(user,logineduser);
-			baseDao.update(logineduser);
+			User tmpuser = (User)baseDao.find("from User where account = ?" , user.getAccount()).get(0);
+			copyProperties(user,tmpuser);
+			baseDao.update(tmpuser);
 			rhs.put("result", "0000");
-			putSessionValue("userlogined", logineduser);
+			User logineduser = (User)getSessionValue("userlogined");
+			if(logineduser.getAccount().equals(tmpuser.getAccount())){
+				putSessionValue("userlogined", tmpuser);
+			}
 			return "success";
 		}
 		
