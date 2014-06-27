@@ -78,7 +78,14 @@
 		</action>
    		<action name="lang" class="langAction" method="execute">
    		   <result name="login">login.ftl</result>
-		</action>		
+		</action>
+		
+   		<action name="mobileLogin" class="mobileloginAction" method="execute">
+			<result name="apm_fail">m_apm_login.ftl</result>
+			<result name="task_fail">m_task_login.ftl</result>
+			<result name="apm_success">app/mobile/apm/home.ftl</result>
+			<result name="task_success">app/mobile/task/home.ftl</result>
+		</action>
 	</package>
 		
 </struts>
