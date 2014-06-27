@@ -80,7 +80,10 @@ public class User extends BaseModel {
 	public String kpidescription;
 	
 	public String goldnumber; //added by xiaoqinghong
-	public String flowernumber; //added by xiaoqinghong
+	public String praisenumber; //added by xiaoqinghong  称赞数量
+	public String fecesnumber; //added by xiaoqinghong   鄙视数量
+	public String praiseDate; //added by xiaoqinghong   最后称赞日期
+	public String fecesDate; //added by xiaoqinghong   最后鄙视日期
 	
 	public Set<User> childUsers = new HashSet<User>();
 	public User parentModel;	//added by tom 账户关联，比如出差，或者2个账户拥有共同的权限
@@ -99,12 +102,40 @@ public class User extends BaseModel {
 	
 	
 	
-	public String getFlowernumber() {
-		return flowernumber;
+	
+
+	public String getPraiseDate() {
+		return praiseDate;
 	}
 
-	public void setFlowernumber(String flowernumber) {
-		this.flowernumber = flowernumber;
+	public void setPraiseDate(String praiseDate) {
+		this.praiseDate = praiseDate;
+	}
+
+	public String getFecesDate() {
+		return fecesDate;
+	}
+
+	public void setFecesDate(String fecesDate) {
+		this.fecesDate = fecesDate;
+	}
+
+	public String getPraisenumber() {
+		if(praisenumber == null) return "0";
+		return praisenumber;
+	}
+
+	public void setPraisenumber(String praisenumber) {
+		this.praisenumber = praisenumber;
+	}
+
+	public String getFecesnumber() {
+		if(fecesnumber == null) return "0";
+		return fecesnumber;
+	}
+
+	public void setFecesnumber(String fecesnumber) {
+		this.fecesnumber = fecesnumber;
 	}
 
 	@OneToMany(mappedBy = "parentModel", cascade = CascadeType.ALL)
