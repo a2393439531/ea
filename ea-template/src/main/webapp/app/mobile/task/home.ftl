@@ -1,4 +1,4 @@
-<#include "include_header.ftl">
+<#include "../include_header.ftl">
 <script type="text/javascript" charset="utf-8" src="common/common.js"></script>
 <script>
 	var loginedAccount = '<#if Session?exists && Session["userlogined"]?exists>${Session["userlogined"].account?if_exists}</#if>';
@@ -53,6 +53,7 @@ function getDateStr(date){
 		<#include "include_pay_gold.ftl">
 		<#include "include_pay_gold_records.ftl">
 		<#include "include_gold_order.ftl">
+		<#include "include_work_review.ftl">
 	</div>
 </div>
 <script>
