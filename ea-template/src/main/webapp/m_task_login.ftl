@@ -35,10 +35,10 @@
 		if(account && pwd){
 			$("#account").val(account);
 			$("#password").val(pwd);
-			if(search != "changeaccount"){
-				console.log("submit....");
-				$("#loginform")[0].submit();
-			}
+//			if(search != "changeaccount"){
+//				console.log("submit....");
+//				$("#loginform")[0].submit();
+//			}
 				
 		}
 	});

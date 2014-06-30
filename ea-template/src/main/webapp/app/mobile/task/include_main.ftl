@@ -21,9 +21,9 @@
 	<br/>&nbsp;<br/>&nbsp;
 				
 	<ul class="list" >
-		<li><a href="#allTaskPage" >赚取金币</a></li>
+		<li><a href="#allTaskPage" >悬赏任务</a></li>
 		<li><a href="#payGoldPage" >金币交易</a></li>
-		<li><a href="#goldOrderPage" >排行榜</a></li>
+		<li><a href="#goldOrderPage" >金币排行榜</a></li>
 		<li><a href="#workReviewPage" >表现排行榜</a></li>
 		<!--
 		<li><a href="#testpage" >组织架构</a></li>
