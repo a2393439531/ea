@@ -111,7 +111,8 @@ public class BaseAction {
 		String id = getpara("id");
 		String beanname = getpara("beanname");
 		String column = getpara("column");
-		String columnValue = java.net.URLDecoder.decode(getpara("columnValue"));
+//		String columnValue = java.net.URLDecoder.decode(getpara("columnValue"));
+		String columnValue = java.net.URLDecoder.decode(getpara("columnValue"), "UTF-8");
 		/*
 		 * searchtext=java.net.URLDecoder.decode(searchtext,"UTF-8");
 		 * 另外还有一种方法是JavaScript进行一次编码，后台java处理时换种想法就好了： java代码：String s = new
