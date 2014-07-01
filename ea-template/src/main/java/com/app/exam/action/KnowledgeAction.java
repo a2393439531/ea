@@ -70,14 +70,14 @@ public class KnowledgeAction extends BaseEaAction {
 		common_change_rank(); 
 		rhs.put("knowledgeRootList", common_get_tree_root(getpara("beanname")));
 		rhs.put("info_type", "success");
-		rhs.put("info", "改变顺序成功!");
+		rhs.put("info", "Change Successfully!");
 		return "success";
 	}
 	public String change_level() throws Exception {
 		common_change_level();
 		rhs.put("knowledgeRootList", common_get_tree_root(getpara("beanname")));
 		rhs.put("info_type", "success");
-		rhs.put("info", "改变层级成功!");
+		rhs.put("info", "Change Successfully!");
 		return "success";
 	}
 }

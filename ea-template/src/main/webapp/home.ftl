@@ -91,7 +91,7 @@
 	  				<td class="templateOrange"><a href="app/common/test/UI_demo/UI_panel.ftl" target="_blank">面板</a></td>
 	  				<td class="templateOrange"><a href="app/common/test/UI_demo/UI_layout.ftl" target="_blank">布局</a></td>
 	  				<td class="templateOrange"><a href="app/common/test/UI_demo/UI_label.ftl" target="_blank">标签</a></td>
-	  				<td class="templateOrange"><a href="app/common/test/UI_demo/UI_demo/UI_botton.ftl" target="_blank">按钮</a></td>
+	  				<td class="templateOrange"><a href="app/common/test/UI_demo/UI_botton.ftl" target="_blank">按钮</a></td>
 	  				<td class="templateOrange"><a href="app/common/test/UI_demo/UI_icon.ftl" target="_blank">图标</a></td>
 	  				<td class="templateOrange"><a href="app/common/test/UI_demo/UI_table.ftl" target="_blank">表格</a></td>
 	  				<td class="templateOrange"><a href="app/common/test/UI_demo/UI_dialogBox.ftl" target="_blank">对话框</a></td>

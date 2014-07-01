@@ -83,7 +83,7 @@ public class ExamAction extends BaseProcessAction {
 				String examarrangeid = String.valueOf(infActiviti.getVariableByTaskId(taskId, "examarrangeid"));
 				if(!"".equals(examarrangeid) && examarrangeid != null){
 					Examarrange examarrange = (Examarrange)baseDao.loadById("Examarrange", Long.valueOf(examarrangeid));
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//should be yyyy-MM-dd HH:mm:ss
 					String current_str = sdf.format(new Date());
 					Date current = sdf.parse(current_str);
 					Date start = sdf.parse(examarrange.getStarttime());
@@ -247,7 +247,7 @@ public class ExamAction extends BaseProcessAction {
 	
 	public String getstarttime() throws ParseException{
 		String taskid = getpara("taskid");
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String examarrangeid = String.valueOf(infActiviti.getVariableByTaskId(taskid, "examarrangeid"));
 		StringBuffer starttime = new StringBuffer();
 		if(!"".equals(examarrangeid) && examarrangeid != null){
@@ -269,7 +269,7 @@ public class ExamAction extends BaseProcessAction {
 	}
 	
 	public String monitorexam(){
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String keycode = getpara("keycode");
 		String taskid = getpara("taskid");
 		String paperid = (String) infActiviti.getVariableByTaskId(taskid, "formId");
@@ -332,7 +332,7 @@ public class ExamAction extends BaseProcessAction {
 			}
 			
 			String taskid = oaTask.getTask().getId();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//should be yyyy-MM-dd HH:mm:ss
 			String examarrangeid = String.valueOf(infActiviti.getVariableByTaskId(taskid, "examarrangeid"));
 			StringBuffer starttime = new StringBuffer();
 			if(!"".equals(examarrangeid) && examarrangeid != null){
@@ -341,7 +341,7 @@ public class ExamAction extends BaseProcessAction {
 				Date end = sdf.parse(examarrange.getEndtime());
 				String current_str = sdf.format(new Date());
 				Date current = sdf.parse(current_str);
-				if(current.before(start) || (current.before(end) && current.after(start))){
+				if(current.before(start) || (current.after(start)&&current.before(end) )){
 					starttime.append(TimeUtil.compareTwoDate(current, start));
 					oaTask.setStarttime(starttime.toString());
 					allData.add(oaTask);

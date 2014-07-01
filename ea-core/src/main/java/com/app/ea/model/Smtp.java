@@ -28,7 +28,14 @@ public class Smtp extends BaseModel {
 	private String account;
 	private String passwd;
 	private String title;
+	
+	public Long getSortNob() {
+		return sortNob;
+	}
 
+	public void setSortNob(Long sortNob) {
+		this.sortNob = sortNob;
+	}
 	public String getSender() {
 		return sender;
 	}

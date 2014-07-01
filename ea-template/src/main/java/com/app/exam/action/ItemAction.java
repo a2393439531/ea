@@ -129,10 +129,12 @@ public class ItemAction extends BaseEaAction {
 				String content = item.getContent();
 				String refkey = item.getRefkey();
 				String score = item.getMark();
+				int type = item.getType();
 				item = (Item)baseDao.loadById("Item", item.getId());
 				item.setContent(content);
 				item.setRefkey(refkey);
 				item.setMark(score);
+				item.setType(type);
 			}
 			if (knowledgevalue.size() > 0) {
 				for (String klv : knowledgevalue) {
@@ -148,8 +150,19 @@ public class ItemAction extends BaseEaAction {
 				for (int j = 0; j < choiceitemvalue.size(); j++) {
 					Choiceitem ci = null;
 					if(choiceitemid.size() > 0){
-						for (int k = j; k < choiceitemid.size(); k++) {
-							ci = (Choiceitem) baseDao.loadById("Choiceitem", Long.parseLong(choiceitemid.get(k)));
+						for (int k = j; k < choiceitemid.size();) {
+							String id = choiceitemid.get(k);
+							if(!"".equals(id) && id != null){
+								ci = (Choiceitem) baseDao.loadById("Choiceitem", Long.parseLong(id));
+							}else{
+								if(!"".equals(choiceitemvalue.get(j))){
+									ci = new Choiceitem();
+									ci.setRefid(k+1);
+									baseDao.create(ci);
+								}else{
+									break;
+								}
+							}
 							ci.setItem(item);
 							ci.setValue(choiceitemvalue.get(j));
 							baseDao.update(ci);
@@ -160,11 +173,12 @@ public class ItemAction extends BaseEaAction {
 						if(!"".equals(choiceitemvalue.get(j))){
 							ci = new Choiceitem();
 							ci.setItem(item);
-							ci.setRefid(i++);
+							ci.setRefid(i);
 							ci.setValue(choiceitemvalue.get(j));
 							baseDao.create(ci);
 							choiceitem.add(ci);
 						}
+						i++;
 					}
 				}
 				item.setChoiceitem(choiceitem);// 添加选项

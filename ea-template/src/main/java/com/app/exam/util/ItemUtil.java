@@ -329,15 +329,15 @@ public class ItemUtil {
                         	switch (c) {
 							case 0:
 								//item Knowledge
-								Knowledge kn = (Knowledge)baseDao.loadByFieldValue(Knowledge.class, "name", cellValue);
-								if(rootkn == null){
-									rootkn = new Knowledge();
-									rootkn.setName("auto_knowledge");
-									baseDao.create(rootkn);
-								}
+								Knowledge kn = (Knowledge)baseDao.loadByFieldValue(Knowledge.class, "name", leftTrim(rightTrim(cellValue)));
 								if(kn == null){
 									kn = new Knowledge();
 									kn.setName(cellValue);
+									if(rootkn == null){
+										rootkn = new Knowledge();
+										rootkn.setName("auto_knowledge");
+										baseDao.create(rootkn);
+									}
 									kn.setParentModel(rootkn);
 									baseDao.create(kn);
 								}
@@ -398,4 +398,28 @@ public class ItemUtil {
 		
 		return data;
 	}
+	
+	 public static String rightTrim(String s) {
+	        if (s == null || s.trim().length() == 0)
+	            return null;
+	        if (s.trim().length() == s.length())
+	            return s;
+	        if (!s.startsWith(" ")) {
+	            return s.trim();
+	        } else {
+	            return s.substring(0, s.indexOf(s.trim().substring(0, 1)) + s.trim().length());
+	        }
+	    }
+
+	    public static String leftTrim(String s) {
+	        if (s == null || s.trim().length() == 0)
+	            return null;
+	        if (s.trim().length() == s.length())
+	            return s;
+	        if (!s.startsWith(" ")) {
+	            return s;
+	        } else {
+	            return s.substring(s.indexOf(s.trim().substring(0, 1)));
+	        }
+	    }
 }
