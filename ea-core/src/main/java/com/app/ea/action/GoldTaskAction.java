@@ -274,6 +274,10 @@ public class GoldTaskAction extends BaseEaAction {
 			if(logineduser.getAccount().equals(tmpuser.getAccount())){
 				putSessionValue("userlogined", tmpuser);
 			}
+			if(getpara("tipInfo").length() >= 0){
+				log.info(getpara("tipInfo"));
+			}
+			
 			return "success";
 		}
 		
