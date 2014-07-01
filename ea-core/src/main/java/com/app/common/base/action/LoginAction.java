@@ -32,15 +32,7 @@ public class LoginAction extends BaseEaAction {
 		String account = getpara("account");
 		String password = getpara("password");
 		String sysName = getpara("sysName");
-		String terType = getpara("terType"); // app 端登录
-		String success = "success";
-		String fail = "fail";
-		if(terType != null && terType.length() > 0){
-			success = terType + "_" + success;
-			fail = terType + "_" + fail;
-		}
-		boolean saveCookie = false;
-		if(getpara("saveCookie") != null && !"".equals(getpara("saveCookie"))) saveCookie = Boolean.parseBoolean(getpara("saveCookie"));
+		
 		
 		if("".equals(getSessionValue("lang"))||getSessionValue("lang") == null ){
 			putSessionValue("lang", "en");
@@ -51,7 +43,7 @@ public class LoginAction extends BaseEaAction {
 			if("forget".equals(method)){
 				return "forget";
 			}
-			return fail;
+			return "fail";
 		}
 		System.out.println("EA查出用户个数=" + infEa.getAllUser().size());
 		User user = (User) infEa.getUserbyAccount(account);
@@ -61,7 +53,7 @@ public class LoginAction extends BaseEaAction {
 			if("forget".equals(method)){
 				return "forget";
 			}
-			return fail;
+			return "fail";
 		}
 		//新增忘记密码
 		if("forget".equals(method)){
@@ -89,7 +81,7 @@ public class LoginAction extends BaseEaAction {
 					mail, "", "", null);
 			
 			rhs.put("tipInfo", content);
-			return fail;
+			return "fail";
 		}
 		
 		String result = "";
@@ -127,17 +119,7 @@ public class LoginAction extends BaseEaAction {
 				putSessionValue("currnetDepartment", departmentOrganize);
 			}
 			
-			//added by xiao
-			if(saveCookie){
-				Cookie c1 = new Cookie("accountInfo", user.getAccount());
-				c1.setMaxAge(60*60*24*365);  //1年
-				ServletActionContext.getResponse().addCookie(c1);
-				Cookie c2 = new Cookie("pwdInfo", user.getPasswd());
-				c2.setMaxAge(60*60*24*365); //1年
-				ServletActionContext.getResponse().addCookie(c2);
-				log.debug("cookie 添加完毕..");
-			}
-			//added by xiao
+			
 			
 			
 			if (user.getAccount().equals("admin")) { 
@@ -145,10 +127,10 @@ public class LoginAction extends BaseEaAction {
 			}
 			
 			log.info(user.getName() + " 登录成功");
-			return success;
+			return "success";
 		}
 
-		return fail;
+		return "fail";
 	}
 
 	public String changeProject() {

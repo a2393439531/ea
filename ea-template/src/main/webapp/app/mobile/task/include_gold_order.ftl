@@ -4,7 +4,7 @@
 			
 <script>
 function loadGoldOrder(){
-	$("#header").find("h1").text("排行榜["+currUsr.name+"]");
+	$("#header").find("h1").text("金币排行榜["+currUsr.name+"]");
 	sendRequest("ea_goldtask_goldrecords.do", function(jsonstr){
 		$("#goldOrderPage").html("");
 		var allGoldTraRec = JSON.parse(jsonstr);

@@ -12,6 +12,13 @@
 	"parentModel":{
 		"account": 	"<#if x.parentModel?exists>${x.parentModel.account?if_exists}</#if>"
 	},
+	"praiseNumber": "${x.praisenumber?if_exists}",
+	"fecesNumber": "${x.fecesnumber?if_exists}",
+	"praiseDate": "${x.praiseDate?if_exists}",
+	"praiseDays": "<#if x.praiseDate?exists>${javacall["com.utils.time.TimeUtil"].getHowManyDayFromNow("${x.praiseDate?if_exists}")}</#if>",
+	"fecesDate": "${x.fecesDate?if_exists}",
+	"fecesDays": "<#if x.fecesDate?exists>${javacall["com.utils.time.TimeUtil"].getHowManyDayFromNow("${x.fecesDate?if_exists}")}</#if>",
+	
 	"order": ""
 	
 }
