@@ -3,6 +3,7 @@
 </div>
 			
 <script>
+
 function loadGoldOrder(){
 	$("#header").find("h1").text("金币排行榜["+currUsr.name+"]");
 	sendRequest("ea_goldtask_goldrecords.do", function(jsonstr){
@@ -15,8 +16,27 @@ function loadGoldOrder(){
 				continue;
 			}
 			
-			var cli = $('<li style="padding: 15px 20px 15px 10px;"></li>');
-			var cdiv1 = $('<a>' + usrMap[key].name + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="common/images/android/gold.png" />&nbsp;'+usrMap[key].goldNumber + '</a>');
+			var praiseDaysTxt = "";
+			var fecesDaysTxt = "";
+			if(usrMap[key].praiseDate){
+				praiseDaysTxt = "距离上次: " + usrMap[key].praiseDays + " 天";
+			}
+			if(usrMap[key].fecesDate){
+				fecesDaysTxt = "距离上次: " + usrMap[key].fecesDays + " 天";
+			}
+			var cli = $('<li style="padding: 10px 15px 5px 10px;"></li>');
+			var cdiv1 = $('<a></a>');
+			cdiv1.append('<span style="vertical-align: middle;width: 40px; display:inline-block; ">' + usrMap[key].name + '</span>');
+			cdiv1.append('<span style="vertical-align: middle;width: 60px; display:inline-block; "><img src="common/images/android/gold.png" />' + usrMap[key].goldNumber + '</span>');
+			cdiv1.append('<span style="vertical-align: middle;width: 60px; display:inline-block; "><img src="common/images/android/praise.png" />' + usrMap[key].praiseNumber + '<br /><span style="color: #666666;font-size: 1px;">' +praiseDaysTxt+'</span></span>');
+			cdiv1.append('<span style="vertical-align: middle;width: 60px; display:inline-block; "><img src="common/images/android/feces.png" />' + usrMap[key].fecesNumber + '<br /><span style="color: #666666;font-size: 7px;">' +fecesDaysTxt+'</span></span>');
+			cdiv1.append('<span style="vertical-align: middle;width: 10px; display:inline-block; ">&nbsp;&nbsp;</span>');
+			if(currUsr.account == "admin" || currUsr.parentModel.account == "admin"){
+				cdiv1.append('<span style="vertical-align: middle;display:inline-block; "><a style="padding:4px 6px;margin:0;" class="button" onclick="addPraise(\''+usrMap[key].account+'\')">赞赏</a></span>');
+				cdiv1.append('<span style="vertical-align: middle;display:inline-block; "><a style="padding:4px 6px;margin:0;" class="button" onclick="addFeces(\''+usrMap[key].account+'\')">鄙视</a></span>');
+			}
+			
+			
 			var cdiv2 = $('<div style="color: #999999;"><br /></div>');
 			var cdiv3 = $('<span class="grid" ></span>');
 			cdiv3.append('<span class="col1-3" style="font-weight: bold;">支付人/金币</span><span class="col2-3" style="font-weight: bold;">说明</span>');
@@ -40,5 +60,32 @@ function loadGoldOrder(){
 		cul.accordion({time:"0.2s"});
 		setTimeout(function(){cli.find("div").css("height", "40px");}, 1000);
 	});
+
+}
+
+function addPraise(usraccount){
+	var praiseNumber = Number(usrMap[usraccount].praiseNumber);
+	var datestr = getDateStr().substring(0, 11);
+	var url = "ea_goldtask_updateuser.do?user.praiseDate="+datestr+"&user.praisenumber="+(praiseNumber + 1)+"&user.account="+usraccount + "&tipInfo=" + currUsr.name + "赞了" + usrMap[usraccount].name;
+	
+	
+	optRequest(url,function(){
+		usrMap[usraccount].praiseNumber = praiseNumber + 1;
+		usrMap[usraccount].praiseDate = datestr;
+		usrMap[usraccount].praiseDays = "0";
+		loadGoldOrder();
+	}, false);
+}
+
+function addFeces(usraccount){
+	var fecesNumber = Number(usrMap[usraccount].fecesNumber);
+	var datestr = getDateStr().substring(0, 11);
+	var url = "ea_goldtask_updateuser.do?user.fecesDate="+datestr+"&user.fecesnumber="+(fecesNumber + 1)+"&user.account="+usraccount + "&tipInfo=" + currUsr.name + "鄙视了" + usrMap[usraccount].name;;
+	optRequest(url,function(){
+		usrMap[usraccount].fecesNumber = fecesNumber + 1;
+		usrMap[usraccount].fecesDate = datestr;
+		usrMap[usraccount].fecesDays = "0";
+		loadGoldOrder();
+	}, false);
 }
 </script>

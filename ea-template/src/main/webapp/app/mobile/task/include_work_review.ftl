@@ -58,7 +58,7 @@ function loadWorkReview(what){
 	pageobj.append(cul);
 }
 
-function addPraise(usraccount){
+/*function addPraise(usraccount){
 	var praiseNumber = Number(usrMap[usraccount].praiseNumber);
 	var datestr = getDateStr().substring(0, 11);
 	var url = "ea_goldtask_updateuser.do?user.praiseDate="+datestr+"&user.praisenumber="+(praiseNumber + 1)+"&user.account="+usraccount;
@@ -80,6 +80,6 @@ function addFeces(usraccount){
 		usrMap[usraccount].fecesDays = "0";
 		loadWorkReview($("#workReviewPage").get(0));
 	}, false);
-}
+}*/
 
 </script>
