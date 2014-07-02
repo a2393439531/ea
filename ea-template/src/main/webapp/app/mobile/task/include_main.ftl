@@ -14,10 +14,14 @@
 		<span style="color: #C70505;font-weight: bold;" id="myGoldNum"></span>&nbsp;
 		<#if Session["userlogined"]?exists && (Session["userlogined"].account=='admin' || (Session["userlogined"].getParentModel()?exists&&Session["userlogined"].getParentModel().account=='admin'))>
 		<#else>
-			排名: 第<span style="color: #C70505;font-weight: bold;" id="myGoldOrder"></span>位
+			排名: 第<span style="color: #C70505;font-weight: bold;" id="myGoldOrder"></span>位&nbsp;
+			<br/><img src="common/images/android/praise.png" />
+			<span style="color: #C70505;font-weight: bold;" id="myPraiseNum"></span>&nbsp;
+			<img src="common/images/android/feces.png" />
+			<span style="color: #C70505;font-weight: bold;" id="myFecesNum"></span>&nbsp;
 		</#if>
 	</div>
-	<br/>&nbsp;<br/>&nbsp;
+	<br />
 				
 	<ul class="list" >
 		<li><a href="#allTaskPage" >悬赏任务</a></li>
@@ -48,6 +52,8 @@
 			$("#labLoginedName").text(currUsr.name);
 			$("#myGoldNum").text(currUsr.goldNumber);
 			$("#myGoldOrder").text(currUsr.order);
+			$("#myPraiseNum").text(currUsr.praiseNumber);
+			$("#myFecesNum").text(currUsr.fecesNumber);
 		});
 	}
 	

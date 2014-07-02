@@ -19,21 +19,22 @@ function loadGoldOrder(){
 			var praiseDaysTxt = "";
 			var fecesDaysTxt = "";
 			if(usrMap[key].praiseDate){
-				praiseDaysTxt = "距离上次: " + usrMap[key].praiseDays + " 天";
+				praiseDaysTxt = usrMap[key].praiseDays == "0" ? "今天" : usrMap[key].praiseDays + " 天前";
 			}
 			if(usrMap[key].fecesDate){
-				fecesDaysTxt = "距离上次: " + usrMap[key].fecesDays + " 天";
+				fecesDaysTxt = usrMap[key].fecesDays == "0" ? "今天" : usrMap[key].fecesDays + " 天前";
 			}
 			var cli = $('<li style="padding: 10px 15px 5px 10px;"></li>');
 			var cdiv1 = $('<a></a>');
 			cdiv1.append('<span style="vertical-align: middle;width: 40px; display:inline-block; ">' + usrMap[key].name + '</span>');
-			cdiv1.append('<span style="vertical-align: middle;width: 60px; display:inline-block; "><img src="common/images/android/gold.png" />' + usrMap[key].goldNumber + '</span>');
-			cdiv1.append('<span style="vertical-align: middle;width: 60px; display:inline-block; "><img src="common/images/android/praise.png" />' + usrMap[key].praiseNumber + '<br /><span style="color: #666666;font-size: 1px;">' +praiseDaysTxt+'</span></span>');
-			cdiv1.append('<span style="vertical-align: middle;width: 60px; display:inline-block; "><img src="common/images/android/feces.png" />' + usrMap[key].fecesNumber + '<br /><span style="color: #666666;font-size: 7px;">' +fecesDaysTxt+'</span></span>');
-			cdiv1.append('<span style="vertical-align: middle;width: 10px; display:inline-block; ">&nbsp;&nbsp;</span>');
+			cdiv1.append('<span style="vertical-align: middle;width: 60px; display:inline-block; "><img src="common/images/android/gold.png" />&nbsp;<span style="font-weight: bold;font-size: 14px;">' + usrMap[key].goldNumber + '</span></span>');
+			cdiv1.append('<span style="vertical-align: middle;width: 70px; display:inline-block; "><img src="common/images/android/praise.png" />&nbsp;<span style="font-weight: bold;">' + usrMap[key].praiseNumber + '</span>&nbsp;&nbsp;<span style="color: #4B8005;font-size: 7px;">' +praiseDaysTxt+'</span></span>');
+			cdiv1.append('<span style="vertical-align: middle;width: 70px; display:inline-block; "><img src="common/images/android/feces.png" />&nbsp;<span style="font-weight: bold;">' + usrMap[key].fecesNumber + '</span>&nbsp;&nbsp;<span style="color: #4B8005;font-size: 7px;">' +fecesDaysTxt+'</span></span>');
+			//cdiv1.append('<span style="vertical-align: middle;width: 10px; display:inline-block; ">&nbsp;&nbsp;</span>');
 			if(currUsr.account == "admin" || currUsr.parentModel.account == "admin"){
 				cdiv1.append('<span style="vertical-align: middle;display:inline-block; "><a style="padding:4px 6px;margin:0;" class="button" onclick="addPraise(\''+usrMap[key].account+'\')">赞赏</a></span>');
-				cdiv1.append('<span style="vertical-align: middle;display:inline-block; "><a style="padding:4px 6px;margin:0;" class="button" onclick="addFeces(\''+usrMap[key].account+'\')">鄙视</a></span>');
+				
+				cdiv1.append('&nbsp;&nbsp;<span style="vertical-align: middle;display:inline-block; "><a style="padding:4px 6px;margin:0;" class="button" onclick="addFeces(\''+usrMap[key].account+'\')">鄙视</a></span>');
 			}
 			
 			
