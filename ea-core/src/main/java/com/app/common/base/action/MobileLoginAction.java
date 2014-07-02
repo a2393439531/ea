@@ -34,7 +34,7 @@ public class MobileLoginAction extends LoginAction{
 		
 		User user = (User) infEa.getUserbyAccount(getpara("account"));
 
-		if(saveCookie){
+		if(saveCookie && user != null){
 			Cookie c1 = new Cookie("accountInfo", user.getAccount());
 			c1.setMaxAge(60*60*24*365);  //1年
 			ServletActionContext.getResponse().addCookie(c1);
