@@ -762,11 +762,14 @@ public class ExamAction extends BaseProcessAction {
 			sql = "from Examrecord r";
 		}
 		
-		
+		String groupby = getpara("groupby");
+		if("".equals(groupby)){
+			groupby = "paper";
+		}
 		getPageData(sql);
 		
 		List<Examrecord> recordList = (List)rhs.get("dataList");
-		if ("paper".equals(getpara("groupby"))) {
+		if ("paper".equals(groupby)) {
 			if (!"admin".equals(getCurrentUser().getAccount())) {
 				for (Examrecord examrecord : recordList) {
 					if (useraccount.equals(examrecord.getUserid())
