@@ -750,6 +750,7 @@ public class ExamAction extends BaseProcessAction {
 //		return "success";
 //	}
 
+	//目前屏蔽了groupby = paper 的这种呈现，只有user，schedule
 	public String exam_record_list() throws Exception{
 		String useraccount = getCurrentAccount();
 		List<Examrecord> dataList = new ArrayList<Examrecord>();
@@ -762,11 +763,19 @@ public class ExamAction extends BaseProcessAction {
 			sql = "from Examrecord r";
 		}
 		
-		
+		String groupby = getpara("groupby");
+		if("".equals(groupby)){
+			groupby = "paper";
+		}
+		if("schedule".equals(groupby)){
+			exam_arrange_list();
+			rhs.put("groupby", "user");
+			return "success";
+		}
 		getPageData(sql);
 		
 		List<Examrecord> recordList = (List)rhs.get("dataList");
-		if ("paper".equals(getpara("groupby"))) {
+		if ("paper".equals(groupby)) {
 			if (!"admin".equals(getCurrentUser().getAccount())) {
 				for (Examrecord examrecord : recordList) {
 					if (useraccount.equals(examrecord.getUserid())
@@ -834,7 +843,7 @@ public class ExamAction extends BaseProcessAction {
 				}
 				rhs.put("export", true);
 			}
-			rhs.put("groupby", "paper");
+			rhs.put("groupby", "schedule");//先换成schedule分组
 		}
 		Map<String,List<Monitor>> monitorData = new HashMap<String, List<Monitor>>();
 		for (Examrecord examrecord : recordList) {

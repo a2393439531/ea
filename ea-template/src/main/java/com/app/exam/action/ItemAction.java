@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,6 +15,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.struts2.ServletActionContext;
@@ -29,6 +33,7 @@ import com.app.exam.model.Item;
 import com.app.exam.model.Knowledge;
 import com.app.exam.model.Paper;
 import com.app.exam.model.Result;
+import com.app.exam.util.ExcelUtil;
 import com.app.exam.util.ItemUtil;
 
 @Scope("prototype")
@@ -293,59 +298,88 @@ public class ItemAction extends BaseEaAction {
 		Uploadfile uploadFile = new Uploadfile(fileType, fileName, fileName, foreignId, "/file/" + folder + "/"  + newFileName);
 		baseDao.create(uploadFile);
 		//上传成功，然后开始生成题目
-		Map<Item,List<Choiceitem>> data = ItemUtil.getDataByXLS(deskFile);
-		Set<Item> items = data.keySet();
-		for (Item item : items) {
-			List<Choiceitem> choiceitems = data.get(item);
-			item.setChoiceitem(choiceitems);
-			baseDao.create(item);
-			for (Choiceitem choiceitem : choiceitems) {
-				choiceitem.setItem(item);
-				baseDao.create(choiceitem);
-			}
-		}
-		if("paper".equals(method)){
-			//然后自动生成一个模板，把这些题目变成必做题。然后拿到该模板的ID，新建一个该模板创建的试卷
-			Paper paper = new Paper();
-			int p = 0,j = 0,k = 0,l = 0;
-			int totalmark = 0;
-			paper.setItems(items);
-			paper.setRmdsinglechoice(0);
-			paper.setRmdmultichoice(0);
-			paper.setRmdblank(0);
-			paper.setRmdessay(0);
-			
+		//先进行检测
+		Map<String,List<String>> exceptions = ItemUtil.checkDataByXLS(deskFile);
+		Set<String> exception = exceptions.keySet();
+		if(exception.size() > 0){
+			rhs.put("exception", exceptions);
+		}else{
+			Map<Item,List<Choiceitem>> data = ItemUtil.getDataByXLS(deskFile);
+			Set<Item> items = data.keySet();
 			for (Item item : items) {
-				totalmark += Integer.valueOf(item.getMark());
-				switch(item.getType()){
-				case 1:
-					p++;
-					break;
-				case 2:
-					j++;
-					break;
-				case 3:
-					k++;
-					break;
-				case 4:
-					l++;
-					break;
+				List<Choiceitem> choiceitems = data.get(item);
+				item.setChoiceitem(choiceitems);
+				baseDao.create(item);
+				for (Choiceitem choiceitem : choiceitems) {
+					choiceitem.setItem(item);
+					baseDao.create(choiceitem);
 				}
 			}
-			paper.setSinglechoice(p);
-			paper.setMultichoice(j);
-			paper.setBlank(k);
-			paper.setEssay(l);
-			paper.setName(fileName.substring(0, fileName.lastIndexOf("."))  + "_"+new Date().toLocaleString());
-			paper.setTotalmark(totalmark);
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-			paper.setCreatedate(sdf.format(new Date()));
-			paper.setCreateuser(getCurrentAccount());
-			baseDao.create(paper);
-			//跳转到paper页面
+			if("paper".equals(method)){
+				//然后自动生成一个模板，把这些题目变成必做题。然后拿到该模板的ID，新建一个该模板创建的试卷
+				Paper paper = new Paper();
+				int p = 0,j = 0,k = 0,l = 0;
+				int totalmark = 0;
+				paper.setItems(items);
+				paper.setRmdsinglechoice(0);
+				paper.setRmdmultichoice(0);
+				paper.setRmdblank(0);
+				paper.setRmdessay(0);
+				
+				for (Item item : items) {
+					totalmark += Integer.valueOf(item.getMark());
+					switch(item.getType()){
+					case 1:
+						p++;
+						break;
+					case 2:
+						j++;
+						break;
+					case 3:
+						k++;
+						break;
+					case 4:
+						l++;
+						break;
+					}
+				}
+				paper.setSinglechoice(p);
+				paper.setMultichoice(j);
+				paper.setBlank(k);
+				paper.setEssay(l);
+				paper.setName(fileName.substring(0, fileName.lastIndexOf("."))  + "_"+new Date().toLocaleString());
+				paper.setTotalmark(totalmark);
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+				paper.setCreatedate(sdf.format(new Date()));
+				paper.setCreateuser(getCurrentAccount());
+				baseDao.create(paper);
+				//跳转到paper页面
+			}
 		}
 		rhs.put("method", method);
 		return "success";
+	}
+	
+	public String getItemTemplate() {
+		HttpServletResponse response = ServletActionContext.getResponse();
+		String filepath = ServletActionContext.getRequest().getRealPath("");
+		filepath += "/file/";
+		String fileName = "question-sample-import-by-excel.xls";
+		File templatefile = new File(filepath, fileName);
+		response.setContentType("application/vnd.ms-excel");
+		try {
+			response.setHeader("Content-disposition", "attachment; filename="
+					+ java.net.URLEncoder.encode("UploadTemplate", "UTF-8")
+					+ ".xls");
+			ServletOutputStream os = response.getOutputStream();
+			ItemUtil.exportTemplate(templatefile, os);
+			os.close();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public List<String> getChoiceitemvalue() {

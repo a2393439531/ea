@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.ServletOutputStream;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -398,8 +400,121 @@ public class ItemUtil {
 		
 		return data;
 	}
-	
-	 public static String rightTrim(String s) {
+	public static Map<String,List<String>> checkDataByXLS(File file){
+		Map<String,List<String>> data = new HashMap<String,List<String>>();
+		HSSFWorkbook workbook = null;
+        HSSFSheet sheet = null;
+        HSSFRow row = null;
+        HSSFCell cell = null;
+        List<String> exception = null;
+        try {
+			workbook = new HSSFWorkbook(new POIFSFileSystem(new FileInputStream(file)));
+			sheet = workbook.getSheetAt(0);// getSheet("Sheet1");
+			int rowNum = sheet.getPhysicalNumberOfRows();
+			if(rowNum > 0){
+				for(int r = 1; r < rowNum; r++){
+					exception = new ArrayList<String>();
+					row = sheet.getRow(r);
+					if(row==null){
+						exception.add("The row was null!");
+						data.put("Line " + row, exception);
+					}else{
+						//开始读取该行的数据
+						int cellNum = row.getLastCellNum();//拿到该行cell数量
+						String cellValue = "";
+						// 这里cellNum要加上1
+						boolean find = false;
+                        for (short c = 0; c < cellNum + 1; c++){
+							cell = row.getCell(c);
+							if (c == 3) {// mark字段本来就是为空
+								continue;
+							} else {
+								cellValue = ExcelUtil.getCellStringValue(cell);
+								// if ("".equals(cellValue)) {
+								// if (!find) {
+								// find = true;
+								// continue;
+								// }
+								// } else {
+								// if (find) {
+								// if (c == cellNum) {
+								// } else {
+								// exception.add("Column " + (c)
+								// + " is empty!");
+								// }
+								// }
+								// find = false;
+								// }
+								if("".equals(cellValue)){
+									if (c == cellNum) {
+									} else {
+										exception.add("Column " + (c+1)
+												+ " is empty!");
+									}
+									continue;
+								}
+							}
+							switch (c) {
+							case 0:
+								// item Knowledge
+								if("".equals(cellValue)){
+									exception.add("Knowledge can not be null!");
+								}
+								break;
+							case 1:
+								// item type
+								if("".equals(cellValue)){
+									exception.add("Item Type can not be null!");
+								}
+								break;
+							case 2:
+								// item content
+								if("".equals(cellValue)){
+									exception.add("Item Content can not be null!");
+								}
+								break;
+							case 3:
+								// item mark
+								break;
+							case 4:
+								// item refkey
+								for (String val : cellValue.split(",")) {
+									if (val.matches("[1-" + (cellNum - 5) + "]")) {
+
+									} else {
+										exception
+												.add("Column "
+														+ (c + 1)
+														+ ", the answer was not macth the option!");
+									}
+								}
+								break;
+							default:
+								break;
+							}
+                        }
+					}
+					if(exception.size() > 0){
+						data.put("Line " + r, exception);
+					}
+				}
+			}else{
+				exception = new ArrayList<String>();
+				exception.add("The excel was empty!");
+				data.put("error", exception);
+			}
+        } catch (FileNotFoundException e) {
+        	exception = new ArrayList<String>();
+        	exception.add(e.getMessage());
+        	data.put("exception", exception);
+		} catch (IOException e) {
+			exception = new ArrayList<String>();
+        	exception.add(e.getMessage());
+        	data.put("exception", exception);
+		}
+		return data;
+	}
+	public static String rightTrim(String s) {
 	        if (s == null || s.trim().length() == 0)
 	            return null;
 	        if (s.trim().length() == s.length())
@@ -422,4 +537,19 @@ public class ItemUtil {
 	            return s.substring(s.indexOf(s.trim().substring(0, 1)));
 	        }
 	    }
+
+		public static void exportTemplate(File templatefile,
+				ServletOutputStream os) {
+			HSSFWorkbook workbook = null;
+			try {
+				workbook = new HSSFWorkbook(new POIFSFileSystem(new FileInputStream(templatefile)));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				workbook.write(os);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 }
