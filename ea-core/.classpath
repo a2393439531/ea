@@ -165,5 +165,6 @@
 	<classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/websocket/websocket-common/9.1.2.v20140210/websocket-common-9.1.2.v20140210.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/websocket/websocket-client/9.1.2.v20140210/websocket-client-9.1.2.v20140210.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/eclipse/jetty/websocket/websocket-server/9.1.2.v20140210/websocket-server-9.1.2.v20140210.jar"/>
+	<classpathentry kind="var" path="M2_REPO"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
