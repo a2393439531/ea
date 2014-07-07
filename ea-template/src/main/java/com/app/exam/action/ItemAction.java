@@ -208,6 +208,7 @@ public class ItemAction extends BaseEaAction {
 				rhs.put("readonly", false);
 			}
 		} 
+		rhs.put("method", getpara("method"));
 		return "success";
 	}
 
