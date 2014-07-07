@@ -53,6 +53,7 @@ public class ItemAction extends BaseEaAction {
 	public String list() throws Exception {
 		String sql = getSearchSql(get_list_sql());
 		String formstyle = getpara("formstyle");
+		String divstyle = getpara("divstyle");
 		Set<Item> list = new HashSet<Item>();
 		Set<Item> data = new HashSet<Item>();
 		getPageData(sql);
@@ -80,6 +81,7 @@ public class ItemAction extends BaseEaAction {
 		rhs.put("itemtype", itemtype);
 		rhs.put("dataList", data);
 		rhs.put("formstyle", "".equals(formstyle)? "none":formstyle);
+		rhs.put("divstyle", "".equals(divstyle)? "0 10px 0 0":divstyle);
 		rhs.put("knowledgeRootList", common_get_tree_root("Knowledge"));
 		return "success";
 	}
@@ -102,14 +104,14 @@ public class ItemAction extends BaseEaAction {
 			
 			for (Item item : itemlist) {
 				//有分值的题目不能被复用，因为是通过excel上传的 -->取消
-				//if(type.equals(String.valueOf(item.getType())) && (item.getMark() == null||"0".equals(item.getMark()))){
+				if(type.equals(String.valueOf(item.getType()))){
 					dataList.add(item);
-				//}
+				}
 			}
 		}
 		
 		if(dataList.size() == 0){
-			rhs.put("info", "所选知识领域没有该题型");
+			rhs.put("info", "The Category has no question!");
 		}
 		rhs.put("itemlist", dataList);
 		rhs.put("paper",paper);

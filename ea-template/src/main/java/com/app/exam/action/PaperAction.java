@@ -49,6 +49,7 @@ public class PaperAction extends BaseEaAction {
 		String sql = getSearchSql(get_list_sql());
 		getPageData(sql);
 		String formstyle = getpara("formstyle");
+		String divstyle = getpara("divstyle");
 		Set<Paper> list = new HashSet<Paper>();
 		if(knowledgevalue.size() != 0){
 			for (String knowledge : knowledgevalue) {
@@ -84,6 +85,7 @@ public class PaperAction extends BaseEaAction {
 		rhs.put("knowledgevalue", condition);
 		rhs.put("dataList", dataMap);
 		rhs.put("formstyle", "".equals(formstyle)? "none":formstyle);
+		rhs.put("divstyle", "".equals(divstyle)? "0 10px 0 0":divstyle);
 		rhs.put("knowledgeRootList", common_get_tree_root("Knowledge"));
 		return "success";
 	}
