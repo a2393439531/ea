@@ -769,7 +769,7 @@ public class ExamAction extends BaseProcessAction {
 		}
 		if("schedule".equals(groupby)){
 			exam_arrange_list();
-			rhs.put("groupby", "user");
+			rhs.put("groupby", "schedule");
 			return "success";
 		}
 		getPageData(sql);
@@ -843,7 +843,7 @@ public class ExamAction extends BaseProcessAction {
 				}
 				rhs.put("export", true);
 			}
-			rhs.put("groupby", "schedule");//先换成schedule分组
+			rhs.put("groupby", "paper");
 		}
 		Map<String,List<Monitor>> monitorData = new HashMap<String, List<Monitor>>();
 		for (Examrecord examrecord : recordList) {

@@ -304,7 +304,7 @@ public class ItemUtil {
 			sheet = workbook.getSheetAt(0);// getSheet("Sheet1");
 			int rowNum = sheet.getPhysicalNumberOfRows();
 			if(rowNum > 0){
-				Knowledge rootkn = (Knowledge)baseDao.loadByFieldValue(Knowledge.class, "name", "auto_knowledge");
+				Knowledge rootkn = (Knowledge)baseDao.loadByFieldValue(Knowledge.class, "name", "upload");
 				for(int r = 1; r < rowNum; r++){
 					row = sheet.getRow(r);
 					if(row==null){
