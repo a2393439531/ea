@@ -64,6 +64,7 @@ public class GoldTaskAction extends BaseEaAction {
 			long start = raf.getFilePointer();
 			long len = raf.length();
 			long cur = start + len - 1;
+			if(cur <= -1) return "success";
 			raf.seek(cur);
 			int c = -1;
 			while(cur>=start && ( c = raf.read()) != -1){
@@ -273,6 +274,10 @@ public class GoldTaskAction extends BaseEaAction {
 			if(logineduser.getAccount().equals(tmpuser.getAccount())){
 				putSessionValue("userlogined", tmpuser);
 			}
+			if(getpara("tipInfo").length() >= 0){
+				log.info(getpara("tipInfo"));
+			}
+			
 			return "success";
 		}
 		

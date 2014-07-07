@@ -25,6 +25,7 @@ import com.app.common.spring.ssh.model.BaseModel;
 import com.app.common.spring.ssh.page.Pagination;
 import com.app.ea.model.Organize;
 import com.app.ea.model.Role;
+import com.app.ea.model.User;
 import com.opensymphony.util.BeanUtils;
 import com.opensymphony.xwork2.ActionContext;
 
@@ -111,7 +112,8 @@ public class BaseAction {
 		String id = getpara("id");
 		String beanname = getpara("beanname");
 		String column = getpara("column");
-		String columnValue = java.net.URLDecoder.decode(getpara("columnValue"));
+//		String columnValue = java.net.URLDecoder.decode(getpara("columnValue"));
+		String columnValue = java.net.URLDecoder.decode(getpara("columnValue"), "UTF-8");
 		/*
 		 * searchtext=java.net.URLDecoder.decode(searchtext,"UTF-8");
 		 * 另外还有一种方法是JavaScript进行一次编码，后台java处理时换种想法就好了： java代码：String s = new
@@ -142,20 +144,21 @@ public class BaseAction {
 		} else {
 			BaseModel baseModelParent = (BaseModel) baseDao.loadById(beanname,
 					Long.parseLong(getpara("parentId")));
-			
-			Organize organize = (Organize) baseDao.loadById("Organize",
-					Long.parseLong(getpara("organizeId")));
-			
-			Set<Role> rootSet = organize.rootRoles(); //拿到当前organize的根Role
-			Set<Role> roleSet =  organize.getRoles();//拿到下属的Role,应该还要除掉自己本身，传过来的role只要不等于下属role就可以改变
-			String parentId = getpara("parentId"); //前台传过来的上一级role id
-			for (Role role : roleSet) {
-				if(rootSet.contains(role)){
-					continue;
-				}
-				if( parentId.equals(String.valueOf(role.getId()))){
-					System.out.println("不能设置上级为自己的下属！");
-					return false;
+			if (!"".equals(getpara("organizeId"))) {
+				Organize organize = (Organize) baseDao.loadById("Organize",
+						Long.parseLong(getpara("organizeId")));
+
+				Set<Role> rootSet = organize.rootRoles(); // 拿到当前organize的根Role
+				Set<Role> roleSet = organize.getRoles();// 拿到下属的Role,应该还要除掉自己本身，传过来的role只要不等于下属role就可以改变
+				String parentId = getpara("parentId"); // 前台传过来的上一级role id
+				for (Role role : roleSet) {
+					if (rootSet.contains(role)) {
+						continue;
+					}
+					if (parentId.equals(String.valueOf(role.getId()))) {
+						System.out.println("不能设置上级为自己的下属！");
+						return false;
+					}
 				}
 			}
 			BeanUtils.setValue(baseModel, "parentModel", baseModelParent);
@@ -178,10 +181,21 @@ public class BaseAction {
 				pagination.setMaxSize(pageNum);
 			}
 		} else {
-			BaseModel modle = (BaseModel) baseDao.loadById(getpara("beanname"),
+			BaseModel model = (BaseModel) baseDao.loadById(getpara("beanname"),
 					Long.parseLong(id));
-			BeanUtils.setValue(modle, column, columnValue);
-			baseDao.update(modle);
+			//加入对account的唯一性判断
+			BaseModel existsModel = null;
+			if(column.equals("account")){
+				existsModel = (BaseModel) baseDao.loadByFieldValue(User.class, column, columnValue);
+			}
+			if(existsModel == null){
+				BeanUtils.setValue(model, column, columnValue);
+				rhs.put("find", false);
+			}else{
+				rhs.put("result", "The " + column + " already exists!");
+				rhs.put("find", true);
+			}
+			baseDao.update(model);
 		}
 
 		

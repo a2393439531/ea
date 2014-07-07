@@ -28,7 +28,7 @@ public class JudgeUtil implements JavaDelegate {
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		log.debug("----------------------------------->"+execution.getCurrentActivityName());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		BaseDao baseDao = (BaseDao)SpringContext.getBean("eaDaoTarget");
 		InfActiviti infActiviti = (InfActiviti)SpringContext.getBean("infActiviti");
 		String processInstanceId = execution.getProcessInstanceId();

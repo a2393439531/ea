@@ -5,17 +5,26 @@
 <div  style="margin:10px">
 	 <div class="panel panel-default">
 	    <div class="panel-heading">
-	      <h3 class="panel-title">Web Service 调用规则</h3>
+	      <h3 class="panel-title">Web Service 说明</h3>
 	    </div>
 	    <div class="panel-body">
-			1. 首先我们的Web Service的接口地址为：<span class="label label-danger"><@context/>service/</span>
+	    	描述：我们使用了activiti封装的Restlet开源项目作为我们的webservice。<br/>
+			1. 首先我们的Web Service的路径在web.xml中配置：RestletServlet的Url-pattern<br/>
+			2. 开发webservice资源类，例子见ea-core里面的com/webservice/
 			<br/>
 			<br/>
-			2. 根据安全的需要，调用我们的Web Service需要验证，现对验证进行说明：
-			<pre>2.1 如果直接在浏览器中对我们的Web Service进行Get请求，我们首先会对当前用户进行验证，是否登录？
+			3. 调用webservice，首先浏览器直接访问：<a href="./service/management/tables" target="_blank">http://localhost:8080/demo/service/management/tables</a>,查看到的为json数据格式。<br/>（如果未登录，则会弹出基本验证框）
+			
+			
+			<br/>
+			<br/>
+			<br/>
+			根据安全的需要，调用我们的Web Service需要验证，现对验证进行说明：
+			<br/>验证规则可以在org.activiti.rest.common.application.ActivitiRestApplication中查看（该文件是从avtiviti源文件中抽取出来，从而覆盖activiti的默认验证逻辑)。
+			<pre>2.1 如果直接在浏览器中对我们的Web Service进行Get请求，ActivitiRestApplication类首先会对当前用户进行验证，是否登录？
     如果否，则会跳转到登录页面在进行相关操作。演示方式：点击下面的按钮<button class="btn btn-xs btn-primary" onclick="javascript:demo('./service/management/tables','')">演示</button>(查询当前部署的工作流)
 
-2.2 如果是进行远端的Web Service调用，同样需要对调用发起者进行验证，即需要调用者把用户名和密码进行base 64位加密，然后放入Post或者Get请求的头部信息中，发送给我们的Web Service。
+2.2 如果是为第三方提供Web Service调用，同样需要对第三方进行验证，即需要第三方把用户名和密码进行base 64位加密，然后放入Post或者Get请求的头部信息中，发送给我们的Web Service。
     <button class="btn btn-xs btn-primary" onclick="javascript:showdemo()">演示</button>(查询指定用户所被分配的任务)
 	<div style="display:none" id="demo" border="1px solid">
  a) 拿到base 64位加密字符串
@@ -23,8 +32,9 @@
  b) 向Web Service 发送请求
  <button class="btn btn-xs btn-primary" onclick="javascript:sendRequest()">查询用户的task</button>
  <br/> c) 向web service发送请求，上传一个文件，请求地址：/upload
-<form id="upload_form" action="./service/upload" method="post" enctype="multipart/form-data"><input type="file" name="uploadfile" />
-<button class="btn btn-xs btn-primary" onclick="javascript:document.getElementById('upload_form').submit()">发送Upload请求</button>
+<form id="upload_form" action="./service/upload" method="post" enctype="multipart/form-data">
+<input type="file" name="uploadfile" />
+<button class="btn btn-xs btn-primary" onclick="javascript:document.getElementById().submit();">发送Upload请求</button>
 </form>
 	</div>	
 			</pre>
@@ -37,7 +47,7 @@
 	    	</div>
 	 	</div>
 			<br/>
-			3. JAVA后台调用的例子(Restlet):
+			2.3. JAVA后台调用的例子(Restlet):
 			<pre>
 public static void testClient() {
 	Request request = new Request(Method.GET,"http://localhost:8080/demo/service/management/tables");
@@ -130,9 +140,9 @@ function sendRequest(){
 function sendUploadRequest(){
 	var basiccode=$("#code").text();
 	$.ajax({
-         type:"GET",
+         type:"POST",
          url: './service/upload',
-         data: '',
+         data: $('#upload_form').serialize(),
          cache: false,
          contentType: false,
          processData: false,

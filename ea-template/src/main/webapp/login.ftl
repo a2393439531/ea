@@ -53,7 +53,8 @@
 			    <#list language_name?keys as key>
 				   <option value="${key}">${language_name[key]}</option>
 				</#list> 
-		</select> 			                            
+		</select> 	
+		&nbsp;&nbsp;<a href="ea_ea_home.do">二维码</a>		                            
     </form>
                             
       <form class="form-signin" name="loginForm" action="login.do" method="post">
@@ -72,7 +73,7 @@
         <br>
         
       
-        <button class="btn btn-lg  btn-primary" type="submit"> <@i18n "submit" /></button>
+        <button class="btn btn-lg  btn-primary" type="submit"> <@i18n "submit" /></button> 
         <#if rhs?exists>${rhs["tipInfo"]?if_exists}</#if>
       </form>
     </div> <!-- /container -->

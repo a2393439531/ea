@@ -33,7 +33,10 @@ public class LoginAction extends BaseEaAction {
 		String password = getpara("password");
 		String sysName = getpara("sysName");
 		
-		
+		if("logout".equals(method)){//新增登出功能
+			putSessionValue("userlogined", null);
+			return "fail";
+		}
 		if("".equals(getSessionValue("lang"))||getSessionValue("lang") == null ){
 			putSessionValue("lang", "en");
 		}
@@ -77,7 +80,7 @@ public class LoginAction extends BaseEaAction {
 				}
 			}
 			//send mail
-			infEa.sendMailTheadBySmtpList("NRJ TOOLS PASSWORD!", "<font color='red'>Account/Password: " + user.getAccount() + "/" + user.getPasswd() + "</font>", 
+			infEa.sendMailTheadBySmtpList("WEB SAC PASSWORD!", "<font color='red'>Account/Password: " + user.getAccount() + "/" + user.getPasswd() + "</font>", 
 					mail, "", "", null);
 			
 			rhs.put("tipInfo", content);

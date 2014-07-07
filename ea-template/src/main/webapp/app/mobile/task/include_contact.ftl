@@ -15,7 +15,7 @@
 				var cgrid = $('<div class="grid"></div>');
 				cgrid.append('<div class="col3">'+usrMap[key].name+'</div>');
 				cgrid.append('<div class="col3">'+usrMap[key].phoneNumber+'</div>');
-				cgrid.append('<div class="col3"><a href="tel: '+usrMap[key].phoneNumber+'" class="icon phone" style="font-size: 12px;"></a>&nbsp;<a href="tel: '+usrMap[key].phoneNumber+'" class="icon message" style="font-size: 12px;"></a>&nbsp;</div>');
+				cgrid.append('<div class="col3"><a href="tel: '+usrMap[key].phoneNumber+'" class="icon phone" style="font-size: 12px;"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="sms: '+usrMap[key].phoneNumber+'" class="icon message" style="font-size: 12px;"></a>&nbsp;</div>');
 				var cdemail = $('<div style="color: #8693AC;">email: '+usrMap[key].email+'</div>');
 				cli.append(cgrid);
 				cli.append(cdemail);

@@ -12,27 +12,35 @@
 	<div>
 		<span style="color: #C70505;font-weight: bold;" id="labLoginedName"></span>&nbsp;<img src="common/images/android/gold.png" />
 		<span style="color: #C70505;font-weight: bold;" id="myGoldNum"></span>&nbsp;
-		<#if Session["userlogined"]?exists && Session["userlogined"].getParentModel()?exists&&Session["userlogined"].getParentModel().account=='admin'>
+		<#if Session["userlogined"]?exists && (Session["userlogined"].account=='admin' || (Session["userlogined"].getParentModel()?exists&&Session["userlogined"].getParentModel().account=='admin'))>
 		<#else>
-			排名: 第<span style="color: #C70505;font-weight: bold;" id="myGoldOrder"></span>位
+			排名: 第<span style="color: #C70505;font-weight: bold;" id="myGoldOrder"></span>位&nbsp;
+			<br/><img src="common/images/android/praise.png" />
+			<span style="color: #C70505;font-weight: bold;" id="myPraiseNum"></span>&nbsp;
+			<img src="common/images/android/feces.png" />
+			<span style="color: #C70505;font-weight: bold;" id="myFecesNum"></span>&nbsp;
 		</#if>
 	</div>
-	<marquee scrolldelay="10" scrollamount="1"  id="marquee" direction=up height="40px" style="float: right;color:#4B8005;"></marquee>
-	<br/>&nbsp;<br/>&nbsp;
+	<br />
 				
 	<ul class="list" >
-		<li><a href="#allTaskPage" >赚取金币</a></li>
+		<li><a href="#allTaskPage" >悬赏任务</a></li>
 		<li><a href="#payGoldPage" >金币交易</a></li>
-		<li><a href="#goldOrderPage" >排行榜</a></li>
+		<li><a href="#goldOrderPage" >金币排行榜</a></li>
+		
+		<!--
 		<li><a href="#testpage" >组织架构</a></li>
+		-->
 	</ul>
+	
+	<marquee scrolldelay="10" scrollamount="1"  id="marquee" direction=up height="80px" style="float: right;color:#4B8005;"></marquee>
 </div>
 
 <script>
 	//切换账号
 	function changeAccount(){
 		document.cookie.length = 0;
-		window.location="m_login.ftl?changeaccount";
+		window.location="m_task_login.ftl?changeaccount";
 	}
 	
 	//加载主页面, 
@@ -44,6 +52,8 @@
 			$("#labLoginedName").text(currUsr.name);
 			$("#myGoldNum").text(currUsr.goldNumber);
 			$("#myGoldOrder").text(currUsr.order);
+			$("#myPraiseNum").text(currUsr.praiseNumber);
+			$("#myFecesNum").text(currUsr.fecesNumber);
 		});
 	}
 	

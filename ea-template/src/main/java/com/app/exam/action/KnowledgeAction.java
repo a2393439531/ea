@@ -49,20 +49,29 @@ public class KnowledgeAction extends BaseEaAction {
 			common_update();
 		} catch (Exception e) {
 			rhs.put("info_type", "error");
-			rhs.put("info", " 属性更新失败!");
+			rhs.put("info", " Update failed!");
 			return "success";
 		}
 		rhs.put("knowledgeRootList", common_get_tree_root(getpara("beanname")));
 		rhs.put("info_type", "success");
-		rhs.put("info", "更新成功!");
+		rhs.put("info", "Update successfully!");
 		return "success";
 	}
 
 	public String delete() throws Exception {
-		common_del_tree_node();
+		String id = getpara("id");
+		Knowledge knowledge = (Knowledge) baseDao.loadById(getpara("beanname"), Long.valueOf(id));
+		boolean find = false;
+		if(knowledge.getItems().size() > 0){
+			find = true;
+			rhs.put("result", "Can not delete the knowledge!");
+		}else{
+			common_del_tree_node();
+			rhs.put("info_type", "success");
+			rhs.put("info", " Delete successfully!");
+		}
+		rhs.put("flag", find);
 		rhs.put("knowledgeRootList", common_get_tree_root(getpara("beanname")));
-		rhs.put("info_type", "success");
-		rhs.put("info", " 删除成功!");
 		return "success";
 	}
 	
@@ -70,14 +79,14 @@ public class KnowledgeAction extends BaseEaAction {
 		common_change_rank(); 
 		rhs.put("knowledgeRootList", common_get_tree_root(getpara("beanname")));
 		rhs.put("info_type", "success");
-		rhs.put("info", "改变顺序成功!");
+		rhs.put("info", "Change Successfully!");
 		return "success";
 	}
 	public String change_level() throws Exception {
 		common_change_level();
 		rhs.put("knowledgeRootList", common_get_tree_root(getpara("beanname")));
 		rhs.put("info_type", "success");
-		rhs.put("info", "改变层级成功!");
+		rhs.put("info", "Change Successfully!");
 		return "success";
 	}
 }

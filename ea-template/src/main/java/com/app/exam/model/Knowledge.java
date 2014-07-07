@@ -35,7 +35,14 @@ public class Knowledge extends BaseModel {
 	private String name;
 	private String alias;
 	private String value;
+	
+	public Long getSortNob() {
+		return sortNob;
+	}
 
+	public void setSortNob(Long sortNob) {
+		this.sortNob = sortNob;
+	}
 	//
 	// private Set<Template> templates = new HashSet<Template>();
 	//

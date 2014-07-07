@@ -4,10 +4,10 @@
 </footer>
 
 <div id="payGoldPage" data-load="loadPayGold" class="panel" data-footer="payGoldFooter" data-tab="navbar_paygold">
-	<div align="center">可用金币:  <span style="color: #C70505;font-weight: bold;" id="pay_goldnum"></span>&nbsp;</div>
+	
 	<form action="" method="post">
 		<br />
-		<label for="payGoldNum">支出金币数: </label><input id="payGoldNum" type="number" placeholder="请输入金币数量">
+		<label for="payGoldNum">支出金币数: </label><input id="payGoldNum" type="number" placeholder="">
 		<label for="tousrlist">收金人:</label><select id="tousrlist"></select>
 		<label for="payRemarks">说明: </label><input id="payRemarks" type="text" placeholder="请输入说明" onclick="payRemarksClick()" />
 		<input type="button" class="button" value="提交" style='float:right;' onclick="payGold()">
@@ -20,9 +20,10 @@
 function loadPayGold(){
 	if(!currUsr) return;
 	$("#header").find("h1").text("金币支出["+currUsr.name+"]");
+	$("#payGoldNum").attr("placeholder", "最多可支付 " + currUsr.goldNumber + " 金币");
 	if(!usrMap) return;
 	
-	$("#pay_goldnum").text(currUsr.goldNumber);
+	
 	$("#tousrlist").html("");
 	for(var key in usrMap){
 		if(key != currUsr.account){
