@@ -186,13 +186,21 @@ public class BaseAction {
 			//加入对account的唯一性判断
 			BaseModel existsModel = null;
 			if(column.equals("account")){
-				existsModel = (BaseModel) baseDao.loadByFieldValue(User.class, column, columnValue);
+				existsModel = (BaseModel) baseDao.loadByFieldValue(User.class, column, columnValue.trim());
 			}
 			if(existsModel == null){
+				if(model instanceof User){
+					User user = (User)model;
+					if("admin".equals(user.getAccount()) && "account".equals(column)){
+						rhs.put("result", "The admin account can not be changed!");
+						rhs.put("find", true);
+						return "success";
+					}
+				}
 				BeanUtils.setValue(model, column, columnValue);
 				rhs.put("find", false);
 			}else{
-				rhs.put("result", "The " + column + " already exists!");
+				rhs.put("result", "The " + column + " '"+columnValue.trim() + "' " +" already exists!");
 				rhs.put("find", true);
 			}
 			baseDao.update(model);

@@ -337,7 +337,7 @@ public class ItemUtil {
 									kn.setName(cellValue);
 									if(rootkn == null){
 										rootkn = new Knowledge();
-										rootkn.setName("auto_knowledge");
+										rootkn.setName("upload");
 										baseDao.create(rootkn);
 									}
 									kn.setParentModel(rootkn);
@@ -429,29 +429,41 @@ public class ItemUtil {
 							if (c == 3) {// mark字段本来就是为空
 								continue;
 							} else {
-								cellValue = ExcelUtil.getCellStringValue(cell);
-								// if ("".equals(cellValue)) {
-								// if (!find) {
-								// find = true;
-								// continue;
-								// }
-								// } else {
-								// if (find) {
-								// if (c == cellNum) {
-								// } else {
-								// exception.add("Column " + (c)
-								// + " is empty!");
-								// }
-								// }
-								// find = false;
-								// }
-								if("".equals(cellValue)){
+								if(cell == null){
 									if (c == cellNum) {
-									} else {
+									}else{
 										exception.add("Column " + (c+1)
 												+ " is empty!");
+										continue;
 									}
-									continue;
+								}else{
+									if(cell.getCellType() == HSSFCell.CELL_TYPE_BLANK){
+										continue;
+									}
+									cellValue = ExcelUtil.getCellStringValue(cell);
+									// if ("".equals(cellValue)) {
+									// if (!find) {
+									// find = true;
+									// continue;
+									// }
+									// } else {
+									// if (find) {
+									// if (c == cellNum) {
+									// } else {
+									// exception.add("Column " + (c)
+									// + " is empty!");
+									// }
+									// }
+									// find = false;
+									// }
+									if("".equals(cellValue)){
+										if (c == cellNum) {
+										} else {
+											exception.add("Column " + (c+1)
+													+ " is empty!");
+										}
+										continue;
+									}
 								}
 							}
 							switch (c) {

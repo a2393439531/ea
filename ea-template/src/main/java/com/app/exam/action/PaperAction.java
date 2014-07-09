@@ -432,13 +432,13 @@ public class PaperAction extends BaseEaAction {
 			} else if ("edit".equals(getpara("method"))) {
 				rhs.put("readonly", false);
 			}
-			Set<Item> items = paper.getItems();
-			for (Item item : items) {
-				if(!"0".equals(item.getMark()) && item.getMark() != null){
-					byexcel = true;
-					break;
-				}
-			}
+			// Set<Item> items = paper.getItems();
+			// for (Item item : items) {
+			// if(!"0".equals(item.getMark()) && item.getMark() != null){
+			// byexcel = true;
+			// break;
+			// }
+			// }
 			//如果是excel导入的，就把所有题目显示出来//目前只显示了单选。因为，目前通过excel导入只能是单选题
 			//if(byexcel){
 				//Template template = paper.getTemplate();

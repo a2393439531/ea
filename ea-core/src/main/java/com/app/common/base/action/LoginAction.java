@@ -51,7 +51,7 @@ public class LoginAction extends BaseEaAction {
 		System.out.println("EA查出用户个数=" + infEa.getAllUser().size());
 		User user = (User) infEa.getUserbyAccount(account);
 		if (user==null) {
-			rhs.put("tipInfo", "Account can not be empty!");
+			rhs.put("tipInfo", "Account can not be found!");
 			
 			if("forget".equals(method)){
 				return "forget";
