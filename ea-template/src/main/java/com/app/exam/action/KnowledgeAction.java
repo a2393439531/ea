@@ -64,7 +64,7 @@ public class KnowledgeAction extends BaseEaAction {
 		boolean find = false;
 		if(knowledge.getItems().size() > 0){
 			find = true;
-			rhs.put("result", "Can not delete the knowledge!");
+			rhs.put("result", "The Category has questions, can not delete it!");
 		}else{
 			common_del_tree_node();
 			rhs.put("info_type", "success");

@@ -186,6 +186,11 @@ public class BaseAction {
 			//加入对account的唯一性判断
 			BaseModel existsModel = null;
 			if(column.equals("account")){
+				if("".equals(columnValue.trim()) || columnValue.trim().length() == 0){
+					rhs.put("result", "The account should not be empty!");
+					rhs.put("find", true);
+					return "success";
+				}
 				existsModel = (BaseModel) baseDao.loadByFieldValue(User.class, column, columnValue.trim());
 			}
 			if(existsModel == null){
