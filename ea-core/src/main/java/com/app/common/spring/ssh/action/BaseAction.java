@@ -183,7 +183,15 @@ public class BaseAction {
 		} else {
 			BaseModel model = (BaseModel) baseDao.loadById(getpara("beanname"),
 					Long.parseLong(id));
-			//加入对account的唯一性判断
+			//加入对account的唯一性判断和admin的account不能修改
+			if(model instanceof User){
+				User user = (User)model;
+				if("admin".equals(user.getAccount()) && "account".equals(column)){
+					rhs.put("result", "The admin account can not be changed!");
+					rhs.put("find", true);
+					return "success";
+				}
+			}
 			BaseModel existsModel = null;
 			if(column.equals("account")){
 				if("".equals(columnValue.trim()) || columnValue.trim().length() == 0){
@@ -194,14 +202,6 @@ public class BaseAction {
 				existsModel = (BaseModel) baseDao.loadByFieldValue(User.class, column, columnValue.trim());
 			}
 			if(existsModel == null){
-				if(model instanceof User){
-					User user = (User)model;
-					if("admin".equals(user.getAccount()) && "account".equals(column)){
-						rhs.put("result", "The admin account can not be changed!");
-						rhs.put("find", true);
-						return "success";
-					}
-				}
 				BeanUtils.setValue(model, column, columnValue);
 				rhs.put("find", false);
 			}else{

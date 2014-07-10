@@ -423,8 +423,26 @@ public class ItemUtil {
 						int cellNum = row.getLastCellNum();//拿到该行cell数量
 						String cellValue = "";
 						// 这里cellNum要加上1
-						boolean find = false;
+						//boolean find = false;
+						String columnname = "";
                         for (short c = 0; c < cellNum + 1; c++){
+                        	switch(c){
+                        		case 0:
+                        			columnname = "<strong>Category</strong>";
+                        			break;
+                        		case 1:
+                        			columnname = "<strong>Type</strong>";
+                        			break;
+                        		case 2:
+                        			columnname = "<strong>Content</strong>";
+                        			break;
+                        		case 4:
+                        			columnname = "<strong>Answer</strong>";
+                        			break;
+                        		default:
+                        			columnname = "<strong>Option " + (c+1)+"</strong>";
+                        			break;
+                        	}
 							cell = row.getCell(c);
 							if (c == 3) {// mark字段本来就是为空
 								continue;
@@ -432,7 +450,7 @@ public class ItemUtil {
 								if(cell == null){
 									if (c == cellNum) {
 									}else{
-										exception.add("Column " + (c+1)
+										exception.add("Column " + columnname
 												+ " is empty!");
 										continue;
 									}
@@ -459,7 +477,7 @@ public class ItemUtil {
 									if("".equals(cellValue)){
 										if (c == cellNum) {
 										} else {
-											exception.add("Column " + (c+1)
+											exception.add("Column " + columnname
 													+ " is empty!");
 										}
 										continue;
@@ -467,27 +485,6 @@ public class ItemUtil {
 								}
 							}
 							switch (c) {
-							case 0:
-								// item Knowledge
-								if("".equals(cellValue)){
-									exception.add("Knowledge can not be null!");
-								}
-								break;
-							case 1:
-								// item type
-								if("".equals(cellValue)){
-									exception.add("Item Type can not be null!");
-								}
-								break;
-							case 2:
-								// item content
-								if("".equals(cellValue)){
-									exception.add("Item Content can not be null!");
-								}
-								break;
-							case 3:
-								// item mark
-								break;
 							case 4:
 								// item refkey
 								for (String val : cellValue.split(",")) {
@@ -495,9 +492,7 @@ public class ItemUtil {
 
 									} else {
 										exception
-												.add("Column "
-														+ (c + 1)
-														+ ", the answer was not macth the option!");
+												.add("The Column <strong>Answer</strong> is not macth the option!");
 									}
 								}
 								break;
@@ -507,7 +502,7 @@ public class ItemUtil {
                         }
 					}
 					if(exception.size() > 0){
-						data.put("Line " + r, exception);
+						data.put("Line " + (r+1), exception);
 					}
 				}
 			}else{

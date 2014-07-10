@@ -207,6 +207,7 @@ public class PaperAction extends BaseEaAction {
 			// paper.setTemplate(template);
 			// }
 			// }
+			getmaxitem();
 			baseDao.create(paper);
 			rhs.put("page", "setpaper");
 			rhs.put("paper", paper);
@@ -500,31 +501,39 @@ public class PaperAction extends BaseEaAction {
 	public String getmaxitem() throws Exception{
 		int maxsinglechoicecount = 0;
 		int maxmultichoicecount = 0;
+		String method = getpara("method");
 		Set<Knowledge> knowledges = new HashSet<Knowledge>();
 		List<Knowledge> knowledgerootlist = common_get_tree_root("Knowledge");
 		String[] knowledgesid = getpara("knowledgesid").split(",");
-		if (knowledgesid.length > 0) {
-			for (String value : knowledgesid) {
-				Knowledge kn = getKnowledgeById(knowledgerootlist, value);
-				if(kn != null){
-					knowledges.add(kn);
+		if("newpaper".equals(method)){//第一次新建paper的时候
+			List<Knowledge> knowledge = baseDao.find(" from Knowledge where parent_id != null");
+			for(Knowledge k: knowledge){
+				knowledges.add(k);
+			}
+		}else{
+			if (knowledgesid.length > 0) {
+				for (String value : knowledgesid) {
+					Knowledge kn = getKnowledgeById(knowledgerootlist, value);
+					if(kn != null){
+						knowledges.add(kn);
+					}
 				}
 			}
-			for (Knowledge knowledge : knowledges) {
-				Set<Item> tmpitems = knowledge.getItems();
-				for (Item item : tmpitems) {
-					switch (item.getType()) {
-					case 1:
-						maxsinglechoicecount++;
-						break;
-					case 2:
-						maxmultichoicecount++;
-						break;
-					case 3:
-						break;
-					case 4:
-						break;
-					}
+		}
+		for (Knowledge knowledge : knowledges) {
+			Set<Item> tmpitems = knowledge.getItems();
+			for (Item item : tmpitems) {
+				switch (item.getType()) {
+				case 1:
+					maxsinglechoicecount++;
+					break;
+				case 2:
+					maxmultichoicecount++;
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
 				}
 			}
 		}
