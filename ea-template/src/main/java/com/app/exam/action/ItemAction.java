@@ -135,12 +135,12 @@ public class ItemAction extends BaseEaAction {
 			}else{
 				String content = item.getContent();
 				String refkey = item.getRefkey();
-				String score = item.getMark();
+				//String score = item.getMark();
 				int type = item.getType();
 				item = (Item)baseDao.loadById("Item", item.getId());
 				item.setContent(content);
 				item.setRefkey(refkey);
-				item.setMark(score);
+				//item.setMark(score);
 				item.setType(type);
 			}
 			if (knowledgevalue.size() > 0) {

@@ -88,14 +88,34 @@ public class JudgeUtil implements JavaDelegate {
 				//String itemid = String.valueOf(result.getItemId());
 				//(Item)baseDao.loadById("Item", Long.valueOf(itemid));
 				Item item = result.getItem(); 
-				if(result.getAnswer()!= null && result.getAnswer().equals(item.getRefkey())){
+				boolean flag = false;
+				if(item.getType() == 2){ //多选答案判断
+					String[] keys = item.getRefkey().split(",");
+					String[] answers = result.getAnswer().split(",");
+					if(answers.length == keys.length){
+						for(String answer: answers){
+							flag = false;
+							for(String key: keys){
+								if(answer.trim().equals(key)){
+									flag = true;
+									break;
+								}
+							}
+						}
+					}
+					if(flag){
+						multichoicemark += result.getMark();
+					}else{
+						result.setMark(0);
+					}
+				}else if(result.getAnswer()!= null && result.getAnswer().equals(item.getRefkey())){//单选答案判断
 					switch(item.getType()){
 					case 1:
 						singlechoicemark += result.getMark();
 						break;
-					case 2:
-						multichoicemark += result.getMark();
-						break;
+					// case 2:
+					// multichoicemark += result.getMark();
+					// break;
 					case 3:
 						blankmark += result.getMark();
 						break;

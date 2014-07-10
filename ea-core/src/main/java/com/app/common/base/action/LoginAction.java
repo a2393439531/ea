@@ -51,7 +51,7 @@ public class LoginAction extends BaseEaAction {
 		System.out.println("EA查出用户个数=" + infEa.getAllUser().size());
 		User user = (User) infEa.getUserbyAccount(account);
 		if (user==null) {
-			rhs.put("tipInfo", "Account can not be empty!");
+			rhs.put("tipInfo", "Account can not be found!");
 			
 			if("forget".equals(method)){
 				return "forget";
@@ -154,14 +154,18 @@ public class LoginAction extends BaseEaAction {
 		User currentuser = (User) sessionMap.get("userlogined");
 		String currentpassword = currentuser.getPasswd();
 		if (!oldpassword.equals(currentpassword)) {
-			String errorinfo = "密码输入错误！请正确输入当前密码";
+			String errorinfo = "password error, please input correct password!";
 			rhs.put("info", errorinfo);
 		} else {
 			// String userId = getpara("userid");
 			// User user = (User) baseDao.loadById("User",
 			// Long.parseLong(userId));
-			infEa.resetPassword(currentuser.account, getpara("newpassword"));
-			rhs.put("info", "修改成功");
+			if("".equals(getpara("newpassword"))){
+				rhs.put("info", "Password can not be empty!");
+			}else{
+				infEa.resetPassword(currentuser.account, getpara("newpassword"));
+				rhs.put("info", "Change successfully!");
+			}
 		}
 		return "ajaxResetPassword";
 	}
