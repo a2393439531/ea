@@ -29,6 +29,7 @@ import org.springframework.stereotype.Component;
 import com.app.common.activiti.action.BaseProcessAction;
 import com.app.common.activiti.api.OaTask;
 import com.app.common.spring.ssh.page.Pagination;
+import com.app.ea.hsql.Hsql;
 import com.app.ea.model.User;
 import com.app.exam.model.Examarrange;
 import com.app.exam.model.Examrecord;
@@ -367,11 +368,46 @@ public class ExamAction extends BaseProcessAction {
 	}
 	
 	public String exam_home() throws Exception{
-		exam_list();
 		exam_record_list();
+		exam_list();
 		return "success";
 	}
-	
+	//修改每页显示的个数
+	public String change_page_number() throws Exception {
+		putSessionValue("maxSize", getpara("maxSize"));
+		exam_list();
+		rhs.put("system_para_map", infEa.getParaMap());
+		rhs.put("info_type", "success");
+		rhs.put("info", "");
+		return "success";
+	}
+    //翻页
+	public String ajax_page_data() throws Exception {
+		exam_list();
+		rhs.put("info_type", "success");
+		rhs.put("info", "success!");
+		return "success";
+	}
+
+	// 修改每页显示的个数
+	public String change_historypage_number() throws Exception {
+		putSessionValue("maxSize", getpara("maxSize"));
+		exam_list();
+		exam_record_list();
+		rhs.put("system_para_map", infEa.getParaMap());
+		rhs.put("info_type", "success");
+		rhs.put("info", "");
+		return "success";
+	}
+
+	// 翻页
+	public String ajax_historypage_data() throws Exception {
+		exam_list();
+		exam_record_list();
+		rhs.put("info_type", "success");
+		rhs.put("info", "success!");
+		return "success";
+	}
 	public String complete_task() throws Exception{
 		Map<String, Object> var = new HashMap<String, Object>();
 		//完成task后的跳转页面
@@ -752,6 +788,16 @@ public class ExamAction extends BaseProcessAction {
 
 	//目前屏蔽了groupby = paper 的这种呈现，只有user，schedule
 	public String exam_record_list() throws Exception{
+		int maxPage = 0;
+		int count = 0;
+		int currentPage = 0;
+		int maxSize = 0;
+		//为了普通用户显示结果分页
+		int historymaxPage = 0;
+		int historycount = 0;
+		int historycurrentPage = 0;
+		int historymaxSize = 0;
+		//结束
 		String useraccount = getCurrentAccount();
 		List<Examrecord> dataList = new ArrayList<Examrecord>();
 		Map<String,List<Examrecord>> dataMap = new HashMap<String, List<Examrecord>>();
@@ -773,8 +819,30 @@ public class ExamAction extends BaseProcessAction {
 			return "success";
 		}
 		getPageData(sql);
-		
 		List<Examrecord> recordList = (List)rhs.get("dataList");
+		maxPage = (int) rhs.get("maxPage");
+		count = (int) rhs.get("count");
+		currentPage = (int) rhs.get("currentPage");
+		maxSize = Integer.valueOf((String) rhs.get("maxSize"));
+		Map<String, List<Monitor>> monitorData = new HashMap<String, List<Monitor>>();
+		if ("admin".equals(getCurrentUser().getAccount())) {
+			for (Examrecord examrecord : recordList) {
+				String paperid = String.valueOf(examrecord.getPaper().getId());
+				String taskid = examrecord.getTaskid();
+				String userid = examrecord.getUserid();
+
+				String monitor_sql = "from Monitor m where m.userid='" + userid
+						+ "' and m.taskid='" + taskid + "' and m.paperid='"
+						+ paperid + "'";
+
+				getPageData(monitor_sql);
+
+				List<Monitor> monitorList = (List) rhs.get("dataList");
+
+				monitorData
+						.put(String.valueOf(examrecord.getId()), monitorList);
+			}
+		}
 		if ("paper".equals(groupby)) {
 			if (!"admin".equals(getCurrentUser().getAccount())) {
 				for (Examrecord examrecord : recordList) {
@@ -823,17 +891,13 @@ public class ExamAction extends BaseProcessAction {
 				}
 				rhs.put("export", false);
 			} else {
-				/*for (Examrecord examrecord : recordList) {
-					if (examrecord.getPaper() != null) {
-						String username = examrecord.getUserid();
-						List<Examrecord> examrecords = dataMap.get(username);
-						if (examrecords == null) {
-							examrecords = new ArrayList<Examrecord>();
-						}
-						examrecords.add(examrecord);
-						dataMap.put(username, examrecords);
-					}
-				}*/
+				String usersql = "from User";
+				getPageData(usersql);
+				maxPage = (int) rhs.get("maxPage");
+				count = (int) rhs.get("count");
+				currentPage = (int) rhs.get("currentPage");
+				maxSize = Integer.valueOf((String) rhs.get("maxSize"));
+				users = (List<User>) rhs.get("dataList");
 				for (User user : users) {
 					String username = user.getAccount();
 					String datasql = "from Examrecord e where e.userid='" + username + "'";
@@ -845,33 +909,37 @@ public class ExamAction extends BaseProcessAction {
 			}
 			rhs.put("groupby", "paper");
 		}
-		Map<String,List<Monitor>> monitorData = new HashMap<String, List<Monitor>>();
-		for (Examrecord examrecord : recordList) {
-			String paperid = String.valueOf(examrecord.getPaper().getId());
-			String taskid = examrecord.getTaskid();
-			String userid = examrecord.getUserid();
-			
-			String monitor_sql = "from Monitor m where m.userid='" + userid + "' and m.taskid='" + taskid + "' and m.paperid='" + paperid + "'";
-			
-			getPageData(monitor_sql);
-			
-			List<Monitor> monitorList = (List)rhs.get("dataList");
-			
-			monitorData.put(String.valueOf(examrecord.getId()), monitorList);
-		}
+		historymaxPage = maxPage;
+		historycount = count;
+		historycurrentPage = currentPage;
+		historymaxSize = maxSize;
 		rhs.put("monitorlist", monitorData);
 		rhs.put("datalist", dataMap);
+		rhs.put("maxSize", maxSize);
+		rhs.put("count", count);
+		rhs.put("maxPage", maxPage);
+		rhs.put("currentPage", currentPage);
+		rhs.put("historymaxSize", historymaxSize);
+		rhs.put("historycount", historycount);
+		rhs.put("historymaxPage", historymaxPage);
+		rhs.put("historycurrentPage", historycurrentPage);
 		return "success";
 	}
 	
 	public String exam_arrange_list() throws Exception{
+		int maxPage = 0;
+		int count = 0;
+		int currentPage = 0;
+		int maxSize = 0;
 		String sql = "from Examarrange";
 		Map<String,Paper> paperList = new HashMap<String, Paper>();
 		Map<String,List<Examrecord>> recordList = new HashMap<String, List<Examrecord>>();
 		getPageData(sql);
-		
+		maxPage = (int) rhs.get("maxPage");
+		count = (int) rhs.get("count");
+		currentPage = (int) rhs.get("currentPage");
+		maxSize = Integer.valueOf((String) rhs.get("maxSize"));
 		List<Examarrange> arrangeList = (List<Examarrange>) rhs.get("dataList");
-		
 		for (Examarrange examarrange : arrangeList) {
 			List<Examrecord> examrecordList = new ArrayList<Examrecord>();
 			String paperid = examarrange.getPaperid();
@@ -894,6 +962,10 @@ public class ExamAction extends BaseProcessAction {
 		rhs.put("recordlist", recordList);
 		rhs.put("paperlist", paperList);
 		rhs.put("datalist", arrangeList);
+		rhs.put("maxSize", maxSize);
+		rhs.put("count", count);
+		rhs.put("maxPage", maxPage);
+		rhs.put("currentPage", currentPage);
 		return "success";
 	}
 	

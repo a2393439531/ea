@@ -231,7 +231,7 @@ public class BaseAction {
 		}
 
 		if (pageId == null || "".equals(pageId)) {
-			pageId = (String) getSessionValue("pageId");
+			//pageId = (String) getSessionValue("pageId");//从session中拿，会拿到别的地方的当前页面
 			if (pageId == null || "".equals(pageId))
 				pageId = "1";
 		}
