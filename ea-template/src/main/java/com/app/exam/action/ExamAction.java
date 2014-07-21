@@ -820,9 +820,9 @@ public class ExamAction extends BaseProcessAction {
 		}
 		getPageData(sql);
 		List<Examrecord> recordList = (List)rhs.get("dataList");
-		maxPage = (int) rhs.get("maxPage");
-		count = (int) rhs.get("count");
-		currentPage = (int) rhs.get("currentPage");
+		maxPage = (Integer) rhs.get("maxPage");
+		count = (Integer) rhs.get("count");
+		currentPage = (Integer) rhs.get("currentPage");
 		maxSize = Integer.valueOf((String) rhs.get("maxSize"));
 		Map<String, List<Monitor>> monitorData = new HashMap<String, List<Monitor>>();
 		if ("admin".equals(getCurrentUser().getAccount())) {
@@ -893,9 +893,9 @@ public class ExamAction extends BaseProcessAction {
 			} else {
 				String usersql = "from User";
 				getPageData(usersql);
-				maxPage = (int) rhs.get("maxPage");
-				count = (int) rhs.get("count");
-				currentPage = (int) rhs.get("currentPage");
+				maxPage = (Integer) rhs.get("maxPage");
+				count = (Integer) rhs.get("count");
+				currentPage = (Integer) rhs.get("currentPage");
 				maxSize = Integer.valueOf((String) rhs.get("maxSize"));
 				users = (List<User>) rhs.get("dataList");
 				for (User user : users) {
@@ -935,9 +935,9 @@ public class ExamAction extends BaseProcessAction {
 		Map<String,Paper> paperList = new HashMap<String, Paper>();
 		Map<String,List<Examrecord>> recordList = new HashMap<String, List<Examrecord>>();
 		getPageData(sql);
-		maxPage = (int) rhs.get("maxPage");
-		count = (int) rhs.get("count");
-		currentPage = (int) rhs.get("currentPage");
+		maxPage = (Integer) rhs.get("maxPage");
+		count = (Integer) rhs.get("count");
+		currentPage = (Integer) rhs.get("currentPage");
 		maxSize = Integer.valueOf((String) rhs.get("maxSize"));
 		List<Examarrange> arrangeList = (List<Examarrange>) rhs.get("dataList");
 		for (Examarrange examarrange : arrangeList) {
