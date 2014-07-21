@@ -12,23 +12,23 @@
                      http://www.springframework.org/schema/context/spring-context.xsd   
                      http://www.springframework.org/schema/aop   
                      http://www.springframework.org/schema/aop/spring-aop.xsd">
-                     
+                      
     <import resource="spring-ea-persistence.xml"/>
-    <import resource="spring-scan.xml" />
-        <import resource="spring-aop.xml" />
+    <import resource="spring-aop.xml"/>
     <import resource="spring-activiti.xml"/>
+    <import resource="spring-scan.xml"/>
+ 
+
     <!--必须写在spring.xml里，不能写在import中-->   
 	<bean id="DatabasePropertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath:/database-mysql.properties</value>
+				<value>classpath:/database-h2.properties</value>
 			</list>
 		</property>
 		<property name="fileEncoding" value="UTF-8" />
-	</bean>  
-	
-
-	
-	
+	</bean> 
+ 
+		 
 </beans>
