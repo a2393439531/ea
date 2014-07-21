@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 
+import com.examples.spring.SpringConfigTestTemplate;
 import com.utils.encrypt.PasswordEncryptor;
-import com.utils.spring.junit.SpringConfigTestTemplate;
 
 public class PasswordEncryptorTest {
 	static Logger log = LoggerFactory.getLogger(PasswordEncryptorTest.class);
@@ -28,7 +28,7 @@ public class PasswordEncryptorTest {
 	 /**/
 	public PasswordEncryptor getPasswordEncryptor(String beanname) {
 		XmlBeanFactory factory = SpringConfigTestTemplate
-				.createXmlBeanFactory("<bean id=\"passwordEncryptor\" class=\"com.common.encrypt.impl."
+				.createXmlBeanFactory("<bean id=\"passwordEncryptor\" class=\"com.utils.encrypt.impl."
 						+ beanname + "\"></bean>");
 		PasswordEncryptor passwordEncryptor = (PasswordEncryptor) factory
 				.getBean("passwordEncryptor");

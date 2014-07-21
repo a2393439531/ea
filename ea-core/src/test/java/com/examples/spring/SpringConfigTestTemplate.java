@@ -1,4 +1,4 @@
-package com.utils.spring.junit;
+package com.examples.spring;
 
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ByteArrayResource;
