@@ -307,15 +307,55 @@ public class ExamAction extends BaseProcessAction {
 		return "success";
 	}
 	
+	public String show_miss_exam() throws ParseException{
+		List<OaTask> outData = new ArrayList< OaTask>();
+		if(!getCurrentAccount().equals("")){
+			List<OaTask> assigneeList = infActiviti.getAssigneeTaskListByAccount(getCurrentAccount());
+			for (OaTask oaTask : assigneeList) {
+				Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(oaTask.getFormId()));
+				oaTask.setObj(paper);
+				String taskid = oaTask.getTask().getId();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//should be yyyy-MM-dd HH:mm:ss
+				String examarrangeid = String.valueOf(infActiviti.getVariableByTaskId(taskid, "examarrangeid"));
+				StringBuffer starttime = new StringBuffer();
+				if(!"".equals(examarrangeid) && examarrangeid != null){
+					Examarrange examarrange = (Examarrange)baseDao.loadById("Examarrange", Long.valueOf(examarrangeid));
+					Date start = sdf.parse(examarrange.getStarttime());
+					Date end = sdf.parse(examarrange.getEndtime());
+					String current_str = sdf.format(new Date());
+					Date current = sdf.parse(current_str);
+					if(current.before(start) || (current.after(start)&&current.before(end) )){
+					}else{
+						//过期的使用另一个数组存放
+						starttime.append("Out of Date");
+						oaTask.setStarttime(starttime.toString());
+						outData.add(oaTask);
+					}
+				}else{
+					starttime.append("Start Time was not set!");
+				}
+			}
+		}
+		rhs.put("oatasklist_outdate", outData);
+		return "success";
+	}
+	
 	public String exam_list() throws ParseException{
-		String pageId = getpara("pageId");
+		/*String pageId = getpara("pageId");
 		String maxSize = getpara("maxSize");
+		if(pageId.equals("")){
+			pageId = getpara("historypageId");
+		}
+		if(maxSize.equals("")){
+			maxSize = getpara("historymaxSize");
+		}
 		if(pageId.equals("")) pageId = "1";
-		if(maxSize.equals("")) maxSize = "20";
+		if(maxSize.equals("")) maxSize = "20";*/
 
-		Map<String, Object> map = infActiviti.getAssignedOaTaskListByAccount(getCurrentAccount(), Integer.parseInt(pageId), Integer.parseInt(maxSize));
-		
-		List<OaTask> assigneeList = (List<OaTask>) map.get("dataList");
+		List<OaTask> assigneeList = infActiviti.getAssigneeTaskListByAccount(getCurrentAccount());
+		// Map<String, Object> map = infActiviti.getAssignedOaTaskListByAccount(getCurrentAccount(), Integer.parseInt(pageId), Integer.parseInt(maxSize));
+		 //List<OaTask> assigneeList = (List<OaTask>) map.get("dataList");
+		List<Examarrange> examarranges = baseDao.find("from Examarrange");
 		
 		List<OaTask> allData = new ArrayList< OaTask>();
 		List<OaTask> outData = new ArrayList< OaTask>();
@@ -337,33 +377,39 @@ public class ExamAction extends BaseProcessAction {
 			String examarrangeid = String.valueOf(infActiviti.getVariableByTaskId(taskid, "examarrangeid"));
 			StringBuffer starttime = new StringBuffer();
 			if(!"".equals(examarrangeid) && examarrangeid != null){
-				Examarrange examarrange = (Examarrange)baseDao.loadById("Examarrange", Long.valueOf(examarrangeid));
-				Date start = sdf.parse(examarrange.getStarttime());
-				Date end = sdf.parse(examarrange.getEndtime());
-				String current_str = sdf.format(new Date());
-				Date current = sdf.parse(current_str);
-				if(current.before(start) || (current.after(start)&&current.before(end) )){
-					starttime.append(TimeUtil.compareTwoDate(current, start));
-					oaTask.setStarttime(starttime.toString());
-					allData.add(oaTask);
-				}else{
-					//过期的使用另一个数组存放
-					starttime.append("Out of Date");
-					oaTask.setStarttime(starttime.toString());
-					outData.add(oaTask);
+				//Examarrange examarrange = (Examarrange)baseDao.loadById("Examarrange", Long.valueOf(examarrangeid));
+				for(Examarrange examarrange: examarranges){
+					if(!examarrangeid.equals(String.valueOf(examarrange.getId()))){
+						continue;
+					}else{
+						Date start = sdf.parse(examarrange.getStarttime());
+						Date end = sdf.parse(examarrange.getEndtime());
+						String current_str = sdf.format(new Date());
+						Date current = sdf.parse(current_str);
+						if(current.before(start) || (current.after(start)&&current.before(end) )){
+							starttime.append(TimeUtil.compareTwoDate(current, start));
+							oaTask.setStarttime(starttime.toString());
+							allData.add(oaTask);
+						}else{
+							//过期的使用另一个数组存放
+							starttime.append("Out of Date");
+							oaTask.setStarttime(starttime.toString());
+							outData.add(oaTask);
+						}
+					}
 				}
 			}else{
 				starttime.append("Start Time was not set!");
 			}
 		}
 
-		Pagination p = (Pagination)map.get("pagination");
+		//Pagination p = (Pagination)map.get("pagination");
 		rhs.put("oatasklist", allData);
 		rhs.put("oatasklist_outdate", outData);
-		rhs.put("maxSize", p.getMaxSize());
+		/*rhs.put("maxSize", p.getMaxSize());
 		rhs.put("count", p.getTotalSize());
 		rhs.put("maxPage", p.getTotalPage());
-		rhs.put("currentPage", p.getCurrentPage());
+		rhs.put("currentPage", p.getCurrentPage());*/
 		return "success";
 	}
 	
@@ -1200,7 +1246,7 @@ public class ExamAction extends BaseProcessAction {
 		}
 		content = content + "<br/><font color='red'>Account/Password: " + user.getAccount() + "/" + user.getPasswd() + "</font>";
 		//send mail
-		infEa.sendMailTheadBySmtpList("Exam has been Started!", content , mail, "", "", null);
+		infEa.sendMailTheadBySmtpList(" Exam has been Started!", content , mail, "", "", null);
 //		ClientResource client = new ClientResource("http://localhost:5051/apm/service/mail?maillist="+ mail + "&content=" + content);
 //		 try {
 //			Representation result = client.get();
