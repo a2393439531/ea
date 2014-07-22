@@ -13,7 +13,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 public class QRCodeEvents {
 
 	public static void main(String[] args) throws Exception {
-		String text = "http://www.trainyjj.com/site/aaa";
+		String text = "http://www.trainyjj.com/ea/mt";
 		int width = 100;
 		int height = 100;
 		String format = "png";

@@ -1,4 +1,4 @@
-package com.examples;
+package com.examples.spring;
 import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.List;
@@ -24,8 +24,8 @@ import com.utils.time.TimeUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring.xml")
-public class ProcessTest {
-	private final Logger log = LoggerFactory.getLogger(ProcessTest.class);
+public class ActivitiTest {
+	private final Logger log = LoggerFactory.getLogger(ActivitiTest.class);
   @Autowired
   private RuntimeService runtimeService;
   @Autowired
@@ -42,12 +42,8 @@ public class ProcessTest {
   private FormService formService;
   @Autowired
   private BasicDataSource dataSource;
-  /*
-  ClassPathXmlApplicationContext applicationContext = 
-		    new ClassPathXmlApplicationContext("org/activiti/examples/spring/SpringTransactionIntegrationTest-context.xml");
-  */
  
- 
+
   @Test
   public void printDatabase() {
 	 log.debug("测试启动的api");
@@ -55,7 +51,7 @@ public class ProcessTest {
 	 //log.debug(impActiviti.getDatabase());
   }
  
-  
+ 
   
   public void printTaskList(List<Task> taskList) {
 	  for (Iterator iterator = taskList.iterator(); iterator.hasNext();) {
@@ -65,7 +61,6 @@ public class ProcessTest {
 					+" 拥有者:"+task.getOwner()
 					+" 优先级:"+task.getPriority()
 					+" 任务名:"+task.getName()
-					
 					+" 描述:"+task.getDescription()
 					+" 时间"+TimeUtil.getTimeStrByDate(task.getCreateTime(), "yyyy-MM-dd hh-mm-ss")
 		            +" 到期时间:"+task.getDueDate()
@@ -78,7 +73,7 @@ public class ProcessTest {
 		}
   }
   
-  /*
+/*
   @Test
   public void getDatabase() {
 	 log.debug("测试启动的api"+infActiviti.getDatabase());
@@ -104,7 +99,7 @@ public class ProcessTest {
 	  infActiviti.deploy("src/main/resources/bpmn/hello_print.bpmn20.xml");
 	  runtimeService.startProcessInstanceByKey("helloProcess");
   }
-  */
+*/
   
 }      
 

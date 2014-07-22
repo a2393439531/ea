@@ -87,6 +87,9 @@ public class ImpEa implements InfEa  {
 		System.out.println("查询所有的用户接口调用");
 		ArrayList rootList = (ArrayList) baseDao.find(Hsql.All_USER);
 		User admin=getUserbyAccount("admin");
+		if(admin==null){
+			admin=createUser("admin", "abc123");
+		}
 		for (Iterator iterator = admin.getChildUsers().iterator(); iterator.hasNext();) {
 			User user = (User) iterator.next();
 			rootList.remove(user);

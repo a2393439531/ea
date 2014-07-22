@@ -1,4 +1,4 @@
-package com.app;
+
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -17,15 +17,14 @@ import com.app.common.spring.ssh.page.Pagination;
 import com.app.ea.api.InfEa;
 import com.app.ea.model.Resource;
 import com.app.ea.model.User;
-import com.app.model.Tb1;
-
-import com.utils.spring.ok.AbstractBaseTestCase;
+import com.app.old.Tb1;
+import com.examples.junit.AbstractTestSpringHibernate;
 
 /*
  每个方法之前会重新将数据库重新建一次，这样比较好，每个方法之间没有数据关联性
  */
-public class BaseDaoTest extends AbstractBaseTestCase {
-	static Logger log = LoggerFactory.getLogger(BaseDaoTest.class);
+public class EaTest extends AbstractTestSpringHibernate {
+	static Logger log = LoggerFactory.getLogger(EaTest.class);
 	private BaseDao baseDao;
 	private InfEa infEa;
   
@@ -45,21 +44,9 @@ public class BaseDaoTest extends AbstractBaseTestCase {
 	
 	}
 	
-	public void UserLeftJoin() throws Exception {
-		List reslist =baseDao.find("select u from User u  left join u.resources ");
-		for (Iterator iterator = reslist.iterator(); iterator.hasNext();) {
-			User user = (User) iterator.next();
-			log.debug(user.account);
-			
-		}
+	@Test
+	public void email() throws Exception {
+	     infEa.sendMail( "3436070@qq.com", "tom.ling@ericsson.com", "","组长录入REQ101:更新SVN解决方案", "请", null);	    
 	}
-	public void resourceLeftJoin() throws Exception {
-		List reslist =baseDao.find("select r from Resource r  join r.users");
-		for (Iterator iterator = reslist.iterator(); iterator.hasNext();) {
-			Resource resource = (Resource) iterator.next();
-			log.debug(resource.getName()+resource.getUsers().size());
-		}
-	}
-	
 	
 }

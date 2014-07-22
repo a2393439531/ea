@@ -1,3 +1,4 @@
+package com.examples.struts;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.StrutsSpringTestCase;
@@ -23,7 +24,7 @@ public class StrutsActionTest extends StrutsSpringTestCase {
  
     @Override
     public String[] getContextLocations() {
-      String[] str = {"spring-base.xml"};
+      String[] str = {"spring.xml"};
       return str;
     }
  
@@ -38,15 +39,17 @@ public class StrutsActionTest extends StrutsSpringTestCase {
     private SessionFactory lookupSessionFactory(HttpServletRequest request) {
         return (SessionFactory)this.applicationContext.getBean("eaSessionFactory");
    }
-
-    @Test
-    public void login() throws Exception {
-        /*request是类StrutsSpringTestCase的成员变量， 是MockHttpServletRequest对象，在这里mock出来的一个web中的request*/
+    /*
+	@Test
+    public void testLogin() throws Exception {
+       
+    	System.out.println("测试action");
         request.setParameter("account", "wanghaiming");
         request.setParameter("password", "abc123");
         request.setContextPath("/");
-        String result =  executeAction("/com/app/manager/ea/action/login!execute.action");
+        String result =  executeAction("/com/app/common/base/action/loginAction.do");
         System.out.println(result);
           
     }
+  */
 }
