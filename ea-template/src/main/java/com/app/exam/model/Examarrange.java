@@ -26,6 +26,29 @@ public class Examarrange extends BaseModel {
 	private String userid;
 	private String starttime;
 	private String endtime;
+	
+	
+	private String status; //问卷的状态， 是关闭还是打开 open/off
+	private String title; //问卷标题， 
+	
+	
+	
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
 	public String getPaperid() {
 		return paperid;
