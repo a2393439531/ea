@@ -27,6 +27,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.app.common.base.action.BaseEaAction;
+import com.app.common.spring.ssh.page.Pagination;
 import com.app.common.uploadfile.model.Uploadfile;
 import com.app.exam.model.Choiceitem;
 import com.app.exam.model.Item;
@@ -47,36 +48,58 @@ public class ItemAction extends BaseEaAction {
 	public List<String> choiceitemid = new ArrayList<String>();
 
 	public String get_list_sql() {
-		return "from Item";
+		return "from Item i";
 	}
 
 	public String list() throws Exception {
+		boolean flag = false;
 		String sql = getSearchSql(get_list_sql());
 		String formstyle = getpara("formstyle");
 		String divstyle = getpara("divstyle");
 		Set<Item> list = new HashSet<Item>();
 		Set<Item> data = new HashSet<Item>();
-		getPageData(sql);
 		if(knowledgevalue.size() != 0){
 			for (String knowledge : knowledgevalue) {
-				Knowledge kl = (Knowledge)baseDao.loadById("Knowledge", Long.valueOf(knowledge));
-				list.addAll(kl.getAllItem(kl));
-			}
-		}else{
-			list.addAll((Collection<? extends Item>) rhs.get("dataList"));
-		}
-
-		if(itemtype.size() != 0 &&list.size() != 0){
-			for (String type : itemtype) {
-				for (Item item : list) {
-					if(item.getType() == Integer.valueOf(type)){
-						data.add(item);
-					}
+				if(sql.indexOf("knowledge") > 0){
+					sql = sql + " or k.id=" + knowledge;
+				}else{
+					sql = sql + " left join i.knowledge k where (k.id=" + knowledge;
 				}
 			}
-		}else{
-			data.addAll(list);
+			sql = sql + ")";
 		}
+		for (String type : itemtype) {
+			if(sql.indexOf("type") > 0){
+				sql = sql + " or i.type=" + type;
+			}else{
+				if(sql.indexOf("knowledge") > 0){
+					sql = sql + " and (i.type=" + type;	
+				}else{
+					sql = sql + " where (i.type=" + type;
+				}
+			}
+		}
+		sql = sql + ")";
+		getPageData(sql);
+		
+		list.addAll((Collection<? extends Item>) rhs.get("dataList"));
+		Set<Item> datalist = new HashSet<Item>();
+		for (Object obj : list) {
+			if(!(obj instanceof Item)){
+				Object[] item_knowledge = (Object[]) obj;
+				Item item = (Item) item_knowledge[0];
+				datalist.add(item);
+			}else{
+				flag = true;
+				break;
+			}
+		}
+		if(flag){
+			data.addAll(list);
+		}else{
+			data.addAll(datalist);
+		}
+	
 		rhs.put("knowledgevalue", knowledgevalue);
 		rhs.put("itemtype", itemtype);
 		rhs.put("dataList", data);

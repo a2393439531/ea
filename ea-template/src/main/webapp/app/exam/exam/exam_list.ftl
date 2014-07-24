@@ -49,7 +49,7 @@
 				<input type="hidden" name="maxSize" id="pageMaxSize">
 			</form>
 			<#include "../../../common/freemarker/macro_pagination.ftl">
-			<@pagination  "search_form" />
+			<#--<@pagination  "search_form" />-->
   </div>
 </div>
 <script>
