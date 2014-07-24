@@ -6,8 +6,7 @@
 </style>
 <body style=" background-color: #463265;color:#fff">
 <a href="home.ftl" target="mainFrame">
-<blockquote class="pull-left"><div >EA企业架构<small>version: beta-1.3</small> </div> 
-</blockquote>   
+<div class="pull-left" style="padding: 10px 20px;">EA企业架构<br><small>version: beta-1.3</small> </div> 
 </a>
 <div class="pull-right" style="padding:10px">
 		<#if Session?exists&&Session["userlogined"]?exists>   用户：${Session["userlogined"].name?if_exists}</#if>

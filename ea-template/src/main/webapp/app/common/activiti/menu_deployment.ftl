@@ -1,11 +1,11 @@
 <#include "../../../common/freemarker/include_header.ftl">
-
-<div class="container-fluid">
+<div class="container-fluid" style="padding:10px">
 	<form class="form-inline" action="common_activiti_upload_process_file.do" method="post" enctype="multipart/form-data">
 		<fieldset>
 			<legend>Upload Process File</legend>
 			<input name="file" class="input-file" type="file">
-			<input type="submit" class="btn" value="Upload" />
+			<br>
+			<input type="submit" class="btn btn-xs btn-primary" value="Upload" />
 		</fieldset>
 	</form>
 	<hr>

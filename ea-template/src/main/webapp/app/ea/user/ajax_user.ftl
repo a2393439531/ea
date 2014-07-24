@@ -1,17 +1,13 @@
- <table   class="table table-bordered table-condensed  table-indie">
+<table class="table table-bordered table-condensed  table-indie">
     <thead>
 		<tr>
-
-  		   	
 			<th>姓名</th>
 			<th>帐号</th>
 			<th>密码</th>
 			<th>手机号码</th>
-			
 			<#if rhs["system_para_map"]?exists&& rhs["system_para_map"]["user-status"]?exists>
 			<th>状态</th>
 			</#if>
-			
 			<th>email</th>
 			<th>金币数</th>
 			<th>关联帐号</th>		
@@ -24,7 +20,6 @@
 			<th>sog</th>
 			-->
 			<th></th>
-			
 		</tr>
 	</thead>
 	<tbody>
@@ -88,18 +83,12 @@
 			</td>
 			<td >
 			<span style="width:220px">
-			
 				<a  class="btn btn-xs btn-info" href='ea_user_profile_edit.do?id=${x.id?if_exists}' onclick="return hs.htmlExpand(this, { objectType: 'iframe' })">信息</a>
-			     <a target="mainFrame" href='common_edit_edit_bean_property.do?objectname=User&op=r&propertyname=mark&id=${x.id?if_exists}' onclick="return hs.htmlExpand(this, { objectType: 'iframe' })">评价</a>&nbsp;&nbsp;
+			    <a target="mainFrame" href='common_edit_edit_bean_property.do?objectname=User&op=r&propertyname=mark&id=${x.id?if_exists}' onclick="return hs.htmlExpand(this, { objectType: 'iframe' })">评价</a>&nbsp;&nbsp;
 	            <a  href="common_notify_send_email.do?userId=${x.id?if_exists}" onclick="return hs.htmlExpand(this, { objectType: 'iframe' })">email</a>&nbsp;&nbsp;
-				
-	   
-	    
 				<a  href="common_file_image_upload.do?id=${x.id?if_exists}&beanname=User&op=r&propertyfilepath=imgfilename" onclick="return hs.htmlExpand(this, { objectType: 'iframe' })">照片</a>&nbsp;&nbsp;
-					
 				<a  href="ea_ea_iframe_get_rolelist_of_user.do?id=${x.id?if_exists}" onclick="return hs.htmlExpand(this, { objectType: 'iframe' })">职位</a>&nbsp;&nbsp;
-				
-				<a  title="删除" onclick="javascript:action_user('delete.do','id=${x.id}');"  title=删除 >删除</a>
+				<a  title="删除" href="" onclick="javascript:action_user('delete.do','id=${x.id}');" >删除</a>
 			</span>
 			
 			</td>

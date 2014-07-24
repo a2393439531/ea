@@ -1,6 +1,7 @@
 <#include "macro_organizegroup.ftl">
+<#include "../../../common/freemarker/include_custom.ftl">
 
-<table    class="table  table-condensed" style="width:1000px">
+<table class="table table-condensed" style="width:1000px">
      <thead>
 		<tr>
 			<th>分组</th><th>操作</th>
