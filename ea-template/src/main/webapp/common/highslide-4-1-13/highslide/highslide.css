@@ -352,7 +352,8 @@ html>/**/body .highslide-gallery ul img {
 /* hs.wrapperClassName = 'draggable-header' */
 .draggable-header .highslide-header {
 	height: 18px;
-	border-bottom: 1px solid #dddddd;
+	/* border-bottom: 1px solid #dddddd; */
+	border: none;
 }
 .draggable-header .highslide-heading {
 	position: absolute;
