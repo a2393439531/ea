@@ -37,7 +37,7 @@ public class PaperAction extends BaseEaAction {
 	public Collection<String> reqessay = new ArrayList<String>();
 
 	public String get_list_sql() {
-		return "from Paper";
+		return "from Paper p";
 	}
 
 	public String get_template_list_sql() {
@@ -45,23 +45,52 @@ public class PaperAction extends BaseEaAction {
 	}
 
 	public String list() throws Exception {
+		boolean flag = false;
 		Map<String,List<BusinessWithProcessModel<Paper>>> dataMap = new HashMap<String, List<BusinessWithProcessModel<Paper>>>();
 		String sql = getSearchSql(get_list_sql());
-		getPageData(sql);
 		String formstyle = getpara("formstyle");
 		String divstyle = getpara("divstyle");
 		Set<Paper> list = new HashSet<Paper>();
 		if(knowledgevalue.size() != 0){
 			for (String knowledge : knowledgevalue) {
+				if(sql.indexOf("knowledge") > 0){
+					sql = sql + " or k.id=" + knowledge;
+				}else{
+					sql = sql + " left join p.knowledge k where (k.id=" + knowledge;
+				}
 				Knowledge kl = (Knowledge)baseDao.loadById("Knowledge", Long.valueOf(knowledge));
-				list.addAll(kl.getAllPaper(kl));
+				if(kl.getChildKnowledges().size() > 0){
+					Set<Knowledge> tempknowledge = kl.getChildKnowledges();
+					for(Knowledge k: tempknowledge){
+						if(sql.indexOf("knowledge") > 0){
+							sql = sql + " or k.id=" + k.getId();
+						}
+					}
+				}
 			}
+			sql = sql + ")";
+		}
+		
+		getPageData(sql);
+		list.addAll((Collection<? extends Paper>) rhs.get("dataList"));
+		Set<Paper> datalist = new HashSet<Paper>();
+		for (Object obj : list) {
+			if(!(obj instanceof Paper)){
+				Object[] paper_knowledge = (Object[]) obj;
+				Paper paper = (Paper) paper_knowledge[0];
+				datalist.add(paper);
+			}else{
+				flag = true;
+				break;
+			}
+		}
+		List paperList = new ArrayList<Paper>();
+		if(flag){
+			paperList.addAll(list);
 		}else{
-			list.addAll((Collection<? extends Paper>) rhs.get("dataList"));
+			paperList.addAll(datalist);
 		}
 		//rhs.put("dataList", list);
-		List paperList = new ArrayList<Paper>();
-		paperList.addAll(list);
 		List<BusinessWithProcessModel<Paper>> processPaperList = paperToProcessPaper(paperList);
 		for (BusinessWithProcessModel<Paper> object : processPaperList) {
 			Papergroup pg = object.getBusinessModel().getPapergroup();
@@ -89,7 +118,7 @@ public class PaperAction extends BaseEaAction {
 		rhs.put("knowledgeRootList", common_get_tree_root("Knowledge"));
 		return "success";
 	}
-
+	
 	public String save() throws Exception {
 		Set<Knowledge> knowledge = new HashSet<Knowledge>();
 		List<Knowledge> knowledgerootlist = common_get_tree_root("Knowledge");

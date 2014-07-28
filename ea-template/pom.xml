@@ -5,14 +5,14 @@
     <groupId>ea</groupId>
     <artifactId>ea-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <relativePath>ea-parent</relativePath>	
+    <relativePath>ea-parent</relativePath>
   </parent>
 	<groupId>ea</groupId>
 	<artifactId>ea-template</artifactId>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<version>1.0-SNAPSHOT</version>
-	 
-	 
+
+
 	<build>
 	  	 <plugins>
 				<plugin>
@@ -33,7 +33,7 @@
                     </webAppConfig>
                 </configuration>
             </plugin>
-            
+
 			<plugin>
 				<groupId>com.agilejava.docbkx</groupId>
 				<artifactId>docbkx-maven-plugin</artifactId>
@@ -73,14 +73,14 @@
 							<highlightSource>1</highlightSource>
 							<htmlStylesheet>css/style1.css</htmlStylesheet>
 							<l10nGentextDefaultLanguage>en</l10nGentextDefaultLanguage>
-							<l10nGentextLanguage>zh</l10nGentextLanguage>							
+							<l10nGentextLanguage>zh</l10nGentextLanguage>
 							<postProcess>
 								<copy todir="${basedir}/target/docs/html/css">
 									<fileset dir="docbook/css" includes="**/*" />
-								</copy>			
+								</copy>
 								<copy todir="${basedir}/target/docs/html/picture">
 									<fileset dir="docbook/picture" includes="**/*" />
-								</copy>	
+								</copy>
 							</postProcess>
 						</configuration>
 					</execution>
@@ -90,10 +90,10 @@
             <entity><name>version</name><value>${project.version}</value></entity>
          </entities>
 					<sourceDirectory>${basedir}/docbook</sourceDirectory>
-					<xincludeSupported>true</xincludeSupported>			
+					<xincludeSupported>true</xincludeSupported>
 				  <generateToc>
 					      book toc,title,figure,table,example,equation
-                          appendix  toc,title,figure,table,example,equation		
+                          appendix  toc,title,figure,table,example,equation
         	</generateToc>
 					<tocMaxDepth>8</tocMaxDepth>
 					<tocSectionDepth>8</tocSectionDepth>
@@ -105,14 +105,14 @@
 				</configuration>
 			</plugin>
          </plugins>
-  </build>            
-            
+  </build>
+
 	<dependencies>
 			<dependency>
 			<groupId>ea</groupId>
 			<artifactId>ea-core</artifactId>
 			<version>${project.version}</version>
-		</dependency>			
-		
+		</dependency>
+
 	</dependencies>
 	</project>

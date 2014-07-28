@@ -224,7 +224,7 @@ public class BaseAction {
 
 		if (maxSize == null || "".equals(maxSize)) {
 			maxSize = String.valueOf( getSessionValue("maxSize"));
-			if (maxSize == null || "".equals(maxSize))
+			if (maxSize == null || "".equals(maxSize) || "null".equals(maxSize))
 				maxSize = "20";
 			pagination.setMaxSize(Integer.parseInt(maxSize));
 		} else {

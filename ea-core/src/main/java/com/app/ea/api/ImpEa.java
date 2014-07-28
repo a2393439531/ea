@@ -755,6 +755,9 @@ public class ImpEa implements InfEa  {
 					result.put(mailaddress, "Success");
 				} catch (Exception e) {
 					log.error("<br>向"+ mailaddress +"发送邮件失败.");
+					if(mailaddress == null || "".equals(mailaddress)){
+						mailaddress = "No Email";
+					}
 					result.put(mailaddress, "Failed");
 					e.printStackTrace();
 				}
@@ -765,6 +768,7 @@ public class ImpEa implements InfEa  {
 			} catch (Exception e) {
 				//log.error("Email send error = " + smtp.getTitle(), e);
 				log.error("<br>使用下面邮箱配置发送失败：" +smtp.getTitle()+smtp.getHost()+":"+smtp.getPort()+":"+smtp.getSender());
+				result.put("Result:","Send mail failed by using: " + smtp.getTitle()+smtp.getHost()+":"+smtp.getPort()+":"+smtp.getSender() );
 				e.printStackTrace();
 			}
 		}

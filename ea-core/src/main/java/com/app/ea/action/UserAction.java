@@ -10,9 +10,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.app.common.base.action.BaseEaAction;
+import com.app.common.spring.ssh.model.BaseModel;
 import com.app.ea.hsql.Hsql;
 import com.app.ea.model.Organize;
 import com.app.ea.model.User;
+import com.opensymphony.util.BeanUtils;
 import com.utils.math.MathUtil;
 @Component("userAction")
 @Scope("prototype")
@@ -223,20 +225,67 @@ public class UserAction extends BaseEaAction {
 	}
 
 	public String delete() throws Exception {
-		String id = getpara("id");
-		User userdata = new User();
-		userdata.setId(Long.parseLong(id));
-		infEa.deleteUser(userdata);
+		User userdata = (User) baseDao.loadById("User", Long.parseLong(getpara("id")));
+		if("admin".equals(userdata.getAccount())){
+			rhs.put("result", "The admin account can not be deleted!");
+			rhs.put("find", true);
+		}else{
+			infEa.deleteUser(userdata);
+			rhs.put("find", false);
+			rhs.put("info_type", "success");
+			rhs.put("info", "delete success!");	
+		}
 		getPageData(Hsql.All_USER);
 		rhs.put("system_para_map", 	infEa.getParaMap());
-		rhs.put("info_type", "success");
-		rhs.put("info", "delete success!");		
 		return "success";
 	}
 	public String update() throws Exception {
+		String id = getpara("id");
+		String column = getpara("column");
+		// String columnValue = getpara("columnValue");
+		String columnValue = java.net.URLDecoder.decode(getpara("columnValue"));
+		if (column.equals("maxSize")) {
+			int pageNum = Integer.parseInt(columnValue);
+			if (pageNum != pagination.getMaxSize() && pageNum > 0) {
+				pagination.setMaxSize(pageNum);
+			}
+		} else {
+			BaseModel model = (BaseModel) baseDao.loadById(getpara("beanname"),
+					Long.parseLong(id));
+			//加入对account的唯一性判断和admin的account不能修改
+			if(model instanceof User){
+				User user = (User)model;
+				if("admin".equals(user.getAccount()) && "account".equals(column)){
+					rhs.put("result", "The admin account can not be changed!");
+					rhs.put("find", true);
+					return "success";
+				}
+			}
+			BaseModel existsModel = null;
+			if(column.equals("account") || column.equals("email")){
+				if("".equals(columnValue.trim()) || columnValue.trim().length() == 0){
+					rhs.put("result", "The "+column+" should not be empty!");
+					rhs.put("find", true);
+					return "success";
+				}
+				existsModel = (BaseModel) baseDao.loadByFieldValue(User.class, column, columnValue.trim());
+			}
+			if(existsModel == null){
+				BeanUtils.setValue(model, column, columnValue);
+				rhs.put("find", false);
+			}else{
+				rhs.put("result", "The " + column + " '"+columnValue.trim() + "' " +" already exists!");
+				rhs.put("find", true);
+			}
+			baseDao.update(model);
+		}
+
 		
-		common_update("from User u ");
+		rhs.put("info_type", "success");
+		rhs.put("info", "update success!");
+		getPageData("from User u ");
 		return "success";
+	
 	}
     //修改每页显示的个数
 	public String change_page_number() throws Exception {
