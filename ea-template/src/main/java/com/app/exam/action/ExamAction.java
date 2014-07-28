@@ -468,6 +468,7 @@ public class ExamAction extends BaseProcessAction {
 		}
 		
 		if("assign".equals(method)){
+			Map<String,String> result = new HashMap<String,String>();
 			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperId));
 			String autojudge = getpara("autojudge");
 			if("".equals(autojudge) || autojudge == null){
@@ -505,7 +506,11 @@ public class ExamAction extends BaseProcessAction {
 							+ starttime
 							+ "</font>, and end at <font color='red'>"
 							+ endtime + "</font>, <br/>please attend the exam on time!";
-					sendStartEmail(assignee, content);
+					Map<String,String> data = sendStartEmail(assignee, content);
+					Set<String> mails = data.keySet();
+					for (String mail : mails) {
+						result.put(assignee + ",Mail: "+ mail, data.get(mail));
+					}
 					//end
 				}
 			}else{
@@ -526,11 +531,16 @@ public class ExamAction extends BaseProcessAction {
 						+ starttime
 						+ "</font>, and end at <font color='red'>"
 						+ endtime + "</font>, <br/>please attend the exam on time!";
-				sendStartEmail(assignees[0], content);
+				Map<String,String> data = sendStartEmail(assignees[0], content);
+				Set<String> mails = data.keySet();
+				for (String mail : mails) {
+					result.put(assignees[0] + ",Mail: "+ mail, data.get(mail));
+				}
 				//end
 			}
 			paper.setProcessInstanceId(processInstanceId);
 			baseDao.update(paper);
+			rhs.put("result", result);
 			page = "exam_paper_list.do";
 		}else if("start".equals(method)){
 			Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperId));
@@ -1225,7 +1235,7 @@ public class ExamAction extends BaseProcessAction {
 		this.result = result;
 	}
 	
-	public void sendStartEmail(String account,String content){
+	public Map<String,String> sendStartEmail(String account,String content){
 		User user = (User)baseDao.loadByFieldValue(User.class, "account", account);
 		String mail = "";
 		if(user != null){
@@ -1246,13 +1256,14 @@ public class ExamAction extends BaseProcessAction {
 		}
 		content = content + "<br/><font color='red'>Account/Password: " + user.getAccount() + "/" + user.getPasswd() + "</font>";
 		//send mail
-		infEa.sendMailTheadBySmtpList(" Exam has been Started!", content , mail, "", "", null);
+		Map<String,String> result = infEa.sendMailBySmtpList(" Exam has been Started!", content , mail, "", "", null);
 //		ClientResource client = new ClientResource("http://localhost:5051/apm/service/mail?maillist="+ mail + "&content=" + content);
 //		 try {
 //			Representation result = client.get();
 //		} catch (ResourceException e) {
 //			e.printStackTrace();
 //		}
+		return result;
 	}
 	
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.app.common.base.action.BaseEaAction;
 import com.app.common.spring.ssh.action.BaseAction;
 import com.app.common.spring.ssh.action.BaseBusinessAction;
+import com.app.common.spring.ssh.model.BaseModel;
 import com.app.exam.model.Knowledge;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -46,7 +47,22 @@ public class KnowledgeAction extends BaseEaAction {
 	
 	public String update() throws Exception {
 		try {
-			common_update();
+			String id = getpara("id");
+			String beanname = getpara("beanname");
+			String column = getpara("column");
+			String columnValue = java.net.URLDecoder.decode(getpara("columnValue"), "UTF-8");
+			if(columnValue.length() >= 255){
+				columnValue = columnValue.substring(0, 255);//防止过长
+			}
+			BaseModel baseModel = (BaseModel) baseDao.loadById(beanname,
+					Long.parseLong(id));
+			try {
+				BeanUtils.setProperty(baseModel, column, columnValue);
+			} catch (Exception e) {
+				log.error("属性修改有问题" + column + "=" + columnValue);
+				e.printStackTrace();
+			}
+			baseDao.update(baseModel);
 		} catch (Exception e) {
 			rhs.put("info_type", "error");
 			rhs.put("info", " Update failed!");

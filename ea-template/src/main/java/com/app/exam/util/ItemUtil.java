@@ -18,6 +18,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Cell;
 
 import com.app.common.activiti.api.SpringContext;
 import com.app.common.spring.ssh.dao.BaseDao;
@@ -321,7 +322,7 @@ public class ItemUtil {
                         for (short c = 0; c < cellNum + 1; c++){
                         	cell = row.getCell(c);
                         	if (cell != null){
-                                cellValue = ExcelUtil.getCellStringValue(cell);
+                                cellValue = ExcelUtil.getCellStringValue(cell).trim();
                             }else{
                                 continue;
                             }
@@ -354,20 +355,24 @@ public class ItemUtil {
 								//item content
 								item.setContent(cellValue);
 								break;
+							// case 3:
+							// //item mark
+							// item.setMark(cellValue);
+							// break;
 							case 3:
-								//item mark
-								item.setMark(cellValue);
-								break;
-							case 4:
 								//item refkey
 								//if(cellValue.split(",").length > 1){
 								//没考虑填空题和问答题的答案情况，先用英文逗号分隔多选题答案
 								if(item.getType() == 1 || item.getType() == 2){
 									for (String val : cellValue.split(",")) {
-										if(val.matches("[1-" + (cellNum-5) + "]")){
-											if(!"".equals(item.getRefkey()) && item.getRefkey() != null){
-												item.setRefkey(item.getRefkey() + "," + val);
-											}else{
+										//if(val.matches("[1-" + (cellNum-5) + "]")){
+										if (Integer.valueOf(val) >= 1
+												&& Integer.valueOf(val) <= (cellNum - c)) {
+											if (!"".equals(item.getRefkey())
+													&& item.getRefkey() != null) {
+												item.setRefkey(item.getRefkey()
+														+ "," + val);
+											} else {
 												item.setRefkey(val);
 											}
 										}
@@ -381,7 +386,7 @@ public class ItemUtil {
 								//choiceitem
 								Choiceitem choiceitem = new Choiceitem();
 								choiceitem.setValue(cellValue);
-								choiceitem.setRefid(c-4);
+								choiceitem.setRefid(c-3);
 								
 								choiceitems.add(choiceitem);
 								break;
@@ -411,6 +416,15 @@ public class ItemUtil {
 			workbook = new HSSFWorkbook(new POIFSFileSystem(new FileInputStream(file)));
 			sheet = workbook.getSheetAt(0);// getSheet("Sheet1");
 			int rowNum = sheet.getPhysicalNumberOfRows();
+			row = sheet.getRow(0);//从第一行判断文件内容
+			cell = row.getCell(0);
+			String value = ExcelUtil.getCellStringValue(cell);
+			if(!value.trim().equalsIgnoreCase("Category")){
+				exception = new ArrayList<String>();
+	        	exception.add("Please select correct File format!");
+	        	data.put("exception", exception);
+	        	return data;
+			}
 			if(rowNum > 0){
 				for(int r = 1; r < rowNum; r++){
 					exception = new ArrayList<String>();
@@ -420,10 +434,18 @@ public class ItemUtil {
 						data.put("Line " + row, exception);
 					}else{
 						//开始读取该行的数据
-						int cellNum = row.getLastCellNum();//拿到该行cell数量
+						int cellNum = row.getLastCellNum();//拿到该行cell数量，有可能拿到值为空的单元格，所以不一定准确。
+						for(int i = cellNum; i >= 0; i--){
+							HSSFCell preview = row.getCell(i);
+							if(preview == null || "".equals(ExcelUtil.getCellStringValue(preview))){
+								cellNum--;
+							}else{
+								break;
+							}
+						}
 						String cellValue = "";
 						// 这里cellNum要加上1
-						//boolean find = false;
+						boolean find = false;
 						String columnname = "";
                         for (short c = 0; c < cellNum + 1; c++){
                         	switch(c){
@@ -436,60 +458,36 @@ public class ItemUtil {
                         		case 2:
                         			columnname = "<strong>Content</strong>";
                         			break;
-                        		case 4:
+                        		case 3:
                         			columnname = "<strong>Answer</strong>";
                         			break;
                         		default:
-                        			columnname = "<strong>Option " + (c+1)+"</strong>";
+                        			columnname = "<strong>Option " + (c-3)+"</strong>";
                         			break;
                         	}
 							cell = row.getCell(c);
-							if (c == 3) {// mark字段本来就是为空
-								continue;
-							} else {
-								if(cell == null){
-									if (c == cellNum) {
-									}else{
-										exception.add("Column " + columnname
-												+ " is empty!");
-										continue;
-									}
-								}else{
-									if(cell.getCellType() == HSSFCell.CELL_TYPE_BLANK){
-										continue;
-									}
-									cellValue = ExcelUtil.getCellStringValue(cell);
-									// if ("".equals(cellValue)) {
-									// if (!find) {
-									// find = true;
-									// continue;
-									// }
-									// } else {
-									// if (find) {
-									// if (c == cellNum) {
-									// } else {
-									// exception.add("Column " + (c)
-									// + " is empty!");
-									// }
-									// }
-									// find = false;
-									// }
-									if("".equals(cellValue)){
-										if (c == cellNum) {
-										} else {
-											exception.add("Column " + columnname
-													+ " is empty!");
-										}
-										continue;
-									}
+							
+							if (cell == null) {
+								if (c == cellNum) {
+								} else {
+									exception.add("Column " + columnname
+											+ " is empty!");
+									continue;
 								}
+							} 
+							cellValue = ExcelUtil.getCellStringValue(cell);
+							if("".equals(cellValue)){
+									exception.add("Column " + columnname
+											+ " is empty!");
+									continue;
 							}
 							switch (c) {
-							case 4:
+							case 3:
 								// item refkey
 								for (String val : cellValue.split(",")) {
-									if (val.matches("[1-" + (cellNum - 5) + "]")) {
-
+									//if (val.matches("[1-" + (cellNum - 4) + "]")) {
+									if (Integer.valueOf(val) >= 1 && Integer.valueOf(val) <= (cellNum - c)) {
+									
 									} else {
 										exception
 												.add("The Column <strong>Answer</strong> is not macth the option!");
@@ -517,6 +515,10 @@ public class ItemUtil {
 		} catch (IOException e) {
 			exception = new ArrayList<String>();
         	exception.add(e.getMessage());
+        	data.put("exception", exception);
+		}catch(Exception e){
+			exception = new ArrayList<String>();
+        	exception.add(e.toString());
         	data.put("exception", exception);
 		}
 		return data;

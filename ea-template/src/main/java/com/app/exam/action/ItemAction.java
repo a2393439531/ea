@@ -65,6 +65,15 @@ public class ItemAction extends BaseEaAction {
 				}else{
 					sql = sql + " left join i.knowledge k where (k.id=" + knowledge;
 				}
+				Knowledge kl = (Knowledge)baseDao.loadById("Knowledge", Long.valueOf(knowledge));
+				if(kl.getChildKnowledges().size() > 0){
+					Set<Knowledge> tempknowledge = kl.getChildKnowledges();
+					for(Knowledge k: tempknowledge){
+						if(sql.indexOf("knowledge") > 0){
+							sql = sql + " or k.id=" + k.getId();
+						}
+					}
+				}
 			}
 			sql = sql + ")";
 		}
@@ -108,7 +117,17 @@ public class ItemAction extends BaseEaAction {
 		rhs.put("knowledgeRootList", common_get_tree_root("Knowledge"));
 		return "success";
 	}
-	
+	private String getSql(String sql,Knowledge k){
+		if(k.getChildKnowledges().size() > 0){
+			Set<Knowledge> knowledge = k.getChildKnowledges();
+			for(Knowledge kn: knowledge){
+				return getSql(sql,k);
+			}
+		}else{
+			return sql + "or k.id="+k.getId();
+		}
+		return sql;
+	}
 	public String listbycondition() throws Exception{
 		Set<Item> dataList = new HashSet<Item>();
 		
