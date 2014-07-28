@@ -947,7 +947,7 @@ public class ExamAction extends BaseProcessAction {
 				}
 				rhs.put("export", false);
 			} else {
-				String usersql = "from User";
+				String usersql = "from User u ";
 				getPageData(usersql);
 				maxPage = (Integer) rhs.get("maxPage");
 				count = (Integer) rhs.get("count");
@@ -955,11 +955,15 @@ public class ExamAction extends BaseProcessAction {
 				maxSize = Integer.valueOf((String) rhs.get("maxSize"));
 				users = (List<User>) rhs.get("dataList");
 				for (User user : users) {
-					String username = user.getAccount();
-					String datasql = "from Examrecord e where e.userid='" + username + "'";
+					String account = user.getAccount();
+					String username = user.getName();
+					if(account.trim().length() == 0 || username.trim().length() == 0){
+						continue;
+					}
+					String datasql = "from Examrecord e where e.userid='" + account + "'";
 					getPageData(datasql);
 					List<Examrecord> list = (List<Examrecord>) rhs.get("dataList");
-					dataMap.put(username, list);
+					dataMap.put(account, list);
 				}
 				rhs.put("export", true);
 			}
@@ -1207,7 +1211,11 @@ public class ExamAction extends BaseProcessAction {
 		List<User> users = infEa.getAllUser();
 		Map<String,List<Examrecord>> datamap = new HashMap<String, List<Examrecord>>();
 		for (User user : users) {
-			String username = user.getAccount();
+			String username = user.getName();
+			String account = user.getAccount();
+			if(account.trim().length() == 0 || username.trim().length() == 0){
+				continue;
+			}
 			String sql = "from Examrecord e where e.userid='" + username + "'";
 			getPageData(sql);
 			List<Examrecord> list = (List<Examrecord>) rhs.get("dataList");

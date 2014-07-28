@@ -416,16 +416,21 @@ public class ItemUtil {
 			workbook = new HSSFWorkbook(new POIFSFileSystem(new FileInputStream(file)));
 			sheet = workbook.getSheetAt(0);// getSheet("Sheet1");
 			int rowNum = sheet.getPhysicalNumberOfRows();
-			row = sheet.getRow(0);//从第一行判断文件内容
-			cell = row.getCell(0);
-			String value = ExcelUtil.getCellStringValue(cell);
-			if(!value.trim().equalsIgnoreCase("Category")){
-				exception = new ArrayList<String>();
-	        	exception.add("Please select correct File format!");
-	        	data.put("exception", exception);
-	        	return data;
+			for(int i = rowNum-1; i >= 0; i--){
+				if(checkEmptyRow(sheet.getRow(i))){
+					rowNum --;
+				}
 			}
-			if(rowNum > 0){
+			if(rowNum > 1){
+				row = sheet.getRow(0);//从第一行判断文件内容
+				cell = row.getCell(0);
+				String value = ExcelUtil.getCellStringValue(cell);
+				if(!value.trim().equalsIgnoreCase("Category")){
+					exception = new ArrayList<String>();
+		        	exception.add("Please select correct File format!");
+		        	data.put("exception", exception);
+		        	return data;
+				}
 				for(int r = 1; r < rowNum; r++){
 					exception = new ArrayList<String>();
 					row = sheet.getRow(r);
@@ -442,6 +447,10 @@ public class ItemUtil {
 							}else{
 								break;
 							}
+						}
+						if(cellNum < 0){
+							exception.add("The row " + (r+1) +" was empty!");
+							data.put("Line " + (r+1), exception);
 						}
 						String cellValue = "";
 						// 这里cellNum要加上1
@@ -523,6 +532,23 @@ public class ItemUtil {
 		}
 		return data;
 	}
+	
+	public static boolean checkEmptyRow(HSSFRow row){
+		int cellNum = row.getLastCellNum();//拿到该行cell数量，有可能拿到值为空的单元格，所以不一定准确。
+		for(int i = cellNum; i >= 0; i--){
+			HSSFCell preview = row.getCell(i);
+			if(preview == null || "".equals(ExcelUtil.getCellStringValue(preview))){
+				cellNum--;
+			}else{
+				return false;
+			}
+		}
+		if(cellNum < 0){
+			return true;
+		}
+		return true;
+	}
+	
 	public static String rightTrim(String s) {
 	        if (s == null || s.trim().length() == 0)
 	            return null;
