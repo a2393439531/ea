@@ -17,7 +17,7 @@ a {font-family: "宋体";font-size: 12px;color: #000;text-decoration: none;curso
 <#--情况1：角色下面有没有人，如果有角色，没有人，就显示照片-->
 <#macro show_no_user role><table><tr><td width=150px align=center><#if role.getUsers()?size<1 ><#if (RequestParameters["img"]=='yes') ><br><image  style='width:${RequestParameters["width"]}px;height:${RequestParameters["height"]}px'  src=<@context/>common/images/np2.png  /></#if><br><span style='color:red'>空缺</span></#if></td></tr></table></#macro>
 <#--情况2：有人就显示照片,number是显示图片的个数最多显示几个人-->
-<#macro show_user role number><#if role.getUsers()?size<number&&(RequestParameters["img"]=='yes')><table><tr><#list role.getUsers() as u><td width=150px align=center><#if u.imgfilename?exists><image  <@style_img/>  src='<@context/>file/photo/${u.imgfilename?if_exists}'  ></images></#if><div style='margin:10px'>${u.name?if_exists}${u.account}&nbsp;</div></td></#list></tr></table><#else><div style='margin:10px'><#list role.getUsers() as u>${u.name}${u.account}&nbsp;</#list></div></#if></#macro>
+<#macro show_user role number><#if role.getUsers()?size<number&&(RequestParameters["img"]=='yes')><table><tr><#list role.getUsers() as u><td width=150px align=center><#if u.uploadfileid?exists><image  <@style_img/>  src='common_file_show_image.do?id=${u.uploadfileid}'  ></images></#if><div style='margin:10px'>${u.name?if_exists}${u.account}&nbsp;</div></td></#list></tr></table><#else><div style='margin:10px'><#list role.getUsers() as u>${u.name}${u.account}&nbsp;</#list></div></#if></#macro>
 <#--情况3：高亮显示特别某人-->
 <#macro show_user_by_id role userId><div style='margin:10px'><#list role.getUsers() as u><#if (u.id==userId) ><#if u.imgfilename?exists><image  <@style_img/>  src='<@context/>file/${u.imgfilename?if_exists}'  ></images></#if><b style='color:red'>${u.name}&nbsp;</b><#else>${u.name}&nbsp;</#if></#list></div></#macro>
 
@@ -56,8 +56,8 @@ a {font-family: "宋体";font-size: 12px;color: #000;text-decoration: none;curso
 					</ul>
 				</div>
 				<div class="highslide-body">
-				<#if organize.imgfilename?exists&&organize.imgfilename!=''>
-				   <img src=<@context/>file/${organize.imgfilename?if_exists} />
+				<#if organize.uploadfileid?exists>
+				   <img src='common_file_show_image.do?id=${organize.uploadfileid}' />
 				</#if>
 				   <p>
 				   ${organize.name?if_exists}<br>
@@ -149,7 +149,7 @@ a {font-family: "宋体";font-size: 12px;color: #000;text-decoration: none;curso
 <#macro digui_organize_v organizeNodes   varname  show=''>
 	<#list organizeNodes as organize>
    	        var organize${organize.id}=new OrgNode(); 
-     	    organize${organize.id}.Text="<@frame organize.name /><#if organize.imgfilename?exists&&organize.imgfilename!=''><table><tr><td width=150px align=center><image <@style_img/>  onmouseover='' src=<@context/>file/${organize.imgfilename?if_exists}  /></td></tr></table></#if><div style='margin:10px;'><@suoxie organize.organizedescription /></div> <#if show=='user'><div ><#assign i=1><#list organize.getRoles() as role><#list role.getUsers() as u>${u.name}&nbsp;<#if i%3==0><br/></#if><#assign i = i + 1></#list></#list></div></#if>";
+     	    organize${organize.id}.Text="<@frame organize.name /><#if organize.uploadfileid?exists><table><tr><td width=150px align=center><image <@style_img/>  onmouseover='' src='common_file_show_image.do?id=${organize.uploadfileid}'  /></td></tr></table></#if><div style='margin:10px;'><@suoxie organize.organizedescription /></div> <#if show=='user'><div ><#assign i=1><#list organize.getRoles() as role><#list role.getUsers() as u>${u.name}&nbsp;<#if i%3==0><br/></#if><#assign i = i + 1></#list></#list></div></#if>";
 			organize${organize.id}.Description="${organize.name?if_exists}";
 			organize${organize.id}.Link="win_${organize.id?if_exists}()";
 			${varname}.Nodes.Add(organize${organize.id});

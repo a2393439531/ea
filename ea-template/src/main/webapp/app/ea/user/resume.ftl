@@ -42,8 +42,8 @@
       </table>
 	 </td>
 	 <td width=120px valign=top>
-		  <#if  rhs["user"].imgfilename?exists&&rhs["user"].imgfilename!='' ><br><img style="width:100px; height:120px" src="<@context/>file/photo/${rhs["user"].imgfilename?if_exists}" />   
-		  <#else> <br><img style="width:100px; height:120px" src="<@context/>common/images/face.jpg" />   
+		  <#if  rhs["user"].uploadfileid?exists ><br>
+		  <img style="width:100px; height:120px" src="common_file_show_image.do?id=${rhs["user"].uploadfileid}" />
 		  </#if>
 	 </td>
 	 </tr>
