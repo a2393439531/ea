@@ -46,6 +46,7 @@ public class ItemAction extends BaseEaAction {
 	public List<String> knowledgevalue = new ArrayList<String>();
 	public List<String> itemtype = new ArrayList<String>();
 	public List<String> choiceitemid = new ArrayList<String>();
+	public List<String> choiceitemrefid = new ArrayList<String>();
 
 	public String get_list_sql() {
 		return "from Item i";
@@ -195,7 +196,7 @@ public class ItemAction extends BaseEaAction {
 				item.setKnowledge(null);
 			}
 			if (choiceitemvalue.size() >= 2) {
-				int i = 1;
+				int i = 0;
 				for (int j = 0; j < choiceitemvalue.size(); j++) {
 					Choiceitem ci = null;
 					if(choiceitemid.size() > 0){
@@ -206,7 +207,7 @@ public class ItemAction extends BaseEaAction {
 							}else{
 								if(!"".equals(choiceitemvalue.get(j))){
 									ci = new Choiceitem();
-									ci.setRefid(k+1);
+									ci.setRefid(Integer.valueOf(choiceitemrefid.get(k)));
 									baseDao.create(ci);
 								}else{
 									break;
@@ -222,7 +223,7 @@ public class ItemAction extends BaseEaAction {
 						if(!"".equals(choiceitemvalue.get(j))){
 							ci = new Choiceitem();
 							ci.setItem(item);
-							ci.setRefid(i);
+							ci.setRefid(Integer.valueOf(choiceitemrefid.get(i)));
 							ci.setValue(choiceitemvalue.get(j));
 							baseDao.create(ci);
 							choiceitem.add(ci);
