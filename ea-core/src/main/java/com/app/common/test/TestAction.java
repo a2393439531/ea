@@ -138,6 +138,14 @@ public class TestAction extends BaseEaAction {
 		return "success";
 	}
 	
+	public String upload_db() throws Exception {
+		ServletActionContext.getRequest().getRealPath("");
+		rhs.put("datalist", baseDao.find("from Uploadfile where content != null"));
+		
+		return "success";
+	}
+	
+	
 	public String day_grid() throws Exception {
 		List<String> dayList = new ArrayList<String>();
 		Date currentDate = new Date();

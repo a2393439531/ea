@@ -170,4 +170,15 @@ public class Organize extends BaseModel  {
 		this.imgfilename = imgfilename;
 	}
 	
+	
+	public String getUploadfileid() {
+		return uploadfileid;
+	}
+	
+	
+	public void setUploadfileid(String uploadfileid) {
+		// TODO Auto-generated method stub
+		this.uploadfileid = uploadfileid;
+	}
+	
 }
