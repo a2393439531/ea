@@ -1,5 +1,8 @@
 package com.app.ea.demo;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,12 +12,14 @@ import java.util.Set;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
+import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.app.common.spring.ssh.dao.BaseDao;
 import com.app.common.spring.ssh.model.BaseModel;
+import com.app.common.uploadfile.model.Uploadfile;
 import com.app.ea.hsql.Hsql;
 import com.app.ea.model.Organize;
 import com.app.ea.model.Organizegroup;
@@ -97,6 +102,27 @@ public class ParentDemo  {
 		user.setPhoneNumber(phonenumber);
 		user.setEmail(email);
 		user.setAssessLev(assessLev);
+		String filepath =ServletActionContext.getRequest().getRealPath("");
+		filepath += "/file/photo/";
+		File f = new File(filepath + account + ".png"); 
+		if(f.exists()){
+			Uploadfile uf = new Uploadfile();
+			uf.setFileType("image/png");
+			int len = (int)f.length();
+			byte[] data = new byte[len];
+			InputStream is = new FileInputStream(f);
+			is.read(data);
+			is.close();
+			uf.setContent(data);
+			uf.setFileName(f.getName());
+			long ufid = baseDao.create(uf);
+			user.setUploadfileid(ufid + "");
+			System.out.println(filepath + account + ".png 保存成功.." );
+		}else{
+			System.out.println(filepath + account + ".png 不存在" );
+		}
+		
+		
 		baseDao.create(user);
 		return user;
 	}

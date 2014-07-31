@@ -11,6 +11,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
@@ -18,7 +19,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.app.common.base.action.BaseEaAction;
+import com.app.common.spring.ssh.model.BaseModel;
 import com.app.common.uploadfile.model.Uploadfile;
+import com.app.ea.model.User;
 
 @Component("uploadfileAction")
 public class UploadfileAction extends BaseEaAction {
@@ -138,4 +141,46 @@ public class UploadfileAction extends BaseEaAction {
 		return "success";
 	}
 	//added by xiaoqinghong for mobile 2014-6-24 end
+	
+	
+	public String uploaddb() throws Exception {
+		int len = (int)file.length();
+		byte[] data = new byte[len];
+		InputStream is = new FileInputStream(file);
+		int rlen = is.read(data);
+		is.close();
+		Uploadfile uf = new Uploadfile();
+		uf.setFileType(getFileContentType());
+		uf.setContent(data);
+		uf.setFileName(getFileFileName());
+		baseDao.create(uf);
+		return "success";
+	}
+	
+	
+	public void show_image() throws Exception {
+		String id = getpara("id");
+		Uploadfile uf = (Uploadfile)baseDao.loadById(Uploadfile.class, Long.parseLong(id));
+		byte[] data = uf.getContent();
+		if(data != null){
+			ServletActionContext.getResponse().setContentType("image/jpeg");
+			ServletActionContext.getResponse().setHeader("Cache-control", "no-cache ");
+			ServletActionContext.getResponse().getOutputStream().write(data);
+			ServletActionContext.getResponse().getOutputStream().flush();
+		}else{
+			System.out.println("无图片...");
+		}
+	}
+	
+	public void file_download() throws Exception {
+		String id = getpara("id");
+		Uploadfile uf = (Uploadfile)baseDao.loadById(Uploadfile.class, Long.parseLong(id));
+		byte[] data = uf.getContent();
+        ServletActionContext.getResponse().reset();
+        ServletActionContext.getResponse().setContentType("application/octet-stream;charset=utf-8");
+        ServletActionContext.getResponse().setHeader("Content-Disposition", "attachment;filename=" +new String(uf.getFileName().getBytes("utf-8"),"iso8859-1") );
+        ServletActionContext.getResponse().setHeader("Content-Length", "" + data.length);
+        ServletActionContext.getResponse().getOutputStream().write(data);
+        ServletActionContext.getResponse().getOutputStream().flush();
+	}
 }

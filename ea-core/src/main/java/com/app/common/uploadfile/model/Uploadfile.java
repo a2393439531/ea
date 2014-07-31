@@ -1,8 +1,10 @@
 package com.app.common.uploadfile.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import com.app.common.spring.ssh.model.BaseModel;
@@ -18,6 +20,20 @@ public class Uploadfile extends BaseModel {
 	private String fileDescription;
 	private String foreignId;
 	private String url;
+	
+	private byte[] content;
+	
+	
+	
+	@Lob
+	@Column(name = "content", columnDefinition = "BLOB",nullable=true)
+	public byte[] getContent() {
+		return content;
+	}
+
+	public void setContent(byte[] content) {
+		this.content = content;
+	}
 
 	public Uploadfile() {
 		super();

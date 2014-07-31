@@ -18,6 +18,20 @@ public class BaseModel implements Serializable, Comparable {
 	private Long id;
 	public Long sortNob = 0l;
 	public String inputtime;
+	
+	
+	public String uploadfileid;
+	
+	
+
+	public String getUploadfileid() {
+		return uploadfileid;
+	}
+
+	public void setUploadfileid(String uploadfileid) {
+		this.uploadfileid = uploadfileid;
+	}
+	
 
 	public Long getId() {
 		return id;

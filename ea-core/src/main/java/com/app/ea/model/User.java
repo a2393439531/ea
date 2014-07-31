@@ -95,13 +95,19 @@ public class User extends BaseModel {
 	 * */
 
 	private Set roles = new HashSet();
+	
+	
+	
 
+	public String getUploadfileid() {
+		return uploadfileid;
+	}
 	
 	
-	
-	
-	
-	
+	public void setUploadfileid(String uploadfileid) {
+		// TODO Auto-generated method stub
+		this.uploadfileid = uploadfileid;
+	}
 	
 
 	public String getPraiseDate() {

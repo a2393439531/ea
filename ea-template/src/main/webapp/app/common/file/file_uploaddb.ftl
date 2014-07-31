@@ -21,6 +21,7 @@
 	
 	function file_upload_db(){
 		$(file_upload_form).attr("action", "common_file_file_uploaddb.do");
+		console.log($(file_upload_form).attr("action"));
 		file_upload_form.submit();
 	}		          	
 </script>

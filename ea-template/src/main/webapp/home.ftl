@@ -181,6 +181,8 @@
 			    	<td class="pubModuCon">
 			    		<a href="common_test_upload.do" target="_blank" class="btn btn-xs btn-default">文件上传</a>  
 			    		<a href="common_test_upload.do" target="_blank" class="btn btn-xs btn-default">图片上传</a>
+			    		<a href="common_test_upload_db.do" target="_blank" class="btn btn-xs btn-default">文件上传(存储于数据库)</a>
+			    		
 			    	</td>
 			    </tr>
 			    <tr>
