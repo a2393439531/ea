@@ -29,7 +29,7 @@
 		</#list> 
 		</tbody>
 	</table>            
-	<blockquote class="pull-right">
+	<div class="pull-right">
 		<span id="div_action_result" class="small text-${rhs["info_type"]?if_exists} " style="display:none">
 			${rhs["info"]?if_exists}
 		</span>
@@ -48,5 +48,5 @@
 		第${rhs.currentPage}页&nbsp;
 		共${rhs.maxPage}页&nbsp;
 		总${rhs.count}条记录
-	</blockquote>
+	</div>
 </div>

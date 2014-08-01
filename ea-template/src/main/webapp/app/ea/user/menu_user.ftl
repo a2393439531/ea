@@ -1,5 +1,5 @@
-
 <#include "../../../common/freemarker/include_header.ftl">
+<#include "../../../common/freemarker/include_custom.ftl">
 <script type="text/javascript" src="<@context_module/>user.js"></script>
 <div  style="margin:10px">
 	<div class="btn-group btn-group-xs" style="padding-bottom:10px">

@@ -1,18 +1,17 @@
 <#include "../../../common/freemarker/include_header.ftl">
+<#include "../../../common/freemarker/include_custom.ftl">
 <script>
 $(function() {
 	$( "#tabs" ).tabs();
 });
 </script>
- 
-<div id="tabs">
-	<ul>
-	    <li><a href="#tabs-1">Process</a></li>
-	    <li><a href="common_activiti_menu_deployment.do">Upload</a></li>
-	</ul>
-	<div id="tabs-1">
-		<div class="container-fluid">
-			<table class="table table-condensed table-hover">
+<body style="padding:10px">
+	<a class="btn btn-xs btn-primary"  href="#tabs-1">Process</a>
+   	<a class="btn btn-xs btn-primary"  href="common_activiti_menu_deployment.do">Upload</a>
+    <br>
+    <br>
+
+			<table class="table table-bordered table-condensed">
 				<thead>
 				<tr>
 					<th >Process Name</th>
@@ -39,6 +38,5 @@ $(function() {
 				</#list>
 				</tbody>
 			</table>
-		</div>
-	</div>
-</div>
+
+</body>
