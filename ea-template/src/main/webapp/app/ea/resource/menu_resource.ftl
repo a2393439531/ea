@@ -1,4 +1,5 @@
 <#include "../../../common/freemarker/include_header.ftl">
+<#include "../../../common/freemarker/include_custom.ftl">
 <script type="text/javascript" src="<@context_module/>resource.js"></script>
 
 <div style="padding:10px">

@@ -1,5 +1,5 @@
-
 <#include "../../../common/freemarker/include_header.ftl">
+<#include "../../../common/freemarker/include_custom.ftl">
 <script type="text/javascript" src="<@context_module/>organize.js"></script>
 <body>
 
@@ -13,7 +13,7 @@
 
 	
 	 
-	<br>
+	<br><br>
 	<div id=div_organize_tree>
 		<#include "ajax_organize.ftl">
 	</div>	

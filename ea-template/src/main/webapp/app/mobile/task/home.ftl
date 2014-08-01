@@ -25,7 +25,8 @@ function getDateStr(date){
 </script>
 <div id="afui">
 	<div id="splashscreen" class='ui-loader heavy'>
-		<br><br>    <span class='ui-icon ui-icon-loading spin'></span>
+		<br><br>    
+		<span class='ui-icon ui-icon-loading spin'></span>
 		<h1>努力加载中, 请稍后....</h1>
 	</div>
 	
