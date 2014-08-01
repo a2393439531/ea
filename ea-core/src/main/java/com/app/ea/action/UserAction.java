@@ -262,7 +262,7 @@ public class UserAction extends BaseEaAction {
 				}
 			}
 			BaseModel existsModel = null;
-			if(column.equals("account") || column.equals("email")){
+			if(column.equals("account") || column.equals("email") || column.equals("name") ||column.equals("passwd")){
 				if("".equals(columnValue.trim()) || columnValue.trim().length() == 0){
 					rhs.put("result", "The "+column+" should not be empty!");
 					rhs.put("find", true);
