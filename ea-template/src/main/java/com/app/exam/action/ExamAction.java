@@ -502,7 +502,7 @@ public class ExamAction extends BaseProcessAction {
 					String content = "<font color='red'>URL:<a href='"+url+"'>"+url+"</a></font>" + 
 							"<br/>The exam of paper:<font color='red'>"
 							+ paper.getName()
-							+ "</font> has been started! <br/>The exam time start at <font color='red'>"
+							+ "</font> has been started! <br/>The exam enter time start at <font color='red'>"
 							+ starttime
 							+ "</font>, and end at <font color='red'>"
 							+ endtime + "</font>, <br/>please attend the exam on time!";
@@ -527,7 +527,7 @@ public class ExamAction extends BaseProcessAction {
 				String content = "<font color='red'>URL:<a href='"+url+"'>"+url+"</a></font>" + 
 						"<br/>The exam of paper:<font color='red'>"
 						+ paper.getName()
-						+ "</font> has been started! <br/>The exam time start at <font color='red'>"
+						+ "</font> has been started! <br/>The exam enter time start at <font color='red'>"
 						+ starttime
 						+ "</font>, and end at <font color='red'>"
 						+ endtime + "</font>, <br/>please attend the exam on time!";
