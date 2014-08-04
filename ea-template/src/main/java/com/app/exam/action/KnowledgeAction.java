@@ -54,6 +54,11 @@ public class KnowledgeAction extends BaseEaAction {
 			if(columnValue.length() >= 255){
 				columnValue = columnValue.substring(0, 255);//防止过长
 			}
+			if("".equals(columnValue.trim()) || columnValue.trim().length() == 0){
+				rhs.put("result", "The "+column+" should not be empty!");
+				rhs.put("flag", true);
+				return "success";
+			}
 			BaseModel baseModel = (BaseModel) baseDao.loadById(beanname,
 					Long.parseLong(id));
 			try {
@@ -71,6 +76,7 @@ public class KnowledgeAction extends BaseEaAction {
 		rhs.put("knowledgeRootList", common_get_tree_root(getpara("beanname")));
 		rhs.put("info_type", "success");
 		rhs.put("info", "Update successfully!");
+		rhs.put("flag", false);
 		return "success";
 	}
 
