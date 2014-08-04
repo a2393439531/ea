@@ -41,7 +41,7 @@ public class KnowledgeAction extends BaseEaAction {
 		}
 		rhs.put("knowledgeRootList", common_get_tree_root(getpara("beanname")));
 		rhs.put("info_type", "success");
-		rhs.put("info", " 添加新节点!");
+		rhs.put("info", " Add new node!");
 		return "success";
 	}	
 	
@@ -59,7 +59,7 @@ public class KnowledgeAction extends BaseEaAction {
 			try {
 				BeanUtils.setProperty(baseModel, column, columnValue);
 			} catch (Exception e) {
-				log.error("属性修改有问题" + column + "=" + columnValue);
+				log.error("change propertise error: " + column + "=" + columnValue);
 				e.printStackTrace();
 			}
 			baseDao.update(baseModel);

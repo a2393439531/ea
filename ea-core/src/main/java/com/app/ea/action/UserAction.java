@@ -268,9 +268,11 @@ public class UserAction extends BaseEaAction {
 					rhs.put("find", true);
 					return "success";
 				}
-				existsModel = (BaseModel) baseDao.loadByFieldValue(User.class, column, columnValue.trim());
+				if(!column.equals("email") && !column.equals("passwd")){
+					existsModel = (BaseModel) baseDao.loadByFieldValue(User.class, column, columnValue.trim());
+				}
 			}
-			if(existsModel == null){
+			if(existsModel == null ){
 				BeanUtils.setValue(model, column, columnValue);
 				rhs.put("find", false);
 			}else{
