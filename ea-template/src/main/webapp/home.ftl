@@ -186,6 +186,13 @@
 			    	</td>
 			    </tr>
 			    <tr>
+			    	<td class="pubModuNam">图表组件</td> 
+			    	<td class="pubModuCon">
+			    		<a href="common_test_chart_demo.do" target="_blank" class="btn btn-xs btn-default">elycharts 基本图表</a>
+			    	</td>
+			   	</tr>
+			   	
+			    <tr>
 			    	<td class="pubModuNam">编辑组件</td>
 			    	<td class="pubModuCon">
 			    		<a href="common_test_ckeditor.do" target="_blank" class="btn btn-xs btn-default">Ckedit</a>  
