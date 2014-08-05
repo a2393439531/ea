@@ -186,4 +186,10 @@ public class TestAction extends BaseEaAction {
 	public String UI_demo(){
 		return "success";
 	}
+	
+	public String chart_demo(){
+		return "success";
+	}
+	
+	
 }
