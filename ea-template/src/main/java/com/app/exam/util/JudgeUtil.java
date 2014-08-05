@@ -91,7 +91,7 @@ public class JudgeUtil implements JavaDelegate {
 				boolean flag = false;
 				if(item.getType() == 2){ //多选答案判断
 					String[] keys = item.getRefkey().split(",");
-					String[] answers = result.getAnswer().split(",");
+					String[] answers = result.getAnswer() == null? new String[0]:result.getAnswer().split(",");
 					if(answers.length == keys.length){
 						for(String answer: answers){
 							flag = false;
