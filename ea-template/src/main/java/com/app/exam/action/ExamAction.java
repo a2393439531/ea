@@ -503,7 +503,7 @@ public class ExamAction extends BaseProcessAction {
 							+ paper.getName()
 							+ "</font><br/>The exam enter time starts at <font color='red'>"
 							+ starttime
-							+ "</font><br/>Please attend the exam on time!" + "<br/><font color='red'>URL:<a href='"+url+"'>"+url+"</a></font>";
+							+ "</font>" + "<br/><font color='red'>URL:<a href='"+url+"'>"+url+"</a></font><br/><br/>Please attend the exam on time!";
 					Map<String,String> data = sendStartEmail(assignee, content);
 					Set<String> mails = data.keySet();
 					for (String mail : mails) {
