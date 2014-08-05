@@ -499,13 +499,11 @@ public class ExamAction extends BaseProcessAction {
 					}
 					//add send email function at 2014/06/09 by HB
 					String url ="http:/"+HardInfo.findNonLocalhostIp()+":"+getRequest().getLocalPort()+getRequest().getContextPath();
-					String content = "<font color='red'>URL:<a href='"+url+"'>"+url+"</a></font>" + 
-							"<br/>The exam of paper:<font color='red'>"
+					String content = "<br/>The exam paper:<font color='red'>"
 							+ paper.getName()
-							+ "</font> has been started! <br/>The exam enter time start at <font color='red'>"
+							+ "</font><br/>The exam enter time starts at <font color='red'>"
 							+ starttime
-							+ "</font>, and end at <font color='red'>"
-							+ endtime + "</font>, <br/>please attend the exam on time!";
+							+ "</font>, <br/>please attend the exam on time!" + "<br/><font color='red'>URL:<a href='"+url+"'>"+url+"</a></font>";
 					Map<String,String> data = sendStartEmail(assignee, content);
 					Set<String> mails = data.keySet();
 					for (String mail : mails) {
@@ -524,13 +522,11 @@ public class ExamAction extends BaseProcessAction {
 				processInstanceId = infActiviti.startProcessAssigneeVar("ExamProcess", paperId, getCurrentAccount(), assignees[0], var);
 				//add send email function at 2014/06/09 by HB
 				String url ="http:/"+HardInfo.findNonLocalhostIp()+":"+getRequest().getLocalPort()+getRequest().getContextPath();
-				String content = "<font color='red'>URL:<a href='"+url+"'>"+url+"</a></font>" + 
-						"<br/>The exam of paper:<font color='red'>"
+				String content = "<br/>The exam paper:<font color='red'>"
 						+ paper.getName()
-						+ "</font> has been started! <br/>The exam enter time start at <font color='red'>"
+						+ "</font><br/>The exam enter time starts at <font color='red'>"
 						+ starttime
-						+ "</font>, and end at <font color='red'>"
-						+ endtime + "</font>, <br/>please attend the exam on time!";
+						+ "</font>, <br/>please attend the exam on time!" + "<br/><font color='red'>URL:<a href='"+url+"'>"+url+"</a></font>";
 				Map<String,String> data = sendStartEmail(assignees[0], content);
 				Set<String> mails = data.keySet();
 				for (String mail : mails) {
@@ -1264,7 +1260,7 @@ public class ExamAction extends BaseProcessAction {
 		}
 		content = content + "<br/><font color='red'>Account/Password: " + user.getAccount() + "/" + user.getPasswd() + "</font>";
 		//send mail
-		Map<String,String> result = infEa.sendMailBySmtpList(" Exam has been Started!", content , mail, "", "", null);
+		Map<String,String> result = infEa.sendMailBySmtpList("SAC Examination Notice!", content , mail, "", "", null);
 //		ClientResource client = new ClientResource("http://localhost:5051/apm/service/mail?maillist="+ mail + "&content=" + content);
 //		 try {
 //			Representation result = client.get();
