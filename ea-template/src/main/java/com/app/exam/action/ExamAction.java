@@ -855,10 +855,12 @@ public class ExamAction extends BaseProcessAction {
 		Map<String,List<Examrecord>> dataMap = new HashMap<String, List<Examrecord>>();
 		
 		String sql = ""; 
+		String paper_sql = "";//add by hb at 2014/08/06 for group by paper
 		if(!"admin".equals(getCurrentUser().getAccount())){
 			sql = " from Examrecord r where r.userid=" + "'" +useraccount+"'";
 		}else{
 			sql = "from Examrecord r";
+			paper_sql = "from Paper p  where p.resultdetail is not empty";
 		}
 		
 		String groupby = getpara("groupby");
@@ -895,6 +897,12 @@ public class ExamAction extends BaseProcessAction {
 						.put(String.valueOf(examrecord.getId()), monitorList);
 			}
 		}
+		getPageData(paper_sql);
+		List<Paper> paperList = (List)rhs.get("dataList");
+		maxPage = (Integer) rhs.get("maxPage");
+		count = (Integer) rhs.get("count");
+		currentPage = (Integer) rhs.get("currentPage");
+		maxSize = Integer.valueOf((String) rhs.get("maxSize"));
 		if ("paper".equals(groupby)) {
 			if (!"admin".equals(getCurrentUser().getAccount())) {
 				for (Examrecord examrecord : recordList) {
@@ -911,15 +919,18 @@ public class ExamAction extends BaseProcessAction {
 				}
 				rhs.put("export", false);
 			} else {
-				for (Examrecord examrecord : recordList) {
-					if (examrecord.getPaper() != null) {
-						String papername = examrecord.getPaper().getName();
-						List<Examrecord> examrecords = dataMap.get(papername);
-						if (examrecords == null) {
-							examrecords = new ArrayList<Examrecord>();
+				for (Paper paper : paperList) {
+					String papername = paper.getName();
+					for (Examrecord examrecord : recordList) {
+						if (examrecord.getPaper() != null && examrecord.getPaper().getId() == paper.getId()) {
+							List<Examrecord> examrecords = dataMap
+									.get(papername);
+							if (examrecords == null) {
+								examrecords = new ArrayList<Examrecord>();
+							}
+							examrecords.add(examrecord);
+							dataMap.put(papername, examrecords);
 						}
-						examrecords.add(examrecord);
-						dataMap.put(papername, examrecords);
 					}
 				}
 				rhs.put("export", true);
