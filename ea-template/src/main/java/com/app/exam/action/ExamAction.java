@@ -853,7 +853,7 @@ public class ExamAction extends BaseProcessAction {
 		String useraccount = getCurrentAccount();
 		List<Examrecord> dataList = new ArrayList<Examrecord>();
 		Map<String,List<Examrecord>> dataMap = new HashMap<String, List<Examrecord>>();
-		
+		List<Paper> paperList = new ArrayList<Paper>();
 		String sql = ""; 
 		String paper_sql = "";//add by hb at 2014/08/06 for group by paper
 		if(!"admin".equals(getCurrentUser().getAccount())){
@@ -861,6 +861,12 @@ public class ExamAction extends BaseProcessAction {
 		}else{
 			sql = "from Examrecord r";
 			paper_sql = "from Paper p  where p.resultdetail is not empty";
+			getPageData(paper_sql);
+			paperList = (List)rhs.get("dataList");
+			maxPage = (Integer) rhs.get("maxPage");
+			count = (Integer) rhs.get("count");
+			currentPage = (Integer) rhs.get("currentPage");
+			maxSize = Integer.valueOf((String) rhs.get("maxSize"));
 		}
 		
 		String groupby = getpara("groupby");
@@ -897,12 +903,6 @@ public class ExamAction extends BaseProcessAction {
 						.put(String.valueOf(examrecord.getId()), monitorList);
 			}
 		}
-		getPageData(paper_sql);
-		List<Paper> paperList = (List)rhs.get("dataList");
-		maxPage = (Integer) rhs.get("maxPage");
-		count = (Integer) rhs.get("count");
-		currentPage = (Integer) rhs.get("currentPage");
-		maxSize = Integer.valueOf((String) rhs.get("maxSize"));
 		if ("paper".equals(groupby)) {
 			if (!"admin".equals(getCurrentUser().getAccount())) {
 				for (Examrecord examrecord : recordList) {
