@@ -957,8 +957,9 @@ public class ExamAction extends BaseProcessAction {
 						continue;
 					}
 					String datasql = "from Examrecord e where e.userid='" + account + "'";
-					getPageData(datasql);
-					List<Examrecord> list = (List<Examrecord>) rhs.get("dataList");
+					//getPageData(datasql);
+					//List<Examrecord> list = (List<Examrecord>) rhs.get("dataList");
+					List<Examrecord> list = (List<Examrecord>) baseDao.find(datasql);
 					dataMap.put(account, list);
 				}
 				rhs.put("export", true);
@@ -1030,12 +1031,12 @@ public class ExamAction extends BaseProcessAction {
 		String sql = "from Examrecord e where e.examarrangeid='"
 				+ examarrangeid + "' and e.userid='" + userid + "'";
 		
-		getPageData(sql);
+		//getPageData(sql);
 		
 		
 		
-		List<Examrecord> recordlist = (List<Examrecord>) rhs.get("dataList");
-		
+		//List<Examrecord> recordlist = (List<Examrecord>) rhs.get("dataList");
+		List<Examrecord> recordlist = (List<Examrecord>) baseDao.find(sql);
 		//Paper paper = (Paper)baseDao.loadById("Paper", Long.valueOf(paperid));
 		// Set<Examrecord> recordlisttmp = paper.getResultdetail();
 		// List<Examrecord> datalist = new ArrayList<Examrecord>();
@@ -1212,7 +1213,7 @@ public class ExamAction extends BaseProcessAction {
 			if(account.trim().length() == 0 || username.trim().length() == 0){
 				continue;
 			}
-			String sql = "from Examrecord e where e.userid='" + username + "'";
+			String sql = "from Examrecord e where e.userid='" + account + "'";
 			getPageData(sql);
 			List<Examrecord> list = (List<Examrecord>) rhs.get("dataList");
 			datamap.put(username, list);
