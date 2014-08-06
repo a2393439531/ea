@@ -887,10 +887,10 @@ public class ExamAction extends BaseProcessAction {
 						+ "' and m.taskid='" + taskid + "' and m.paperid='"
 						+ paperid + "'";
 
-				getPageData(monitor_sql);
+				//getPageData(monitor_sql);
 
-				List<Monitor> monitorList = (List) rhs.get("dataList");
-
+				//List<Monitor> monitorList = (List) rhs.get("dataList");
+				List<Monitor> monitorList = (List)baseDao.find(monitor_sql);
 				monitorData
 						.put(String.valueOf(examrecord.getId()), monitorList);
 			}
