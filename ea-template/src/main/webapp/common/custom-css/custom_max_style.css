@@ -1,0 +1,11 @@
+@media screen and (max-width: 350px){
+#description, #rewardGold {
+	float: left;
+	background-color: red;
+	width: 30%; 
+}
+#taskRemarks, #gold {
+	background-color: yellow;
+	width: 70%; 
+}
+}

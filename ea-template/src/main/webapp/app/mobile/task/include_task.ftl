@@ -1,10 +1,54 @@
+<#include "../include_custom.ftl">
+<style type="text/css">
+
+</style>
 <!--发布，　编辑任务页面-->
 <div id="taskPage" class="panel" data-footer="none" data-load="loadTask">
+	<!--
 	<label for="taskName">任务名称: </label><input name="goldtask.title" maxlength="10" id="taskName" type="text" placeholder="请输入任务名称, 长度小于等于10">
 	<label for="taskRemarks">任务说明:</label><textarea name="goldtask.detail"  id="taskRemarks" rows="6" placeholder="请输入任务说明"></textarea>
 	<label for="endDate">截止日期: </label><input name="goldtask.endDate" readonly="readonly" id="endDate" class="Wdate" type="text" onClick="WdatePicker()">
 	<label for="gold">悬赏金币:</label><input name="goldtask.goldNumber" id="gold" type="number" placeholder="请输入悬赏金币数">
 	<div id="taskTmpDiv" ></div>
+	-->
+	
+	
+	<!--
+	<div>
+		任务名称：<input name="goldtask.title" maxlength="10" id="taskName" type="text" placeholder="请输入任务名称, 长度小于等于10">
+	</div>
+	<div>
+		<div id="description" >任务说明：</div>
+		<textarea name="goldtask.detail"  id="taskRemarks" rows="6" placeholder="请输入任务说明"></textarea>
+	</div>
+	<div>
+		截止日期：<input name="goldtask.endDate" readonly="readonly" id="endDate" class="Wdate" type="text" onClick="WdatePicker()">
+	</div>
+	<div>
+		<div id="rewardGold">悬赏金币：</div>
+		<input name="goldtask.goldNumber" id="gold" type="number" placeholder="请输入悬赏金币数" >
+	</div>
+	<div id="taskTmpDiv" ></div>
+	-->
+	
+	<table style="width: 100%;">
+		<tr>
+			<td>任务名称：</td>
+			<td><input name="goldtask.title" maxlength="10" id="taskName" type="text" placeholder="请输入任务名称, 长度小于等于10"></td>
+		</tr>
+		<tr>
+			<td id="description">任务说明：</td>
+			<td><textarea name="goldtask.detail"  id="taskRemarks" rows="6" placeholder="请输入任务说明"></textarea></td>
+		</tr>
+		<tr>
+			<td>截止日期：</td>
+			<td><input name="goldtask.endDate" readonly="readonly" id="endDate" class="Wdate" type="text" onClick="WdatePicker()"></td>
+		</tr>
+		<tr>
+			<td>悬赏金币：</td>
+			<td><input name="goldtask.goldNumber" id="gold" type="number" placeholder="请输入悬赏金币数" ></td>
+		</tr>
+	</table>
 </div>
 
 <script>
