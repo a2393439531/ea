@@ -958,7 +958,7 @@ public class ExamAction extends BaseProcessAction {
 				}
 				rhs.put("export", false);
 			} else {
-				String usersql = "from User u ";
+				String usersql = "from User u where ( u.name != '') and ( u.account != '')";
 				getPageData(usersql);
 				maxPage = (Integer) rhs.get("maxPage");
 				count = (Integer) rhs.get("count");
